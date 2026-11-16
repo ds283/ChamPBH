@@ -1,0 +1,87 @@
+ip-n1-M1e-15-b2.0-oneloop1.txt: store pl (and pl-resumed), run c: inverse-power n=1 M=1e-15 Mp beta=2 one-loop-measured-pl-v1 A=1; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-15 --drain-law one_loop --alpha 1 --model inverse-power --n 1
+ip-n1-M1e-3-b1.2-natural.txt: store pl (and pl-resumed), run b: inverse-power n=1 M=0.001 Mp beta=1.2 fixed alpha=0; options ['--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 1e-3 --model inverse-power --n 1
+ip-n1-M1e-3-b2.0-natural.txt: store pl (and pl-resumed), run b: inverse-power n=1 M=0.001 Mp beta=2 fixed alpha=0; options ['--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-3 --model inverse-power --n 1
+ip-n1-M1e-3-b2.9-natural.txt: store pl (and pl-resumed), run b: inverse-power n=1 M=0.001 Mp beta=2.9 fixed alpha=0; options ['--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 1e-3 --model inverse-power --n 1
+ip-n1-M1e-33-b2.0-oneloop1.txt: store pl (and pl-resumed), run c: inverse-power n=1 M=1e-33 Mp beta=2 one-loop-measured-pl-v1 A=1; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-33 --drain-law one_loop --alpha 1 --model inverse-power --n 1
+ip-n1-M4e-31-b1.2-fixed0.01.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=1.2 fixed alpha=0.01; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --alpha 0.01 --model inverse-power --n 1
+ip-n1-M4e-31-b1.2-fixed0.1.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=1.2 fixed alpha=0.1; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --alpha 0.1 --model inverse-power --n 1
+ip-n1-M4e-31-b1.2-oneloop0.05.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=1.2 one-loop-measured-pl-v1 A=0.05; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 1
+ip-n1-M4e-31-b1.2-oneloop1.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=1.2 one-loop-measured-pl-v1 A=1; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 1
+ip-n1-M4e-31-b1.2-oneloop10.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=1.2 one-loop-measured-pl-v1 A=10; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 1
+ip-n1-M4e-31-b2.0-fixed0.01.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=2 fixed alpha=0.01; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --alpha 0.01 --model inverse-power --n 1
+ip-n1-M4e-31-b2.0-fixed0.1.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=2 fixed alpha=0.1; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --alpha 0.1 --model inverse-power --n 1
+ip-n1-M4e-31-b2.0-oneloop0.05.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=2 one-loop-measured-pl-v1 A=0.05; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 1
+ip-n1-M4e-31-b2.0-oneloop1.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=2 one-loop-measured-pl-v1 A=1; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 1
+ip-n1-M4e-31-b2.0-oneloop10.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=2 one-loop-measured-pl-v1 A=10; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 1
+ip-n1-M4e-31-b2.9-fixed0.01.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=2.9 fixed alpha=0.01; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --alpha 0.01 --model inverse-power --n 1
+ip-n1-M4e-31-b2.9-fixed0.1.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=2.9 fixed alpha=0.1; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --alpha 0.1 --model inverse-power --n 1
+ip-n1-M4e-31-b2.9-oneloop0.05.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=2.9 one-loop-measured-pl-v1 A=0.05; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 1
+ip-n1-M4e-31-b2.9-oneloop1.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=2.9 one-loop-measured-pl-v1 A=1; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 1
+ip-n1-M4e-31-b2.9-oneloop10.txt: store pl (and pl-resumed), run a: inverse-power n=1 M=4e-31 Mp beta=2.9 one-loop-measured-pl-v1 A=10; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 1
+ip-n2-M1e-15-b2.0-oneloop1.txt: store pl (and pl-resumed), run c: inverse-power n=2 M=1e-15 Mp beta=2 one-loop-measured-pl-v1 A=1; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-15 --drain-law one_loop --alpha 1 --model inverse-power --n 2
+ip-n2-M1e-3-b1.2-natural.txt: store pl (and pl-resumed), run b: inverse-power n=2 M=0.001 Mp beta=1.2 fixed alpha=0; options ['--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 1e-3 --model inverse-power --n 2
+ip-n2-M1e-3-b2.0-natural.txt: store pl (and pl-resumed), run b: inverse-power n=2 M=0.001 Mp beta=2 fixed alpha=0; options ['--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-3 --model inverse-power --n 2
+ip-n2-M1e-3-b2.9-natural.txt: store pl (and pl-resumed), run b: inverse-power n=2 M=0.001 Mp beta=2.9 fixed alpha=0; options ['--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 1e-3 --model inverse-power --n 2
+ip-n2-M1e-33-b2.0-oneloop1.txt: store pl (and pl-resumed), run c: inverse-power n=2 M=1e-33 Mp beta=2 one-loop-measured-pl-v1 A=1; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-33 --drain-law one_loop --alpha 1 --model inverse-power --n 2
+ip-n2-M4e-31-b1.2-fixed0.01.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=1.2 fixed alpha=0.01; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --alpha 0.01 --model inverse-power --n 2
+ip-n2-M4e-31-b1.2-fixed0.1.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=1.2 fixed alpha=0.1; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --alpha 0.1 --model inverse-power --n 2
+ip-n2-M4e-31-b1.2-oneloop0.05.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=1.2 one-loop-measured-pl-v1 A=0.05; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 2
+ip-n2-M4e-31-b1.2-oneloop1.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=1.2 one-loop-measured-pl-v1 A=1; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 2
+ip-n2-M4e-31-b1.2-oneloop10.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=1.2 one-loop-measured-pl-v1 A=10; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 2
+ip-n2-M4e-31-b2.0-fixed0.01.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=2 fixed alpha=0.01; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --alpha 0.01 --model inverse-power --n 2
+ip-n2-M4e-31-b2.0-fixed0.1.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=2 fixed alpha=0.1; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --alpha 0.1 --model inverse-power --n 2
+ip-n2-M4e-31-b2.0-oneloop0.05.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=2 one-loop-measured-pl-v1 A=0.05; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 2
+ip-n2-M4e-31-b2.0-oneloop1.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=2 one-loop-measured-pl-v1 A=1; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 2
+ip-n2-M4e-31-b2.0-oneloop10.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=2 one-loop-measured-pl-v1 A=10; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 2
+ip-n2-M4e-31-b2.9-fixed0.01.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=2.9 fixed alpha=0.01; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --alpha 0.01 --model inverse-power --n 2
+ip-n2-M4e-31-b2.9-fixed0.1.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=2.9 fixed alpha=0.1; options ['--alpha', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --alpha 0.1 --model inverse-power --n 2
+ip-n2-M4e-31-b2.9-oneloop0.05.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=2.9 one-loop-measured-pl-v1 A=0.05; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 2
+ip-n2-M4e-31-b2.9-oneloop1.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=2.9 one-loop-measured-pl-v1 A=1; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 2
+ip-n2-M4e-31-b2.9-oneloop10.txt: store pl (and pl-resumed), run a: inverse-power n=2 M=4e-31 Mp beta=2.9 one-loop-measured-pl-v1 A=10; options ['--alpha', '--drain-law', '--model', '--n']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 2
+exp-M1e-15-b2.0-oneloop1.txt: store exp, run c: exponential n=1 M=1e-15 Mp beta=2 one-loop-measured-v1 A=1; options ['--alpha', '--drain-law']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py 2.0 1e-15 --drain-law one_loop --alpha 1
+exp-M1e-3-b2.0-natural.txt: store exp, run b: exponential n=1 M=0.001 Mp beta=2 fixed alpha=0; options []; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py 2.0 1e-3
+exp-M4e-31-b2.0-oneloop1.txt: store exp, run a: exponential n=1 M=4e-31 Mp beta=2 one-loop-measured-v1 A=1; options ['--alpha', '--drain-law']; other options: none
+    # command: PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py 2.0 4e-31 --drain-law one_loop --alpha 1
+outputs: 43 with no option but --model, --n, --drain-law and --alpha

@@ -1,0 +1,312 @@
+store /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl-resumed: 40 ScalarHistory rows; outputs: 40
+formats (read from the source): bounce N .9f (history_and_bbn.py main: bounce.N:.9f); bounce T_J .6f MeV (exp(bounce.log_T_Jordan) / units.MeV); bounce phi .6e (bounce.phi_Einstein / units.PlanckMass); dissipation .6g (dissipation_line), None as None; drain .6g (drain_line), None as None; fixed_T phi, ratio .9e (_fmt); bbn .10g; cand N .6f (sample_run.py); cand log_x, log_R .8g (sample_run.py g(..., '.8g')); cand ell, alpha_eff, w_gate .6g (sample_run.py g())
+cand fields compared, with their BOUNCE_COLUMNS kinds (to_column in Planck_units): N->N kind None, kind->kind kind None, log_R->log_R kind None, ell->ell kind None, regime->regime kind None, alpha_eff->alpha_eff kind None, w_gate->w_gate kind None, resolved->resolved kind None
+cand fields not held: log_x: ln(E/V0): the store holds log_E_Mp4 and the normalization, not ln x (reported below as a derived check, not compared); phi_t_Mp: the classical turning point is not stored; f: the law's fraction is not stored (alpha_eff and A are); dK_over_K: delta_K over K(N_final): K(N_final) is not a column; rho_kin_over_rho_rad: rho_R,E at the candidate is not stored
+not held, by line: history `wall`, `drain_law`/`A`/`model` (keys, matched); tuning none; bounce none; dissipation none; drain `candidates` (compared as the sum of candidates_<regime> and as the count of candidate bounce rows); fixed_T `crossings`, `stand_in_phi`, `stand_in_ratio`; bbn `PRyM_time`, `wall`
+
+THE MAP
+  ip-n1-M1e-15-b2.0-oneloop1.txt: inverse-power n=1 M=1e-15 beta=2 one-loop-measured-pl-v1 alpha=1; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0000.db #134)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-15 --drain-law one_loop --alpha 1 --model inverse-power --n 1
+  ip-n1-M1e-3-b1.2-natural.txt: inverse-power n=1 M=0.001 beta=1.2 fixed alpha=0; options ['--model', '--n']; store rows 1 (shard0015.db #91)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 1e-3 --model inverse-power --n 1
+  ip-n1-M1e-3-b2.0-natural.txt: inverse-power n=1 M=0.001 beta=2 fixed alpha=0; options ['--model', '--n']; store rows 1 (shard0000.db #128)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-3 --model inverse-power --n 1
+  ip-n1-M1e-3-b2.9-natural.txt: inverse-power n=1 M=0.001 beta=2.9 fixed alpha=0; options ['--model', '--n']; store rows 1 (shard0001.db #131)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 1e-3 --model inverse-power --n 1
+  ip-n1-M1e-33-b2.0-oneloop1.txt: inverse-power n=1 M=1e-33 beta=2 one-loop-measured-pl-v1 alpha=1; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0000.db #133)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-33 --drain-law one_loop --alpha 1 --model inverse-power --n 1
+  ip-n1-M4e-31-b1.2-fixed0.01.txt: inverse-power n=1 M=4e-31 beta=1.2 fixed alpha=0.01; options ['--alpha', '--model', '--n']; store rows 1 (shard0015.db #1)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --alpha 0.01 --model inverse-power --n 1
+  ip-n1-M4e-31-b1.2-fixed0.1.txt: inverse-power n=1 M=4e-31 beta=1.2 fixed alpha=0.1; options ['--alpha', '--model', '--n']; store rows 1 (shard0015.db #3)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --alpha 0.1 --model inverse-power --n 1
+  ip-n1-M4e-31-b1.2-oneloop0.05.txt: inverse-power n=1 M=4e-31 beta=1.2 one-loop-measured-pl-v1 alpha=0.05; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0015.db #46)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 1
+  ip-n1-M4e-31-b1.2-oneloop1.txt: inverse-power n=1 M=4e-31 beta=1.2 one-loop-measured-pl-v1 alpha=1; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0015.db #48)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 1
+  ip-n1-M4e-31-b1.2-oneloop10.txt: inverse-power n=1 M=4e-31 beta=1.2 one-loop-measured-pl-v1 alpha=10; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0015.db #49)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 1
+  ip-n1-M4e-31-b2.0-fixed0.01.txt: inverse-power n=1 M=4e-31 beta=2 fixed alpha=0.01; options ['--alpha', '--model', '--n']; store rows 1 (shard0000.db #41)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --alpha 0.01 --model inverse-power --n 1
+  ip-n1-M4e-31-b2.0-fixed0.1.txt: inverse-power n=1 M=4e-31 beta=2 fixed alpha=0.1; options ['--alpha', '--model', '--n']; store rows 1 (shard0000.db #44)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --alpha 0.1 --model inverse-power --n 1
+  ip-n1-M4e-31-b2.0-oneloop0.05.txt: inverse-power n=1 M=4e-31 beta=2 one-loop-measured-pl-v1 alpha=0.05; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0000.db #65)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 1
+  ip-n1-M4e-31-b2.0-oneloop1.txt: inverse-power n=1 M=4e-31 beta=2 one-loop-measured-pl-v1 alpha=1; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0000.db #67)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 1
+  ip-n1-M4e-31-b2.0-oneloop10.txt: inverse-power n=1 M=4e-31 beta=2 one-loop-measured-pl-v1 alpha=10; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0000.db #70)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 1
+  ip-n1-M4e-31-b2.9-fixed0.01.txt: inverse-power n=1 M=4e-31 beta=2.9 fixed alpha=0.01; options ['--alpha', '--model', '--n']; store rows 1 (shard0001.db #21)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --alpha 0.01 --model inverse-power --n 1
+  ip-n1-M4e-31-b2.9-fixed0.1.txt: inverse-power n=1 M=4e-31 beta=2.9 fixed alpha=0.1; options ['--alpha', '--model', '--n']; store rows 1 (shard0001.db #23)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --alpha 0.1 --model inverse-power --n 1
+  ip-n1-M4e-31-b2.9-oneloop0.05.txt: inverse-power n=1 M=4e-31 beta=2.9 one-loop-measured-pl-v1 alpha=0.05; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0001.db #85)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 1
+  ip-n1-M4e-31-b2.9-oneloop1.txt: inverse-power n=1 M=4e-31 beta=2.9 one-loop-measured-pl-v1 alpha=1; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0001.db #87)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 1
+  ip-n1-M4e-31-b2.9-oneloop10.txt: inverse-power n=1 M=4e-31 beta=2.9 one-loop-measured-pl-v1 alpha=10; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0001.db #89)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 1
+  ip-n2-M1e-15-b2.0-oneloop1.txt: inverse-power n=2 M=1e-15 beta=2 one-loop-measured-pl-v1 alpha=1; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0000.db #136)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-15 --drain-law one_loop --alpha 1 --model inverse-power --n 2
+  ip-n2-M1e-3-b1.2-natural.txt: inverse-power n=2 M=0.001 beta=1.2 fixed alpha=0; options ['--model', '--n']; store rows 1 (shard0015.db #92)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 1e-3 --model inverse-power --n 2
+  ip-n2-M1e-3-b2.0-natural.txt: inverse-power n=2 M=0.001 beta=2 fixed alpha=0; options ['--model', '--n']; store rows 1 (shard0000.db #129)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-3 --model inverse-power --n 2
+  ip-n2-M1e-3-b2.9-natural.txt: inverse-power n=2 M=0.001 beta=2.9 fixed alpha=0; options ['--model', '--n']; store rows 1 (shard0001.db #132)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 1e-3 --model inverse-power --n 2
+  ip-n2-M1e-33-b2.0-oneloop1.txt: inverse-power n=2 M=1e-33 beta=2 one-loop-measured-pl-v1 alpha=1; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0000.db #135)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 1e-33 --drain-law one_loop --alpha 1 --model inverse-power --n 2
+  ip-n2-M4e-31-b1.2-fixed0.01.txt: inverse-power n=2 M=4e-31 beta=1.2 fixed alpha=0.01; options ['--alpha', '--model', '--n']; store rows 1 (shard0015.db #2)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --alpha 0.01 --model inverse-power --n 2
+  ip-n2-M4e-31-b1.2-fixed0.1.txt: inverse-power n=2 M=4e-31 beta=1.2 fixed alpha=0.1; options ['--alpha', '--model', '--n']; store rows 1 (shard0015.db #4)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --alpha 0.1 --model inverse-power --n 2
+  ip-n2-M4e-31-b1.2-oneloop0.05.txt: inverse-power n=2 M=4e-31 beta=1.2 one-loop-measured-pl-v1 alpha=0.05; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0015.db #45)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 2
+  ip-n2-M4e-31-b1.2-oneloop1.txt: inverse-power n=2 M=4e-31 beta=1.2 one-loop-measured-pl-v1 alpha=1; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0015.db #47)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 2
+  ip-n2-M4e-31-b1.2-oneloop10.txt: inverse-power n=2 M=4e-31 beta=1.2 one-loop-measured-pl-v1 alpha=10; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0015.db #50)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 2
+  ip-n2-M4e-31-b2.0-fixed0.01.txt: inverse-power n=2 M=4e-31 beta=2 fixed alpha=0.01; options ['--alpha', '--model', '--n']; store rows 1 (shard0000.db #42)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --alpha 0.01 --model inverse-power --n 2
+  ip-n2-M4e-31-b2.0-fixed0.1.txt: inverse-power n=2 M=4e-31 beta=2 fixed alpha=0.1; options ['--alpha', '--model', '--n']; store rows 1 (shard0000.db #43)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --alpha 0.1 --model inverse-power --n 2
+  ip-n2-M4e-31-b2.0-oneloop0.05.txt: inverse-power n=2 M=4e-31 beta=2 one-loop-measured-pl-v1 alpha=0.05; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0000.db #66)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 2
+  ip-n2-M4e-31-b2.0-oneloop1.txt: inverse-power n=2 M=4e-31 beta=2 one-loop-measured-pl-v1 alpha=1; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0000.db #68)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 2
+  ip-n2-M4e-31-b2.0-oneloop10.txt: inverse-power n=2 M=4e-31 beta=2 one-loop-measured-pl-v1 alpha=10; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0000.db #69)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 2
+  ip-n2-M4e-31-b2.9-fixed0.01.txt: inverse-power n=2 M=4e-31 beta=2.9 fixed alpha=0.01; options ['--alpha', '--model', '--n']; store rows 1 (shard0001.db #22)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --alpha 0.01 --model inverse-power --n 2
+  ip-n2-M4e-31-b2.9-fixed0.1.txt: inverse-power n=2 M=4e-31 beta=2.9 fixed alpha=0.1; options ['--alpha', '--model', '--n']; store rows 1 (shard0001.db #24)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --alpha 0.1 --model inverse-power --n 2
+  ip-n2-M4e-31-b2.9-oneloop0.05.txt: inverse-power n=2 M=4e-31 beta=2.9 one-loop-measured-pl-v1 alpha=0.05; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0001.db #86)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 0.05 --model inverse-power --n 2
+  ip-n2-M4e-31-b2.9-oneloop1.txt: inverse-power n=2 M=4e-31 beta=2.9 one-loop-measured-pl-v1 alpha=1; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0001.db #88)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 1 --model inverse-power --n 2
+  ip-n2-M4e-31-b2.9-oneloop10.txt: inverse-power n=2 M=4e-31 beta=2.9 one-loop-measured-pl-v1 alpha=10; options ['--alpha', '--drain-law', '--model', '--n']; store rows 1 (shard0001.db #90)
+      # command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 2
+  outputs matched: 40 of 40; store rows matched once: 40
+
+=== ip-n1-M1e-15-b2.0-oneloop1.txt
+    cand rows: 38 printed, 38 stored candidate rows, 37 other bounce rows ({'candidate': 38, 'plateau': 37}); derived ln x = log_E_Mp4 - normalization equal at .8g: 38 of 38 (a measurement)
+    values compared: 379
+
+=== ip-n1-M1e-3-b1.2-natural.txt
+    failure at both: True; the tool's reason with the stored name, cut to 256 characters, equal to the stored reason: True; characters beyond the cut (not held): 47
+      tool (masked, whole): integrate_scalar_history (<history>): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-05, pi^2/2 = 3.998e-05) (tuning integration 0)
+      store (masked):       integrate_scalar_history (<history>): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e
+
+=== ip-n1-M1e-3-b2.0-natural.txt
+    failure at both: True; the tool's reason with the stored name, cut to 256 characters, equal to the stored reason: True; characters beyond the cut (not held): 47
+      tool (masked, whole): integrate_scalar_history (<history>): reflection requested inside the wall: W/(pi^2/2) = 1.5358 at N=37.75808722, phi_E=4.7358e-14, pi_E=-0.00048214 (W = 1.785e-07, pi^2/2 = 1.1623e-07) (tuning integration 0)
+      store (masked):       integrate_scalar_history (<history>): reflection requested inside the wall: W/(pi^2/2) = 1.5358 at N=37.75808722, phi_E=4.7358e-14, pi_E=-0.00048214 (W = 1.785e-
+
+=== ip-n1-M1e-3-b2.9-natural.txt
+    failure at both: True; the tool's reason with the stored name, cut to 256 characters, equal to the stored reason: True; characters beyond the cut (not held): 47
+      tool (masked, whole): integrate_scalar_history (<history>): reflection requested inside the wall: W/(pi^2/2) = 1.1679 at N=40.6223989, phi_E=5.753e-15, pi_E=-6.023e-05 (W = 2.1183e-09, pi^2/2 = 1.8138e-09) (tuning integration 0)
+      store (masked):       integrate_scalar_history (<history>): reflection requested inside the wall: W/(pi^2/2) = 1.1679 at N=40.6223989, phi_E=5.753e-15, pi_E=-6.023e-05 (W = 2.1183e-
+
+=== ip-n1-M1e-33-b2.0-oneloop1.txt
+    cand rows: 31 printed, 31 stored candidate rows, 30 other bounce rows ({'candidate': 31, 'plateau': 30}); derived ln x = log_E_Mp4 - normalization equal at .8g: 31 of 31 (a measurement)
+    values compared: 323
+
+=== ip-n1-M4e-31-b1.2-fixed0.01.txt
+    fixed law: no drain line; 5 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n1-M4e-31-b1.2-fixed0.1.txt
+    fixed law: no drain line; 9 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n1-M4e-31-b1.2-oneloop0.05.txt
+    cand rows: 170 printed, 170 stored candidate rows, 169 other bounce rows ({'candidate': 170, 'plateau': 169}); derived ln x = log_E_Mp4 - normalization equal at .8g: 170 of 170 (a measurement)
+    values compared: 1435
+
+=== ip-n1-M4e-31-b1.2-oneloop1.txt
+    cand rows: 23 printed, 23 stored candidate rows, 22 other bounce rows ({'candidate': 23, 'plateau': 22}); derived ln x = log_E_Mp4 - normalization equal at .8g: 23 of 23 (a measurement)
+    values compared: 259
+
+=== ip-n1-M4e-31-b1.2-oneloop10.txt
+    cand rows: 7 printed, 7 stored candidate rows, 6 other bounce rows ({'candidate': 7, 'plateau': 6}); derived ln x = log_E_Mp4 - normalization equal at .8g: 7 of 7 (a measurement)
+    values compared: 131
+
+=== ip-n1-M4e-31-b2.0-fixed0.01.txt
+    fixed law: no drain line; 85 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n1-M4e-31-b2.0-fixed0.1.txt
+    fixed law: no drain line; 49 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n1-M4e-31-b2.0-oneloop0.05.txt
+    cand rows: 35 printed, 35 stored candidate rows, 34 other bounce rows ({'candidate': 35, 'plateau': 34}); derived ln x = log_E_Mp4 - normalization equal at .8g: 35 of 35 (a measurement)
+    values compared: 355
+
+=== ip-n1-M4e-31-b2.0-oneloop1.txt
+    cand rows: 37 printed, 37 stored candidate rows, 36 other bounce rows ({'candidate': 37, 'plateau': 36}); derived ln x = log_E_Mp4 - normalization equal at .8g: 37 of 37 (a measurement)
+    values compared: 371
+
+=== ip-n1-M4e-31-b2.0-oneloop10.txt
+    cand rows: 13 printed, 13 stored candidate rows, 12 other bounce rows ({'candidate': 13, 'plateau': 12}); derived ln x = log_E_Mp4 - normalization equal at .8g: 13 of 13 (a measurement)
+    values compared: 179
+
+=== ip-n1-M4e-31-b2.9-fixed0.01.txt
+    fixed law: no drain line; 55 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n1-M4e-31-b2.9-fixed0.1.txt
+    fixed law: no drain line; 42 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n1-M4e-31-b2.9-oneloop0.05.txt
+    cand rows: 150 printed, 150 stored candidate rows, 149 other bounce rows ({'candidate': 150, 'plateau': 149}); derived ln x = log_E_Mp4 - normalization equal at .8g: 150 of 150 (a measurement)
+    values compared: 1275
+
+=== ip-n1-M4e-31-b2.9-oneloop1.txt
+    cand rows: 62 printed, 62 stored candidate rows, 61 other bounce rows ({'candidate': 62, 'plateau': 61}); derived ln x = log_E_Mp4 - normalization equal at .8g: 62 of 62 (a measurement)
+    values compared: 571
+
+=== ip-n1-M4e-31-b2.9-oneloop10.txt
+    cand rows: 13 printed, 13 stored candidate rows, 12 other bounce rows ({'candidate': 13, 'plateau': 12}); derived ln x = log_E_Mp4 - normalization equal at .8g: 13 of 13 (a measurement)
+    values compared: 179
+
+=== ip-n2-M1e-15-b2.0-oneloop1.txt
+    cand rows: 23 printed, 23 stored candidate rows, 22 other bounce rows ({'candidate': 23, 'plateau': 22}); derived ln x = log_E_Mp4 - normalization equal at .8g: 23 of 23 (a measurement)
+    values compared: 259
+
+=== ip-n2-M1e-3-b1.2-natural.txt
+    no dissipation line (alpha = 0); the store's injections, Delta_N_eff_today, log_R_first_impact: [0, 0.0, None]
+    fixed law: no drain line; 0 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 37
+
+=== ip-n2-M1e-3-b2.0-natural.txt
+    no dissipation line (alpha = 0); the store's injections, Delta_N_eff_today, log_R_first_impact: [0, 0.0, None]
+    fixed law: no drain line; 0 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 37
+
+=== ip-n2-M1e-3-b2.9-natural.txt
+    no dissipation line (alpha = 0); the store's injections, Delta_N_eff_today, log_R_first_impact: [0, 0.0, None]
+    fixed law: no drain line; 0 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 37
+
+=== ip-n2-M1e-33-b2.0-oneloop1.txt
+    cand rows: 48 printed, 48 stored candidate rows, 47 other bounce rows ({'candidate': 48, 'plateau': 47}); derived ln x = log_E_Mp4 - normalization equal at .8g: 48 of 48 (a measurement)
+    values compared: 459
+
+=== ip-n2-M4e-31-b1.2-fixed0.01.txt
+    fixed law: no drain line; 5 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n2-M4e-31-b1.2-fixed0.1.txt
+    fixed law: no drain line; 9 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n2-M4e-31-b1.2-oneloop0.05.txt
+    cand rows: 152 printed, 152 stored candidate rows, 151 other bounce rows ({'candidate': 152, 'plateau': 151}); derived ln x = log_E_Mp4 - normalization equal at .8g: 152 of 152 (a measurement)
+    values compared: 1291
+
+=== ip-n2-M4e-31-b1.2-oneloop1.txt
+    cand rows: 15 printed, 15 stored candidate rows, 14 other bounce rows ({'candidate': 15, 'plateau': 14}); derived ln x = log_E_Mp4 - normalization equal at .8g: 15 of 15 (a measurement)
+    values compared: 195
+
+=== ip-n2-M4e-31-b1.2-oneloop10.txt
+    cand rows: 8 printed, 8 stored candidate rows, 7 other bounce rows ({'candidate': 8, 'plateau': 7}); derived ln x = log_E_Mp4 - normalization equal at .8g: 8 of 8 (a measurement)
+    values compared: 139
+
+=== ip-n2-M4e-31-b2.0-fixed0.01.txt
+    fixed law: no drain line; 85 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n2-M4e-31-b2.0-fixed0.1.txt
+    fixed law: no drain line; 49 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n2-M4e-31-b2.0-oneloop0.05.txt
+    cand rows: 36 printed, 36 stored candidate rows, 35 other bounce rows ({'candidate': 36, 'plateau': 35}); derived ln x = log_E_Mp4 - normalization equal at .8g: 36 of 36 (a measurement)
+    values compared: 363
+
+=== ip-n2-M4e-31-b2.0-oneloop1.txt
+    cand rows: 48 printed, 48 stored candidate rows, 47 other bounce rows ({'candidate': 48, 'plateau': 47}); derived ln x = log_E_Mp4 - normalization equal at .8g: 48 of 48 (a measurement)
+    values compared: 459
+
+=== ip-n2-M4e-31-b2.0-oneloop10.txt
+    cand rows: 11 printed, 11 stored candidate rows, 10 other bounce rows ({'candidate': 11, 'plateau': 10}); derived ln x = log_E_Mp4 - normalization equal at .8g: 11 of 11 (a measurement)
+    values compared: 163
+
+=== ip-n2-M4e-31-b2.9-fixed0.01.txt
+    fixed law: no drain line; 55 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n2-M4e-31-b2.9-fixed0.1.txt
+    fixed law: no drain line; 42 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 61
+
+=== ip-n2-M4e-31-b2.9-oneloop0.05.txt
+    cand rows: 157 printed, 157 stored candidate rows, 156 other bounce rows ({'candidate': 157, 'plateau': 156}); derived ln x = log_E_Mp4 - normalization equal at .8g: 157 of 157 (a measurement)
+    values compared: 1331
+
+=== ip-n2-M4e-31-b2.9-oneloop1.txt
+    cand rows: 54 printed, 54 stored candidate rows, 53 other bounce rows ({'candidate': 54, 'plateau': 53}); derived ln x = log_E_Mp4 - normalization equal at .8g: 54 of 54 (a measurement)
+    values compared: 507
+
+=== ip-n2-M4e-31-b2.9-oneloop10.txt
+    cand rows: 11 printed, 11 stored candidate rows, 10 other bounce rows ({'candidate': 11, 'plateau': 10}); derived ln x = log_E_Mp4 - normalization equal at .8g: 11 of 11 (a measurement)
+    values compared: 163
+
+Values compared, per history:
+  ip-n1-M1e-15-b2.0-oneloop1.txt: 379
+  ip-n1-M1e-3-b1.2-natural.txt: 2
+  ip-n1-M1e-3-b2.0-natural.txt: 2
+  ip-n1-M1e-3-b2.9-natural.txt: 2
+  ip-n1-M1e-33-b2.0-oneloop1.txt: 323
+  ip-n1-M4e-31-b1.2-fixed0.01.txt: 61
+  ip-n1-M4e-31-b1.2-fixed0.1.txt: 61
+  ip-n1-M4e-31-b1.2-oneloop0.05.txt: 1435
+  ip-n1-M4e-31-b1.2-oneloop1.txt: 259
+  ip-n1-M4e-31-b1.2-oneloop10.txt: 131
+  ip-n1-M4e-31-b2.0-fixed0.01.txt: 61
+  ip-n1-M4e-31-b2.0-fixed0.1.txt: 61
+  ip-n1-M4e-31-b2.0-oneloop0.05.txt: 355
+  ip-n1-M4e-31-b2.0-oneloop1.txt: 371
+  ip-n1-M4e-31-b2.0-oneloop10.txt: 179
+  ip-n1-M4e-31-b2.9-fixed0.01.txt: 61
+  ip-n1-M4e-31-b2.9-fixed0.1.txt: 61
+  ip-n1-M4e-31-b2.9-oneloop0.05.txt: 1275
+  ip-n1-M4e-31-b2.9-oneloop1.txt: 571
+  ip-n1-M4e-31-b2.9-oneloop10.txt: 179
+  ip-n2-M1e-15-b2.0-oneloop1.txt: 259
+  ip-n2-M1e-3-b1.2-natural.txt: 37
+  ip-n2-M1e-3-b2.0-natural.txt: 37
+  ip-n2-M1e-3-b2.9-natural.txt: 37
+  ip-n2-M1e-33-b2.0-oneloop1.txt: 459
+  ip-n2-M4e-31-b1.2-fixed0.01.txt: 61
+  ip-n2-M4e-31-b1.2-fixed0.1.txt: 61
+  ip-n2-M4e-31-b1.2-oneloop0.05.txt: 1291
+  ip-n2-M4e-31-b1.2-oneloop1.txt: 195
+  ip-n2-M4e-31-b1.2-oneloop10.txt: 139
+  ip-n2-M4e-31-b2.0-fixed0.01.txt: 61
+  ip-n2-M4e-31-b2.0-fixed0.1.txt: 61
+  ip-n2-M4e-31-b2.0-oneloop0.05.txt: 363
+  ip-n2-M4e-31-b2.0-oneloop1.txt: 459
+  ip-n2-M4e-31-b2.0-oneloop10.txt: 163
+  ip-n2-M4e-31-b2.9-fixed0.01.txt: 61
+  ip-n2-M4e-31-b2.9-fixed0.1.txt: 61
+  ip-n2-M4e-31-b2.9-oneloop0.05.txt: 1331
+  ip-n2-M4e-31-b2.9-oneloop1.txt: 507
+  ip-n2-M4e-31-b2.9-oneloop10.txt: 163
+Values compared, per line kind:
+  bbn: 259
+  bounce: 148
+  cand: 9173
+  dissipation: 816
+  drain: 308
+  fixed_T: 148
+  history: 185
+  outcome: 43
+  tuning: 555
+  total: 11635
+
+bbn values not equal at ten digits (reported): none
+
+DIFFERENCES: none
+RESULT: every output matched once; every bit-for-bit and printed-digit item equal; Yp and D/H within 5e-10

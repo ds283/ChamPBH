@@ -1,0 +1,108 @@
+--- .documents/one-loop-drain/rehearse-06/histories.py	2026-11-13 20:15:33
++++ .documents/power-law-wall/rehearse-07/histories.py	2026-11-16 18:52:58
+@@ -1,21 +1,24 @@
+ """
+-The stored-values reader of one-loop-drain prompt 06 (§1.6), adapted from inelastic-reflection prompt 11's
+-(.documents/inelastic-reflection/measure/histories.py) to read the drain-model key, the history's drain record and the
+-bounce rows of one-loop-drain prompt 03. Stdlib only.
++The stored-values reader of power-law-wall prompt 07 (§1.6, R7), adapted from one-loop-drain prompt 06's
++(.documents/one-loop-drain/rehearse-06/histories.py) to read the potential: each history's model through its model_type
++(1 ExponentialModel, 2 InversePowerModel; CosmologyConcepts/Models/model_ids.py), from that table, never by model_serial
++alone (README §6.9 P37). Stdlib only.
+ 
+-    ./venv/bin/python .documents/one-loop-drain/rehearse-06/histories.py STORE_STEM
++    ./venv/bin/python .documents/power-law-wall/rehearse-07/histories.py STORE_STEM
+ 
+-STORE_STEM is the store's path without `.db` (e.g. var/datastores/one-loop-drain-06-reference). Every shard
+-(`<stem>-shard*.db`) is read through sqlite3 with `file:...?mode=ro` URIs only; the primary is not opened, and no file is
+-written. Its output goes to stdout; prompt 06 sends it to a file under var/one-loop-drain/06/.
++STORE_STEM is the store's path without `.db` (e.g. <main checkout>/var/datastores/power-law-wall-07-pl). Every shard
++(`<stem>-shard*.db`) is read through sqlite3 with `file:...?mode=ro` URIs only; the primary is not opened, no file is
++written, and neither datastorekit nor Ray is used. Its output goes to stdout; prompt 07 sends it to a file under
++var/power-law-wall/07/.
+ 
+-One line per ScalarHistory row, sorted by (drain_model, alpha, M, beta), with:
+-  - its key: drain_model (`fixed` where the store's alpha_value has no drain_model column, a format-6 store), alpha (A under
+-    the one-loop model), M/M_P (M_value.value_eV over the reduced Planck mass in eV), n, beta, phi*;
++One line per ScalarHistory row, sorted by (potential, n, drain_model, alpha, M, beta), with:
++  - its key: the potential (`exponential` or `inverse-power`, from model_type), drain_model (`fixed` where the store's
++    alpha_value has no drain_model column, a format-6 store), alpha (A under a one-loop model), M/M_P (M_value.value_eV
++    over the reduced Planck mass in eV), n, beta, phi*;
+   - failure, validated, failure_reason;
+   - the tuning's outputs (TUNING_OUTPUT_KEYS) by repr, the integrations (tuning_iterations) and the steps by kind;
+   - compute_time (the final integration's) and the tuning wall: the store's `timestamp` less the time in the history's
+-    label (main.py's datetime.now() at the compute's submission, whole seconds, local time = UTC on 2026-11-07), so that
++    label (main.py's datetime.now() at the compute's submission, whole seconds, local time = UTC on 2026-11-16), so that
+     it includes the queueing of the compute task;
+   - Delta_N_eff today and at 1 MeV, and the BBNData row's Yp and D/H (or its failure);
+   - for a one-loop history: the drain record's counts and shares, ell_min, log_R_min_drain, bounce_rows, and the bounce
+@@ -34,6 +37,13 @@
+ # REDUCED_PLANCK_MASS_EV of Units/base.py, as printed; used only to print M in units of M_P
+ M_P_EV = 2.4353235955263046e27
+ 
++# model_type -> (the model's table, the potential's option value); CosmologyConcepts/Models/model_ids.py and
++# model_options.py
++MODEL_TABLES = {
++    1: ("ExponentialModel", "exponential"),
++    2: ("InversePowerModel", "inverse-power"),
++}
++
+ TUNING_OUTPUT_KEYS = (
+     "normalization",
+     "V_ref",
+@@ -131,6 +141,7 @@
+         tabs = tables_of(conn)
+         for t in (
+             "ExponentialModel",
++            "InversePowerModel",
+             "ScalarHistory",
+             "ScalarHistoryValue",
+             "ScalarHistoryBounce",
+@@ -148,9 +159,10 @@
+         )
+         for r in conn.execute('SELECT * FROM "ScalarHistory" ORDER BY serial'):
+             r = dict(r)
++            mtable, potential = MODEL_TABLES[r["model_type"]]
+             em = dict(
+                 conn.execute(
+-                    'SELECT * FROM "ExponentialModel" WHERE serial = ?',
++                    f'SELECT * FROM "{mtable}" WHERE serial = ?',
+                     (r["model_serial"],),
+                 ).fetchone()
+             )
+@@ -159,6 +171,8 @@
+                 "shard": path.rsplit("-", 1)[-1],
+                 "serial": r["serial"],
+                 "label": r["label"],
++                "potential": potential,
++                "model_type": r["model_type"],
+                 "drain_model": (
+                     one(conn, "alpha_value", r["alpha_serial"], "drain_model")
+                     if has_model
+@@ -216,7 +230,16 @@
+                 rec["bounce_rows_found"] = len(br)
+             rows.append(rec)
+         conn.close()
+-    rows.sort(key=lambda x: (x["drain_model"], x["alpha"], x["M_Mp"], x["beta"]))
++    rows.sort(
++        key=lambda x: (
++            x["potential"],
++            x["n"],
++            x["drain_model"],
++            x["alpha"],
++            x["M_Mp"],
++            x["beta"],
++        )
++    )
+     return shards, rows, counts
+ 
+ 
+@@ -226,7 +249,7 @@
+     print(f"store {stem}: {len(shards)} shard files; {len(rows)} ScalarHistory rows")
+     for rec in rows:
+         head = (
+-            f"{rec['drain_model']} alpha={rec['alpha']:g} M={rec['M_Mp']:.6g}Mp n={rec['n']} beta={rec['beta']:g} "
++            f"{rec['potential']} {rec['drain_model']} alpha={rec['alpha']:g} M={rec['M_Mp']:.6g}Mp n={rec['n']} beta={rec['beta']:g} "
+             f"phi*={rec['phi_init_Mp']:g} [{rec['shard']} #{rec['serial']}]"
+         )
+         if rec["failure"]:

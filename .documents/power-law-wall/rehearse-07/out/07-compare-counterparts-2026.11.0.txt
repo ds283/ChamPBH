@@ -1,0 +1,4 @@
+exp export: 48 rows; counterparts: 20 rows; columns both hold: 61; only the export: ['model']; only the counterparts: []
+rows matched: 20 of 20
+columns equal in every matched row, as text: 61 of 61
+columns that differ (rows differing, largest relative difference, first):

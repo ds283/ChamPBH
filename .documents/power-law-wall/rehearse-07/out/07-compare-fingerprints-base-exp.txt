@@ -1,0 +1,25 @@
+A: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-base.manifest.json (store power-law-wall-07-base, store_id 60fc081b15c74c57968f9bd739bc30ba)
+B: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp.manifest.json (store power-law-wall-07-exp, store_id 63364222c77e45febdb266f188c347ce)
+A: format 7, digest 2b80c50c25805da0556eddb4a54a65577875aa400a16ec2bb6c5643cb3578277, 16 classes
+B: format 8, digest 2092b20090988edbc7e3d75c5909f30aeb095803b8c2cce16b861b3675f56086, 17 classes
+
+class                     count A  count B  digest A / digest B
+AdiabaticHistory               20       20  9b7ee0e0a68b23bd… / 7ddccc5c6bd2670a…  DIFFER
+BBNData                        20       20  10039a9cb349880c… / 48557e239f33b404…  DIFFER
+ExponentialModel                8        8  132ac5571a61aa3b… / 132ac5571a61aa3b…  equal
+IntegrationSolver               7        7  5806cd3cbdd94302… / 5806cd3cbdd94302…  equal
+InversePowerModel               -        0  named by B only, count 0, digest e3b0c44298fc1c14…
+M_value                         4        4  29553150f0f6b2e1… / 29553150f0f6b2e1…  equal
+QCD_Cosmology                   1        1  dcbaa9d413d45bf5… / dcbaa9d413d45bf5…  equal
+ScalarHistory                  20       20  d53df247a728cc8e… / bb7da5c132db7939…  DIFFER
+alpha_value                     6        6  e1ff5c4a4c8658d9… / e1ff5c4a4c8658d9…  equal
+beta_value                      3        3  638163f012ebbc4d… / 638163f012ebbc4d…  equal
+phi_value                       1        1  29e7a88b01e35866… / 29e7a88b01e35866…  equal
+pi_value                        1        1  237cd5e9616925ea… / 237cd5e9616925ea…  equal
+redshift                    75001    75001  8dad579a1ae8f2a8… / 8dad579a1ae8f2a8…  equal
+store_tag                       1        1  34407c96658d27b3… / 34407c96658d27b3…  equal
+temperature                     1        1  9bd0581c026ad77d… / 9bd0581c026ad77d…  equal
+tolerance                       2        2  a6a6f286796401ec… / a6a6f286796401ec…  equal
+version                         1        1  c5c399c6972cf65a… / d4371025b6073135…  DIFFER
+
+RESULT: NOT EQUAL (see above)

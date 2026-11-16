@@ -1,0 +1,38 @@
+A: var/power-law-wall/07/export-mixed/QCD_Cosmology/inverse-power
+B: var/power-law-wall/07/export-pl/QCD_Cosmology/inverse-power
+mode: --n1-subset
+files: A 59, B 120; A's missing in B 0; B's not in A 61
+B's files not in A under an n = 2 path: 61; elsewhere: 0
+alpha=0.01/csv/M=0.00097413eV_n=1/data.csv: differs only in timing or masked-label columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.173320250120014' vs '1.2183856249321252'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '7.986992958001792' vs '10.445840917062014'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0017497909720987082' vs '0.0023841660004109144'
+alpha=0.1/csv/M=0.00097413eV_n=1/data.csv: differs only in timing or masked-label columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.633881207788363' vs '1.8876410000957549'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '7.963909707963467' vs '8.46741791605018'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.001739791128784418' vs '0.0027126248460263014'
+histories.csv: 3 failure-reason cell(s) equal only once main.py's label is masked, to the shorter cut (ruling (a))
+histories.csv: a row file; A 48 rows, B 96 rows of which n = 1: 48, n = 2: 48; A equal to B's n = 1 rows in order: True
+one-loop-measured-pl-v1/A=0.05/csv/M=0.00097413eV_n=1/data.csv: differs only in timing or masked-label columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '14.989633582998067' vs '16.1034810829442'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.005120374960825' vs '9.185407915851101'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0014629580546170473' vs '0.0021110838279128075'
+one-loop-measured-pl-v1/A=1/csv/M=0.00097413eV_n=1/data.csv: differs only in timing or masked-label columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '2.913190457969904' vs '3.2819620410446078'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '7.883170791901648' vs '9.048404792090878'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.001613166183233261' vs '0.0018865421880036592'
+one-loop-measured-pl-v1/A=1/csv/M=2.4353e+12eV_n=1/data.csv: differs only in timing or masked-label columns
+     timing: column 'scalar_compute_time' differs in 1 row(s); first '4.987262875074521' vs '5.000206708908081'
+     timing: column 'BBN_compute_time' differs in 1 row(s); first '8.135461624944583' vs '9.630415000021458'
+     timing: column 'NP_compute_time' differs in 1 row(s); first '0.0015499170403927565' vs '0.0016255418304353952'
+one-loop-measured-pl-v1/A=1/csv/M=2.4353e-06eV_n=1/data.csv: differs only in timing or masked-label columns
+     timing: column 'scalar_compute_time' differs in 1 row(s); first '4.374410124961287' vs '4.330817666836083'
+     timing: column 'BBN_compute_time' differs in 1 row(s); first '8.568792999954894' vs '10.1489272499457'
+     timing: column 'NP_compute_time' differs in 1 row(s); first '0.0015284998808056116' vs '0.0019585001282393932'
+one-loop-measured-pl-v1/A=10/csv/M=0.00097413eV_n=1/data.csv: differs only in timing or masked-label columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.4301829158794135' vs '1.5770059588830918'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '7.976561208022758' vs '8.03223174996674'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0014042500406503677' vs '0.002170208841562271'
+quanta_histories.csv: a row file; A 11 rows, B 22 rows of which n = 1: 11, n = 2: 11; A equal to B's n = 1 rows in order: True
+row files: 2; other files of A byte-identical to B's: 50, differing only in timing or masked-label columns: 7, of 57
+RESULT: A is B at n = 1: every file equal (timing and masked-label columns named), the row files B rows at n = 1; B alone holds n = 2

@@ -1178,3 +1178,441 @@ Read at `main` by `git show main:science-runs/2026-11-13-science-2026.11.0/<path
 None reads a path of an export itself; each reads committed copies, by column name, so the extra column does not
 disturb them, and the potential's directory is above every path they name. The relativistic-quanta analysis is
 `tools/quanta_measures.py` on a potential's root (§5.5).
+
+## 6. The rehearsal (prompt 07, 2026-11-16)
+
+**Tree:** branch `power-law-wall` at `945bf5d` (the commit that adds prompt 07); the code is 06's reviewed code,
+`VERSION_LABEL` 2026.12.0, `FINGERPRINT_FORMAT` 8. The base builds ran from a detached worktree of `a7e0978` (2026.11.0,
+format 7), since removed. §1–§5 above are unchanged. Nothing in the code changed.
+**Scripts:** [`power-law-wall/rehearse-07/`](power-law-wall/rehearse-07/), each with a docstring: `code_probe.py` (§6.1),
+`histories.py` (§6.2), `compare_histories.py` (§6.4, §6.7), `compare_fingerprints.py` (§6.4), `compare_04.py` (§6.6),
+`compare_exports.py` (§6.5, §6.7, §6.8), and the helpers copied from `one-loop-drain` 06 (`wait_for_line.py`,
+`beat_times.py`, `ray_state.py`, `silences.py`, `check.sh`, `suite.sh`); each adaptation is a diff in `out/07-*.diff`.
+**Committed outputs:** [`power-law-wall/rehearse-07/out/`](power-law-wall/rehearse-07/out/): the runs' logs (ANSI codes
+removed), the recorders, the manifests, status files and the five sidecars; the probes; the comparisons; the histories
+readers; each export's `histories.csv` and each tip root's `quanta_histories.csv`; the readers' logs, `07-readers.txt` and
+`07-shasums.txt`; the loads, the clusters, the worktree, the costs and the suites. **Raw output** (not committed):
+`var/power-law-wall/07/` in the worktree (`runs/`, `readers/`, `export-*/`, `plot-pl/` with the figures, `quanta-grid-pl/`);
+the stores `<main checkout>/var/datastores/power-law-wall-07-{base,exp,pl,pl-resumed,mixed}*` with their sidecars; the
+run records `<main checkout>/var/runs/power-law-wall-07-*`.
+
+Orchestrator note 07's rulings 1–9 governed, and the user's ruling (a) on the stop at §6.7 (2026-11-16, "(a) please").
+The machine was shared: one-minute loads of 1.95–13.87 at the launches, up to 21.3 during the readers.
+
+### 6.1 The base tree, the clusters and the probes (prompt §1.1, §1.2; rulings 1, 2)
+
+- **The base tree** ([`07-worktree.txt`](power-law-wall/rehearse-07/out/07-worktree.txt)): `git worktree add --detach
+  <scratch>/base-a7e0978 a7e0978`, one link `venv`. `VERSION_LABEL = "2026.11.0"`, `FINGERPRINT_FORMAT = 7`, no `models`
+  key in `exponential.yaml`. `runregistrykit.find_client_root()` from its root: `runs_root` and `stores_root` in the main
+  checkout's `var/` (P61). `git diff a7e0978 945bf5d` over `PRyMrates PRyM CosmologyModels/GenericEOS requirements.txt
+  runregistrykit.toml thirdparty` is empty. `main.py`'s SHA-256 is `7b93fae4…8a7d` at `a7e0978` and `27056364…fb87` at
+  the tip. Its `git status` before the first base run and after the last: `?? venv` alone. Removed at 20:40 with the link
+  unlinked first, `git worktree remove` without `--force`, then `git worktree prune`.
+- **Two clusters, one at a time** ([`07-start-*.txt`](power-law-wall/rehearse-07/out/), `07-status-*`, `07-lock-*`, `07-stop-*`):
+  - the base's: `tools/ray_cluster.sh start "power-law-wall 07 (rehearsal, base a7e0978)"` from the base root, exit 0,
+    started in 7 s, gcs pid 82686, the lock HELD with that purpose; stopped by the base tree's `stop`, exit 0, "grace
+    period of 15s over; SIGKILL to: 82686 82687", released the lock, stopped in 19 s; then `status` exit 0, lock free, no
+    process, the four ports free;
+  - the tip's: `start "power-law-wall 07 (rehearsal, tip)"` from this worktree, exit 0, started in 7 s, gcs pid 85681;
+    stopped by this tree's `stop` at the end of the readers, exit 0, stopped in 20 s, lock released; `status` exit 0,
+    lock free, no process, the ports free. `ray stop` was never run.
+- **The probes** ([`07-probe-base.txt`](power-law-wall/rehearse-07/out/07-probe-base.txt),
+  [`07-probe-tip.txt`](power-law-wall/rehearse-07/out/07-probe-tip.txt)), each exit 0:
+
+  | tree | processes | module files under | labels | cwd | `PYTHONPATH` | `Xav_EOS_data.csv` | `PRyMrates/` |
+  |---|---|---|---|---|---|---|---|
+  | base | driver, task, actor | the base worktree | 2026.11.0, 7 | the base worktree | `.` (driver), None (workers) | `690090c8…119d` | 84 files, `49b4cea2…9224` |
+  | tip | driver, task, actor | this worktree | 2026.12.0, 8 | this worktree | `.` (driver), None (workers) | `690090c8…119d` | 84 files, `49b4cea2…9224` |
+
+  Each worker's `sys.path[0]` is its driver's tree root, and each cluster's working directory is the tree that started
+  it, so every process reads its own tree's data files, and those are identical in both trees.
+
+### 6.2 The builds (prompt §1.3, §1.4; ruling 3)
+
+Each run went through its tree's wrapper, detached through `sh`, with a recorder beside it; registration seen in 2.0 s
+each; one check ([`07-checks.txt`](power-law-wall/rehearse-07/out/07-checks.txt): the pid file equals `status.json`'s pid,
+state `running`); its end waited on in the background by `wait_for_line.py --timeout 3600`. 04's forty map to `pl`'s
+forty by (n, M, β, law), each `# command:` line giving only `--model`, `--n`, `--drain-law` and `--alpha`, and the three
+plain-tool outputs to `exp`'s histories ([`07-map-04.txt`](power-law-wall/rehearse-07/out/07-map-04.txt): 43 of 43).
+
+| Run id | Slug | Store | pid | State | Exit | Launched → ended (UTC) | Wall | Load at launch | git_head | git_dirty | script_sha256 | Fingerprint at finish (format, digest, taken) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `power-law-wall-07-base-a-20261116T190412` | `base-a` | base | 83029 | `done` | 0 | 19:04:10 → 19:06:57 | 2 min 48 s | 4.65 | `a7e0978` | true | `7b93fae4…8a7d` | 7, `d0bc61db…18e0`, 19:06:33 |
+| `power-law-wall-07-base-b-20261116T190723` | `base-b` | base | 83771 | `done` | 0 | 19:07:22 → 19:08:54 | 1 min 33 s | 3.79 | `a7e0978` | true | `7b93fae4…8a7d` | 7, `f8f4a0c1…44b7`, 19:08:30 |
+| `power-law-wall-07-base-c-20261116T190908` | `base-c` | base | 84170 | `done` | 0 | 19:09:07 → 19:10:07 | 1 min 1 s | 3.38 | `a7e0978` | true | `7b93fae4…8a7d` | 7, `2b80c50c…8277`, 19:09:43 |
+| `power-law-wall-07-exp-a-20261116T191457` | `exp-a` | exp | 86035 | `done` | 0 | 19:14:56 → 19:17:44 | 2 min 48 s | 5.26 | `945bf5d` | true | `27056364…fb87` | 8, `225e83c4…0f9f`, 19:17:20 |
+| `power-law-wall-07-exp-b-20261116T191802` | `exp-b` | exp | 86387 | `done` | 0 | 19:18:01 → 19:19:37 | 1 min 36 s | 5.85 | `945bf5d` | true | `27056364…fb87` | 8, `f4b75bff…5591`, 19:19:13 |
+| `power-law-wall-07-exp-c-20261116T191947` | `exp-c` | exp | 86789 | `done` | 0 | 19:19:45 → 19:20:46 | 1 min 1 s | 10.14 | `945bf5d` | true | `27056364…fb87` | 8, `2092b200…6086`, 19:20:21 |
+| `power-law-wall-07-pl-a-20261116T192157` | `pl-a` | pl | 87377 | `done` | 0 | 19:21:55 → 19:25:23 | 3 min 29 s | 10.36 | `945bf5d` | true | `27056364…fb87` | 8, `2d02fb5d…6889`, 19:24:57 |
+| `power-law-wall-07-pl-b-20261116T192616` | `pl-b` | pl | 88045 | `done` | 0 | 19:26:14 → 19:28:42 | 2 min 28 s | 8.14 | `945bf5d` | true | `27056364…fb87` | 8, `7983bdf4…8d5d`, 19:28:17 |
+| `power-law-wall-07-pl-c-20261116T192903` | `pl-c` | pl | 90202 | `done` | 0 | 19:29:01 → 19:30:15 | 1 min 15 s | 7.13 | `945bf5d` | true | `27056364…fb87` | 8, `9d4fcf02…ff7a`, 19:29:50 |
+| `power-law-wall-07-pl-resumed-a-20261116T193200` | `pl-resumed-a` | pl-resumed | 91275 | `killed` | 143 | 19:31:58 → 19:34:10 | 2 min 12 s | 4.97 | `945bf5d` | true | `27056364…fb87` | 8, `cc815048…3e54`, 19:33:45 |
+| `power-law-wall-07-pl-resumed-a2-20261116T193454` | `pl-resumed-a2` | pl-resumed | 91941 | `done` | 0 | 19:34:52 → 19:36:54 | 2 min 2 s | 11.74 | `945bf5d` | true | `27056364…fb87` | 8, `2d02fb5d…6889`, 19:36:29 |
+| `power-law-wall-07-pl-resumed-b-20261116T193722` | `pl-resumed-b` | pl-resumed | 92310 | `done` | 0 | 19:37:21 → 19:39:48 | 2 min 27 s | 9.23 | `945bf5d` | true | `27056364…fb87` | 8, `7983bdf4…8d5d`, 19:39:23 |
+| `power-law-wall-07-pl-resumed-c-20261116T193957` | `pl-resumed-c` | pl-resumed | 93222 | `done` | 0 | 19:39:55 → 19:41:15 | 1 min 20 s | 13.87 | `945bf5d` | true | `27056364…fb87` | 8, `9d4fcf02…ff7a`, 19:40:49 |
+| `power-law-wall-07-mixed-a-20261116T201642` | `mixed-a` | mixed | 98248 | `done` | 0 | 20:16:40 → 20:21:31 | 4 min 51 s | 1.95 | `945bf5d` | true | `27056364…fb87` | 8, `7caa9a3c…b088`, 20:21:07 |
+| `power-law-wall-07-mixed-b-20261116T202152` | `mixed-b` | mixed | 98763 | `done` | 0 | 20:21:50 → 20:23:35 | 1 min 45 s | 3.78 | `945bf5d` | true | `27056364…fb87` | 8, `72b35099…9d12`, 20:23:10 |
+| `power-law-wall-07-mixed-c-20261116T202347` | `mixed-c` | mixed | 99069 | `done` | 0 | 20:23:45 → 20:25:05 | 1 min 20 s | 5.25 | `945bf5d` | true | `27056364…fb87` | 8, `7d7a1a4c…57c7`, 20:24:40 |
+
+- **The manifests** ([`07-<slug>.manifest.json`](power-law-wall/rehearse-07/out/)): every base run records `git_head`
+  `a7e097874fe7…` and `script_sha256` `7b93fae4…8a7d`, the SHA-256 of `git show a7e0978:main.py`; every tip run
+  `945bf5dfcc7b…` and `27056364…fb87`, the tip's `main.py`. `git_dirty` is true throughout: in the base worktree from the
+  `venv` link, in this worktree from this prompt's untracked `rehearse-07/` (no tracked file differed). `results_store_id`
+  is null for every run: each store's sidecar was created after its last run, so each run's `fingerprint_sidecar` says
+  "not written … (there is none)".
+- **The stores** ([`07-*-store.sidecar.json`](power-law-wall/rehearse-07/out/), `07-fingerprint-*.txt`): `store create`
+  after each store's last run, base from the base root (its history `git_head` `a7e0978`), the others from this worktree;
+  then `store fingerprint --write`, from the same tree, so that each sidecar carries the fingerprint `compare_fingerprints.py`
+  reads. Base **format 7** `2b80c50c…8277` (= `base-c`'s at finish); exp **format 8** `2092b200…6086` (= `exp-c`'s); pl and
+  pl-resumed **format 8** `9d4fcf02…ff7a` (= `pl-c`'s and `pl-resumed-c`'s); mixed **format 8** `7d7a1a4c…57c7`. Every one
+  `problems: none`.
+- **The histories** (`07-histories-<store>.txt`): base and exp 20 each, all tuned; pl and pl-resumed 40 each, 37 tuned and
+  the three n = 1 natural-mode histories at 10⁻³ M_P failed at G2 (R5), as in 04; mixed 40, 20 per potential, the same
+  three n = 1 failures. Counts: base and exp `ScalarHistoryValue` 109 052, `ScalarHistoryBounce` 917; pl and pl-resumed
+  201 766 and 2 262; mixed 201 756 and 2 064.
+- **The stage times** (each pipeline's `ALL WORK ITEMS COMPLETE`, scalar / adiabatic / BBN):
+
+  | run | α or A: scalar / adiabatic / BBN |
+  |---|---|
+  | `base-a` | α 0.01 16.4/0.735/10.5 s; α 0.1 10.8/0.657/9.14 s; A 0.05 16.8/0.727/9.73 s; A 1 10.3/0.672/9.51 s; A 10 7.72/0.718/8.22 s |
+  | `base-b`, `exp-b` | α 0 42.5/0.798/10.5 s; 44.8/0.806/10.7 s |
+  | `base-c`, `exp-c` | A 1 9.64/0.826/11 s; 9.68/0.934/9.84 s |
+  | `exp-a` | α 0.01 16.4/0.724/11.2 s; α 0.1 11.2/0.679/9.19 s; A 0.05 17.5/0.978/9.88 s; A 1 10.2/0.682/9.06 s; A 10 7.61/0.713/8.39 s |
+  | `pl-a` | α 0.01 19.3/1.32/12.5 s; α 0.1 14.7/1.2/10.3 s; A 0.05 25.1/1.07/11 s; A 1 14/1.19/10.3 s; A 10 8.9/1.14/8.83 s |
+  | `pl-b`, `pl-resumed-b` | α 0 1m 35.6/0.993/10.6 s; 1m 34.7/0.885/10.6 s (AdiabaticHistory and BBNData skip the 3 failures) |
+  | `pl-c`, `pl-resumed-c` | A 1 13.6/1.51/19 s; 15.1/1.74/18.6 s |
+  | `pl-resumed-a` | α 0.01 18/1.05/11.6 s; α 0.1 13.6/1.27/10.5 s; A 0.05 interrupted |
+  | `pl-resumed-a2` | α 0.01 and 0.1 nothing to compute (0.01–0.23 s); A 0.05 26/1.27/10.8 s; A 1 13.2/1.04/9.54 s; A 10 9.66/1.25/9.08 s |
+  | `mixed-a` | exponential: α 0.01 17.6, α 0.1 10.7, A 0.05 17.2, A 1 10.2, A 10 7.39 s scalar; inverse-power: 14.7, 11, 22.4, 12.6, 6.88 s |
+  | `mixed-b` | exponential α 0 42.4/0.778/10.4 s; inverse-power α 0 11.7 s (all three fail), adiabatic and BBN skipped |
+  | `mixed-c` | exponential A 1 9.68/0.875/10 s; inverse-power A 1 9.11/0.861/9.1 s |
+
+  No log holds a `Traceback`. The builds' walls: base 5 min 22 s (three runs), exp 5 min 25 s, pl 7 min 12 s, pl-resumed
+  8 min 1 s (four runs), mixed 7 min 56 s; the whole Ray work 19:03–19:43 and 20:16–20:38 (the gap is the stop of §6.7).
+- **The silences** ([`07-silences.txt`](power-law-wall/rehearse-07/out/07-silences.txt)): the longest heartbeat silence
+  was **55 s** (`pl-b`, the α = 0 scalar stage; `pl-resumed-b` 54 s; the others 24–45 s), against the 900 s window.
+
+### 6.3 The interruption (prompt §1.4; ruling 5)
+
+- **The window** ([`07-delay.txt`](power-law-wall/rehearse-07/out/07-delay.txt)). The banner's text, `>> RUNNING PIPELINE FOR
+  MODEL QCD_Cosmology, A = 0.05 (one-loop-measured-pl-v1)`, was confirmed in `pl-a`'s log; the recorder saw it at
+  19:23:35.515. The beats hold no line per stored history (the stage's lines are its banner, its completion line and the
+  queue summary), so the opening was read from the `pl` store's `ScalarHistory.timestamp`s of the A = 0.05 rows, as
+  `one-loop-drain` 06 read its own: n = 2 β = 1.2 at +16.303 s (**the opening**), then +16.709, +17.349, +18.076, +22.290,
+  +23.010 s. **The close**: the A = 0.05 scalar stage's `-- ALL WORK ITEMS COMPLETE in time 25.1s` at +24.693 s. The window
+  is 8.390 s, shorter than 10 s, so the delay is the opening + 2 s = 18.303 s, rounded down to a whole second as the
+  midpoint rule rounds: **`--after 18`**. Load at `pl-a`'s launch 10.36, at `pl-resumed-a`'s 4.97.
+- **The signal** ([`07-pl-resumed-a.interrupt.log`](power-law-wall/rehearse-07/out/07-pl-resumed-a.interrupt.log)): banner seen at
+  19:33:26 (the recorder: 19:33:26.347), `sent SIGTERM to pid 91275` at 19:33:44, about +17.7 s after the banner,
+  **inside the window**. The wrapper: `** SIGTERM at 2026-11-16 19:33:44 +0000: recorded killed, exit code 143`; `main.py
+  ended with SystemExit(1)`; `** launcher saw exit status 143`. One attempt; no miss.
+- **What was stored** ([`07-histories-pl-resumed-after-a.txt`](power-law-wall/rehearse-07/out/07-histories-pl-resumed-after-a.txt),
+  [`07-stage-counts-pl-resumed-a.txt`](power-law-wall/rehearse-07/out/07-stage-counts-pl-resumed-a.txt)): the twelve fixed-law
+  histories of run a, validated, with their adiabatic and BBN rows; **A = 0.05 n = 1 β = 2, n = 2 β = 1.2 and n = 2 β = 2,
+  stored 19:33:43.35–19:33:44.06, each `validated = 0`**; the other three not stored. `ScalarHistory` 15, `ScalarHistoryBounce`
+  443, `AdiabaticHistory` 12, `BBNData` 12. The scalar stage of A = 0.05: INCOMPLETE, no queue summary.
+- **Ray after it** ([`07-ray-state-after-interrupt.txt`](power-law-wall/rehearse-07/out/07-ray-state-after-interrupt.txt)): every
+  job `SUCCEEDED` (Ray's record of a `SIGTERM`ed driver), workers 165 recorded and 0 alive, actors 120 and 0 `ALIVE`;
+  `ray_cluster.sh status` exit 0, the lock HELD; the driver's pid answers no `kill -0`; the registry says `killed`.
+- **The resume** (`pl-resumed-a2`, `--prune-unvalidated`;
+  [`07-stage-counts-pl-resumed-a2.txt`](power-law-wall/rehearse-07/out/07-stage-counts-pl-resumed-a2.txt)): the datastore actors
+  report the three unvalidated `ScalarHistory` rows (5003 or 5437 z-sample values and 303 or 71 bounce rows each, as
+  expected) and "these values have been pruned from the datastore". At α = 0.01 and 0.1 every stage had 0 lookups ("all
+  assets read from datastore"); at A = 0.05 the scalar, adiabatic and BBN stages looked up, computed, stored and validated
+  all six, and at A = 1 and 10 all six, as a fresh build. `pl-resumed-a2`'s fingerprint at finish, `2d02fb5d…6889`, equals
+  `pl-a`'s, and `pl-resumed-b`'s and `-c`'s equal `pl-b`'s and `pl-c`'s.
+
+### 6.4 The gate R (i): the exponential bitwise, base to tip (prompt §2.1; P64)
+
+- `compare_histories.py` on base and exp ([`07-compare-base-exp.txt`](power-law-wall/rehearse-07/out/07-compare-base-exp.txt)),
+  exit 0, **`RESULT: every history matched once each way, every compared value bitwise equal`**, `DIFFERENCES: none`:
+  20 of 20 matched each way by (potential, M, n, β, φ*, α, drain model) through `ExponentialModel`; no history failed.
+  Values compared: `ScalarHistory` 1 560 and `extra_data` 134, `ScalarHistoryValue` 2 290 092, `ScalarHistoryBounce`
+  27 510, `AdiabaticHistory` 120 and `AdiabaticHistoryValue` 545 260, `BBNData` 200 and `BBNDataValue` 119 060, the key
+  tables 400: **2 984 336 values, every one equal.** Left out by name: `serial`, every `*_serial`, `version`, `label`,
+  `timestamp` and the six timing columns.
+- `compare_fingerprints.py` on the two sidecars ([`07-compare-fingerprints-base-exp.txt`](power-law-wall/rehearse-07/out/07-compare-fingerprints-base-exp.txt)),
+  exit 1, with every difference explained from the two trees' `inventory_spec()`s
+  ([`07-compare-fingerprints-base-exp-explained.txt`](power-law-wall/rehearse-07/out/07-compare-fingerprints-base-exp-explained.txt)):
+  `version` differs (its spec's one leaf is `label`, 2026.11.0 against 2026.12.0, U6); `ScalarHistory`, `AdiabaticHistory`
+  and `BBNData` differ, and each names `Parent("version", "version")` at both trees, so each identity carries the label;
+  the other twelve classes, none of which names a version parent, are equal in count and digest; `InversePowerModel` is
+  named by the tip alone, count 0, the empty digest (P40).
+
+### 6.5 The gate R (ii): the power law resumed (prompt §2.2; P65; the user's ruling (a))
+
+- `tools/compare_stores.py` on pl and pl-resumed ([`07-compare-stores-pl.txt`](power-law-wall/rehearse-07/out/07-compare-stores-pl.txt)),
+  as it printed: exit 1, `RESULT: the stores differ, or a problem was named`, `problems: none`. Every table matched with
+  0 rows on either side only (`InversePowerModel` 16 and `ScalarHistoryBounce` 2 262 among them; `ScalarHistoryValue`
+  201 766, `AdiabaticHistoryValue` 201 766, `BBNDataValue` 55 059, `redshift` 75 001) but `ScalarHistory` (37 matched, 3
+  and 3 on one side only) and `ScalarHistory_tags` (the same three). The three are the n = 1 natural-mode failures: their
+  stored `failure_reason` carries main.py's history label (`…-pl-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=…)-
+  2026-11-16T19:26:30` against `…-pl-resumed-b-…-19:37:37`), which `compare_stores.py` compares as content, and the
+  reason is cut at 256 characters with the label in it, so `pl-resumed`'s rows keep 8 characters fewer of the reason. **The
+  stop and the ruling** (§6.7): the user ruled (a), the label a run-dependent fragment; the item holds when its only
+  differences are failure rows whose reasons are equal once the label is masked and compared to the shorter cut, which is
+  so for all three (157 of 165 and 157, 159 of 167 and 159, 157 of 165 and 157 masked characters,
+  [`07-compare-histories-pl-pl-resumed.txt`](power-law-wall/rehearse-07/out/07-compare-histories-pl-pl-resumed.txt)).
+  The bookkeeping columns that differ: timestamps, labels and compute times only.
+- `compare_histories.py` on pl and pl-resumed, exit 0: 40 matched each way, 3 failing in both, **5 538 777 values equal**,
+  the three `failure_reason`s equal only under the mask (counted and printed).
+- **`store fingerprint`** on both: **`9d4fcf022a4968fb59f891f701f978c013d14e8cebc0fc4d8f26039c9fd3ff7a`, format 8**,
+  `problems: none`, equal.
+- `compare_exports.py` on `export-pl/QCD_Cosmology` and `export-pl-resumed/QCD_Cosmology`, after R5
+  ([`07-compare-exports-pl.txt`](power-law-wall/rehearse-07/out/07-compare-exports-pl.txt)), exit 0: 120 files each, none on one side
+  only; **104 byte-identical** (the 22 `bounces.csv`, 37 `fields.csv`, R5's 22 `quanta_bounces.csv`, 22 `quanta_samples.csv`
+  and `quanta_histories.csv`); 15 `data.csv` differ only in the timing columns `scalar_compute_time`, `BBN_compute_time`,
+  `NP_compute_time`; `histories.csv` differs only in `failure_reasons`, 3 rows, equal under the ruled mask.
+
+### 6.6 The gate R (iii): the power law against 04 (prompt §2.3; P66; ruling 4)
+
+`compare_04.py` on pl, pl-resumed and exp ([`07-compare-04-pl.txt`](power-law-wall/rehearse-07/out/07-compare-04-pl.txt),
+[`07-compare-04-pl-resumed.txt`](power-law-wall/rehearse-07/out/07-compare-04-pl-resumed.txt),
+[`07-compare-04-exp.txt`](power-law-wall/rehearse-07/out/07-compare-04-exp.txt)), each exit 0, **`RESULT: every output matched once;
+every bit-for-bit and printed-digit item equal; Yp and D/H within 5e-10`**, `DIFFERENCES: none`:
+- **the outcome**: 37 successes and 3 failures as 04's `sample outcome`; each failure's stored reason equals the tool's
+  with the stored history's name in place of the tool's, cut to `DEFAULT_STRING_LENGTH` (256) characters as production
+  cuts it, character for character (every number included); the 39 characters beyond the cut are not held;
+- **bit for bit**: the `tuning` line's fifteen keys by `float.hex` of the printed `repr` (555 values per store); the
+  `history` line's RHS = `RHS_evaluations`, `accepted_steps` and `reflections` (`extra_data`), `samples` = `z_samples`,
+  `integrations` = `tuning_iterations` (185);
+- **at the printed digits**: `bounce` (`.9f`, `.6f` MeV, `.6e`, the flag; 148), `dissipation` (every field `.6g`; 816),
+  `drain` (`.6g`; 308, `candidates` as the sum of `candidates_<regime>` and as the count of candidate bounce rows),
+  `fixed_T` (`phi`, `ratio`, `.9e`; 148); every `cand` row of a one-loop history against its bounce row of source
+  `candidate` by `candidate_index`, their number equal to the line's `candidates` (`N` `.6f`, `kind`, `log_R` `.8g`, `ell`,
+  `regime`, `alpha_eff`, `w_gate` `.6g`, `resolved`, each through `to_column(…, kind None, Planck_units())`, the identity;
+  9 173); a fixed-law history holds no bounce row and no drain record, checked, and its cand rows are listed as not held;
+- **not held**, listed: `history` `wall`; `fixed_T` `crossings`, `stand_in_phi`, `stand_in_ratio`; `bbn` `PRyM_time`,
+  `wall`; `cand` `log_x` (derived as `log_E_Mp4` less the normalization, a measurement), `phi_t_Mp`, `f`, `dK_over_K`,
+  `rho_kin_over_rho_rad`;
+- **Y_p and D/H** (and He3/H, Li7/H beside them), `.10g`: every stored value rounds to the printed text in every history
+  (259 `bbn` values with the network, the PRyM version and the failure flag); the 5 × 10⁻¹⁰ allowance was not used.
+- **The count**: 11 635 values per power-law store (outcome 43, history 185, tuning 555, bounce 148, dissipation 816, drain
+  308, fixed_T 148, cand 9 173, bbn 259); exp's three plain-tool outputs 185 (no cand rows: the plain tool prints none).
+- **The 2026.11.0 counterparts** (a measurement; [`07-compare-counterparts-2026.11.0.txt`](power-law-wall/rehearse-07/out/07-compare-counterparts-2026.11.0.txt)):
+  exp's export `histories.csv` against 04's `exponential_counterparts.csv`, rows by (β, M, n, drain model, α), 20 of 20
+  matched, **all 61 shared columns equal as text in every row** (the export alone has `model`).
+
+### 6.7 The gate R (iv): two potentials in one store (prompt §2.4; P67), and the stop
+
+- `compare_histories.py` on mixed and exp with `--model exponential`
+  ([`07-compare-mixed-exp.txt`](power-law-wall/rehearse-07/out/07-compare-mixed-exp.txt)), exit 0: 20 matched each way,
+  **2 984 336 values equal**, no failure.
+- On mixed and pl with `--model inverse-power --n 1` ([`07-compare-mixed-pl-n1.txt`](power-law-wall/rehearse-07/out/07-compare-mixed-pl-n1.txt)),
+  exit 0: 20 matched each way, 3 failing in both, **2 548 230 values equal**, the three `failure_reason`s under the ruled
+  mask (162 of 162 and 165, 164 of 164 and 167, 162 of 162 and 165 masked characters).
+- The mixed store's own: `ExponentialModel` 8 and `InversePowerModel` 8 rows, both with digest `132ac557…` (one spec,
+  the same values, P33); its serials interleave the two potentials' histories.
+- `compare_exports.py` on `export-mixed/…/exponential` and `export-exp/…/exponential`
+  ([`07-compare-exports-mixed-exp.txt`](power-law-wall/rehearse-07/out/07-compare-exports-mixed-exp.txt)), exit 0: 63 files each, none
+  on one side only, **55 byte-identical**, 8 `data.csv` differing only in the three timing columns.
+- `compare_exports.py --n1-subset` on `export-mixed/…/inverse-power` and `export-pl/…/inverse-power`
+  ([`07-compare-exports-mixed-pl.txt`](power-law-wall/rehearse-07/out/07-compare-exports-mixed-pl.txt)), exit 0: every one of mixed's 59
+  files is at pl's path; `histories.csv` (48 rows) equals pl's 48 n = 1 rows in order, 3 `failure_reasons` cells under the
+  ruled mask; `quanta_histories.csv` (11 rows) equals pl's n = 1 rows; 50 other files byte-identical and 7 `data.csv`
+  differing only in timing columns; pl's 61 other files all lie under `_n=2` paths.
+- **The stop** (at §2.2, 19:43): `compare_stores` on pl and pl-resumed did not print `RESULT: equal` (§6.5). The agent
+  stopped with the cluster up and the four stores in place, and the user ruled, in their words, "(a) please": the label in
+  `ScalarHistory.failure_reason` is a run-dependent fragment for 07; §2.2's `compare_stores` item and §2.4's comparisons
+  hold when their only differences are failure rows whose reasons are equal once the label is masked and compared to the
+  shorter of the two cuts; `compare_stores.py` is not edited; one issue is opened (board §3,
+  `[07-failure-reason-carries-the-run-label]`). The tip cluster stayed up from 19:14 to 20:38 across the stop.
+
+### 6.8 The gate R (v): the readers (prompt §1.5, §2.5; P68)
+
+Each unregistered, its store's `shasum -a 256` (16 shards, the primary and the sidecar) taken before and after:
+**unchanged every time** ([`07-readers.txt`](power-law-wall/rehearse-07/out/07-readers.txt),
+[`07-shasums.txt`](power-law-wall/rehearse-07/out/07-shasums.txt)). The base's readers ran from the base tree with its cluster
+up, the others from this worktree, R1–R4 and R7 with its cluster up, R5 and R6 after its stop.
+
+| reader | store | exit | wall | load at start |
+|---|---|---|---|---|
+| R1 `main.py --inventory` | base, exp, pl, pl-resumed, mixed | 0 each | 26.4, 25.0, 25.6, 25.6, 25.0 s | 2.93, 9.62, 5.78, 18.13, 14.46 |
+| R2 `plot_by_beta.py --no-plots` | base, exp, pl, pl-resumed, mixed | 0 each | 25.4, 27.7, 23.2, 22.2, 21.9 s | 6.21, 9.80, 15.45, 21.33, 16.62 |
+| R2 `plot_ScalarHistory.py --no-plots` | base, exp, pl, pl-resumed, mixed | 0 each | 17.5, 16.5, 20.0, 20.7, 21.4 s | 7.42, 14.80, 13.33, 11.73, 9.64 |
+| R3 `plot_by_beta.py`, `plot_ScalarHistory.py` | pl | 0, 0 | 33.7, 44.3 s | 7.48, 6.73 |
+| R4 `plot_by_beta.py --models inverse-power` | exp | **2** | 9.6 s; 8.9 s with the fixed rows only | 8.88, 7.38 |
+| R4 `plot_by_beta.py --A-values 0.5` | pl | **2** | 9.0 s | 8.77 |
+| R4 `main.py --n-values 3 --A-values 1` | (no store) | **2** | 1.4 s | 8.28 |
+| R5 `quanta_measures.py`, ×5 | the tip's roots | 0 each | 4.8–8.3 s | 4.28–4.84 |
+| R5 `plot_quanta_grid.py` | pl's root | 1 | 1.6 s | 4.11 |
+| R6 `bbn_from_store.py` | base, exp, pl n = 1, pl n = 2 | 0 each | 10.9, 10.3, 9.9, 9.7 s | 7.54, 4.31, 4.10, 3.93 |
+| R7 `histories.py` | each of the five | 0 each | 0.1 s | 6.50–7.21 |
+
+- **R1**: every inventory prints `problems: none`. exp lists `InversePowerModel (sharded): 0 records`; pl and pl-resumed
+  `ExponentialModel` 0 and `InversePowerModel` 16; mixed 8 and 8; `ScalarHistory` 20, 20, 40, 40, 40, all validated. Three
+  first calls on pl, pl-resumed and mixed passed `--n-values 1 2` or `--models exponential inverse-power` as one shell word
+  (zsh does not split an unquoted variable) and were refused at parse, exit 2, nothing opened; re-run one command each.
+- **R2** (`export-<store>/QCD_Cosmology/`): base `alpha=0/`, `alpha=0.01/`, `alpha=0.1/`, `one-loop-measured-v1/` and
+  `histories.csv` at the label (40 files, 48 rows: 20 histories and 28 grid markers, the grids not being a rectangle);
+  exp `exponential/` alone (40 files); pl and pl-resumed `inverse-power/` alone (75 files, 96 rows); mixed one plot run with
+  `--models exponential inverse-power`, both roots (40 + 36 files).
+- **§2.5's export rule** (`compare_exports.py --base … --exclude 'quanta_*'`;
+  [`07-compare-exports-base-exp.txt`](power-law-wall/rehearse-07/out/07-compare-exports-base-exp.txt)), exit 0: the base's 40
+  files and the tip's `exponential/` 40 (R5's 23 quanta files left out by name) at the same paths; `histories.csv` with
+  `model` at column 3, directly after `n`, `exponential` in all 48 rows, and with it removed **identical** (17 911 bytes, sha256
+  `eeafb6ad9b2be5f5`); 31 other files byte-identical; 8 `data.csv` differ only in the three timing columns, the two stores
+  being two builds (06's rule compared one store exported by two trees).
+- **R3** (`plot-pl/QCD_Cosmology/inverse-power/`): 397 PDF, 397 PNG and 75 CSV files.
+- **R4** ([`07-R4-*.log`](power-law-wall/rehearse-07/out/)): each exit 2, its `--output` not created:
+  - `--models inverse-power` on exp with the store's alpha rows: `!! plot: the store holds no alpha_value for --A-values
+    0.05 (one-loop-measured-pl-v1); …` (the power law's A rows are looked up under its own drain model, which exp does not
+    hold, and that check comes first); with the fixed rows only (`--alpha-values 0 0.01 0.1`): the twelve (M, β) not
+    stored, then `!! plot: the store holds no InversePowerModel for --models inverse-power; main.py was not run with it, so
+    no history in this store can match. Give the plot the options the build used`;
+  - `--A-values 0.5` on pl: `!! plot: the store holds no alpha_value for --A-values 0.5 (one-loop-measured-pl-v1); …`;
+  - `main.py --config inverse_power.yaml --n-values 3 --A-values 1 --database <var/datastores>/power-law-wall-07-nonexistent.db`:
+    `main.py: error: --A-values needs one one-loop drain model for each potential of --models over the n of --n-values: the
+    potential inverse-power has no one-loop drain law at n = 3: …`, at parse, before Ray (no `ray.init` line); no file of
+    that name was created.
+- **R5** (c_a = 1; [`07-R5-*.log`](power-law-wall/rehearse-07/out/)): exp's root and mixed's exponential root `measured 11, skipped
+  as fixed-law 24, failed histories 13, missing files 0, refused 0, failed the K check 0`, `R8-exponential-v1`; pl's and
+  pl-resumed's roots `measured 22, skipped as fixed-law 48, failed histories 26`, `R8-power-n1-v1, R8-power-n2-v1`; mixed's
+  inverse-power root `measured 11 … failed histories 13`, `R8-power-n1-v1`. "Failed histories" are the one-loop grid-marker
+  rows with no stored history. In every `quanta_histories.csv` each row's `spectrum_model` is its potential's at its n:
+  `R8-exponential-v1` for the exponential, `R8-power-n1-v1` at n = 1 and `R8-power-n2-v1` at n = 2 for the power law. K
+  bitwise at every candidate but the leftover, the K check within 2.84 × 10⁻¹⁴. **`plot_quanta_grid.py`** on pl's root
+  (with `--output var/power-law-wall/07/quanta-grid-pl`, so that pl's root stays as R2 and R5 left it): exit 1, `figures
+  written 0, refused 3`, each `REFUSED one-loop-measured-pl-v1 A=…: two rows in one cell: … n=1 … and … n=2 …`, as the board's
+  §3 issue `[06-plot-quanta-grid-refuses-two-n-at-one-cell]` expects. A measurement, not a stop.
+- **R6** (`--small-network --variant prod --phi-init-Mp 5 --beta 2.0 --M-Mp 4e-31`):
+
+  | store | law | `stored:` Y_p, D/H | `prod` re-solve |
+  |---|---|---|---|
+  | base (format 7, by the base tree) | fixed, α = 0.1 | 0.24709132974834228, 2.472581603838663 | 0.2470913297, 2.472581604 |
+  | exp | fixed, α = 0.1 | 0.24709132974834228, 2.472581603838663 | 0.2470913297, 2.472581604 |
+  | pl, n = 1 | one-loop, A = 1 | 0.24665306398821538, 2.464458629552044 | 0.246653064, 2.46445863 |
+  | pl, n = 2 | one-loop, A = 1 | 0.247252831052115, 2.4689877633886104 | 0.2472528311, 2.468987763 |
+
+  Each re-solve equals the stored value rounded to the ten significant digits it prints.
+- **R7**: each store's `histories.py` output is byte-identical to the one taken after its build.
+
+### 6.9 The figures, the costs, the suites
+
+- **The figures**, looked at as PNG (none committed). `plot-pl/QCD_Cosmology/inverse-power/plots/M=0.00097413eV_n=1/Delta_N_eff.png`:
+  the title names `M = 4e-31 M_P, n = 1`; two panels, ΔN_eff(T_CMB) and ΔN_eff(1 MeV) against β on log axes, one curve per
+  (model, value) with value > 0: α = 0.01, α = 0.1 and A = 0.05, 1, 10 (one-loop-measured-pl-v1). A = 10 lies highest (0.34
+  at β = 1.2 falling to 0.06 at 2.9), then α = 0.1 (0.065 to 0.038), A = 1 (0.039 to 0.024), α = 0.01 (6.8 × 10⁻³ to
+  5.1 × 10⁻³) and A = 0.05 lowest (2.1 × 10⁻³ to 1.4 × 10⁻³); the legend covers A = 10's point at β = 2.9 in the upper panel.
+  `one-loop-measured-pl-v1/A=1/plots/beta=2/M=0.00097413eV_n=1/dark_radiation.png` and its `n=2` twin: Δg* and ρ_χ/ρ_R
+  against N from the first impact at N ≈ 20.4, the QCD-era steps near N = 21–23, the BBN window shaded, the parking marked
+  (N = 30.9 at n = 1, 29.65 at n = 2), ρ_χ/ρ_R flat after it at about 4.1 × 10⁻³ (n = 1) and 4.6 × 10⁻³ (n = 2); the footer
+  reads "Reflections: 37" and "Reflections: 48". Each figure names `InversePowerModel(M=0.00097413eV,n=…,beta=2)` and
+  `A = 1 (one-loop-measured-pl-v1)` in its header.
+- **The costs** ([`07-costs.txt`](power-law-wall/rehearse-07/out/07-costs.txt); per history, the tuning's integrations and the
+  tuning wall, the store's timestamp less the time in the history's label, the queueing included):
+  - at laboratory M the power law at both n tunes in 1 integration, as the exponential (one exponential history, A = 10 at
+    β = 2, takes 2); walls 4.2–22.5 s against the exponential's 5.0–15.2 s; A = 0.05 the longest at each n (16.2–22.5 s
+    against 14.3–15.2 s);
+  - natural mode at 10⁻³ M_P: the exponential 4 integrations in 41–42 s; the power law at n = 2 4 integrations in 92–93 s;
+    at n = 1 the G2 failure in 13 s;
+  - one-loop at 10⁻³³ and 10⁻¹⁵ M_P: 5.2–9.7 s, 1 integration;
+  - totals over the twenty: the exponential 30 integrations, 294 s; the power law n = 1 17 integrations (three failures),
+    229 s; n = 2 29 integrations, 468 s;
+  - bounce rows per one-loop history: the exponential 11–279 (917 in all), the power law n = 1 13–339 (1 147), n = 2 15–313
+    (1 115); mixed 2 064;
+  - on disk (17 files each): base 123 096 KiB, exp 126 720, pl 159 408, pl-resumed 159 656, mixed 164 772;
+  - mixed's wall, 7 min 56 s, against exp's 5 min 25 s and pl's 7 min 12 s (pl at two n, mixed two potentials at one n).
+- **The suites**, serially, never with a cluster up (`07-suites.txt`; `unittest`'s time, the one-minute load before the
+  root): before (18:42–19:03), CosmologyModels 26 OK (64.3 s; 2.73), ComputeTargets `test_[a-f]*` 226 OK (146.2 s; 4.40),
+  `test_[g-z]*` 557 OK (542.3 s; 6.23), ObjectFactories 175 OK (152.0 s; 4.12), tools 312 with 1 failure (312.9 s; 2.07),
+  RunDrivers 79 with 1 failure (24.2 s; 2.98); the two failures are note 01's ruling 7's worktree failures
+  (`test_roots_and_distributions`, `test_the_script_is_main_py_with_its_hash_and_this_repositorys_head`). After, by
+  discovery (P70; 20:40, load 5.88): 26, 226, 557, 175, 312, 79.
+- **The token**: `grep -r -F -l -f ~/.ray/auth_token` over every file this prompt commits finds nothing (exit 1).
+- **The registry** after: 78 runs, all finished; this prompt's 16 `done` but `pl-resumed-a` `killed`. No pid recorded
+  under `var/power-law-wall/07/` answers `kill -0`.
+
+### 6.10 The commands, verbatim
+
+From this worktree's root unless stated. `<R>` is `.documents/power-law-wall/rehearse-07`, `<L>` `var/power-law-wall/07`,
+`<W>` the base worktree `<scratch>/base-a7e0978`, `<scratch>` the session scratchpad's `agent-07`, `ADDRESS=127.0.0.1:6380`,
+`S=<main checkout>/var/datastores`. Each suite, start, stop and status was its own Bash call; each launch, one check and
+wait as below.
+
+```bash
+# the Gate
+git status --porcelain; git worktree list; tools/ray_cluster.sh status; ./venv/bin/python -m raypoolkit.rehearsal_lock status
+./venv/bin/python -m runregistrykit list
+# the suites (ComputeTargets in halves; the rest after them serially, in the background)
+SUITES=<scratch>/suites sh <R>/suite.sh before CosmologyModels CosmologyModels/tests          # and the five others, as CLAUDE.md
+# the base tree
+git worktree add --detach <W> a7e0978; cd <W> && ln -s <main checkout>/venv venv
+# a cluster (alone; PYTHONPATH unset; from <W> for the base, from the worktree for the tip)
+tools/ray_cluster.sh start "power-law-wall 07 (rehearsal, base a7e0978)" > <L>/start-base.txt 2>&1
+tools/ray_cluster.sh start "power-law-wall 07 (rehearsal, tip)" > <L>/start-tip.txt 2>&1
+# the probe, from each tree's root
+PYTHONPATH=. ./venv/bin/python -u <worktree>/<R>/code_probe.py > <L>/probe-<tree>.txt 2>&1
+# a run (TREE is <W> for base-*, the worktree otherwise; SLUG, PURPOSE and ARGS as the table and prompt §1.3 give them)
+echo "$SLUG launch: $(date '+%F %T %z') $(uptime)" | tee -a <L>/07-load.txt
+cd $TREE && export ADDRESS S L=<worktree>/<L>/runs && nohup sh -c 'PYTHONPATH=. ./venv/bin/python -u RunDrivers/registered_run.py --campaign power-law-wall --prompt 07 --register $SLUG --purpose "$PURPOSE" -- $ARGS > $L/$SLUG.log 2>&1 & echo $! > $L/$SLUG.pid; wait $!; echo "** launcher saw exit status $?" >> $L/$SLUG.log' > /dev/null 2>&1 &
+nohup ./venv/bin/python -u <worktree>/<R>/beat_times.py $L/$SLUG.log $L/$SLUG.beats > $L/$SLUG.beats.err 2>&1 &
+./venv/bin/python <R>/wait_for_line.py $L/$SLUG.log "** registered_run: registered as" --timeout 120 && sh <R>/check.sh $SLUG
+./venv/bin/python <R>/wait_for_line.py <L>/runs/$SLUG.log "** launcher saw exit status" --timeout 3600 --poll 5      # in the background
+#   e.g. pl-a: ARGS = --config inverse_power.yaml --n-values 1 2 --database $S/power-law-wall-07-pl.db --shards 16 --phi-init-Mp 5
+#              --ray-address $ADDRESS --job-name power-law-wall-07-pl-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9
+#              --alpha-values 0.01 0.1 --A-values 0.05 1 10
+#   base-*, exp-*: --config exponential.yaml; mixed-*: --config exponential.yaml --models exponential inverse-power;
+#   pl-resumed-a2: pl-a's arguments into …-pl-resumed.db and --prune-unvalidated
+# a store's sidecar, after its last run (from <W> for base)
+PYTHONPATH=. ./venv/bin/python -m runregistrykit store create $S/power-law-wall-07-<store>.db --purpose "…"
+PYTHONPATH=. ./venv/bin/python -m runregistrykit store fingerprint --write $S/power-law-wall-07-<store>.db
+# the interruption, beside pl-resumed-a (after its registration line)
+nohup ./venv/bin/python .documents/dk-and-rpk-migration/rehearsal/interrupt_when.py $L/pl-resumed-a.log $L/pl-resumed-a.pid --banner "RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-measured-pl-v1)" --after 18 > $L/pl-resumed-a.interrupt.log 2>&1 &
+RAY_AUTH_MODE=token ./venv/bin/python <R>/ray_state.py; tools/ray_cluster.sh status
+./venv/bin/python <R>/histories.py $S/power-law-wall-07-pl-resumed > <L>/histories-pl-resumed-after-a.txt
+# the readers (each through a scratch wrapper that takes shasum -a 256 of the store's 16 shards, primary and sidecar before
+# and after, and records the exit, the wall and the load in <L>/readers.txt)
+PYTHONPATH=. ./venv/bin/python -u main.py --config <config> [--n-values 1 2 | --models exponential inverse-power] --database $S/power-law-wall-07-<store>.db --shards 16 --phi-init-Mp 5 --inventory
+PYTHONPATH=. ./venv/bin/python -u plot_by_beta.py --config <config> [same] --database $S/power-law-wall-07-<store>.db --alpha-values 0 0.01 0.1 --A-values 0.05 1 10 --no-plots --ray-address $ADDRESS --shards 16 --phi-init-Mp 5 --output <worktree>/<L>/export-<store>      # and plot_ScalarHistory.py
+PYTHONPATH=. ./venv/bin/python -u plot_by_beta.py --config inverse_power.yaml --n-values 1 2 --database $S/power-law-wall-07-pl.db --alpha-values 0 0.01 0.1 --A-values 0.05 1 10 --ray-address $ADDRESS --shards 16 --phi-init-Mp 5 --output <worktree>/<L>/plot-pl      # and plot_ScalarHistory.py
+PYTHONPATH=. ./venv/bin/python -u plot_by_beta.py --config exponential.yaml --models inverse-power --database $S/power-law-wall-07-exp.db --alpha-values 0 0.01 0.1 [--A-values 0.05 1 10] --ray-address $ADDRESS --shards 16 --phi-init-Mp 5 --output <worktree>/<L>/refuse-models-exp[-fixed]
+PYTHONPATH=. ./venv/bin/python -u plot_by_beta.py --config inverse_power.yaml --n-values 1 2 --database $S/power-law-wall-07-pl.db --A-values 0.5 --ray-address $ADDRESS --shards 16 --phi-init-Mp 5 --output <worktree>/<L>/refuse-A-pl
+PYTHONPATH=. ./venv/bin/python -u main.py --config inverse_power.yaml --n-values 3 --A-values 1 --database $S/power-law-wall-07-nonexistent.db --shards 16 --phi-init-Mp 5 --ray-address $ADDRESS --job-name power-law-wall-07-refuse
+./venv/bin/python <R>/histories.py $S/power-law-wall-07-<store>
+RAY_AUTH_MODE=token ./venv/bin/python <R>/ray_state.py; kill -0 <each pid in <L>/runs/*.pid>
+# the stop, then status and the lock (each alone; from <W> for the base cluster)
+tools/ray_cluster.sh stop; tools/ray_cluster.sh status; ./venv/bin/python -m raypoolkit.rehearsal_lock status
+# R5 and R6, no cluster
+PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py <worktree>/<L>/export-<store>/QCD_Cosmology/<model>
+PYTHONPATH=. ./venv/bin/python tools/plot_quanta_grid.py <worktree>/<L>/export-pl/QCD_Cosmology/inverse-power --output <worktree>/<L>/quanta-grid-pl
+PYTHONPATH=. ./venv/bin/python -u tools/bbn_from_store.py $S/power-law-wall-07-<base|exp> --beta 2.0 --M-Mp 4e-31 --phi-init-Mp 5 --drain-law fixed --alpha 0.1 --small-network --variant prod      # base from <W>
+PYTHONPATH=. ./venv/bin/python -u tools/bbn_from_store.py $S/power-law-wall-07-pl --beta 2.0 --M-Mp 4e-31 --phi-init-Mp 5 --model inverse-power --n <1|2> --drain-law one_loop --alpha 1 --small-network --variant prod
+# the comparisons
+./venv/bin/python <R>/compare_histories.py $S/power-law-wall-07-base $S/power-law-wall-07-exp
+./venv/bin/python <R>/compare_fingerprints.py $S/power-law-wall-07-base.manifest.json $S/power-law-wall-07-exp.manifest.json
+PYTHONPATH=. ./venv/bin/python tools/compare_stores.py $S/power-law-wall-07-pl.db $S/power-law-wall-07-pl-resumed.db
+./venv/bin/python <R>/compare_histories.py $S/power-law-wall-07-pl $S/power-law-wall-07-pl-resumed
+PYTHONPATH=. ./venv/bin/python <R>/compare_04.py $S/power-law-wall-07-<pl|pl-resumed>; PYTHONPATH=. ./venv/bin/python <R>/compare_04.py $S/power-law-wall-07-exp --exp
+./venv/bin/python <R>/compare_histories.py $S/power-law-wall-07-mixed $S/power-law-wall-07-exp --model exponential
+./venv/bin/python <R>/compare_histories.py $S/power-law-wall-07-mixed $S/power-law-wall-07-pl --model inverse-power --n 1
+./venv/bin/python <R>/compare_exports.py <L>/export-pl/QCD_Cosmology <L>/export-pl-resumed/QCD_Cosmology
+./venv/bin/python <R>/compare_exports.py <L>/export-mixed/QCD_Cosmology/exponential <L>/export-exp/QCD_Cosmology/exponential
+./venv/bin/python <R>/compare_exports.py --n1-subset <L>/export-mixed/QCD_Cosmology/inverse-power <L>/export-pl/QCD_Cosmology/inverse-power
+./venv/bin/python <R>/compare_exports.py --base <L>/export-base/QCD_Cosmology <L>/export-exp/QCD_Cosmology/exponential --exclude 'quanta_*'
+./venv/bin/python .documents/dk-and-rpk-migration/rehearsal/stage_counts.py <L>/runs/*.log; ./venv/bin/python <R>/silences.py <L>/runs/*.beats
+# the worktree's removal (the link unlinked first, so no --force)
+rm <W>/venv; git worktree remove <W>; git worktree prune; git worktree list
+# the token
+grep -r -F -l -f ~/.ray/auth_token <each committed path>
+```
+
+### 6.11 Observed, not acted on
+
+- **The run label in a failure reason** (board §3 `[07-failure-reason-carries-the-run-label]`, opened by this prompt): a
+  stored `ScalarHistory.failure_reason` begins `integrate_scalar_history (<main.py's history label>): …`, the label holding
+  the job name and the submission time; `tools/compare_stores.py` compares it as content (its `MASKED_FRAGMENTS` masks a
+  fragment in `BBNData.failure_reason` only), so two builds of one failing history never match; and production cuts the
+  reason to 256 characters with the label in it, so a longer job name keeps less of the reason (pl's rows keep `…(W =
+  6.4355e-05, pi^`, pl-resumed's `…(W = 6.4355e`; 39 characters of the tool's reason are lost even at `pl-b`'s label).
+- **`histories.csv`'s grid rows**, as `one-loop-drain` 06 observed: the three runs' grids are not a rectangle, so each
+  export's `histories.csv` holds 48 rows per potential and n, 28 of them `no ScalarHistory row in the store` markers, which
+  `quanta_measures` counts as "failed histories" (13 per potential and n).
+- **The shard warning**: each plot script prints `!! WARNING: number of shards read from database (=16) does not match
+  specified number of shards (=10)` though given `--shards 16`, as in `one-loop-drain` 06.
+- **R4's order of refusals**: `--models inverse-power` on an exponential store with the store's A rows is refused for its
+  A rows (looked up under the power law's own drain model) before the potential; with the fixed rows alone it is refused
+  for the potential. Both exit 2 and name an option and a value.
+- **The `Delta_N_eff` legend** covers a point (A = 10 at β = 2.9, upper panel, n = 1).
+- **Equal model digests**: in mixed, `ExponentialModel` and `InversePowerModel` have the same fingerprint digest
+  (`132ac557…`), one spec and the same (M, n, β) rows (P33's design); the fingerprint does not tell the two tables' rows apart.

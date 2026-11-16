@@ -1,0 +1,41 @@
+store:    /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-mixed.db
+digest:   7d7a1a4ce1b79cd735e18fa1f630f68529b9a09b4c71c5fe669d8683e99357c7
+format:   8
+classes:  (count, digest; then each tag set)
+  version                  1  d4371025b607
+                           1  d4371025b607  []
+  store_tag                1  34407c96658d
+                           1  34407c96658d  []
+  redshift             75001  8dad579a1ae8
+                       75001  8dad579a1ae8  []
+  tolerance                2  a6a6f2867964
+                           2  a6a6f2867964  []
+  beta_value               3  638163f012eb
+                           3  638163f012eb  []
+  alpha_value              9  cde415c2bb25
+                           9  cde415c2bb25  []
+  M_value                  4  29553150f0f6
+                           4  29553150f0f6  []
+  temperature              1  9bd0581c026a
+                           1  9bd0581c026a  []
+  phi_value                1  29e7a88b01e3
+                           1  29e7a88b01e3  []
+  pi_value                 1  237cd5e96169
+                           1  237cd5e96169  []
+  QCD_Cosmology            1  dcbaa9d413d4
+                           1  dcbaa9d413d4  []
+  IntegrationSolver        7  5806cd3cbdd9
+                           7  5806cd3cbdd9  []
+  ExponentialModel         8  132ac5571a61
+                           8  132ac5571a61  []
+  InversePowerModel        8  132ac5571a61
+                           8  132ac5571a61  []
+  ScalarHistory           40  03a9566720f7
+                          40  03a9566720f7  [SamplesPerLog10Z_250]
+  AdiabaticHistory        37  49be43b0ee46
+                          37  49be43b0ee46  [SamplesPerLog10Z_250]
+  BBNData                 37  26dba5ec3e2b
+                          37  26dba5ec3e2b  [SamplesPerLog10Z_250]
+problems: none
+recorded: none recorded (the sidecar is registry)
+>> wrote the fingerprint into the sidecar; it replaced none

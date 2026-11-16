@@ -1,0 +1,118 @@
+** registered_run: registered as power-law-wall-07-pl-resumed-a2-20261116T193454
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/power-law-wall-07-pl-resumed-a2-20261116T193454/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-16 19:34:54,643	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-16 19:34:54,678	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl-resumed.db" with 16 shards
+(Datastore pid=91983) !! INTEGRITY WARNING (2026-11-16T19:34:59): datastore "shard0015-store" (physical file /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl-resumed-shard0015.db)
+(Datastore pid=91983) >> ScalarHistory instances
+(Datastore pid=91983)      The following unvalidated models were detected in the datastore:
+(Datastore pid=91983)        -- "power-law-wall-07-pl-resumed-a-ScalarHistory-InversePowerModel(M=0.00097413eV,n=2,beta=1.2)-2026-11-16T19:33:26" (store_id=5, log10_atol=-8.0, log10_rtol=-8.0)
+(Datastore pid=91983)           contains 5003 z-sample values | expected=5003
+(Datastore pid=91983)           contains 303 bounce rows | expected=303
+(Datastore pid=91983)      ** Note: these values have been pruned from the datastore.
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model InversePowerModel, V = V0 [1 + (M/phi)^n], with n = [ 1, 2 ]
+   -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+   -- populated M sample grid with 1 value = [ 0.00097413 eV ]
+   -- populated alpha grid with 2 values = [ 0.01, 0.1 ]
+   -- populated A grid with 3 values = [ 0.05, 1, 10 ] (one-loop-measured-pl-v1)
+   -- total number of models to integrate = 6
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 0.0145s
+      Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+(Datastore pid=92030) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+(Datastore pid=91981) !! INTEGRITY WARNING (2026-11-16T19:34:59): datastore "shard0000-store" (physical file /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl-resumed-shard0000.db)
+(Datastore pid=91981) >> ScalarHistory instances
+(Datastore pid=91981)      The following unvalidated models were detected in the datastore:
+(Datastore pid=91981)        -- "power-law-wall-07-pl-resumed-a-ScalarHistory-InversePowerModel(M=0.00097413eV,n=2,beta=2)-2026-11-16T19:33:26" (store_id=46, log10_atol=-8.0, log10_rtol=-8.0) [repeated 2x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+(Datastore pid=91981)           contains 5437 z-sample values | expected=5437 [repeated 2x across cluster]
+(Datastore pid=91981)           contains 71 bounce rows | expected=71 [repeated 2x across cluster]
+(Datastore pid=91981)      ** Note: these values have been pruned from the datastore.
+   -- ALL WORK ITEMS COMPLETE in time 0.233s
+      Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 0.0316s
+      Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 0.0124s
+      Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.197s
+      Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 0.0469s
+      Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+      (no compute items were evaluated - all assets read from datastore)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-measured-pl-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 26s
+      Queue summary: 6 lookup (avg 13.85/min), 6 compute (avg 13.85/min), 6 store (avg 13.85/min), 6 validation (avg 13.85/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.27s
+      Queue summary: 6 lookup (avg 283.6/min), 6 compute (avg 283.6/min), 6 store (avg 283.6/min), 6 validation (avg 283.6/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 10.8s
+      Queue summary: 6 lookup (avg 33.44/min), 6 compute (avg 33.44/min), 6 store (avg 33.44/min), 6 validation (avg 33.44/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-pl-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 13.2s
+      Queue summary: 6 lookup (avg 27.35/min), 6 compute (avg 27.35/min), 6 store (avg 27.35/min), 6 validation (avg 27.35/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.04s
+      Queue summary: 6 lookup (avg 346.8/min), 6 compute (avg 346.8/min), 6 store (avg 346.8/min), 6 validation (avg 346.8/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.54s
+      Queue summary: 6 lookup (avg 37.74/min), 6 compute (avg 37.74/min), 6 store (avg 37.74/min), 6 validation (avg 37.74/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-measured-pl-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 9.66s
+      Queue summary: 6 lookup (avg 37.26/min), 6 compute (avg 37.26/min), 6 store (avg 37.26/min), 6 validation (avg 37.26/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.25s
+      Queue summary: 6 lookup (avg 288.8/min), 6 compute (avg 288.8/min), 6 store (avg 288.8/min), 6 validation (avg 288.8/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.08s
+      Queue summary: 6 lookup (avg 39.67/min), 6 compute (avg 39.67/min), 6 store (avg 39.67/min), 6 validation (avg 39.67/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0
+** launcher saw exit status 0

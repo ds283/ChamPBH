@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-16 · **Status: LIVE — 6 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened); 01–06 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 written with P59–P72 (README §6.11), not dispatched; R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-16 · **Status: LIVE — 7 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–06 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -27,7 +27,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 04 | Measure a sample | U7's forty histories under both laws beside the exponential's; the thresholds of README §0.3, the surfing edges, R9's share, M_crit (P24–P32) | Opus | ✍️ | ✅ | `05f6920` | [`logs/04-measure-a-sample.md`](logs/04-measure-a-sample.md) |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6); the key's drain model at entry and the joins by model type (P33–P44) | Opus | ✍️ | ✅ | `bdb6ae7` | [`logs/05-the-store.md`](logs/05-the-store.md) |
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11); the one-loop rows under the model's own drain model, the quanta tools' wall by row, the scope; every potential under `<output>/<label>/<model>/` (R12, P45–P58) | Opus | ✍️ | ✅ | `fda2df2` | [`logs/06-drivers-and-exports.md`](logs/06-drivers-and-exports.md) |
-| 07 | Rehearse | registered builds, exponential bitwise, power law resumed; U7's grid in five stores (the exponential at `a7e0978` and the tip, the power law straight and resumed, both potentials in one store), against 04, the readers on every store (P59–P72) | Opus | ✍️ | ⬜ | — | — |
+| 07 | Rehearse | registered builds, exponential bitwise, power law resumed; U7's grid in five stores (the exponential at `a7e0978` and the tip, the power law straight and resumed, both potentials in one store), against 04, the readers on every store (P59–P72) | Opus | ✍️ | ✅ | this commit | [`logs/07-rehearse.md`](logs/07-rehearse.md) |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -571,6 +571,25 @@ As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Expor
   base's, and a root without `model` is refused (exit 2); `main.py`'s lookups, pipelines and printed lines for an
   exponential-only run equal the base's in five commands.
 
+- **R — holds** (prompt 07, 2026-11-16; log 07 §4, `.documents/power-law-wall-verification.md` §6), with the user's ruling
+  (a) on the stop at §2.2 (the run label in `ScalarHistory.failure_reason` a run-dependent fragment):
+  - **(i) the exponential bitwise:** the base store (`a7e0978`, format 7) and the tip's exp store, twenty histories each
+    from the same command, matched once each way; 2 984 336 values bitwise equal; the fingerprints differ only in
+    `version` and the three classes that name it as a parent, and `InversePowerModel` is empty at the tip;
+  - **(ii) the power law resumed:** `pl` and `pl-resumed` (run a interrupted by `SIGTERM` in the A = 0.05 scalar stage,
+    three unvalidated rows pruned and recomputed); the same fingerprint `9d4fcf02…` at format 8; `compare_stores` differs
+    only in the three failure rows' reasons, equal under the ruled mask; 5 538 777 values equal; the exports and the quanta
+    outputs equal but named timing columns and the masked reasons;
+  - **(iii) against 04:** all forty of each power-law store, and exp's three plain-tool histories, equal to 04's tool route:
+    the tuning bit for bit, every printed value at its digits, every candidate row, Y_p and D/H at ten digits (11 635 values
+    per store); the 2026.11.0 counterparts equal to exp's export in all 61 shared columns (a measurement);
+  - **(iv) two potentials in one store:** mixed's exponential histories equal exp's (2 984 336 values) and its power-law
+    histories pl's at n = 1 (2 548 230); its exports equal exp's and pl's n = 1 files, timing columns named;
+  - **(v) the readers:** five inventories `problems: none`; the exports of every store, the base's equal to exp's by 06's
+    rule; the power law's figures drawn under Ray; three refusals, exit 2, nothing written; the quanta tools with each
+    potential's spectrum, `plot_quanta_grid` refusing two n at one cell (§3, measured); four BBN re-solves equal to the
+    stored values; no reader changed a store's `shasum`.
+
 ## 3. Active and unresolved issues
 
 - **`[06-plot-quanta-grid-refuses-two-n-at-one-cell]`** (opened by prompt 06, 2026-11-16; log 06 §6). `tools/plot_quanta_grid.py`
@@ -581,6 +600,28 @@ As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Expor
     `plot_quanta_history` are not affected (each history has its own directory, by n).
   - *Next step:* group the grid by (drain model, A, n), or draw n as panels, in a prompt of its own (08's handover may
     assign it); the figure's paths and the exponential's figures then need a ruling on whether they move.
+
+- **`[07-failure-reason-carries-the-run-label]`** (opened by prompt 07, 2026-11-16, from its stop at the gate R §2.2, ruled
+  (a) by the user; log 07 §2 D1, `.documents/power-law-wall-verification.md` §6.5).
+  - *What:* a stored `ScalarHistory.failure_reason` begins `integrate_scalar_history (<main.py's history label>): …`, the
+    label holding the job name and the submission time, e.g. `power-law-wall-07-pl-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-16T19:26:30`
+    in `pl` against `power-law-wall-07-pl-resumed-b-…-2026-11-16T19:37:37` in `pl-resumed`.
+    - `tools/compare_stores.py` compares the column as content: its `MASKED_FRAGMENTS` masks a fragment of
+      `BBNData.failure_reason` only. Two builds of the same failing history therefore never match: on `pl` and
+      `pl-resumed` it reports `ScalarHistory` 37 matched, 3 and 3 on one side only, and `ScalarHistory_tags` the same, and
+      exits 1 though every other value is equal and the fingerprints are equal.
+    - Production cuts the reason to `DEFAULT_STRING_LENGTH` = 256 characters with the label inside it
+      (`ComputeTargets/ScalarHistory.py`, ScalarHistory's construction; the column is `String(256)`). So how much of the
+      reason survives depends on the job name's length. Measured on the three n = 1 natural-mode failures at 10⁻³ M_P:
+      - the tool route's reason is 39 characters longer than `pl`'s stored one;
+      - `pl-resumed`'s stored reason keeps 8 characters fewer than `pl`'s (157 of 165 masked characters), e.g. `…(W = 6.4355e`
+        against `…(W = 6.4355e-05, pi^`;
+      - `mixed` keeps 3 fewer than `pl` (162 of 165).
+  - *Impact:* `compare_stores` cannot be the whole check of two builds that hold a failure (07 read its result through
+    the ruled mask); a long job name loses the end of a failure's numbers from the store. No physics value is affected.
+  - *Next step:* for a later prompt: a `MASKED_FRAGMENTS` entry for `ScalarHistory.failure_reason` in `compare_stores.py`,
+    and a ruling on whether the stored reason should leave the label out, or be cut after it, so that its numbers survive
+    whatever the job name.
 
 ### 3.1 Assigned to this campaign
 
@@ -612,6 +653,11 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   - At the base `b1433f4`: 26, 739 (226 + 513), 175, 307, 76.
   - After 06: 26, 783 (226 + 557), 175, 312, 79.
   - In both, the same two worktree failures and no other.
+
+- **07, 2026-11-16, in the worktree:**
+  - At the base `945bf5d`: 26, 783 (226 + 557), 175, 312, 79, in full.
+  - After 07: the same counts by discovery (P70; no file the suites import changed).
+  - The same two worktree failures and no other.
 
 ### History of the status line
 
@@ -689,3 +735,8 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
 - 2026-11-16: prompt 07 and its orchestrator note written, at the user's request ("Please write 07 and its orchestration
   note"), with the planner's P59–P72 in README §6.11 (the gate R made exact by P64–P68), from a survey of the registry,
   the base `a7e0978`, 04's outputs and the rehearsal tools (note 07 §0). No question waits on the user; not dispatched.
+- 2026-11-16: prompt 07 dispatched at `945bf5d`. It stopped at the gate R §2.2: `compare_stores` on `pl` and `pl-resumed`
+  differed only in three failure rows, whose stored reasons carry main.py's run label. The user ruled, in their words,
+  "(a) please": the label a run-dependent fragment for 07, compared masked and to the shorter cut; `compare_stores.py`
+  unchanged; one issue opened. 07 then landed (this commit); the gate R holds. One issue opened (§3,
+  `[07-failure-reason-carries-the-run-label]`).

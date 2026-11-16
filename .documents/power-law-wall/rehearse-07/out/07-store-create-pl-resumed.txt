@@ -1,0 +1,19 @@
+>> create: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl-resumed.manifest.json
+{
+  "created": "2026-11-16T19:41:28+00:00",
+  "datastore": "power-law-wall-07-pl-resumed.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "945bf5dfcc7b949a84754a641e65ed11ee828420",
+      "operation": "create",
+      "to": "var/datastores/power-law-wall-07-pl-resumed.db",
+      "when": "2026-11-16T19:41:28+00:00"
+    }
+  ],
+  "name": "power-law-wall-07-pl-resumed",
+  "purpose": "power-law-wall 07 R: the pl-resumed store at the tip (run a interrupted with SIGTERM and resumed with --prune-unvalidated, then b, c: 40 inverse-power histories at n 1 2), kept for the user",
+  "sidecar_format": 1,
+  "store_id": "92eadd6a69a74e69b8a9c95cb2ba50f3"
+}

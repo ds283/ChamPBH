@@ -1,0 +1,16 @@
+The interruption's window, read from pl-a (prompt §1.4; orchestrator note 07, ruling 5; one-loop-drain 06, ruling 7)
+- the banner ">> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-measured-pl-v1)": pl-a.beats line 60, 19:23:35.515 UTC
+  (the banner's text confirmed from pl-a's log, as interrupt_when.py's --banner gives it)
+- the beats hold no line per stored history (the stage's lines are the banner, the ALL WORK ITEMS COMPLETE line and the
+  queue summary), so the opening is read from the pl store's ScalarHistory.timestamp of the A = 0.05 rows
+  (one-loop-measured-pl-v1), as one-loop-drain 06 and inelastic-reflection 11 read theirs:
+    19:23:51.818485 n=2 beta=1.2   +16.303 s   <- the opening
+    19:23:52.224037 n=1 beta=2.0   +16.709 s
+    19:23:52.863732 n=2 beta=2.0   +17.349 s
+    19:23:53.590649 n=1 beta=1.2   +18.076 s
+    19:23:57.804721 n=1 beta=2.9   +22.290 s
+    19:23:58.524870 n=2 beta=2.9   +23.010 s
+- the close: the A = 0.05 scalar stage's "-- ALL WORK ITEMS COMPLETE in time 25.1s", pl-a.beats line 64, 19:24:00.208, +24.693 s
+- the window: 8.390 s, shorter than 10 s, so --after = the opening + 2 s = 18.303 s, rounded down to a whole second as the
+  midpoint rule rounds: --after 18 (interrupt_when.py polls every 1 s, so the signal falls 18-19 s after the banner is seen)
+- load at pl-a's launch: 10.36 8.67 7.51 (19:21:55)

@@ -1,0 +1,10 @@
+## after, by discovery 2026-11-16 20:40:09 +0000; 20:40  up 16 days, 23 hrs, 1 user, load averages: 5.88 7.76 8.28
+CosmologyModels/tests test*.py 26
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+ComputeTargets/tests test_[a-f]*.py 226
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+ComputeTargets/tests test_[g-z]*.py 557
+ObjectFactories/tests test*.py 175
+tools/tests test*.py 312
+RunDrivers/tests test*.py 79

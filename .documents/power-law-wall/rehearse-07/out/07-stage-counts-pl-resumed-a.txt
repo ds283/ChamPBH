@@ -1,0 +1,13 @@
+LOG var/power-law-wall/07/runs/pl-resumed-a.log
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 6, compute 6, store 6, validation 6
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 6, compute 6, store 6, validation 6
+    -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+  CALCULATE BBN DATA: complete; lookup 6, compute 6, store 6, validation 6
+    -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: complete; lookup 6, compute 6, store 6, validation 6
+  CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: complete; lookup 6, compute 6, store 6, validation 6
+    -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+  CALCULATE BBN DATA: complete; lookup 6, compute 6, store 6, validation 6
+    -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+  CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: INCOMPLETE; no queue summary
+  driver exit status: 143

@@ -1,0 +1,57 @@
+** registered_run: registered as power-law-wall-07-pl-resumed-a-20261116T193200
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/power-law-wall-07-pl-resumed-a-20261116T193200/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-16 19:32:00,754	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-16 19:32:00,790	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+>> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl-resumed.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model InversePowerModel, V = V0 [1 + (M/phi)^n], with n = [ 1, 2 ]
+   -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+   -- populated M sample grid with 1 value = [ 0.00097413 eV ]
+   -- populated alpha grid with 2 values = [ 0.01, 0.1 ]
+   -- populated A grid with 3 values = [ 0.05, 1, 10 ] (one-loop-measured-pl-v1)
+   -- total number of models to integrate = 6
+(Datastore pid=91286) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 18s
+      Queue summary: 6 lookup (avg 20.02/min), 6 compute (avg 20.02/min), 6 store (avg 20.02/min), 6 validation (avg 20.02/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.05s
+      Queue summary: 6 lookup (avg 342.3/min), 6 compute (avg 342.3/min), 6 store (avg 342.3/min), 6 validation (avg 342.3/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 11.6s
+      Queue summary: 6 lookup (avg 30.91/min), 6 compute (avg 30.91/min), 6 store (avg 30.91/min), 6 validation (avg 30.91/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 13.6s
+      Queue summary: 6 lookup (avg 26.47/min), 6 compute (avg 26.47/min), 6 store (avg 26.47/min), 6 validation (avg 26.47/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.27s
+      Queue summary: 6 lookup (avg 282.6/min), 6 compute (avg 282.6/min), 6 store (avg 282.6/min), 6 validation (avg 282.6/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 10.5s
+      Queue summary: 6 lookup (avg 34.21/min), 6 compute (avg 34.21/min), 6 store (avg 34.21/min), 6 validation (avg 34.21/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-measured-pl-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+** SIGTERM at 2026-11-16 19:33:44 +0000: recorded killed, exit code 143; stopping main.py; the process will exit with status 143
+** SIGTERM: main.py ended with SystemExit(1); recording killed, exit code 143
+(Datastore pid=91292) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO" [repeated 15x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+** driver exit status 143
+** launcher saw exit status 143

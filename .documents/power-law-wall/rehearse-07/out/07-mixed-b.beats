@@ -1,0 +1,79 @@
+2026-11-16T20:21:50.812+00:00 X recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07/runs/mixed-b.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s
+2026-11-16T20:21:52.327+00:00 L ** registered_run: registered as power-law-wall-07-mixed-b-20261116T202152
+2026-11-16T20:21:52.327+00:00 L **   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/power-law-wall-07-mixed-b-20261116T202152/manifest.json
+2026-11-16T20:21:52.327+00:00 L **   list it with: ./venv/bin/python -m runregistrykit list
+2026-11-16T20:21:52.327+00:00 H 2026-11-16T20:21:52+00:00 running list it with: ./venv/bin/python -m runregistrykit list
+2026-11-16T20:21:52.832+00:00 L >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-16T20:21:52.832+00:00 L 2026-11-16 20:21:52,696	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-16T20:21:52.832+00:00 L 2026-11-16 20:21:52,736	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+2026-11-16T20:21:52.832+00:00 H 2026-11-16T20:21:52+00:00 running packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-16T20:21:54.853+00:00 L >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-mixed.db" with 16 shards
+2026-11-16T20:21:54.853+00:00 H 2026-11-16T20:21:54+00:00 running Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-mixed.db" with 16 shards
+2026-11-16T20:22:04.945+00:00 L 
+2026-11-16T20:22:04.945+00:00 L ** BUILDING GRID OF MODELS TO SAMPLE
+2026-11-16T20:22:04.945+00:00 L    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+2026-11-16T20:22:04.945+00:00 L    -- using model InversePowerModel, V = V0 [1 + (M/phi)^n], with n = [ 1 ]
+2026-11-16T20:22:04.945+00:00 L    -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+2026-11-16T20:22:04.945+00:00 L    -- populated M sample grid with 1 value = [ 0.001 Mp ]
+2026-11-16T20:22:04.945+00:00 L    -- populated alpha grid with 1 value = [ 0 ]
+2026-11-16T20:22:04.945+00:00 L    -- total number of models to integrate = 6 (exponential 3, inverse-power 3)
+2026-11-16T20:22:04.945+00:00 L 
+2026-11-16T20:22:04.945+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+2026-11-16T20:22:04.945+00:00 L 
+2026-11-16T20:22:04.945+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T20:22:04.945+00:00 L (Datastore pid=98802) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+2026-11-16T20:22:04.945+00:00 H 2026-11-16T20:22:04+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T20:22:47.436+00:00 L    -- ALL WORK ITEMS COMPLETE in time 42.4s
+2026-11-16T20:22:47.436+00:00 L       Queue summary: 3 lookup (avg 254.6/hr), 3 compute (avg 254.6/hr), 3 store (avg 254.6/hr), 3 validation (avg 254.6/hr)
+2026-11-16T20:22:47.436+00:00 L 
+2026-11-16T20:22:47.436+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T20:22:47.437+00:00 H 2026-11-16T20:22:47+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T20:22:47.940+00:00 L    -- ALL WORK ITEMS COMPLETE in time 0.778s
+2026-11-16T20:22:47.940+00:00 L       Queue summary: 3 lookup (avg 231.3/min), 3 compute (avg 231.3/min), 3 store (avg 231.3/min), 3 validation (avg 231.3/min)
+2026-11-16T20:22:47.940+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-11-16T20:22:47.940+00:00 L 
+2026-11-16T20:22:47.940+00:00 L ** CALCULATE BBN DATA
+2026-11-16T20:22:47.940+00:00 H 2026-11-16T20:22:47+00:00 running CALCULATE BBN DATA
+2026-11-16T20:22:58.583+00:00 L    -- ALL WORK ITEMS COMPLETE in time 10.4s
+2026-11-16T20:22:58.583+00:00 L       Queue summary: 3 lookup (avg 17.23/min), 3 compute (avg 17.23/min), 3 store (avg 17.23/min), 3 validation (avg 17.23/min)
+2026-11-16T20:22:58.583+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-16T20:22:58.583+00:00 L 
+2026-11-16T20:22:58.583+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+2026-11-16T20:22:58.583+00:00 L 
+2026-11-16T20:22:58.583+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T20:22:58.583+00:00 H 2026-11-16T20:22:58+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T20:23:00.595+00:00 L (compute_scalar_history pid=98869) -- integrate_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-16T20:22:58): integration failure
+2026-11-16T20:23:00.596+00:00 L (compute_scalar_history pid=98869)    integrate_scalar_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-16T20:22:58): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-05, pi^2/2 = 3.998e-05)
+2026-11-16T20:23:00.596+00:00 L (compute_scalar_history pid=98869) !! integrate_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-16T20:22:58): marked as total integration failure
+2026-11-16T20:23:00.596+00:00 L (compute_scalar_history pid=98869) !! tune_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-16T20:22:58): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 4.184e-48 M_P at the floor reflection at N = 17.66785152), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+2026-11-16T20:23:00.596+00:00 L (compute_scalar_history pid=98869) !! tune_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-16T20:22:58): integrate_scalar_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-16T20:22:58): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-05,  (tuning integration 0)
+2026-11-16T20:23:01.613+00:00 L (compute_scalar_history pid=98868) !! phi is not positive in InversePowerModel log_V at phi=-1.8953e-05 Mp, M=2.4353e+24 eV, n=1 (InversePowerModel(M=0.001Mp,n=1,beta=2))
+2026-11-16T20:23:04.141+00:00 L (compute_scalar_history pid=98868) !! tune_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=2)-2026-11-16T20:22:58): integrate_scalar_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=2)-2026-11-16T20:22:58): reflection requested inside the wall: W/(pi^2/2) = 1.5358 at N=37.75808722, phi_E=4.7358e-14, pi_E=-0.00048214 (W = 1.785e-07, p (tuning integration 0)
+2026-11-16T20:23:09.222+00:00 L (compute_scalar_history pid=98867) -- integrate_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=2.9)-2026-11-16T20:22:59): integration failure [repeated 2x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+2026-11-16T20:23:09.223+00:00 L (compute_scalar_history pid=98867)    integrate_scalar_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=2.9)-2026-11-16T20:22:59): reflection requested inside the wall: W/(pi^2/2) = 1.1679 at N=40.6223989, phi_E=5.753e-15, pi_E=-6.023e-05 (W = 2.1183e-09, pi^2/2 = 1.8138e-09) [repeated 2x across cluster]
+2026-11-16T20:23:09.732+00:00 L (compute_scalar_history pid=98867) !! integrate_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=2.9)-2026-11-16T20:22:59): marked as total integration failure [repeated 2x across cluster]
+2026-11-16T20:23:09.733+00:00 L (compute_scalar_history pid=98867) !! tune_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=2.9)-2026-11-16T20:22:59): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 4.065e-51 M_P at the floor reflection at N = 23.88781995), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget [repeated 2x across cluster]
+2026-11-16T20:23:09.733+00:00 L (compute_scalar_history pid=98867) !! tune_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=2.9)-2026-11-16T20:22:59): integrate_scalar_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=2.9)-2026-11-16T20:22:59): reflection requested inside the wall: W/(pi^2/2) = 1.1679 at N=40.6223989, phi_E=5.753e-15, pi_E=-6.023e-05 (W = 2.1183e-09, p (tuning integration 0)
+2026-11-16T20:23:10.234+00:00 L    -- ALL WORK ITEMS COMPLETE in time 11.7s
+2026-11-16T20:23:10.234+00:00 L       Queue summary: 3 lookup (avg 15.35/min), 3 compute (avg 15.35/min), 3 store (avg 15.35/min), 3 validation (avg 15.35/min)
+2026-11-16T20:23:10.234+00:00 L -- ScalarHistory: 3 histories failed in this run
+2026-11-16T20:23:10.234+00:00 L      -- 1 x integrate_scalar_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-16T20
+2026-11-16T20:23:10.234+00:00 L      -- 1 x integrate_scalar_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=2)-2026-11-16T20
+2026-11-16T20:23:10.234+00:00 L      -- 1 x integrate_scalar_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=2.9)-2026-11-16T20
+2026-11-16T20:23:10.234+00:00 L 
+2026-11-16T20:23:10.234+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T20:23:10.234+00:00 L    -- ALL WORK ITEMS COMPLETE in time 0.00835s
+2026-11-16T20:23:10.234+00:00 L       Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+2026-11-16T20:23:10.234+00:00 L       (no compute items were evaluated - all assets read from datastore)
+2026-11-16T20:23:10.234+00:00 L -- AdiabaticHistory: 3 models skipped because their ScalarHistory failed
+2026-11-16T20:23:10.234+00:00 L 
+2026-11-16T20:23:10.234+00:00 L ** CALCULATE BBN DATA
+2026-11-16T20:23:10.234+00:00 L    -- ALL WORK ITEMS COMPLETE in time 0.00744s
+2026-11-16T20:23:10.234+00:00 L       Queue summary: 0 lookup (avg 0/day), 0 compute (avg 0/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+2026-11-16T20:23:10.234+00:00 L       (no compute items were evaluated - all assets read from datastore)
+2026-11-16T20:23:10.234+00:00 L -- BBNData: 3 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-16T20:23:10.234+00:00 H 2026-11-16T20:23:10+00:00 running CALCULATE BBN DATA, all work items complete
+2026-11-16T20:23:34.588+00:00 H 2026-11-16T20:23:34+00:00 done CALCULATE BBN DATA, all work items complete
+2026-11-16T20:23:35.091+00:00 L ** driver exit status 0
+2026-11-16T20:23:35.091+00:00 L ** launcher saw exit status 0
+2026-11-16T20:23:35.091+00:00 X exit: the launcher's line was seen; status.json read once more
