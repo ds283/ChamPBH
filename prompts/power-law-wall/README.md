@@ -111,7 +111,7 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 | 02 | `02-measure-the-wall.md` | in `source/wall/`: `walls.PowerWall`; S at n = 1, 2; stage 2 along the power-law cascades' (L, ln R) paths (mapped with the fixed law); the adopted law at candidate L against it; the test field's spectrum (x_p, κ); the planner's estimates of §0.3 checked. Research; no production change. Then U3–U5 | Opus |
 | 03 | `03-the-law-on-this-wall.md` | as U3–U5 rule: `_drain_L`; a new `drain_model` value if the law is refitted, with its constants and S table; the spectrum's constants by wall in `quanta_spectrum.py` and `SPECTRUM_MODEL`; the exponential law bitwise. *(As written 2026-11-15 on R6–R8, P15–P23: the fit f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`, no `_drain_L`; the model's own fraction and one-loop drain model as hooks; the spectrum as measured tables on three walls, the exponential's included.)* | Opus |
 | 04 | `04-measure-a-sample.md` | about forty power-law histories, re-tuned, by the tool route under both laws (§6.3 P9); the thresholds and surfing thresholds; the comparison with the same (M, β) on the exponential. Then the user rules any threshold that does not hold | Opus |
-| 05 | `05-the-store.md` | model type id 2, its table and factory keyed (M, n, β), the registry, sharding, the `types` maps, `FINGERPRINT_FORMAT` 8 and `VERSION_LABEL` (U6), `compare_stores`, `inventory_report`, `bbn_from_store`, `outward_step_scan`; tests in a temporary store | Opus |
+| 05 | `05-the-store.md` | model type id 2, its table and factory keyed (M, n, β), the registry, sharding, the `types` maps, `FINGERPRINT_FORMAT` 8 and `VERSION_LABEL` (U6), `compare_stores`, `inventory_report`, `bbn_from_store`, `outward_step_scan`; tests in a temporary store. *(As written 2026-11-16 on P33–P44: also the key's drain model checked at `ScalarHistory`'s construction, and every raw join of a model table filtered by `model_type`.)* | Opus |
 | 06 | `06-drivers-and-exports.md` | `main.py`'s model option and its config file; `plot_inputs`, `plot_by_beta`, `plot_ScalarHistory`, `extract_common`, `pipeline_selection` through the model interface; the model in `histories.csv` and in the export paths (P11); the exponential exports byte-identical. *(Added 2026-11-15, P17, P19: the one-loop drain model taken from the model, where they name `DRAIN_MODEL_ONE_LOOP`; the quanta tools' spectrum wall taken from the export's model column.)* | Sonnet |
 | 07 | `07-rehearse.md` | registered builds on the isolated cluster: the exponential at base and tip, bitwise; the power law at n = 1, 2 under both laws, interrupted and resumed, by value and against 04 | Opus |
 | 08 | `08-close.md` | `.documents/power-law-wall-verification.md`, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the science run (its grid's inputs from 04), the issues and the indexes | Opus |
@@ -403,6 +403,51 @@ On prompt 04's measurements (verification §4.9; board, "Orchestrator review of 
   surfing figure and any standard analysis reading the edges at large M have no n = 1 EW edge, and an onset known only
   to (1.10, 1.30]. At n = 2 the exponential's edges hold. Every other threshold of §0.3 holds on this wall as measured,
   so none is changed before 05.
+
+### 6.9 Proposed by the planner with prompt 05, 2026-11-16
+
+**P33–P44** stand unless the user rules otherwise. None needs a ruling before 05 is dispatched; there is no U question.
+They rest on the planner's scratch probe at `1233229` (orchestrator note 05 §0).
+
+- **P33 — the factory.** `ObjectFactories/InversePowerModel.py`, table `InversePowerModel`, keyed (M, n, β) with the
+  exponential's columns and spec, building `InversePowerModel`. A module of its own; `ObjectFactories/ExponentialModel.py`
+  is not changed.
+- **P34 — the registry.** Registered immediately after `ExponentialModel`, batch size 50, sharded by `shard_key` (β), in
+  no drop group, as the exponential. The probe found that, so placed, an exponential-only store's fingerprint differs
+  from format 7's only by the format, the new class's empty entry and the top digest.
+- **P35 — the polymorphic key.** `ScalarHistory`'s spec maps type id 2 to `InversePowerModel`; `compare_stores` moves
+  id 2 from `UNSTORED_TYPE_VALUES` into `POLYMORPHIC_REFERENCES` (01's log §7, the user's ruling of 2026-11-14);
+  `inventory_report` lists the class under "Models".
+- **P36 — the key's drain model at entry** (§4: "05 keys and checks a stored history's `drain_model` against it").
+  `ScalarHistory`'s constructor refuses an α whose drain model is neither `fixed` nor the model's
+  `one_loop_drain_model`, through the model interface. Today only the compute-path guard refuses such a key, after the
+  integration. The guard stays.
+- **P37 — joins filter the model type.** Every raw SQL join of a model table in production code filters `model_type`.
+  The probe found the first `InversePowerModel` row at serial 1, as the first `ExponentialModel` row, so a join on the
+  serial alone pairs a power-law history with an exponential row. Records under `.documents/` and `science-runs/` are
+  not changed.
+- **P38 — `bbn_from_store`.** `--model` and `--n` as `tools/history_and_bbn.py`'s (defaults exponential, 1); its
+  queries join that model's table and filter `model_type` and `n_value`; under the one-loop law the drain model is the
+  model's own. Every existing command's output is unchanged. (The exponential's science stores hold n = 1 only;
+  `--n-values` defaults to [1].)
+- **P39 — `outward_step_scan`.** Stays exponential-only, as a reflection-restart diagnostic that re-runs rows as
+  `ExponentialModel` at n = 1: its store read filters `model_type = EXPONENTIAL_MODEL` and counts other models' rows with
+  those it already skips. No `--model` option.
+- **P40 — the golden.** `build_store` is unchanged (the exponential rows it holds today); the new golden file
+  `store_fingerprint_power-law-wall-05.json` differs from format 7's only by the format, the empty `InversePowerModel`
+  class and the top digest, shown by a diff. The power-law rows are exercised by the round-trip tests, not the golden.
+- **P41 — the label.** `VERSION_LABEL` 2026.12.0 and `FINGERPRINT_FORMAT` 8 (U6). The paragraph states that this tree
+  cannot read a 2026.11.0 store: the probe found DatastoreKit's `StoreSchemaMismatch` from the inventory and the
+  fingerprint, and a `RuntimeError` from the pool on reopening, for a store lacking the new table.
+- **P42 — the tests.** Through `_TempStoreCase`: the factory; the two models apart at the same (M, n, β) and the same
+  serial; one real tuned power-law round trip under each law at laboratory M, β = 2 (fixed α = 0.1, one-loop A = 1);
+  the entry check; the inventory, `compare_stores`, `inventory_report`, `outward_step_scan` and `bbn_from_store` on a
+  mixed store; the configuration, the format guard and the golden.
+- **P43 — the exponential bitwise.** The goldens, `test_tuned_history_round_trip`, `test_drain_store` and
+  `test_dissipation_store` pass with no change but the label and format literals; the exponential's tool route at
+  laboratory M, β = 2, A = 1 equals 04's file with timings masked.
+- **P44 — the counts.** The five suites in full at the base and after (P14); `CLAUDE.md`'s counts updated, nothing else
+  in it.
 
 ## 7. What this campaign hands to the user
 
