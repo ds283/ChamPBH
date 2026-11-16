@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-15 · **Status: LIVE — 4 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds, not yet reviewed; the surfing thresholds at n = 1 go to the user, verification §4.9); 01–03 reviewed; P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-16 · **Status: LIVE — 4 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; the surfing thresholds at n = 1 go to the user, verification §4.9); 01–04 reviewed; P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -24,7 +24,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 01 | The model | `InversePowerModel`, the seed at any n, the tool route's `--model` and `--n`; natural mode at large M measured | Opus | ✍️ | ✅ | `3aae9a5` | [`logs/01-the-model.md`](logs/01-the-model.md) |
 | 02 | Measure the wall | S, the one-loop fraction and the spectrum on the power wall (research, `source/wall/`); then U3–U5 | Opus | ✍️ | ✅ | `693784b` | [`logs/02-measure-the-wall.md`](logs/02-measure-the-wall.md) |
 | 03 | The law on this wall | f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`; the spectrum as tables on three walls (R6–R8) | Opus | ✍️ | ✅ | `d924275` | [`logs/03-the-law-on-this-wall.md`](logs/03-the-law-on-this-wall.md) |
-| 04 | Measure a sample | U7's forty histories under both laws beside the exponential's; the thresholds of README §0.3, the surfing edges, R9's share, M_crit (P24–P32) | Opus | ✍️ | ✅ | this commit | [`logs/04-measure-a-sample.md`](logs/04-measure-a-sample.md) |
+| 04 | Measure a sample | U7's forty histories under both laws beside the exponential's; the thresholds of README §0.3, the surfing edges, R9's share, M_crit (P24–P32) | Opus | ✍️ | ✅ | `05f6920` | [`logs/04-measure-a-sample.md`](logs/04-measure-a-sample.md) |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6) | Opus | ⬜ | ⬜ | — | — |
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11) | Sonnet | ⬜ | ⬜ | — | — |
 | 07 | Rehearse | registered builds, exponential bitwise, power law resumed | Opus | ⬜ | ⬜ | — | — |
@@ -264,6 +264,83 @@ load at its start.
       applies on this wall;
     - `model_of_law` still names `one-loop-measured-v1` for the one-loop law, until 05 and 06.
 
+**Orchestrator review of prompt 04 (2026-11-16).** All six checks of note 04 §3 pass. The re-runs below were made
+serially by the orchestrator at `05f6920`, from scratch scripts that are not committed, each timed, with the one-minute
+load at its start.
+- **The gate at dispatch** (2026-11-15, 19:06 local).
+  - `HEAD` was `7d7c578`, one text-only commit after the note's `44b4763` (the brief for this session). The worktree
+    held `?? venv` only.
+  - The code was as the note records: three drain models; `InversePowerModel` defines `_drain_fraction` and
+    `one_loop_drain_model`; the verification document had §1–§3; `sample-04/` did not exist.
+  - The registry had 62 runs, all finished. The rehearsal lock was free. The main checkout was at `9df9e13` and clean.
+  - The load was 7.42 / 6.88 / 6.62, against the planner's 4.42 / 7.34 / 5.75. Free disk was 122 GB, as the note
+    recorded.
+  - The export copy's SHA-256 equalled note §0's. The planner's scratch directory still existed, and its sixteen files
+    were given to the agent as copies, with note §0 proper and the run's README.
+1. *Scope.* `05f6920`'s parent is `7d7c578`.
+   - Its 92 files all lie under `prompts/power-law-wall/`, `.documents/power-law-wall/` and
+     `.documents/power-law-wall-verification.md`. `venv`, `CLAUDE.md` and `.documents/OPEN_ISSUES.md` are not in it.
+   - The verification document gains §4 (+332 lines) and loses nothing.
+   - The main checkout is still at `9df9e13` and clean. No remote branch contains the commit.
+2. *The sample is U7's.*
+   - `runs/` holds forty files, twenty per n, named as the prompt names them. Each has its command, the `uptime` at its
+     start and its exit status, wall time and `uptime` at its end. 37 exit 0; the three exiting 1 are n = 1, natural
+     mode, 10⁻³ M_P at β 1.2, 2.0 and 2.9 (R5).
+   - `tables.py tables`, run from a scratch mirror of `source/sample/`, `runs/` and the extract, rebuilds
+     `summary.csv` (40 rows), `comparison.csv` and `thresholds.txt`. All three `cmp` equal to the committed files.
+3. *Two histories re-run* through the runner, timings masked, `cand` lines included.
+   - n = 2, 10⁻¹⁵ M_P, β 2, A 1 (17 s, load 8.64): identical to the committed file (44 lines). Its tool lines are also
+     identical to the planner's `ol-n2-1e-15.txt`.
+   - n = 1, laboratory M, β 2.9, A 0.05 (35 s, load 8.03), which no check of the agent's covered: identical (171 lines).
+4. *The counterparts.*
+   - The export copy's SHA-256 is P25's. The extract's header and its twenty rows are each found verbatim in the copy,
+     CR stripped.
+   - The exponential's 10⁻¹⁵ M_P tool route, re-run (18 s, load 8.71), is identical to the committed
+     `tool-route/exp-M1e-15-b2.0-oneloop1.txt`. It equals the export row at the printed digits: normalization, 28
+     reflections, 27 injections, the injected fraction, ΔN_eff at 1 MeV 5.78965e-8, Y_p, D/H, the 1 MeV ratio, and the
+     classical (0.0088957) and parking (0.991104) shares.
+5. *The thresholds and R9.* From the `cand` tables, by a scratch script, at n = 1 laboratory M β 1.2 A 0.05 (170
+   candidates) and n = 2 10⁻¹⁵ M_P β 2 A 1 (23):
+   - the largest φ_t (4.2005e-36, 3.30284e-29 M_P);
+   - the smallest ln R (57.682118, 46.987453);
+   - ρ_kin/ρ_R at the cut, the last candidate in both (9.83412e-7, 9.26948e-7);
+   - the smallest ratio before it (1.00755e-6, 1.55772e-6);
+   - the smallest ln(E/V₀) (11.464016, 62.08282), with 1/x there;
+   - the share of K below E/V₀ = 100 and 10³ (0 and 0).
+
+   All equal the runner's `sample` lines. m_eff/H at the cut is not in the `cand` table; it was read from the `sample
+   parking` line (3.53e10, 2.19e10), not recomputed. The M_crit arithmetic of `thresholds.txt` §5 checks at n = 2
+   10⁻¹⁵ M_P: 1e-15 · e^{46.987453/4} = 1.26e-10 M_P and 1e-15 · e^{178.8666/4} = 2.63e4 M_P. The exponential's first
+   impact gives 1.15e-15 M_P.
+6. *The surfing and the records.*
+   - Re-run by `tools/surfing_scan.py`: n = 2 at β 3.003, the first EW capture (206 s, load 6.20), and n = 1 at β 1.25,
+     the failed row below the onset bracket (4 s, load 3.19). Every column but `wall_s` equals the committed row. The
+     n = 1 row fails at G2 again (W/(π²/2) = 1.0457 at N = 36.132).
+   - The edges, read from the CSVs by a scratch script, are the log's. Q-exp and Q-n2 have their first QCD capture at
+     1.117 after an uncaptured 1.116. E-n2 has its last QCD capture at 2.975, 26 uncaptured successes 2.976–3.002 (2.991
+     failed) and its first EW capture at 3.003. C-n1 has 74 failures in 79 rows, QCD captures from 1.30 to 1.80 and no
+     EW capture.
+   - The log has §5.1's seven parts and classes rulings 1–10 and D1–D12. D1 (a zsh word-splitting refusal, re-run from
+     bash) is its one UNINTENDED DRIFT.
+   - Verification §4 has §4.1–§4.9. `source/sample/README.md` names each script and what it produced.
+   - The board had row 04, the gate Sample and the baselines. No issue was opened, so §3, §4 and
+     `.documents/OPEN_ISSUES.md` (32 open) are unchanged.
+   - `CLAUDE.md` is unchanged. Test discovery at `05f6920` counts 26, 219 + 513, 163, 302 and 76, the base's counts. The
+     full suites were not re-run by me.
+   - `black --check` passes on the three Python files.
+   - "This commit" is replaced by `05f6920` in the log and on the board.
+- **For the user's ruling** (README §2 row 04, before 05): the surfing thresholds at n = 1, verification §4.9. At
+  10⁻³ M_P, 74 of 79 coarse rows fail and no EW edge can be bracketed. The agent's options are:
+  - (a) record it as measured, as R5 did;
+  - (b) run the narrower Q-n1 grid, 1.250–1.300 (log D3's other reading);
+  - (c) scan n = 1 at another M, outside U7;
+  - (d) treat the n = 1 natural-mode G2 failures as a production issue for a later campaign.
+
+  None is chosen. Beside them, not rulings, are the log's observations (§6): two failure kinds besides G2 in the scans
+  (a tuning non-convergence at n = 1 β 3.20, and R4's φ ≤ 0 step underflow at n = 2 β 1.149 and 2.991); T_max blank and
+  `n_crossings` one fewer on a reflected first bounce; and the one-loop law's cap and classical branch exercised by no
+  history in the sample.
+
 ## 2. The gates
 
 As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Close (08).
@@ -364,6 +441,8 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   orchestrator note"), with the planner's P24–P32 in README §6.7. No question waits on the user; not dispatched.
 - 2026-11-15: P24–P32 ruled by the user as proposed (README §6.7): "P24–P32 as proposed; don't yet dispatch prompt 04,
   though: I'll do that in a fresh session." The brief for that session is [`orchestrator/session-04.md`](orchestrator/session-04.md).
-- 2026-11-15: prompt 04 dispatched at `7d7c578`, and landed (this commit); the gate Sample holds. No issue opened. The
+- 2026-11-15: prompt 04 dispatched at `7d7c578`, and landed (`05f6920`); the gate Sample holds. No issue opened. The
   surfing thresholds at n = 1 (no EW edge at 10⁻³ M_P; the onset only in (1.10, 1.30]) go to the user with options
   (verification §4.9).
+- 2026-11-16: prompt 04 reviewed by the orchestrator (this board, "Orchestrator review of prompt 04"); all six checks
+  pass. The surfing thresholds at n = 1 (verification §4.9) go to the user before 05; 05 is not written.

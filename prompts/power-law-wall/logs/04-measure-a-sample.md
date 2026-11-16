@@ -3,7 +3,7 @@
 **Subject:** U7's forty power-law histories by the tool route under both drain laws, beside the exponential's 2026.11.0
 counterparts; the thresholds of README §0.3 read off them; R9's share; an M_crit estimate; the surfing edges at
 M = 10⁻³ M_P (P24–P32). No production change.
-**Commit:** this commit, on branch `power-law-wall`, on top of `7d7c578`
+**Commit:** `05f6920`, on branch `power-law-wall`, on top of `7d7c578`
 **Date:** 2026-11-15 to 16, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE.** The gate Sample holds (§4). No stop was reached. The scans put the surfing thresholds at n = 1
 in question; the evidence and options go to the user (verification §4.9), none chosen.

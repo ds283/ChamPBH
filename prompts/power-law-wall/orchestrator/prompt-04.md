@@ -1,6 +1,7 @@
 # Orchestrator — prompt 04, measure a sample
 
-**Written** 2026-11-15 with the prompt, at the user's request: "No need to argue about D12. Leave it as it is. Please
+**Used for 04** (dispatched 2026-11-15 at `7d7c578`; landed `05f6920`; reviewed on the board, "Orchestrator review of
+prompt 04"). **Written** 2026-11-15 with the prompt, at the user's request: "No need to argue about D12. Leave it as it is. Please
 write prompt 04 and its orchestrator note." Not dispatched. P24–P32 were ruled by the user the same day, as proposed
 (README §6.7); the user dispatches it from a fresh session, whose brief is [`session-04.md`](session-04.md).
 
