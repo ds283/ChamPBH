@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-16 · **Status: LIVE — 6 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened); 01–05 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10), not yet reviewed; R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-16 · **Status: LIVE — 6 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened); 01–06 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 not written; R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -26,7 +26,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 03 | The law on this wall | f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`; the spectrum as tables on three walls (R6–R8) | Opus | ✍️ | ✅ | `d924275` | [`logs/03-the-law-on-this-wall.md`](logs/03-the-law-on-this-wall.md) |
 | 04 | Measure a sample | U7's forty histories under both laws beside the exponential's; the thresholds of README §0.3, the surfing edges, R9's share, M_crit (P24–P32) | Opus | ✍️ | ✅ | `05f6920` | [`logs/04-measure-a-sample.md`](logs/04-measure-a-sample.md) |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6); the key's drain model at entry and the joins by model type (P33–P44) | Opus | ✍️ | ✅ | `bdb6ae7` | [`logs/05-the-store.md`](logs/05-the-store.md) |
-| 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11); the one-loop rows under the model's own drain model, the quanta tools' wall by row, the scope; every potential under `<output>/<label>/<model>/` (R12, P45–P58) | Opus | ✍️ | ✅ | this commit | [`logs/06-drivers-and-exports.md`](logs/06-drivers-and-exports.md) |
+| 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11); the one-loop rows under the model's own drain model, the quanta tools' wall by row, the scope; every potential under `<output>/<label>/<model>/` (R12, P45–P58) | Opus | ✍️ | ✅ | `fda2df2` | [`logs/06-drivers-and-exports.md`](logs/06-drivers-and-exports.md) |
 | 07 | Rehearse | registered builds, exponential bitwise, power law resumed | Opus | ⬜ | ⬜ | — | — |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
 
@@ -415,6 +415,104 @@ up to 147) and still at 15–28 when the review began.
   the store must match `model_type`; `outward_step_scan` stays exponential-only, and re-runs every exponential row at
   n = 1 (an observation, harmless while the science stores hold n = 1 only).
 
+**Orchestrator review of prompt 06 (2026-11-16).** All six checks of note 06 §3 pass. The re-runs below were made by
+the orchestrator at `fda2df2`, from scratch scripts and copies of the agent's scripts in the session scratchpad, none
+committed, each timed, with the one-minute load at its start (6–11 during the review). The quanta and RunDrivers tests
+overlapped one 3 s run of `test_models_main`; nothing else ran beside them.
+- **The gate at dispatch** (2026-11-16, 11:42 local).
+  - `HEAD` was `b1433f4`, the note's own commit. The worktree held `?? venv` only.
+  - The code was as the note records: `FINGERPRINT_FORMAT = 8`, `VERSION_LABEL = "2026.12.0"`, no `--models`, no
+    `inverse_power.yaml` or `model_options.py`, and `SPECTRUM_WALL = qs.WALL_EXPONENTIAL` at `tools/quanta_measures.py:98`.
+  - The registry had 62 runs, all finished. The rehearsal lock was free. The main checkout was at `9df9e13` and clean.
+  - The load was 21.62 / 16.10 / 16.83, against the planner's 26.20 / 16.71 / 18.60. Free disk was 110 GB.
+- **No stop.** The agent ran to its commit without asking.
+- **D4, the unintended Ray start.** The agent's first base export passed a real `ScalarHistoryProxy`, whose `ray.put`
+  started a private local Ray instance inside that process; the export failed and the process exited. It touched no
+  cluster, lock or store, and not `/tmp/ray-cpbh`. Its session directory `/tmp/ray/session_2026-11-16_11-52-35_742188_42121`
+  is still there, the only session under `/tmp/ray`, with `session_latest` pointing at it. No Ray process was running
+  during the review, and none of the review's runs added a session. The export script now patches `ray.init` and
+  `ray.put` to raise. The directory is left for the user.
+1. *Scope.* `fda2df2`'s parent is `b1433f4`.
+   - Its 62 files are prompt §5's list. `CosmologyConcepts/Models/__init__.py` is not among them (the new names are
+     imported from `model_options`). `venv` and `var/` are not in it.
+   - No diff in `ComputeTargets/ScalarHistory.py`, `config/fingerprint.py`, `config/version.py`, `ObjectFactories/`
+     outside its tests, or any tool §3 of the prompt names.
+   - In the model classes the diff is `spectrum_wall` and its imports alone. `exponential.yaml`'s diff is the line
+     `models: [exponential]`. `pipeline_selection.py`'s diff is two docstrings.
+   - `CLAUDE.md` changes only in the counts and the note of their last change. The verification document gains §5 and
+     loses no line.
+   - No base worktree of the agent's is left. The main checkout is still at `9df9e13` and clean. The branch has no
+     upstream; nothing is pushed.
+2. *The exponential.*
+   - `export_tree.py` from a base worktree of my own at `b1433f4` (4.6 s, load 9.8) and from the tip (3.4 s) on the
+     agent's store: both exit 0, and both trees' outputs equal the agent's by `diff -r`.
+   - `compare_exports.py` on my two exports exits 0. My own `cmp`: the base's `<label>/` and the tip's
+     `<label>/exponential/` hold the same 6 paths. The 5 files other than `histories.csv` are byte-equal. The tip's
+     `histories.csv` has `model` at column 3, directly after `n`, holding `exponential` in all 4 rows. With it removed,
+     the rows equal the base's, header included.
+   - The store's SHA-256 (`store-shard0000.db` `2ec681d9…`, `store.db` `7aa84846…`) are the agent's, before and after
+     every export of mine.
+   - Serially: `test_golden_history` 3 OK (14 s, load 8.5), `test_golden_reflecting_history` 2 OK (6 s),
+     `test_tuning` 40 OK (167 s), `test_driver_options` 14 OK (1 s, load 5.4), the five quanta tools' modules 89 OK
+     (81 s, load 5.4), and `RunDrivers/tests` 79 with the one known worktree failure (`test_registered_run…this_repositorys_head`, note 01 §0.1) and no other (27 s, load 6.3).
+   - `main.py`'s diff: for one potential the A rows are looked up A by A under its one drain model, after the fixed
+     rows in the same `ray.get`; one model `object_get` per potential; the pipelines loop over `alpha_rows` as before,
+     skipping another potential's A rows. The grid line is rebuilt from `MODEL_POTENTIALS["exponential"]`, which is the
+     base's text, and the A line's model is `one-loop-measured-v1`. The agent's `main_order.py`, run by me from my base
+     worktree against the tip, gives "lookups, pipelines and printed lines IDENTICAL" for all ten commands (five
+     commands, each as given and with `--models exponential`). `test_models_main` passes, 4 OK (3 s, load 6.5).
+3. *The option and the rows.* Parsed by me (with `--database`, which the parser requires):
+   - `--models inverse-power --n-values 1 2 --A-values 1`: accepted, A rows under `one-loop-measured-pl-v1`.
+   - `--models exponential inverse-power --A-values 1`: `one-loop-measured-v1` for the exponential,
+     `one-loop-measured-pl-v1` for the power law.
+   - `--models inverse-power --n-values 3 --A-values 1`, and the same with `--n-values 1 3`: exit 2, "--A-values needs
+     one one-loop drain model for each potential of --models over the n of --n-values: the potential inverse-power has
+     no one-loop drain law at n = 3: …".
+   - `--models inverse-power --n-values 3 --alpha-values 0.1`: accepted.
+   - No `--models`: `[exponential]`, the rest as at the base. `--config exponential.yaml` gives `[exponential]` with
+     16 shards and M = 0.5 M_P. `--config inverse_power.yaml` gives `[inverse-power]` with the same keys, its A rows
+     under `one-loop-measured-pl-v1`.
+   - `git grep DRAIN_MODEL_ONE_LOOP` in production code matches the log's list (`drain_model.py`,
+     `ExponentialModel.py:34, :100`, `ScalarHistory.py`'s import and comments, two docstrings). None is in a driver,
+     the parser or `plot_inputs.py`. `model_of_law` has no production caller.
+4. *The power law's exports.*
+   - The tip's `<label>/inverse-power/` holds `histories.csv` (`model` after `n`, `inverse-power` in all 6 rows: n = 1
+     and 2 at β = 2 under both laws, a fixed-law marker and a one-loop stand-in failure at β = 1.185) and 10 CSV
+     files under `alpha=0.1/` and `one-loop-measured-pl-v1/A=1/`, by n.
+   - `tools/quanta_measures.py` on a copy of that root (3.3 s): exit 0, "(R8-power-n1-v1, R8-power-n2-v1, assoc scale
+     1): measured 2, skipped as fixed-law 3, failed histories 1". In `quanta_histories.csv`, n = 1 gives
+     `R8-power-n1-v1` and n = 2 gives `R8-power-n2-v1`.
+   - My own `plot_inputs` probe. On the agent's store, its shard opened read-only through the undecorated actor:
+     `--models exponential` finds the two `ExponentialModel` rows, and `--models exponential inverse-power` at n = 1
+     finds each potential's two rows in its own table. The A rows are under `one-loop-measured-v1`,
+     `one-loop-measured-pl-v1`, or both, in that order. (`--models inverse-power --n-values 1 2` raised the actor's
+     `ReadOnlyWrite` for (n = 2, β = 1.185), which the store does not hold. The plain actor raises at lookup and not at
+     `ray.get`, where `stored_models` skips a miss. The store's `shard_keys` table is empty, so a `ShardedPool` cannot
+     route a sharded lookup on it: a property of the harness store.) On a mixed store of my own, built with
+     `test_models_plot_inputs._build_store` through the stand-in pool and reopened read-only: inverse-power at n = 1, 2
+     finds its two rows, the missing (n = 1, β = 1) skipped. An A stored only under `one-loop-measured-v1` is refused
+     for the power law, naming `--A-values 0.5 (one-loop-measured-pl-v1)`. On an exponential-only store,
+     `--models inverse-power` is refused: "the store holds no InversePowerModel for --models inverse-power".
+     `ray.is_initialized()` was False after each probe.
+5. *The analyses' readers.* `git show main:` of `m-trend/m_trend.py` reads `bounces.csv` copies at
+   `inputs/bounces/beta=<β>/M=<M>eV_n=1/`, the export's leaf below `<label>/<model>/<drain_model>/A=<A>/csv/`, and
+   `changes/changes.py` has `KEY = ["M_Mp", "beta", "drain_model", "alpha"]`. Both agree with §2.3's table.
+6. *The records.*
+   - The log has §5.1's seven parts. It classes rulings 1–10 and D1–D14, with one UNINTENDED DRIFT (D4), and lists
+     every changed test with its old and new value. It held §2.3's table only by reference to verification §5.8; the
+     review copies the table into it, as prompt §5 asks.
+   - The board has row 06, the gate Export, the baselines, §3's new issue and the history line.
+     `.documents/OPEN_ISSUES.md` has the issue under the new §1.26, and the count is 33.
+   - Test discovery at `fda2df2` counts 26, 783 (226 + 557), 175, 312 and 79, as `CLAUDE.md` says. The full suites were
+     not re-run by me.
+   - `black --check` passes on the 45 changed Python files.
+   - "This commit" is replaced by `fda2df2` in the log and on the board.
+- **For 07**, from the log's §7: `--n-values` is one list for every potential of a run, so a power-law build at
+  n = 1, 2 beside an exponential at n = 1 is two runs (or both potentials at both n), and a plot run over a store
+  holding the potentials at different n is one run per potential. 07's commands must say which. `plot_quanta_grid`
+  refuses a power-law root with n = 1 and 2 at one (β, M) (§3), and 2026.11.0's `changes.py` key has no `n`; both
+  bear on the science run, not on 07.
+
 ## 2. The gates
 
 As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Close (08).
@@ -583,6 +681,8 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   potential over another. We want to treat all potentials symmetrically. Having a dedicated root is the wrong choice
   unless all potentials get it." and "Yes, re-plan 06 on the symmetric design". 06, its note and P45–P58 re-planned
   on it (README §6.10); P11, README §5 and the gate Export amended for the exports. Not dispatched.
-- 2026-11-16: prompt 06 dispatched at `b1433f4`, and landed (this commit); the gate Export holds. One issue opened (§3,
+- 2026-11-16: prompt 06 dispatched at `b1433f4`, and landed (`fda2df2`); the gate Export holds. One issue opened (§3,
   `[06-plot-quanta-grid-refuses-two-n-at-one-cell]`). One unintended Ray start, a private local instance in the first base
   export's process, which ended with it (log 06 D4, UNINTENDED DRIFT); its session directory is left under `/tmp/ray`.
+- 2026-11-16: prompt 06 reviewed by the orchestrator (this board, "Orchestrator review of prompt 06"); all six checks
+  pass. 07 is written only when the user asks for it.

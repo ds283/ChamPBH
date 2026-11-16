@@ -1,6 +1,7 @@
 # Orchestrator — prompt 06, drivers and exports
 
-**Written** 2026-11-16 with the prompt, at the user's request: "Please write 06 and its orchestration note." First
+**Used for 06** (dispatched 2026-11-16 at `b1433f4`; landed `fda2df2` with no stop; reviewed on the board,
+"Orchestrator review of prompt 06"). **Written** 2026-11-16 with the prompt, at the user's request: "Please write 06 and its orchestration note." First
 written on U10 (`8daf91d`). **Re-planned the same day on R12** (README §6.10), the user's ruling that the potentials are
 treated symmetrically: "Yes, re-plan 06 on the symmetric design". Not dispatched. P45–P58 as re-planned stand unless the
 user rules otherwise; none needs a ruling first. 06 is dispatched at the user's word.

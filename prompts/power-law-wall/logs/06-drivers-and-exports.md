@@ -3,7 +3,7 @@
 **Subject:** the potentials treated symmetrically (R12): `--models` for `main.py` and both plot scripts, each
 potential's one-loop rows under its own drain model, every export under `<output>/<label>/<model>/` with a `model`
 column, `spectrum_wall` on the model and the quanta tools' wall by row, the registered run's scope (P45–P58).
-**Commit:** this commit, on branch `power-law-wall`, on top of `b1433f4`
+**Commit:** `fda2df2`, on branch `power-law-wall`, on top of `b1433f4`
 **Date:** 2026-11-16, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE.** The gate Export holds (§4).
 - **The option.** `--models {exponential, inverse-power} …`, default `[exponential]`, YAML key `models`; the values and
@@ -314,6 +314,15 @@ No golden, fingerprint or exponential history test is edited.
 **2.3 The 2026.11.0 analyses' readers:** the table of verification §5.8. Each of `fig6`, `fig6b`, `m_trend` and
 `changes` reads committed copies of `histories.csv` (and `m_trend` of `bounces.csv`) by column name; an export of 06
 gives each under `<label>/<model>/`, the column names unchanged and `model` unread.
+
+The table, copied here from verification §5.8 by the orchestrator's review (prompt §5 asks the log to hold it):
+
+| analysis | what it reads | an export of 06 gives it |
+|---|---|---|
+| `fig6/fig6.py` | `inputs/histories.csv` (a copy beside it), by `pd.read_csv` and column name: `failure_reasons`, `Yp_BBN`, `delta_Yp`, `delta_D_over_H`, `Delta_N_eff_today`, `parking_T_GeV`, `drain_model`, `M_Mp`, `T_deliver_GeV`, `beta` | yes: `<label>/<model>/histories.csv`, every column under its name; `model` is not read |
+| `fig6b/fig6b.py` | `../fig6/inputs/histories.csv`; as fig6's, and `alpha`, `log_R_first_impact` | yes, as fig6 |
+| `m-trend/m_trend.py` | `../fig6/inputs/histories.csv` (`alpha`, `beta`, `M_Mp`, `drain_model`, the shifts, `failure_reasons`, `Yp_BBN`); copies of `bounces.csv` at its own `inputs/bounces/beta=<β>/M=<M>eV_n=1/` (`delta_K_Mp4`) | yes: `histories.csv` as fig6; each `bounces.csv` at `<label>/<model>/<drain_model>/A=<A>/csv/beta=<β>/M=<M>eV_n=<n>/`, below the root as before |
+| `changes/changes.py` | `../fig6/inputs/histories.csv` and 2026.10.0's copy, joined on `M_Mp`, `beta`, `drain_model`, `alpha`; `failure_reasons`, `Yp_BBN`, `T_deliver_GeV` and eleven observables by name | yes; its key has no `n` and no `model` (§6) |
 
 **The gate Export holds.**
 
