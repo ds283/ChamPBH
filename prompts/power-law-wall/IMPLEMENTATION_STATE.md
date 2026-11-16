@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-16 · **Status: LIVE — 6 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened); 01–06 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 not written; R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-16 · **Status: LIVE — 6 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened); 01–06 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 written with P59–P72 (README §6.11), not dispatched; R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -27,7 +27,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 04 | Measure a sample | U7's forty histories under both laws beside the exponential's; the thresholds of README §0.3, the surfing edges, R9's share, M_crit (P24–P32) | Opus | ✍️ | ✅ | `05f6920` | [`logs/04-measure-a-sample.md`](logs/04-measure-a-sample.md) |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6); the key's drain model at entry and the joins by model type (P33–P44) | Opus | ✍️ | ✅ | `bdb6ae7` | [`logs/05-the-store.md`](logs/05-the-store.md) |
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11); the one-loop rows under the model's own drain model, the quanta tools' wall by row, the scope; every potential under `<output>/<label>/<model>/` (R12, P45–P58) | Opus | ✍️ | ✅ | `fda2df2` | [`logs/06-drivers-and-exports.md`](logs/06-drivers-and-exports.md) |
-| 07 | Rehearse | registered builds, exponential bitwise, power law resumed | Opus | ⬜ | ⬜ | — | — |
+| 07 | Rehearse | registered builds, exponential bitwise, power law resumed; U7's grid in five stores (the exponential at `a7e0978` and the tip, the power law straight and resumed, both potentials in one store), against 04, the readers on every store (P59–P72) | Opus | ✍️ | ⬜ | — | — |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -37,7 +37,7 @@ a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written
 01 (dispatched 2026-11-14 at `75ac6fb`); [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-14 with prompt 02, used for
 02 (dispatched 2026-11-14 at `35f6359`); [`prompt-03.md`](orchestrator/prompt-03.md), written 2026-11-15 with prompt 03,
 used for 03 (dispatched 2026-11-15 at `7c60226`, after U8 and U9 were ruled as proposed, R9 and R10), and its §0 holds the f_n(ln R) fit the user ruled R7 on and the
-spectrum probes R8 was ruled on; [`prompt-04.md`](orchestrator/prompt-04.md), written 2026-11-15 with prompt 04, not dispatched, and its §0 holds the planner's probe at `99cc79b` (surfing at 10⁻³ M_P, one-loop histories at 10⁻¹⁵ and 10⁻³³ M_P, the M_crit estimate). Note 02's §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
+spectrum probes R8 was ruled on; [`prompt-04.md`](orchestrator/prompt-04.md), written 2026-11-15 with prompt 04, not dispatched, and its §0 holds the planner's probe at `99cc79b` (surfing at 10⁻³ M_P, one-loop histories at 10⁻¹⁵ and 10⁻³³ M_P, the M_crit estimate); [`prompt-07.md`](orchestrator/prompt-07.md), written 2026-11-16 with prompt 07, not dispatched, and its §0 holds the planner's survey at `c7ba5ca` (the registry's roots in the main checkout, the data files equal at `a7e0978` and the tip, 04's costs and print formats). Note 02's §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
 crossover scripts' absolute tolerances failing at large E/V₀.
 
 **Planner's probe for 01 (2026-11-13, at `c540caa`, not committed).** A scratch power-law model through
@@ -686,3 +686,6 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   export's process, which ended with it (log 06 D4, UNINTENDED DRIFT); its session directory is left under `/tmp/ray`.
 - 2026-11-16: prompt 06 reviewed by the orchestrator (this board, "Orchestrator review of prompt 06"); all six checks
   pass. 07 is written only when the user asks for it.
+- 2026-11-16: prompt 07 and its orchestrator note written, at the user's request ("Please write 07 and its orchestration
+  note"), with the planner's P59–P72 in README §6.11 (the gate R made exact by P64–P68), from a survey of the registry,
+  the base `a7e0978`, 04's outputs and the rehearsal tools (note 07 §0). No question waits on the user; not dispatched.

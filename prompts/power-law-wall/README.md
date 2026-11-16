@@ -113,7 +113,7 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 | 04 | `04-measure-a-sample.md` | about forty power-law histories, re-tuned, by the tool route under both laws (§6.3 P9); the thresholds and surfing thresholds; the comparison with the same (M, β) on the exponential. Then the user rules any threshold that does not hold | Opus |
 | 05 | `05-the-store.md` | model type id 2, its table and factory keyed (M, n, β), the registry, sharding, the `types` maps, `FINGERPRINT_FORMAT` 8 and `VERSION_LABEL` (U6), `compare_stores`, `inventory_report`, `bbn_from_store`, `outward_step_scan`; tests in a temporary store. *(As written 2026-11-16 on P33–P44: also the key's drain model checked at `ScalarHistory`'s construction, and every raw join of a model table filtered by `model_type`.)* | Opus |
 | 06 | `06-drivers-and-exports.md` | `main.py`'s model option and its config file; `plot_inputs`, `plot_by_beta`, `plot_ScalarHistory`, `extract_common`, `pipeline_selection` through the model interface; the model in `histories.csv` and in the export paths (P11); the exponential exports byte-identical. *(Added 2026-11-15, P17, P19: the one-loop drain model taken from the model, where they name `DRAIN_MODEL_ONE_LOOP`; the quanta tools' spectrum wall taken from the export's model column.)* *(As written 2026-11-16 on R12 and P45–P58: `--models`, a list, for `main.py` and the plot scripts; each potential's one-loop rows under its own drain model; every export under `<output>/<label>/<model>/` with a `model` column, for every potential; `spectrum_wall` on the model and the quanta tools by row; the registered run's scope; the gate's evidence by two trees on a harness store; Opus, P58.)* | Sonnet |
-| 07 | `07-rehearse.md` | registered builds on the isolated cluster: the exponential at base and tip, bitwise; the power law at n = 1, 2 under both laws, interrupted and resumed, by value and against 04 | Opus |
+| 07 | `07-rehearse.md` | registered builds on the isolated cluster: the exponential at base and tip, bitwise; the power law at n = 1, 2 under both laws, interrupted and resumed, by value and against 04 *(As written 2026-11-16 on P59–P72: U7's grid; five stores, the exponential at `a7e0978` and at the tip, the power law straight and resumed, and both potentials in one store; one cluster per tree; the readers and the quanta tools on every store.)* | Opus |
 | 08 | `08-close.md` | `.documents/power-law-wall-verification.md`, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the science run (its grid's inputs from 04), the issues and the indexes | Opus |
 
 Written one at a time, each after the previous one lands and is reviewed. 03 waits for U3–U5, and is dropped if they
@@ -130,7 +130,7 @@ ruling. 06 needs only 05's schema; 08 needs 07's stores.
 | **Sample** | every sampled history measured under both laws, re-tuned, with its failures stated; every threshold of §0.3 reported against its use on this wall | 04 |
 | **Store** | power-law histories round-trip in a temporary store; the exponential store's fingerprint golden unchanged apart from the format | 05 |
 | **Export** | the exponential exports byte-identical to the base's on the same store; the power-law exports carry the model and read back *(amended 2026-11-16 by R12, §6.10: every potential's exports are under `<output>/<label>/<model>/` with a `model` column, so the exponential's equal the base's once that directory and column are accounted for, P54)* | 06 |
-| **R** | exponential builds bitwise base to tip; power-law builds resumed by value; inventories "problems: none" | 07 |
+| **R** | exponential builds bitwise base to tip; power-law builds resumed by value; inventories "problems: none" *(made exact 2026-11-16 by P64–P68, §6.11: also the power-law builds against 04's tool route, both potentials in one store equal to each alone, and the readers on every store)* | 07 |
 | **Close** | documents, issues, indexes and the handover written; the suites at their counts | 08 |
 
 ## 3. Stores
@@ -541,6 +541,78 @@ They rest on the planner's survey and scratch probe at `3ce578d` (orchestrator n
 | | Proposed | Alternatives |
 |---|---|---|
 | **U10** — the export layout (amends P11) | (a) a root of its own for the power law, `<output>/<label>/<model>/`, with a `model` column in its `histories.csv` only, and the exponential's exports untouched | (b) P11 word for word: `histories.csv` gains `model` for every model; the power law's per-(M, n) folders are `<model>/M=…eV_n=…`; `histories.csv` stays at `<output>/<label>/`, so two potentials' plot runs into one `--output` overwrite each other's |
+
+### 6.11 Proposed by the planner with prompt 07, 2026-11-16
+
+**P59–P72** stand unless the user rules otherwise. None needs a ruling before 07 is dispatched; there is no U question.
+They rest on the planner's survey at `c7ba5ca` (orchestrator note 07 §0).
+
+- **P59 — the base.** The campaign's base, `a7e0978` (the merge base with `main`: `VERSION_LABEL` 2026.11.0,
+  `FINGERPRINT_FORMAT` 7), checked out in a scratch worktree with a `venv` link only, and removed before the commit. The
+  registry places runs and stores in the main checkout's `var/` from any worktree (P61), so no `var` link is needed.
+- **P60 — one cluster per tree.** Each tree's builds and plot runs go through a cluster started from that tree's root,
+  `electroweak-eos` 02's practice for its open issue `[02-a-worktree-build-reads-the-data-files-of-the-tree-that-started-the-cluster]`:
+  the base's first, stopped, then this worktree's. A code probe before each tree's first build prints, from the driver,
+  a task and an actor, the module files, the label and format, the working directory, `PYTHONPATH`, and the SHA-256 of
+  the two data files read by relative path. The data files are the same at both commits, so any mismatch is a stop.
+- **P61 — where things go.** The registry resolves its roots to the main checkout's `var/runs` and `var/datastores`
+  from this worktree (the planner's probe), so the stores are `<main>/var/datastores/power-law-wall-07-<store>.db` and
+  the run records `<main>/var/runs/power-law-wall-07-*`, where `runregistrykit list` finds them (`CLAUDE.md` rule 1).
+  Launch logs, exports and comparisons go under this worktree's `var/power-law-wall/07/`. No tracked file of the main
+  checkout is read or written.
+- **P62 — the grid is U7's sample.** Each store is built by three registered runs, at φ* = 5 M_P with the config file's
+  tolerances and 16 shards:
+  - `a`: M = 4 × 10⁻³¹ M_P, β 1.2, 2.0, 2.9, α 0.01, 0.1 and A 0.05, 1, 10;
+  - `b`: M = 10⁻³ M_P, β 1.2, 2.0, 2.9, α = 0 (natural mode);
+  - `c`: M = 10⁻³³ and 10⁻¹⁵ M_P, β = 2.0, A = 1, `--no-alpha-values`.
+
+  That is 20 histories per potential and n, exactly 04's forty for the power law and their twenty exponential
+  counterparts. Five stores:
+
+  | store | tree | potentials | n | histories |
+  |---|---|---|---|---|
+  | `base` | `a7e0978` | exponential (`exponential.yaml`) | 1 | 20 |
+  | `exp` | tip | exponential (`exponential.yaml`) | 1 | 20 |
+  | `pl` | tip | inverse-power (`inverse_power.yaml`) | 1, 2 | 40 |
+  | `pl-resumed` | tip | inverse-power, run `a` interrupted and resumed | 1, 2 | 40 |
+  | `mixed` | tip | both, `--models exponential inverse-power` | 1 | 40 |
+
+  04 measured 3–97 s per history by the tool route, so each run is minutes.
+- **P63 — the interruption.** `pl-resumed`'s run `a` is sent `SIGTERM` by `interrupt_when.py` during the A = 0.05
+  pipeline, whose histories' walls spread most (16–32 s in 04), with the window, the delay and the miss rule of
+  `one-loop-drain` 06, read from `pl`'s run `a`. Then `--prune-unvalidated`, runs `b` and `c`.
+- **P64 — R (i), the exponential bitwise.** Every history of `base` matched once in `exp` by its key, and every column
+  both schemas hold compared by `float.hex`, as `one-loop-drain` 06's `compare_base.py` did. A difference is a stop:
+  between `a7e0978` and the tip no exponential code path changed (P2). Beside it, the two sidecars' fingerprints class by
+  class: equal in count and digest for every class both name, and `InversePowerModel` empty in `exp`'s (P40).
+- **P65 — R (ii), the power law resumed.** `tools/compare_stores.py` on `pl` and `pl-resumed`: `RESULT: equal` and
+  `problems: none`; the two fingerprints equal at format 8.
+- **P66 — R (iii), against 04.** Each of `pl`'s and `pl-resumed`'s forty histories against 04's output for it
+  (`.documents/power-law-wall/sample-04/runs/<name>.txt`): its outcome and failure reason; the tuning's values, which
+  the tool prints in full, bit for bit; every other value the store holds at the digits the line prints; every candidate
+  row by `candidate_index`. `exp`'s three histories that 04 ran by the plain tool (`tool-route/exp-*.txt`) the same
+  way. 04's twenty exponential counterparts from the 2026.11.0 export are compared with `exp`'s export as a measurement
+  only, since that run's options were its own.
+- **P67 — R (iv), two potentials in one store** (R12: "we'll run both together"). `mixed`'s exponential histories
+  equal `exp`'s, and its power-law histories `pl`'s at n = 1, bitwise as P64. Its plot run with both potentials
+  writes two roots: the exponential root's CSV files equal `exp`'s byte for byte, and the power law's equal `pl`'s for
+  every n = 1 file, with `histories.csv` equal to `pl`'s n = 1 rows.
+- **P68 — R (v), the readers.** Unregistered, each store's SHA-256 unchanged by every one: the inventory on every store
+  (`problems: none`); both plot scripts with `--no-plots` on every store, the base's by the base tree, and the base's
+  exports against `exp`'s by 06's rule (`exponential/` and `model` accounted for); one plot run with figures, on `pl`; the
+  refusals of a potential or an A that the store does not hold; `tools/quanta_measures.py` on every root of the tip;
+  `tools/plot_quanta_grid.py` on `pl`'s root, whose refusal of two n at one cell (board §3) is recorded, not a stop;
+  `tools/bbn_from_store.py` re-solving one stored history per potential and n.
+- **P69 — the measurement.** As `one-loop-drain` 06's §3: the probe, the runs, the interruption, the heartbeat silences,
+  the cost per store and per history (the power law's beside the exponential's), the stores' sizes, the readers, a look at
+  the power law's first figures under Ray. In `.documents/power-law-wall-verification.md` §6.
+- **P70 — the suites.** In full at the base. No code changes, so the counts after are taken by discovery, as 04's were
+  (P32).
+- **P71 — the scripts.** Under `.documents/power-law-wall/rehearse-07/`, adapted from `one-loop-drain` 06's
+  `rehearse-06/` and `electroweak-eos` 02's `effect/`, each adaptation shown by a diff in `out/`. They read a store only
+  by `sqlite3` `mode=ro`. `out/` holds small text only.
+- **P72 — no code change; one commit.** No code, test, golden or configuration changes. A run not ended 60 minutes after
+  its launch is a stop. Opus, as §2 plans.
 
 
 ## 7. What this campaign hands to the user
