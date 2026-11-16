@@ -19,10 +19,19 @@ every one-loop history of a plot run's exports, from the exports alone. No store
 
     PYTHONPATH=. ./venv/bin/python tools/quanta_measures.py EXPORT_ROOT [--assoc-scale C]
 
-EXPORT_ROOT is a plot run's `<output>/<label>/`, holding histories.csv and the per-row directories (log 04 §7). C is the
-associated piece's scale c_a (default 1; P46), the only choice of spectrum: the exponential wall's measured shape, with
-R10's associated piece (ComputeTargets/quanta_spectrum.py, SPECTRUM_MODELS; power-law-wall prompt 03), whose
-spectrum_model every output names (SPECTRUM_WALL below; power-law-wall prompt 06 takes the wall from the export).
+EXPORT_ROOT is one potential's root of a plot run, `<output>/<label>/<model>/` (power-law-wall prompt 06; README §6.10
+R12, P50), holding histories.csv and the per-row directories (log 04 §7). C is the associated piece's scale c_a (default
+1; P46), the only choice of spectrum besides the wall.
+
+**The wall** (power-law-wall prompt 06 §1.8, P53): each row's spectrum is its potential's, read from the row's `model`
+and `n` through the model interface (`AbstractModel.spectrum_wall`, by CosmologyConcepts.Models.model_options): the
+exponential wall's measured shape at every n of the exponential, the power wall's at n = 1 and 2 of the inverse power
+law, each with R10's associated piece (ComputeTargets/quanta_spectrum.py, SPECTRUM_MODELS; power-law-wall prompt 03).
+One spectrum is built per wall met, and every output row names its own `spectrum_model`. A histories.csv without the
+`model` column is refused as an unreadable one (exit 2), naming the column; no potential is assumed. A one-loop row
+whose potential has no wall at its n, or which names no potential the code knows, is refused and counted with the
+refusals, with the reason. The summary line names the spectrum models of the walls of the root's rows, whatever their
+law (root_models_text), as the figure tools' summary lines do.
 
 **Finding a history.** Each histories.csv row whose drain_model is not `fixed` and whose `normalization` is not blank names
 one directory, EXPORT_ROOT / alpha_path(A, drain_model) / "csv" / history_directory(beta, M_eV, n), by extract_common's
@@ -88,14 +97,15 @@ from typing import Dict, List, Optional, Sequence
 import numpy as np
 
 from ComputeTargets import quanta_spectrum as qs
+from CosmologyConcepts.Models.model_options import spectrum_wall
 from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED
 from Units import Planck_units
 from Units.base import UnitsLike
 from extract_common import alpha_path, history_directory
 
-# the spectrum's wall (power-law-wall prompt 03; README §6.6 P19): the exponential's, passed explicitly until
-# power-law-wall prompt 06 takes it from the export's model column (README §6.3 P11, §2 row 06)
-SPECTRUM_WALL = qs.WALL_EXPONENTIAL
+# the column of histories.csv that names the row's potential (power-law-wall prompt 06, P51), whose wall is the
+# spectrum's (P53)
+MODEL_COLUMN = "model"
 
 # K_before + delta_K against the next K_before, and the leftover's size against parking_share x K_final: relative to the
 # larger K (ruling 6). Each converted cell is one division by M_P^4 (half an ulp), and the ledger's sum one addition (half
@@ -234,6 +244,44 @@ def history_dir(root: Path, row: dict, units: UnitsLike) -> Path:
     M_eV = float(row["M_Mp"]) * (units.PlanckMass / units.eV)
     base = alpha_path(Path(root), float(row["alpha"]), row["drain_model"])
     return base / f"csv/{history_directory(float(row['beta']), M_eV, n)}"
+
+
+def wall_of(row: dict) -> str:
+    """
+    The wall of a histories.csv row's spectrum: `spectrum_wall` of the potential its `model` cell names, at its `n`
+    (power-law-wall prompt 06 §1.8, P53). Refused, with the reason, for a row whose potential has no wall at its n, or
+    whose `model` names no potential the code knows, or whose n is not an integer.
+    """
+    try:
+        n = int(row["n"])
+    except ValueError:
+        raise Refused(f"n = {row['n']!r} is not an integer")
+    try:
+        return spectrum_wall(row[MODEL_COLUMN], n)
+    except (ValueError, NotImplementedError) as e:
+        raise Refused(f"no spectrum for model {row[MODEL_COLUMN]!r} at n = {n}: {e}")
+
+
+def spectrum_models_text(models: Sequence[str]) -> str:
+    """The spectrum models met, in the order met, for a summary line ('no spectrum' if none)."""
+    return ", ".join(models) if models else "no spectrum"
+
+
+def root_models_text(rows: Sequence[dict]) -> str:
+    """
+    The spectrum models of the walls of every row of a root's histories.csv, whatever its law, distinct and in the
+    order met (the rows with no wall left out), for the tools' summary lines (power-law-wall prompt 06): on an
+    exponential root the exponential's model, as the line named it before the wall came from the export.
+    """
+    found: List[str] = []
+    for row in rows:
+        try:
+            model = qs.spectrum_model(wall_of(row))
+        except Refused:
+            continue
+        if model not in found:
+            found.append(model)
+    return spectrum_models_text(found)
 
 
 def row_label(row: dict) -> str:
@@ -689,13 +737,26 @@ def run(
     root = Path(root)
     histories_csv = root / "histories.csv"
     try:
-        _, rows = read_csv(histories_csv)
+        columns, rows = read_csv(histories_csv)
     except (OSError, csv.Error, UnicodeDecodeError) as e:
         print(f"!! quanta_measures: cannot read {histories_csv}: {e}", file=sys.stderr)
         return 2
-    spectrum = qs.spectrum(SPECTRUM_WALL, assoc_scale)
-    tag = suffix(spectrum.assoc_scale)
-    model = dict(spectrum_model=spectrum.model, assoc_scale=spectrum.assoc_scale)
+    if MODEL_COLUMN not in columns:
+        print(
+            f"!! quanta_measures: cannot read {histories_csv}: it has no {MODEL_COLUMN!r} column, which names "
+            f"the potential whose spectrum each row takes (power-law-wall prompt 06)",
+            file=sys.stderr,
+        )
+        return 2
+    # one spectrum per wall met, at the scale asked (power-law-wall prompt 06, P53); every row names its own
+    spectra: Dict[str, object] = {}
+
+    def spectrum_of(wall: str):
+        if wall not in spectra:
+            spectra[wall] = qs.spectrum(wall, assoc_scale)
+        return spectra[wall]
+
+    tag = suffix(qs.spectrum(qs.WALLS[0], assoc_scale).assoc_scale)
     t_start = time.perf_counter()
 
     counts = dict(
@@ -715,15 +776,29 @@ def run(
             counts["refused"] += 1
             print(f"REFUSED {row_label(row)}: {e}", file=out)
             continue
-        candidates.append((row, d))
+        try:
+            wall = wall_of(row)
+        except Refused as e:
+            counts["refused"] += 1
+            print(f"REFUSED {row_label(row)}: {e}", file=out)
+            for p in (
+                d / f"quanta_bounces{tag}.csv",
+                d / f"quanta_samples{tag}.csv",
+            ):
+                if p.exists():
+                    p.unlink()
+            continue
+        candidates.append((row, d, wall))
 
     by_dir: Dict[Path, list] = {}
-    for row, d in candidates:
+    for row, d, _ in candidates:
         by_dir.setdefault(d, []).append(row)
 
     history_rows = []
-    for row, d in candidates:
+    for row, d, wall in candidates:
         label = row_label(row)
+        spectrum = spectrum_of(wall)
+        model = dict(spectrum_model=spectrum.model, assoc_scale=spectrum.assoc_scale)
         files = (
             d / f"quanta_bounces{tag}.csv",
             d / f"quanta_samples{tag}.csv",
@@ -786,7 +861,8 @@ def run(
     write_csv(root / f"quanta_histories{tag}.csv", HISTORY_OUTPUT_COLUMNS, history_rows)
     wall = time.perf_counter() - t_start
     print(
-        f"quanta_measures ({spectrum.model}, assoc scale {spectrum.assoc_scale:g}): measured {counts['measured']}, "
+        f"quanta_measures ({root_models_text(rows)}, assoc scale "
+        f"{qs.spectrum(qs.WALLS[0], assoc_scale).assoc_scale:g}): measured {counts['measured']}, "
         f"skipped as fixed-law {counts['fixed']}, failed histories {counts['failed_history']}, missing files "
         f"{counts['missing']}, refused {counts['refused']}, failed the K check {counts['K_failed']}; wall {wall:.1f} s",
         file=out,
@@ -810,7 +886,10 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="The spectrum-dependent measures of a plot run's one-loop exports (one-loop-drain prompt 05)"
     )
-    parser.add_argument("export_root", help="a plot run's <output>/<label>/")
+    parser.add_argument(
+        "export_root",
+        help="one potential's root of a plot run, <output>/<label>/<model>/",
+    )
     parser.add_argument(
         "--assoc-scale",
         type=_scale,

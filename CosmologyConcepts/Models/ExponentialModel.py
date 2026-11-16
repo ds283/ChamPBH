@@ -29,6 +29,7 @@ table (ObjectFactories/ExponentialModel.py), keyed by (M, n, beta).
 from math import exp, log, log1p, sqrt
 
 from ComputeTargets.exceptions import ComputationFailureError
+from ComputeTargets.quanta_spectrum import WALL_EXPONENTIAL
 from CosmologyConcepts import M_value, beta_value, FieldLike, GetFieldValue
 from CosmologyConcepts.drain_model import DRAIN_MODEL_ONE_LOOP
 from CosmologyConcepts.Models.AbstractModel import AbstractModel, RealizedModel, Seed
@@ -97,6 +98,12 @@ class ExponentialModel(AbstractModel):
         # README §6.6 P16): the L law, drain_fraction read at _drain_L above, at every n, which the measured law was
         # fitted on (one-loop-drain README §8.10)
         return DRAIN_MODEL_ONE_LOOP
+
+    @property
+    def spectrum_wall(self) -> str:
+        # the wall of the quanta spectrum (power-law-wall prompt 06 §1.7; AbstractModel.spectrum_wall, README §6.10 P52):
+        # the exponential wall's table at every n, which serves the exponential family (README §6.6 P19)
+        return WALL_EXPONENTIAL
 
     def _log_V(self, normalization, phi: FieldLike) -> float:
         phi_float = GetFieldValue(phi)

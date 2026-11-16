@@ -1056,3 +1056,125 @@ inside it (β 2.991, R4's φ ≤ 0).
 at every M ≤ M_P (first-impact M_crit 1.4 × 10³ to 7.0 × 10²⁸ M_P), so the M at which the exponential turns classical
 (about 10⁻¹⁵ M_P) has no counterpart; the late cascade would turn classical between about 10⁻²⁷ M_P and above M_P,
 depending on n, β and the law (verification §4.5 item 5). This bears on the science run's M grid (08's handover).
+
+---
+
+## 5. Drivers and exports (prompt 06, 2026-11-16)
+
+**Tree:** the worktree on `power-law-wall`, at the dispatch commit `b1433f4` plus prompt 06's changes (committed as
+prompt 06's commit), against **the base**, a scratch worktree of `b1433f4` made under the session scratchpad and removed
+before the commit. No Ray (see log 06 D4 for the one accidental start), no cluster, no `main.py` against a store. The
+scripts and the committed outputs are in [`power-law-wall/export-06/`](power-law-wall/export-06/); the store and the
+exports themselves are under `var/power-law-wall/06/` (ignored by git). Loads (one-minute) are beside the timings.
+
+### 5.1 What R12 asked, and what moved
+
+Every potential is exported under `<output>/<label>/<model>/` (`extract_common.export_root`), with a `model` column
+directly after `n` in its `histories.csv`; `--models` (a list, default `[exponential]`) chooses the potentials of
+`main.py` and both plot scripts; each potential's `--A-values` rows are looked up under its own one-loop drain model
+(`one-loop-measured-v1` for the exponential, `one-loop-measured-pl-v1` for the power law at n = 1, 2), read through the
+model interface; `AbstractModel.spectrum_wall` names each model's quanta spectrum, and the quanta tools take each row's
+wall from its `model` and `n`. For the exponential, the exports moved one directory down and gained the column; nothing
+else of them, and nothing stored, moved.
+
+### 5.2 The store (§2.1)
+
+`build_store.py`, run from the base worktree through 05's harness (`_PowerStoreCase`, the stand-in cluster), 11:50–11:51
+(load 18.1 → 23.5): six tuned histories at laboratory M (4 × 10⁻³¹ M_P), β = 2, each one tuning of 6.8–8.9 s, and two
+stand-in failure rows at β = 1.185; 49.2 s in all. Each successful history has a stand-in BBNData row (constructed
+values, no samples), so that `build_beta_plot` writes each group's `data.csv` (it returns before `data.csv` when no group
+has BBN data). Its manifest is `out/manifest.json`.
+
+| name | potential | n | key | serial |
+|---|---|---|---|---|
+| E1-fixed0.1 | exponential | 1 | fixed, α = 0.1 | 1 |
+| E1-oneloop1 | exponential | 1 | one-loop-measured-v1, A = 1 | 2 |
+| P1-fixed0.1 | inverse-power | 1 | fixed, α = 0.1 | 3 |
+| P1-oneloop1 | inverse-power | 1 | one-loop-measured-pl-v1, A = 1 | 4 |
+| P2-fixed0.1 | inverse-power | 2 | fixed, α = 0.1 | 5 |
+| P2-oneloop1 | inverse-power | 2 | one-loop-measured-pl-v1, A = 1 | 6 |
+| E1-fail | exponential | 1 | fixed, α = 0.1, β = 1.185 (failure) | 7 |
+| P1-fail | inverse-power | 1 | one-loop-measured-pl-v1, A = 1, β = 1.185 (failure) | 8 |
+
+The two model tables' serials repeat each other (ExponentialModel serial 1 and InversePowerModel serial 1 are both
+named by histories 1, 3 and 4), as 05 found. SHA-256 of the store's files, before and after each of the two exports:
+`store-shard0000.db` `2ec681d90cddb66b75f59b79f686fe25278d56c0ff63aa36d90c628406d1abfe`, `store.db`
+`7aa84846babe26dc48ac580b5b157e718c90e850c3aa731c1f6d60447f4601dd`, unchanged by both (`out/compare.txt`).
+
+### 5.3 The two trees' exports (§2.1)
+
+`export_tree.py` runs each tree's own `build_beta_plot`, `write_alpha_summaries`, `plot_ScalarHistory` and
+`write_csv_file`, extracted by ast and unedited (without `@ray.remote`), with `--no-plots`, on the store opened read-only
+in the stand-in cluster. The base exports the exponential at `<label>/` (6 files); the tip exports each potential in a
+pass of its own, at `<label>/exponential/` (6 files) and `<label>/inverse-power/` (11 files) (`out/export-base.txt`,
+`out/export-tip.txt`). `compare_exports.py` (`out/compare.txt`):
+
+| file under `<label>/` (base) and `<label>/exponential/` (tip) | result |
+|---|---|
+| `alpha=0.1/csv/M=0.00097413eV_n=1/data.csv` | identical, 239 bytes |
+| `alpha=0.1/csv/beta=2/M=0.00097413eV_n=1/fields.csv` | identical, 2 811 832 bytes |
+| `one-loop-measured-v1/A=1/csv/M=0.00097413eV_n=1/data.csv` | identical, 252 bytes |
+| `one-loop-measured-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/bounces.csv` | identical, 25 304 bytes |
+| `one-loop-measured-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/fields.csv` | identical, 2 811 886 bytes |
+| `histories.csv` | `model` at column 3, after `n`, `exponential` in all 4 rows; with it removed, identical (2 449 bytes) |
+
+The paths are the same file for file, and the tip wrote nothing under `<label>/` but `exponential/` and
+`inverse-power/`.
+
+### 5.4 The power law's exports (§2.2)
+
+`check_power_law.py` (`out/power_law.txt`): `<label>/inverse-power/histories.csv` has 6 rows, its header is
+`CSV_COLUMNS` with `model` after `n`, `inverse-power` in every row; each of the manifest's five power-law histories has
+one row, and the sixth is the grid's marker row (β = 1.185, n = 1, the fixed row: a stored model with no history under
+that key). 218 cells and facts compared against the store's raw rows by export-04's rule (the unconverted columns by
+`float.hex`, blanks for NULL, the failure's reason; each history's `model_type` 2, its model row's `n_value`, its
+alpha row's value and drain model; `bounces.csv` with `bounce_rows` rows for each one-loop history and none for a
+fixed-law one): no failure.
+
+### 5.5 The quanta tools (§2.2)
+
+`quanta_roots.sh` ran `quanta_measures`, `plot_quanta_grid` and `plot_quanta_history` of each tree on its exponential
+root (copied to one path, so that the grid's footer, which prints its root, is comparable); `compare_quanta.py`
+(`out/quanta.txt`):
+- **the exponential root**: `quanta_histories.csv`, `quanta_bounces.csv` and `quanta_samples.csv` byte-identical; the two
+  PNG figures byte-identical, the two PDFs identical with matplotlib's `CreationDate` masked; each tool's printed lines
+  identical with the timing fields masked (`wall <x> s`, the only timing field any of them prints) and the `--output`
+  directory named alike;
+- **the power-law root**: `quanta_measures` exit 0, "(R8-power-n1-v1, R8-power-n2-v1, assoc scale 1): measured 2,
+  skipped as fixed-law 3, failed histories 1"; every row of `quanta_histories.csv` and of each history's two files names
+  its own wall's model, `R8-power-n1-v1` at n = 1 and `R8-power-n2-v1` at n = 2;
+- **a copy of the base's root**, whose `histories.csv` has no `model`: exit 2, "it has no 'model' column, which names the
+  potential whose spectrum each row takes", and nothing written.
+
+### 5.6 main.py for one potential (ruling 3)
+
+`main_order.py` runs `main.py`'s `execute`, extracted by ast with the module's imports, on a stood-in pool recording
+every `object_get` (`main_harness.py`), for the five commands of `main_cases.txt` (the fixed law alone; both laws; n = 1,
+2 under `--no-alpha-values`; a β range with a repeated α; `exponential.yaml`), in the base and in the tip, the tip as
+given and with `--models exponential`: the lookups (class, keywords, the sampling axis by its length and ends), the
+pipelines (each alpha row and its models) and the printed lines are identical in all ten comparisons
+(`out/main_order.txt`). `ComputeTargets/tests/test_models_main.py` pins one of them as a literal taken from the base.
+
+### 5.7 The refusals (§2.2, last item)
+
+By the tests, on stores built through the stand-in cluster (`test_models_plot_inputs`): on an exponential-only store,
+`--models inverse-power` is `PlotOptionNotStored("InversePowerModel", "--models", "inverse-power")`; an A stored only
+under `one-loop-measured-v1` is refused for the power law, `PlotOptionNotStored("alpha_value", "--A-values",
+"0.5 (one-loop-measured-pl-v1)")`. At parse (`test_models_option`): `--models inverse-power --n-values 3 --A-values 1` is
+refused, exit 2, "--A-values needs one one-loop drain model for each potential of --models over the n of --n-values: the
+potential inverse-power has no one-loop drain law at n = 3: …".
+
+### 5.8 The 2026.11.0 analyses' readers (§2.3)
+
+Read at `main` by `git show main:science-runs/2026-11-13-science-2026.11.0/<path>`; none run or changed.
+
+| analysis | what it reads | an export of 06 gives it |
+|---|---|---|
+| `fig6/fig6.py` | `inputs/histories.csv` (a copy beside it), by `pd.read_csv` and column name: `failure_reasons`, `Yp_BBN`, `delta_Yp`, `delta_D_over_H`, `Delta_N_eff_today`, `parking_T_GeV`, `drain_model`, `M_Mp`, `T_deliver_GeV`, `beta` | yes: `<label>/<model>/histories.csv`, every column under its name; `model` is not read |
+| `fig6b/fig6b.py` | `../fig6/inputs/histories.csv`; as fig6's, and `alpha`, `log_R_first_impact` | yes, as fig6 |
+| `m-trend/m_trend.py` | `../fig6/inputs/histories.csv` (`alpha`, `beta`, `M_Mp`, `drain_model`, the shifts, `failure_reasons`, `Yp_BBN`); copies of `bounces.csv` at its own `inputs/bounces/beta=<β>/M=<M>eV_n=1/` (`delta_K_Mp4`) | yes: `histories.csv` as fig6; each `bounces.csv` at `<label>/<model>/<drain_model>/A=<A>/csv/beta=<β>/M=<M>eV_n=<n>/`, below the root as before |
+| `changes/changes.py` | `../fig6/inputs/histories.csv` and 2026.10.0's copy, joined on `M_Mp`, `beta`, `drain_model`, `alpha`; `failure_reasons`, `Yp_BBN`, `T_deliver_GeV` and eleven observables by name | yes; its key has no `n` and no `model` (log 06 §6) |
+
+None reads a path of an export itself; each reads committed copies, by column name, so the extra column does not
+disturb them, and the potential's directory is above every path they name. The relativistic-quanta analysis is
+`tools/quanta_measures.py` on a potential's root (§5.5).

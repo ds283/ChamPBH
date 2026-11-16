@@ -1,0 +1,14 @@
+@@ E1-fixed0.1: serial 1; tuned in 8.9 s (11:50:22)
+@@ E1-oneloop1: serial 2; tuned in 6.8 s (11:50:29)
+@@ P1-fixed0.1: serial 3; tuned in 7.4 s (11:50:37)
+@@ P1-oneloop1: serial 4; tuned in 8.7 s (11:50:46)
+@@ P2-fixed0.1: serial 5; tuned in 7.4 s (11:50:53)
+@@ P2-oneloop1: serial 6; tuned in 8.6 s (11:51:02)
+@@ E1-fail: serial 7; failure row (11:51:02)
+@@ P1-fail: serial 8; failure row (11:51:02)
+.
+----------------------------------------------------------------------
+Ran 1 test in 50.966s
+
+OK
+@@ store copied to /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/06/store: ['store-shard0000.db', 'store.db']; 8 histories; total 49.2 s

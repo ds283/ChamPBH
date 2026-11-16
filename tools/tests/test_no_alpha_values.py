@@ -245,6 +245,8 @@ class TestThePlotInputs(tpi._ReadOnlyCase):
                     tuning_tol=args.tuning_tolerance,
                     alpha_values=distinct_values(args.alpha_values),
                     A_values=distinct_values(args.A_values or []),
+                    # the exponential's own one-loop drain model (power-law-wall prompt 06, P47)
+                    A_drain_models=["one-loop-measured-v1"],
                 )
 
     def test_under_the_flag_only_the_A_rows_are_read(self):

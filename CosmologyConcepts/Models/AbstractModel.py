@@ -445,6 +445,10 @@ class RealizedModel:
         return self._model.one_loop_drain_model
 
     @property
+    def spectrum_wall(self) -> str:
+        return self._model.spectrum_wall
+
+    @property
     def reflects_at_origin(self) -> bool:
         return self._model.reflects_at_origin
 
@@ -599,6 +603,22 @@ class AbstractModel(DatastoreObject, ABC):
         raise NotImplementedError(
             f"{type(self).__name__} does not implement one_loop_drain_model, the drain model its one-loop law is "
             f"stored under"
+        )
+
+    @property
+    def spectrum_wall(self) -> str:
+        """
+        The wall of the model's quanta spectrum (power-law-wall prompt 06 §1.7; README §6.10 P52): a wall of
+        ComputeTargets.quanta_spectrum (WALLS), whose spectrum the post-processing (tools/quanta_measures.py and the
+        figure tools) uses for this model's one-loop histories, taken from the export's `model` and `n`.
+        RealizedModel.spectrum_wall. No value of the integration reads it.
+
+        No default: this base raises NotImplementedError, naming the class, and it is not an abstractmethod, so that a
+        test stand-in without it still constructs. A model with no spectrum at its parameters raises ValueError naming
+        its class, the hook and why.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement spectrum_wall, the wall of its quanta spectrum"
         )
 
     # ---- the interface ----

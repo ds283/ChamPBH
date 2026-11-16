@@ -671,7 +671,8 @@ def _dimensionful(values_eV, values_Mp, log10_low_eV, log10_high_eV, per_decade)
 
 def describe_scope(parsed) -> str:
     """The manifest's `scope`, from `main.py`'s parsed arguments as given: the config file, the
-    β and M choices, the model's exponents n, φ*, the tuning tolerance, the drained fractions α
+    potentials of --models (power-law-wall prompt 06, P57: for every run, the parser's default
+    included, as given, duplicates kept), the β and M choices, the model's exponents n, φ*, the tuning tolerance, the drained fractions α
     (inelastic-reflection prompt 10, P37; as given, duplicates included; `α none` under
     --no-alpha-values), the strengths A of the one-loop
     drain law when --A-values is given (one-loop-drain prompt 04, P40), the shards and the job
@@ -680,6 +681,7 @@ def describe_scope(parsed) -> str:
     (jordan-normalization prompt 08 dropped the potential type, which is gone, and added n and the
     tuning tolerance, which key every history.)"""
     parts = [f"config {parsed.config}" if parsed.config else "no config file"]
+    parts.append(f"models {', '.join(parsed.models)}")
     if parsed.beta_values:
         parts.append(f"β {_values(parsed.beta_values)}")
     else:

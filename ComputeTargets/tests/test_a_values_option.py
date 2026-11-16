@@ -219,10 +219,10 @@ class TestTheDriversCarryA(unittest.TestCase):
             [(k.arg, ast.unparse(k.value)) for k in alpha_lookup.keywords],
             [("value", "a")],
         )
-        # by the imported name, never a string
+        # by a name, never a string: each potential's own one-loop drain model (power-law-wall prompt 06, P47)
         self.assertEqual(
             [(k.arg, ast.unparse(k.value)) for k in A_lookup.keywords],
-            [("value", "A"), ("drain_model", "DRAIN_MODEL_ONE_LOOP")],
+            [("value", "A"), ("drain_model", "drain_model")],
         )
         # both are the elements of the tolerances' ray.get, unpacked in that order: the alpha rows, then the A rows
         listcomps = [
@@ -312,7 +312,7 @@ class TestTheDriversCarryA(unittest.TestCase):
         self.assertEqual(len(modelled), 1)
         self.assertEqual(
             [(k.arg, ast.unparse(k.value)) for k in modelled[0].keywords],
-            [("value", "A"), ("drain_model", "DRAIN_MODEL_ONE_LOOP")],
+            [("value", "A"), ("drain_model", "drain_model")],
         )
 
     def test_2_every_per_row_path_and_label_passes_the_rows_model(self):

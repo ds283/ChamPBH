@@ -20,13 +20,17 @@ e-fold axis N, for one one-loop history, from a plot run's exports alone. No sto
     PYTHONPATH=. ./venv/bin/python tools/plot_quanta_history.py ROOT [--A-values A ...] [--beta-values B ...] \\
         [--M-Mp-values M ...] [--assoc-scale C] [--output DIR]
 
-ROOT is a plot run's `<output>/<label>/`. One figure per drawn one-loop history (quanta_figures.classify) that has its quanta
+ROOT is one potential's root of a plot run, `<output>/<label>/<model>/` (power-law-wall prompt 06; README §6.10 R12),
+whose histories.csv must have the `model` column (exit 2 without it). One figure per drawn one-loop history (quanta_figures.classify) that has its quanta
 files at the scale. With no selector, every one; with selectors, those whose `alpha`, `beta` and `M_Mp` cells match one value
 of each given list (`math.isclose(rel_tol=1e-9)`); a value that matches no drawn one-loop row is a usage error (exit 2).
 
 **The files** of a history, from its directory (quanta_measures.history_dir): fields.csv, bounces.csv, quanta_bounces<suffix>.csv
 and quanta_samples<suffix>.csv, and the history's row of quanta_histories<suffix>.csv, joined on the five key cells as
-strings. If quanta_histories<suffix>.csv fails the model check (or cannot be read), every history is refused. A history
+strings. Each history's spectrum model is its wall's, from its row's `model` and `n` (quanta_figures.spectrum_model_of;
+power-law-wall prompt 06, P53): its quanta files must name it, and quanta_histories<suffix>.csv each row's own
+(quanta_figures.expected_models); a history with no wall is refused. If quanta_histories<suffix>.csv fails the model
+check (or cannot be read), every history is refused. A history
 with neither quanta file is skipped and counted (`no quanta files`; 05 refused it or it failed 05's K check); with one only,
 with a file failing the model check, with no quanta_histories row, with quanta_bounces.csv not holding bounces.csv's `ordinal`s
 (and `source`s) in order, with quanta_samples.csv not holding fields.csv's `raw_N` row by row, with `raw_N` not ascending, or
@@ -70,10 +74,6 @@ from ComputeTargets import quanta_spectrum as qs
 from Units import Planck_units
 from tools import quanta_figures as qf
 from tools import quanta_measures as qm
-
-# the spectrum's wall (power-law-wall prompt 03; README §6.6 P19): the exponential's, passed explicitly until
-# power-law-wall prompt 06 takes it from the export's model column (README §6.3 P11, §2 row 06)
-SPECTRUM_WALL = qs.WALL_EXPONENTIAL
 
 LN_N_G_MAX = 709.0
 LN_N_G_MIN = -745.0
@@ -531,7 +531,7 @@ def run(
     qkeys: Dict[Tuple[str, ...], dict] = {}
     qproblem = None
     try:
-        for q in qf.read_checked(quanta_path, assoc_scale):
+        for q in qf.read_checked(quanta_path, assoc_scale, qf.expected_models(rows)):
             k = qf.key_of(q)
             if k in qkeys:
                 raise qf.FigureRefused(f"{quanta_path.name}: two rows with the key {k}")
@@ -562,6 +562,7 @@ def run(
                 raise qf.FigureRefused(
                     f"only one of {names[0]} and {names[1]} exists in {d}"
                 )
+            spectrum_model = qf.spectrum_model_of(h)
             q = qkeys.get(qf.key_of(h))
             if q is None:
                 raise qf.FigureRefused(f"no row in {quanta_path.name}")
@@ -570,8 +571,8 @@ def run(
                 _, bounces = qm.read_csv(d / "bounces.csv")
             except (OSError, csv.Error, UnicodeDecodeError) as e:
                 raise qf.FigureRefused(f"cannot read the exports in {d}: {e}")
-            qb = qf.read_checked(d / names[0], assoc_scale)
-            qsm = qf.read_checked(d / names[1], assoc_scale)
+            qb = qf.read_checked(d / names[0], assoc_scale, spectrum_model)
+            qsm = qf.read_checked(d / names[1], assoc_scale, spectrum_model)
             data = HistoryData(
                 h,
                 q,
@@ -580,7 +581,7 @@ def run(
                 qb,
                 qsm,
                 assoc_scale,
-                qs.spectrum_model(SPECTRUM_WALL),
+                spectrum_model,
             )
             fig = build_figure(data)
             stem = qf.to_output(
@@ -599,7 +600,7 @@ def run(
         counts["written"] += 1
         print(figure_line(h, fig, written, time.perf_counter() - t0), file=out)
     print(
-        f"plot_quanta_history ({qs.spectrum_model(SPECTRUM_WALL)}, assoc scale {assoc_scale:g}): figures written {counts['written']}, "
+        f"plot_quanta_history ({qf.models_text(rows)}, assoc scale {assoc_scale:g}): figures written {counts['written']}, "
         f"refused {counts['refused']}, no quanta files {counts['no_quanta_files']}; skipped as fixed-law "
         f"{len(by_class[qf.FIXED])}, marker rows {len(by_class[qf.MARKER])}, failed histories {len(by_class[qf.FAILED])}; "
         f"wall {time.perf_counter() - t_start:.1f} s",
@@ -612,7 +613,9 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="The per-history figure of the derived measures of a plot run's one-loop exports (one-loop-drain prompt 07)"
     )
-    parser.add_argument("root", help="a plot run's <output>/<label>/")
+    parser.add_argument(
+        "root", help="one potential's root of a plot run, <output>/<label>/<model>/"
+    )
     parser.add_argument("--A-values", type=float, nargs="+", default=None)
     parser.add_argument("--beta-values", type=float, nargs="+", default=None)
     parser.add_argument("--M-Mp-values", type=float, nargs="+", default=None)

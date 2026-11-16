@@ -36,6 +36,7 @@ from typing import List, Optional, Sequence
 import pandas as pd
 
 import extract_common as ec
+from CosmologyConcepts.Models.model_options import model_option
 from ComputeTargets import AdiabaticHistory, BBNData, ScalarHistory
 from ComputeTargets.ScalarHistory import BounceRow
 from ComputeTargets.dark_radiation import DarkRadiationLedger
@@ -180,13 +181,16 @@ def history_record(
     normalization: Optional[float] = -276.6,
     parking_share: Optional[float] = 0.0,
     bounce_rows: Optional[int] = None,
+    model: str = "exponential",
 ):
-    """A histories.csv record with CSV_COLUMNS, constructed (blank where not given)."""
+    """A histories.csv record with CSV_COLUMNS, constructed (blank where not given); `model` is the potential, the
+    exponential's unless given (power-law-wall prompt 06 added the column)."""
     record = {name: nan for name in ec.CSV_COLUMNS}
     record.update(
         beta=beta,
         M_Mp=M_Mp,
         n=n,
+        model=model,
         phi_init_Mp=5.0,
         alpha=A,
         drain_model=drain_model,
@@ -252,6 +256,7 @@ def export_history(
         phi_init_Mp=phi_init_Mp,
         alpha=A,
         drain_model=drain_model,
+        model=model_option(full_object.model),
         scalar=record_object,
         bbn=None,
         baseline=None,

@@ -142,6 +142,7 @@ def _record(alpha, drain_model, beta=1.0, M_Mp=0.5, n=1, scalar=None, units=None
         phi_init_Mp=5.0,
         alpha=alpha,
         drain_model=drain_model,
+        model="exponential",
         scalar=scalar,
         bbn=None,
         baseline=None,

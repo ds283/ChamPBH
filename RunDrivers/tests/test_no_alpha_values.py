@@ -62,7 +62,7 @@ class TestTheScopeUnderTheFlag(unittest.TestCase):
     def test_alpha_reads_none_and_A_follows(self):
         self.assertEqual(
             scope("--no-alpha-values", "--A-values", "0.1", "1"),
-            "no config file; β 0.1–3.0, 5 per unit; M 10^25–10^26.5 eV, 6 per decade; "
+            "no config file; models exponential; β 0.1–3.0, 5 per unit; M 10^25–10^26.5 eV, 6 per decade; "
             "n 1; φ* 5 Mp; tuning tolerance 1e-05; α none; A 0.1, 1; 20 shards; job ChamPBH-test",
         )
 

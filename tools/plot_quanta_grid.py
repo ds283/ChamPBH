@@ -20,15 +20,19 @@ opened and no Ray is started.
 
     PYTHONPATH=. ./venv/bin/python tools/plot_quanta_grid.py ROOT [--A-values A [A ...]] [--assoc-scale C] [--output DIR]
 
-ROOT is a plot run's `<output>/<label>/`, holding histories.csv and quanta_histories<suffix>.csv (tools/quanta_measures.py).
+ROOT is one potential's root of a plot run, `<output>/<label>/<model>/` (power-law-wall prompt 06; README §6.10 R12),
+holding histories.csv, which must have the `model` column (exit 2 without it), and quanta_histories<suffix>.csv
+(tools/quanta_measures.py).
 One figure per (drain model, A) of the one-loop rows of histories.csv, or per A given (a value that matches no one-loop
 row is a usage error, exit 2; values are matched with `math.isclose(rel_tol=1e-9)` against `float()` of the `alpha` cells).
 The rows of histories.csv are counted in the first of fixed, marker, failed, drawn that each meets (quanta_figures.classify);
 the figure draws the drawn and the failed rows of its A.
 
 **The join.** histories.csv to quanta_histories<suffix>.csv on the five key cells, compared as strings (05 copies them
-verbatim). quanta_histories<suffix>.csv must exist and name SPECTRUM_MODEL and the scale asked for in every row, or no
-figure is written (exit 1). A drawn history with no quanta_histories row is drawn from histories.csv alone and crossed in
+verbatim). quanta_histories<suffix>.csv must exist and name, in every row, the spectrum model of its histories.csv row's
+wall (quanta_figures.expected_models; power-law-wall prompt 06, P53) and the scale asked for, or no figure is written
+(exit 1). A figure's footer names the spectrum models of its rows' walls; a figure with a row that has no wall is
+refused. A drawn history with no quanta_histories row is drawn from histories.csv alone and crossed in
 panels (h)-(j).
 
 **Axes.** beta across, left to right, and M up, the least M at the bottom: the sorted distinct values (by `float()`) of the
@@ -73,10 +77,6 @@ from ComputeTargets import quanta_spectrum as qs
 from extract_common import alpha_path
 from tools import quanta_figures as qf
 from tools import quanta_measures as qm
-
-# the spectrum's wall (power-law-wall prompt 03; README §6.6 P19): the exponential's, passed explicitly until
-# power-law-wall prompt 06 takes it from the export's model column (README §6.3 P11, §2 row 06)
-SPECTRUM_WALL = qs.WALL_EXPONENTIAL
 
 HATCH_FILL = "#d9d9d9"
 HATCH_EDGE = "#7f7f7f"
@@ -228,10 +228,11 @@ def build_figure(
     drain_model: str,
     A: float,
     scale: float,
-    model: str = qs.spectrum_model(SPECTRUM_WALL),
+    model: str,
 ) -> Figure:
     """
-    The ten-panel figure of one A. The returned Figure carries `quanta_counts`, a dict by panel letter of the counts of
+    The ten-panel figure of one A; `model` is the spectrum model of its rows' walls, as the footer names it (more
+    than one, comma-separated, where the rows' walls differ; power-law-wall prompt 06). The returned Figure carries `quanta_counts`, a dict by panel letter of the counts of
     each kind of cell (`value`, `blank`, `zero`, `cross-failed`, `cross-noquanta`), `quanta_degenerate` (a dict by letter
     of `"none"` or `"one"` for the panels whose range was degenerate), and `quanta_totals` (drawn, failed, noquanta).
     """
@@ -432,7 +433,7 @@ def run(
     )
     quanta_path = root / f"quanta_histories{tag}.csv"
     try:
-        qrows = qf.read_checked(quanta_path, assoc_scale)
+        qrows = qf.read_checked(quanta_path, assoc_scale, qf.expected_models(rows))
         qkeys: Dict[Tuple[str, ...], dict] = {}
         for q in qrows:
             k = qf.key_of(q)
@@ -457,7 +458,15 @@ def run(
             continue
         t0 = time.perf_counter()
         try:
-            fig = build_figure(cells, root, model, A, assoc_scale)
+            # the spectrum models of the figure's rows' walls, in the order met (power-law-wall prompt 06, P53)
+            spectra = []
+            for c in cells:
+                s = qf.spectrum_model_of(c.row)
+                if s not in spectra:
+                    spectra.append(s)
+            fig = build_figure(
+                cells, root, model, A, assoc_scale, model=", ".join(spectra)
+            )
             stem = qf.to_output(
                 root,
                 alpha_path(root, A, model) / "plots" / f"quanta_grid{tag}",
@@ -471,7 +480,7 @@ def run(
         counts["written"] += 1
         print(figure_line(model, A, fig, written, time.perf_counter() - t0), file=out)
     print(
-        f"plot_quanta_grid ({qs.spectrum_model(SPECTRUM_WALL)}, assoc scale {assoc_scale:g}): figures written {counts['written']}, "
+        f"plot_quanta_grid ({qf.models_text(rows)}, assoc scale {assoc_scale:g}): figures written {counts['written']}, "
         f"refused {counts['refused']}, A with no drawn or failed row {counts['empty']}; skipped as fixed-law "
         f"{len(by_class[qf.FIXED])}, marker rows {len(by_class[qf.MARKER])}; wall {time.perf_counter() - t_start:.1f} s",
         file=out,
@@ -483,7 +492,9 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="The grid figure of the derived measures of a plot run's one-loop exports (one-loop-drain prompt 07)"
     )
-    parser.add_argument("root", help="a plot run's <output>/<label>/")
+    parser.add_argument(
+        "root", help="one potential's root of a plot run, <output>/<label>/<model>/"
+    )
     parser.add_argument(
         "--A-values",
         type=float,

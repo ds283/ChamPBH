@@ -52,6 +52,9 @@ from tools.tests import quanta_exports as qe
 
 ONE_LOOP = DRAIN_MODEL_ONE_LOOP
 UNITS = Planck_units()
+# the spectrum model these exponential exports' rows expect (power-law-wall prompt 06: each row's wall is its
+# potential's; quanta_figures.SPECTRUM_WALL is gone)
+EXPONENTIAL_SPECTRUM = qs.spectrum_model(qs.WALL_EXPONENTIAL)
 K_INITIAL = 1.0e-4
 
 # (N_turn, N, dK, ln q, ln k_ex, ln m, ln E, ln H, regime): five generations, one of them (the unassessed drain) not one,
@@ -272,7 +275,9 @@ class TestTheRowsToDraw(ExportMixin, unittest.TestCase):
     def test_key_cells_are_strings(self):
         self.build()
         rows = qf.read_histories(self.root)
-        q = qf.read_checked(self.root / "quanta_histories.csv", 1.0)
+        q = qf.read_checked(
+            self.root / "quanta_histories.csv", 1.0, EXPONENTIAL_SPECTRUM
+        )
         keys = {qf.key_of(r) for r in rows}
         for r in q:
             self.assertIn(qf.key_of(r), keys)
@@ -287,18 +292,20 @@ class TestTheModelCheck(ExportMixin, unittest.TestCase):
             (0.0, "quanta_histories-assoc0.csv"),
             (10.0, "quanta_histories-assoc10.csv"),
         ):
-            rows = qf.read_checked(self.root / name, c)
+            rows = qf.read_checked(self.root / name, c, EXPONENTIAL_SPECTRUM)
             self.assertTrue(rows)
             self.assertEqual(
                 {r["spectrum_model"] for r in rows},
-                {qs.spectrum_model(qf.SPECTRUM_WALL)},
+                {EXPONENTIAL_SPECTRUM},
             )
             self.assertEqual({float(r["assoc_scale"]) for r in rows}, {c})
 
     def test_a_file_of_another_scale_is_refused(self):
         self.build()
         with self.assertRaises(qf.FigureRefused) as cm:
-            qf.read_checked(self.root / "quanta_histories-assoc0.csv", 1.0)
+            qf.read_checked(
+                self.root / "quanta_histories-assoc0.csv", 1.0, EXPONENTIAL_SPECTRUM
+            )
         self.assertIn("assoc_scale", str(cm.exception))
 
     def test_another_model_and_two_models_are_refused(self):
@@ -311,23 +318,23 @@ class TestTheModelCheck(ExportMixin, unittest.TestCase):
 
         self.rewrite(p, other)
         with self.assertRaises(qf.FigureRefused) as cm:
-            qf.read_checked(p, 1.0)
+            qf.read_checked(p, 1.0, EXPONENTIAL_SPECTRUM)
         self.assertIn("U4-v0", str(cm.exception))
         self.build_again_for_two_models(p)
 
     def build_again_for_two_models(self, p):
         def one_other(rows):
             for r in rows:
-                r["spectrum_model"] = qs.spectrum_model(qf.SPECTRUM_WALL)
+                r["spectrum_model"] = EXPONENTIAL_SPECTRUM
             rows[-1]["spectrum_model"] = "U4-v0"
 
         self.rewrite(p, one_other)
         with self.assertRaises(qf.FigureRefused):
-            qf.read_checked(p, 1.0)
+            qf.read_checked(p, 1.0, EXPONENTIAL_SPECTRUM)
 
     def test_an_unreadable_file_is_refused(self):
         with self.assertRaises(qf.FigureRefused):
-            qf.read_checked(self._dir / "absent.csv", 1.0)
+            qf.read_checked(self._dir / "absent.csv", 1.0, EXPONENTIAL_SPECTRUM)
 
 
 class TestWhereThingsGo(ExportMixin, unittest.TestCase):

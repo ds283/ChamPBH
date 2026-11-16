@@ -54,6 +54,7 @@ refuses the model under it; the fixed law and natural mode run it at every n.
 from math import exp, log, log1p, sqrt
 
 from ComputeTargets.exceptions import ComputationFailureError
+from ComputeTargets.quanta_spectrum import WALL_POWER_N1, WALL_POWER_N2
 from CosmologyConcepts import M_value, beta_value, FieldLike, GetFieldValue
 from CosmologyConcepts.drain_model import (
     DRAIN_MODEL_ONE_LOOP_PL,
@@ -99,6 +100,10 @@ DRAIN_PL_P = {1: 2.22126, 2: 2.45613}
 DRAIN_PL_A = {1: 27.9671, 2: 19.6100}
 DRAIN_PL_C = {1: 14.9835, 2: 10.9039}
 DRAIN_PL_SWITCH = {1: 23.08943252571177, 2: 16.710187997698853}
+
+
+# the wall of the quanta spectrum at each n where the power wall's spectrum was measured (power-law-wall prompt 06 §1.7)
+_SPECTRUM_WALLS = {1: WALL_POWER_N1, 2: WALL_POWER_N2}
 
 
 def _log1p_exp(x: float) -> float:
@@ -167,6 +172,18 @@ class InversePowerModel(AbstractModel):
         if self._n not in DRAIN_PL_S:
             raise self._undefined_at_n("one_loop_drain_model")
         return DRAIN_MODEL_ONE_LOOP_PL
+
+    @property
+    def spectrum_wall(self) -> str:
+        # the wall of the quanta spectrum (power-law-wall prompt 06 §1.7; AbstractModel.spectrum_wall, README §6.10 P52):
+        # the power wall's table at n = 1 and 2 (README §6.5 R8); a ValueError at any other n, which has none
+        wall = _SPECTRUM_WALLS.get(self._n)
+        if wall is None:
+            raise ValueError(
+                f"InversePowerModel (n={self._n}) has no quanta spectrum: spectrum_wall is defined at n = 1 and 2 only "
+                f"(power-law-wall README §6.5 R8) ({self.name})"
+            )
+        return wall
 
     def _drain_fraction(self, normalization, regime, ell, log_E, log_R) -> float:
         """

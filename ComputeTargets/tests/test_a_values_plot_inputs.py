@@ -114,6 +114,8 @@ def _parameters(pool, alphas, As=None, extra=()):
     )
     if As is not None:
         kwargs["A_values"] = list(As)
+        # the exponential's own one-loop drain model, which the drivers pass for it (power-law-wall prompt 06, P47)
+        kwargs["A_drain_models"] = ["one-loop-measured-v1"]
     return plot_inputs.parameters(pool, **kwargs)
 
 

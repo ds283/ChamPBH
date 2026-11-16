@@ -82,23 +82,23 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 739 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 783 tests
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 175 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 307 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 76 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 312 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 79 tests
   ```
   `ComputeTargets/tests` took 807 s on 2026-11-13 (the two halves below, 175.6 s and 631.3 s, at one-minute
   loads of 4.4 and 4.2 at their starts), and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 226 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 513 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 557 tests
   ```
-  (The counts are those of 2026-11-16; the last change to a count was `power-law-wall` 05 on 2026-11-16, which added 12
-  tests to `ObjectFactories/tests` (`test_inverse_power_store`), 7 to the `test_[a-f]` half (`test_bbn_from_store_model`)
-  and 5 to `tools/tests` (`test_power_law_store_tools`); there the halves took 154 s and 547 s, and `tools/tests` 318 s,
-  at one-minute loads of 47.8, 49.5 and 11.1 at their starts (another process was loading the machine), in a
-  worktree. `tools/tests` holds tuned histories and took 333.3 s on 2026-11-13, at a one-minute load of 6.6 at its
+  (The counts are those of 2026-11-16; the last change to a count was `power-law-wall` 06 on 2026-11-16, which added 44
+  tests to the `test_[g-z]` half (`test_models_option`, `test_models_export`, `test_models_plot_inputs`,
+  `test_models_main`), 5 to `tools/tests` (`test_quanta_models`) and 3 to `RunDrivers/tests` (`test_scope_models`); there
+  the halves took 160 s and 555 s, and `tools/tests` 334 s, at one-minute loads of 16.1, 16.5 and 5.1 at their starts, in
+  a worktree. `tools/tests` holds tuned histories and took 333.3 s on 2026-11-13, at a one-minute load of 6.6 at its
   start; run it alone.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor

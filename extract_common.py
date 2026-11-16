@@ -35,6 +35,7 @@ from ComputeTargets import (
 )
 from ComputeTargets.ScalarHistory import REFLECTIONS_KEY, BounceRow, DrainHistoryValues
 from CosmologyConcepts.Models import AbstractModel
+from CosmologyConcepts.Models.model_options import model_class
 from CosmologyConcepts.drain_model import DRAIN_MODELS, DRAIN_MODEL_FIXED, alpha_label
 from CosmologyModels import BaseCosmology
 from ObjectFactories.ScalarHistory import (
@@ -125,6 +126,19 @@ def _cosmology_line(
             "_cosmology_line: an alpha is given without its drain_model; the model is never defaulted"
         )
     return f"Cosmology: {model_label}, {alpha_label(alpha, drain_model)}"
+
+
+def export_root(output, label: str, model: str) -> Path:
+    """
+    The root of one potential's exports, ``<output>/<label>/<model>/`` (power-law-wall prompt 06 §1.6; README §6.10
+    R12, P50): `output` is the plot run's --output, resolved as the plot scripts have always resolved it, `label`
+    the cosmology's label, and `model` the potential's value of --models (CosmologyConcepts.Models.model_options; an
+    unknown one is a ValueError). Every potential is named the same way, so no potential has a root of its own.
+    Every product of a plot run goes below it, by alpha_path and history_directory, as below ``<output>/<label>/``
+    before this prompt.
+    """
+    model_class(model)  # refuses an unknown potential
+    return Path(output).resolve() / f"{label}" / model
 
 
 def alpha_path(base, alpha: float, drain_model: str) -> Path:
@@ -604,6 +618,11 @@ FIXED_T_MEV = {"1MeV": 1.0, "70keV": 0.07}
 # (DrainHistoryValues) under their stored names, after DISSIPATION_CSV_COLUMNS and before failure_reasons. They
 # are dimensionless, read from the history's columns, and blank where the record is None (the fixed law, alpha =
 # 0, a failure) or the field is. The counts are written as integers.
+# power-law-wall prompt 06 (2026-11-16; README §6.10 R12, P51) added model, directly after n: the potential, its value
+# of --models ("exponential" or "inverse-power", CosmologyConcepts.Models.model_options), the same in every row, since
+# a histories.csv is one potential's, at its root <output>/<label>/<model>/ (export_root). Every potential's file has
+# it, and every other column and its formatting is as before; a reader that needs the potential (the quanta tools)
+# refuses a file without it.
 DISSIPATION_CSV_COLUMNS = [
     "injections",
     "injected_fraction",
@@ -620,6 +639,7 @@ CSV_COLUMNS = [
     "beta",
     "M_Mp",
     "n",
+    "model",
     "phi_init_Mp",
     "alpha",
     "drain_model",
@@ -977,6 +997,7 @@ def build_history_record(
     phi_init_Mp: float,
     alpha: float,
     drain_model: str,
+    model: str,
     scalar,
     bbn,
     baseline: Optional[dict],
@@ -996,17 +1017,20 @@ def build_history_record(
     write. ``alpha`` is the value of the alpha row the history was read at, given by the caller
     for every record, a failure's included (a failure has no ``scalar`` to read it from); the
     ``drain_model`` is the model of that row, given by the caller in the same way and with no default
-    (one-loop-drain prompt 04, ruling 3); DRAIN_CSV_COLUMNS are the fields of `scalar.drain_history`, blank
-    where it is None. The two Delta N_eff are `scalar.dissipation`'s fields of those names, NaN where ``scalar`` is None,
+    (one-loop-drain prompt 04, ruling 3); ``model`` is the potential, its value of --models, given by the caller
+    with no default (power-law-wall prompt 06, P51; an unknown one is a ValueError); DRAIN_CSV_COLUMNS are the
+    fields of `scalar.drain_history`, blank where it is None. The two Delta N_eff are `scalar.dissipation`'s fields of those names, NaN where ``scalar`` is None,
     its ``dissipation`` is None or the field is None (inelastic-reflection prompt 10, ruling 1).
     DISSIPATION_CSV_COLUMNS are read the same way, the parking and release temperatures as
     exp(ln T_J) in GeV.
     """
+    model_class(model)  # refuses an unknown potential
     record = {name: nan for name in CSV_COLUMNS}
     record.update(
         beta=beta,
         M_Mp=M_Mp,
         n=n,
+        model=model,
         phi_init_Mp=phi_init_Mp,
         alpha=alpha,
         drain_model=drain_model,
@@ -1288,8 +1312,14 @@ def write_histories_csv(records: Sequence[dict], path: Path) -> None:
     """
     histories.csv: one row per record, columns CSV_COLUMNS, sorted by (drain_model, alpha, M, n, beta); for
     records of the fixed model alone that is the order of (alpha, M, n, beta) it has always had
-    (one-loop-drain prompt 04, P36). Missing values are written empty.
+    (one-loop-drain prompt 04, P36). Missing values are written empty. The file is one potential's (power-law-wall
+    prompt 06, P51): records of more than one `model` are a ValueError, and nothing is written.
     """
+    models = sorted({r["model"] for r in records})
+    if len(models) > 1:
+        raise ValueError(
+            f"write_histories_csv: a histories.csv is one potential's, but the records name {models}"
+        )
     path = Path(path)
     path.parent.mkdir(exist_ok=True, parents=True)
 

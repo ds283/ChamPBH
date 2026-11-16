@@ -1,0 +1,19 @@
+the tip's QCD_Cosmology/ holds: ['exponential', 'inverse-power']
+base QCD_Cosmology/: 6 files; tip QCD_Cosmology/exponential/: 6 files
+the paths are the same, file for file
+
+alpha=0.1/csv/M=0.00097413eV_n=1/data.csv: IDENTICAL (239 bytes; sha256 e4b3f6f1a6a5302e)
+alpha=0.1/csv/beta=2/M=0.00097413eV_n=1/fields.csv: IDENTICAL (2811832 bytes; sha256 9240b394a56427dc)
+histories.csv: model at column 3 (after n: True), cells ['exponential'], rows 4; with model removed: IDENTICAL (2449 and 2449 bytes; sha256 01e4e767d2abd1be and 01e4e767d2abd1be)
+one-loop-measured-v1/A=1/csv/M=0.00097413eV_n=1/data.csv: IDENTICAL (252 bytes; sha256 35abff00d1ec25a6)
+one-loop-measured-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/bounces.csv: IDENTICAL (25304 bytes; sha256 33a3881fa1dd4d13)
+one-loop-measured-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/fields.csv: IDENTICAL (2811886 bytes; sha256 3a208d342242029c)
+
+base export: store files unchanged: True
+   store-shard0000.db: 2ec681d90cddb66b75f59b79f686fe25278d56c0ff63aa36d90c628406d1abfe before, 2ec681d90cddb66b75f59b79f686fe25278d56c0ff63aa36d90c628406d1abfe after
+   store.db: 7aa84846babe26dc48ac580b5b157e718c90e850c3aa731c1f6d60447f4601dd before, 7aa84846babe26dc48ac580b5b157e718c90e850c3aa731c1f6d60447f4601dd after
+tip export: store files unchanged: True
+   store-shard0000.db: 2ec681d90cddb66b75f59b79f686fe25278d56c0ff63aa36d90c628406d1abfe before, 2ec681d90cddb66b75f59b79f686fe25278d56c0ff63aa36d90c628406d1abfe after
+   store.db: 7aa84846babe26dc48ac580b5b157e718c90e850c3aa731c1f6d60447f4601dd before, 7aa84846babe26dc48ac580b5b157e718c90e850c3aa731c1f6d60447f4601dd after
+
+STOP CONDITION HIT: False

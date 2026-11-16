@@ -39,6 +39,7 @@ from pathlib import Path
 import numpy as np
 from matplotlib.colors import LogNorm, Normalize, TwoSlopeNorm
 
+from ComputeTargets import quanta_spectrum as qs
 from tools import plot_quanta_grid as pg
 from tools import quanta_figures as qf
 from tools.tests.test_quanta_figures import ExportMixin, capturing
@@ -391,7 +392,12 @@ class TestSpecialRanges(ExportMixin, unittest.TestCase):
 
     def fig(self, values):
         return pg.build_figure(
-            self.cells(values), Path("/r"), "one-loop-measured-v1", 1.0, 1.0
+            self.cells(values),
+            Path("/r"),
+            "one-loop-measured-v1",
+            1.0,
+            1.0,
+            model=qs.spectrum_model(qs.WALL_EXPONENTIAL),
         )
 
     def test_no_positive_value_has_no_ticks_and_says_so(self):
@@ -428,7 +434,14 @@ class TestSpecialRanges(ExportMixin, unittest.TestCase):
         cells = self.cells([1e-3, 2e-3])
         cells[1].row["beta"] = cells[0].row["beta"]
         with self.assertRaises(qf.FigureRefused) as cm:
-            pg.build_figure(cells, Path("/r"), "one-loop-measured-v1", 1.0, 1.0)
+            pg.build_figure(
+                cells,
+                Path("/r"),
+                "one-loop-measured-v1",
+                1.0,
+                1.0,
+                model=qs.spectrum_model(qs.WALL_EXPONENTIAL),
+            )
         self.assertIn("two rows in one cell", str(cm.exception))
 
 
