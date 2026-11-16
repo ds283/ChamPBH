@@ -112,7 +112,7 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 | 03 | `03-the-law-on-this-wall.md` | as U3–U5 rule: `_drain_L`; a new `drain_model` value if the law is refitted, with its constants and S table; the spectrum's constants by wall in `quanta_spectrum.py` and `SPECTRUM_MODEL`; the exponential law bitwise. *(As written 2026-11-15 on R6–R8, P15–P23: the fit f_n(ln R) and S_n in `InversePowerModel` under `one-loop-measured-pl-v1`, no `_drain_L`; the model's own fraction and one-loop drain model as hooks; the spectrum as measured tables on three walls, the exponential's included.)* | Opus |
 | 04 | `04-measure-a-sample.md` | about forty power-law histories, re-tuned, by the tool route under both laws (§6.3 P9); the thresholds and surfing thresholds; the comparison with the same (M, β) on the exponential. Then the user rules any threshold that does not hold | Opus |
 | 05 | `05-the-store.md` | model type id 2, its table and factory keyed (M, n, β), the registry, sharding, the `types` maps, `FINGERPRINT_FORMAT` 8 and `VERSION_LABEL` (U6), `compare_stores`, `inventory_report`, `bbn_from_store`, `outward_step_scan`; tests in a temporary store. *(As written 2026-11-16 on P33–P44: also the key's drain model checked at `ScalarHistory`'s construction, and every raw join of a model table filtered by `model_type`.)* | Opus |
-| 06 | `06-drivers-and-exports.md` | `main.py`'s model option and its config file; `plot_inputs`, `plot_by_beta`, `plot_ScalarHistory`, `extract_common`, `pipeline_selection` through the model interface; the model in `histories.csv` and in the export paths (P11); the exponential exports byte-identical. *(Added 2026-11-15, P17, P19: the one-loop drain model taken from the model, where they name `DRAIN_MODEL_ONE_LOOP`; the quanta tools' spectrum wall taken from the export's model column.)* *(As written 2026-11-16 on P45–P58 and U10: the option `--model` and `inverse_power.yaml`; the one-loop rows under the model's own drain model; the export root and column as U10 rules; `spectrum_wall` on the model and the quanta tools by row; the registered run's scope; the gate's evidence by two trees on a harness store; Opus, P58.)* | Sonnet |
+| 06 | `06-drivers-and-exports.md` | `main.py`'s model option and its config file; `plot_inputs`, `plot_by_beta`, `plot_ScalarHistory`, `extract_common`, `pipeline_selection` through the model interface; the model in `histories.csv` and in the export paths (P11); the exponential exports byte-identical. *(Added 2026-11-15, P17, P19: the one-loop drain model taken from the model, where they name `DRAIN_MODEL_ONE_LOOP`; the quanta tools' spectrum wall taken from the export's model column.)* *(As written 2026-11-16 on R12 and P45–P58: `--models`, a list, for `main.py` and the plot scripts; each potential's one-loop rows under its own drain model; every export under `<output>/<label>/<model>/` with a `model` column, for every potential; `spectrum_wall` on the model and the quanta tools by row; the registered run's scope; the gate's evidence by two trees on a harness store; Opus, P58.)* | Sonnet |
 | 07 | `07-rehearse.md` | registered builds on the isolated cluster: the exponential at base and tip, bitwise; the power law at n = 1, 2 under both laws, interrupted and resumed, by value and against 04 | Opus |
 | 08 | `08-close.md` | `.documents/power-law-wall-verification.md`, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the science run (its grid's inputs from 04), the issues and the indexes | Opus |
 
@@ -129,7 +129,7 @@ ruling. 06 needs only 05's schema; 08 needs 07's stores.
 | **Law** | the power wall's law as ruled equals its reference implementation at synthetic inputs and reproduces 02's maps candidate by candidate; the exponential law bitwise; the spectrum as R8 rules on every wall *(amended 2026-11-15 by R8)* | 03 |
 | **Sample** | every sampled history measured under both laws, re-tuned, with its failures stated; every threshold of §0.3 reported against its use on this wall | 04 |
 | **Store** | power-law histories round-trip in a temporary store; the exponential store's fingerprint golden unchanged apart from the format | 05 |
-| **Export** | the exponential exports byte-identical to the base's on the same store; the power-law exports carry the model and read back | 06 |
+| **Export** | the exponential exports byte-identical to the base's on the same store; the power-law exports carry the model and read back *(amended 2026-11-16 by R12, §6.10: every potential's exports are under `<output>/<label>/<model>/` with a `model` column, so the exponential's equal the base's once that directory and column are accounted for, P54)* | 06 |
 | **R** | exponential builds bitwise base to tip; power-law builds resumed by value; inventories "problems: none" | 07 |
 | **Close** | documents, issues, indexes and the handover written; the suites at their counts | 08 |
 
@@ -163,7 +163,9 @@ ruling. 06 needs only 05's schema; 08 needs 07's stores.
 - **The exponential does not move.** Every exponential history, export and golden record is bitwise as at the base. A
   prompt that cannot keep that stops. *(Amended 2026-11-15 by R8, §6.5: the exponential's spectrum, read only by the
   post-processing, is redone as the power wall's is, so its relativistic-quanta outputs change; nothing stored or
-  exported moves.)*
+  exported moves.)* *(Amended 2026-11-16 by R12, §6.10: the potentials are treated symmetrically in the exports, so
+  the exponential's exports move under `exponential/` and gain a `model` column; every exponential history, stored row
+  and golden stays bitwise.)*
 - **The integration stays decoupled from the potential.** Anything whose meaning depends on the wall's form goes in
   the model class, with no generic default; `ComputeTargets/ScalarHistory.py` gains no power-law expression (the user's
   ruling of 2026-11-05).
@@ -245,6 +247,8 @@ Accepted as proposed unless the user rules otherwise.
 - **P11 — the export layout.** `histories.csv` gains a `model` column, and the per-(M, n) folders are named by the
   model (`<model>/M=…eV_n=…`) for the power law only, so that the exponential's paths and bytes are unchanged and the
   standard analyses read both. 06 checks this against the four 2026.11.0 analyses' readers.
+  *(Amended 2026-11-16 by R12, §6.10: every potential's exports are under `<output>/<label>/<model>/`, and every
+  `histories.csv` has the column; no potential keeps a layout of its own.)*
 - **P12 — the config file.** `inverse_power.yaml` beside `exponential.yaml`, naming the model; `main.py` and the plot
   scripts take the model from it, and the stored model is matched as the stored α are (`PlotOptionNotStored`).
 - **P13 — the format.** 05 bumps `FINGERPRINT_FORMAT` to 8 and the fingerprint covers the new table; the golden
@@ -449,69 +453,95 @@ They rest on the planner's scratch probe at `1233229` (orchestrator note 05 §0)
 - **P44 — the counts.** The five suites in full at the base and after (P14); `CLAUDE.md`'s counts updated, nothing else
   in it.
 
-### 6.10 Proposed by the planner with prompt 06, 2026-11-16
+### 6.10 Proposed by the planner with prompt 06, 2026-11-16; re-planned on R12 the same day
 
-**P45–P58** stand unless the user rules otherwise. **U10 is the user's to rule before 06 is dispatched**: P11, as
-proposed on 2026-11-13, cannot be met word for word together with the gate Export and §5 ("Every exponential history,
-export and golden record is bitwise as at the base"). The prompt is written on U10 (a); (b) changes §1.6–§1.7 of it.
+**R12, ruled by the user 2026-11-16, in their words** (on U10, the export layout, as first proposed below): "We don't
+want to start privileging one kind of potential over another. We want to treat all potentials symmetrically. Having a
+dedicated root is the wrong choice unless all potentials get it. So `<output>/<label>/inverse-power` is OK, but then we
+would also have to have `<output>/<label>/exponential`." Asked whether the concern was that one science store can hold
+both potentials, they added "(and indeed likely eventually will – we'll run both together)", and ruled: "Yes, re-plan
+06 on the symmetric design". So:
+- **Every potential is named the same way.** No potential has a layout, column or default path of its own. An export of
+  any potential is `<output>/<label>/<model>/…`, where `<output>` is `--output` and `<label>` the cosmology's label
+  (`QCD_Cosmology`). Every `histories.csv` has a `model` column.
+- **One run can build, and one plot run can export, several potentials.** `--models` takes a list, as `--n-values` does.
+- **This amends P11, the gate Export and README §5 for the exports alone.** The exponential's exports move one directory
+  down (`exponential/`) and gain a column. Every exponential history and stored row, and every golden, stays bitwise. The
+  gate Export becomes: each exponential file equals the base's once the directory and the column are accounted for (P54).
+- U10 is closed by R12; neither (a) nor (b) is adopted.
+
+**P45–P58**, as re-planned on R12, stand unless the user rules otherwise. None needs a ruling before 06 is dispatched.
 They rest on the planner's survey and scratch probe at `3ce578d` (orchestrator note 06 §0).
+
+- **P45 — the option.** `--models {exponential, inverse-power} …`, `nargs="+"`, in `config/argument_parser.py`, so that
+  `main.py` and both plot scripts have it; YAML key `models`; distinct values in the order given. **The default is
+  `[exponential]`**, so that every existing command and config file keeps its meaning; that default is the one place a
+  potential is named without being asked for, and the help says so. `--potential-type` stays removed. The values are
+  the tools' `--model` values (`exponential`, `inverse-power`), named once, with their classes, in a new module
+  `CosmologyConcepts/Models/model_options.py`. `tools/history_and_bbn.py`, `tools/surfing_scan.py` and
+  `tools/bbn_from_store.py` keep their own single `--model`, unchanged.
+- **P46 — the config files (P12).** `exponential.yaml` gains `models: [exponential]`, and `inverse_power.yaml` is
+  `exponential.yaml`'s keys with `models: [inverse-power]`, so that each file names its potential.
+- **P47 — the one-loop rows (P17).** Each potential's `--A-values` rows are looked up under its own
+  `one_loop_drain_model`, read through the model interface from a model built at each n of `--n-values` (at M = M_P and
+  β = 1, which the hook does not read; log 05 D6). The fixed rows are shared by every potential. With `--A-values`
+  given, a potential whose n's name more than one drain model, or none (`inverse-power` at n ∉ {1, 2}), is refused at
+  parse, exit 2, before any Ray, naming `--A-values`, `--models` and `--n-values`. `drain_strength_A` checks the one-loop
+  law's rule on A (`check_drain_law` under `DRAIN_LAW_ONE_LOOP`), which accepts and refuses the same values as today.
+- **P48 — `main.py`.** For each potential of `--models` in the order given: its (M, n, β) rows in its table, built as
+  today, and one pipeline per alpha row of its own (the fixed rows, then its A rows). A run of one potential builds its
+  rows, keys and pipelines in today's order, so an exponential run's store is bitwise as at the base (07's gate R). The
+  grid's line is printed once per potential; for the exponential it is today's line.
+- **P49 — `plot_inputs.py`.** The models of the grid are looked up per potential, in its table, by one generic function;
+  `exponential_models` stays as the exponential's call of it, so its tests do not move. A potential of `--models` with
+  no row at any stored (M, β) is `PlotOptionNotStored` naming `--models`. The A rows are looked up per potential under
+  its own drain model.
+- **P50 — the export root.** Every product of a plot run goes under `<output>/<label>/<model>/`, for every potential,
+  through one helper of `extract_common.py`; below it nothing changes (`alpha=…/`, `<drain_model>/A=…/`, `plots/`,
+  `csv/`, `M=…eV_n=…`, `beta=…/M=…eV_n=…`, the file names). Each potential is exported in a pass of its own, since
+  `plot_by_beta.py` groups by (M serial, n), which two potentials at the same M would share.
+- **P51 — the `model` column.** Every `histories.csv` has `model`, directly after `n`, holding the option's value. It is
+  a `histories.csv` of one potential, at that potential's root. A reader that needs the potential (the quanta tools)
+  refuses a file without the column, naming it, rather than assuming one.
+- **P52 — the spectrum's wall is the model's.** `AbstractModel` gains `spectrum_wall`, with no default, declared as
+  `one_loop_drain_model` is (the base raises `NotImplementedError`; not an `abstractmethod`): `ExponentialModel` names
+  `quanta_spectrum`'s exponential wall at every n (its table serves the exponential family, P19), `InversePowerModel`
+  the power wall at n = 1 and 2, raising at any other n. No value of the integration reads it.
+- **P53 — the quanta tools (P19).** `tools/quanta_measures.py`, `tools/plot_quanta_history.py`,
+  `tools/plot_quanta_grid.py` and `tools/quanta_figures.py` take each row's wall from its `model` and `n` through P52's
+  hook, and build one spectrum per wall met. `SPECTRUM_WALL` goes. A row whose potential has no wall at its n is refused
+  and counted with the refusals. `EXPORT_ROOT` is a potential's root, `<output>/<label>/<model>/`.
+- **P54 — the gate Export (amended by R12)** and its evidence, as one-loop-drain 04 made it
+  (`.documents/one-loop-drain/export-04/`): a mixed store built through 05's test harness (no Ray), exported by the base
+  tree and by the tip. **The exponential:** every file of the base's `<label>/<rest>` equals the tip's
+  `<label>/exponential/<rest>` byte for byte, and no other file is there, except `histories.csv`, which equals the base's
+  on every base column, row for row and byte for byte, with `model` after `n` holding `exponential`; the quanta tools'
+  outputs on the two exponential roots are equal, timing fields aside. **The power law:** its root, its column, its rows
+  equal to the stored records, and `quanta_measures` measuring each with its own wall. The scripts and their outputs in
+  `.documents/power-law-wall/export-06/`, recorded in `.documents/power-law-wall-verification.md` §5.
+- **P55 — the 2026.11.0 analyses' readers** (P11). `fig6`, `fig6b`, `m-trend` and `changes` of
+  `science-runs/2026-11-13-science-2026.11.0/`, read at `main` by `git show` (not on this branch; the main checkout is
+  not touched). For each, the log records what it reads and whether an export of 06 gives it. None is run or changed.
+  Under convention 8 the standard analyses' inputs keep their names and columns; only the export path gains the
+  potential's directory, which `science-runs/README.md` does not name, so its rows are not amended.
+- **P56 — no store change.** No table, column or key moves: `FINGERPRINT_FORMAT` stays 8 and `VERSION_LABEL` 2026.12.0.
+- **P57 — the registered run's scope.** `RunDrivers/registered_run.py`'s `describe_scope` names the potentials
+  (`models <values>`) for every run, after the config file's part. Every manifest written from 06 on changes; the
+  manifests on disk are records and are not touched.
+- **P58 — the tests, the model and the counts.** Through the stand-in cluster and temporary stores, never Ray: the
+  option and the YAML files, P47's rows and refusals, P48's order, P49's lookups and refusal, the root and the column
+  for both potentials, P52's hook, the quanta tools on a root of each potential and on a file without the column, P57's
+  scope. Existing tests change only where they pin a string, path or column this prompt changes, each listed with its
+  old and new value. 06 is written for **Opus**, not Sonnet as §2's table proposed: it spans the parser, three drivers,
+  the exports, four quanta tools and a two-tree comparison, and the exponential's histories must not move in any of
+  them. The five suites in full at the base and after (P14); `CLAUDE.md`'s counts updated, nothing else in it.
+
+**U10, as first proposed** (closed by R12; recorded because R12 answers it):
 
 | | Proposed | Alternatives |
 |---|---|---|
-| **U10** — the export layout (amends P11) | **(a) a root of its own for the power law, and the exponential's exports untouched.** A plot run of the exponential writes every path and byte as today. A plot run of another model writes the same tree one directory lower, `<output>/<label>/<model>/` (`<model>` the option's value, `inverse-power`), and its `histories.csv` has a `model` column directly after `n`. A `histories.csv` without the column is the exponential's. Below the root nothing changes (`alpha=…/`, `<drain_model>/A=…/`, `plots/` and `csv/`, `M=…eV_n=…`, `beta=…/M=…eV_n=…`), so the two models can share one `--output`, `tools/quanta_measures.py`'s `EXPORT_ROOT` is either root, and the 2026.11.0 analyses' readers (pandas by column name; `extract_common`'s path helpers below the root) read both. This is P11's rule "the exponential's paths and bytes are unchanged", with the model put at the root rather than in the per-(M, n) folders, and the column in the power law's file only | **(b) P11 word for word:** `histories.csv` gains `model` for every model, so the exponential's gains a column (`exponential` in every row) and the gate Export becomes "every other column, and every other file, byte-identical"; the per-(M, n) folders of the power law are `<model>/M=…eV_n=…` (`plots/`, `csv/`, and `beta=…/<model>/M=…eV_n=…` below `plot_ScalarHistory.py`'s), and `histories.csv` stays at `<output>/<label>/`, so the two models' plot runs need different `--output` roots or overwrite each other's `histories.csv` |
+| **U10** — the export layout (amends P11) | (a) a root of its own for the power law, `<output>/<label>/<model>/`, with a `model` column in its `histories.csv` only, and the exponential's exports untouched | (b) P11 word for word: `histories.csv` gains `model` for every model; the power law's per-(M, n) folders are `<model>/M=…eV_n=…`; `histories.csv` stays at `<output>/<label>/`, so two potentials' plot runs into one `--output` overwrite each other's |
 
-- **P45 — the option.** `--model {exponential, inverse-power}`, default `exponential`, in `config/argument_parser.py`, so
-  that `main.py` and both plot scripts have it, with the names, default and help of `tools/history_and_bbn.py`'s; the
-  YAML key is `model`. `--potential-type` stays removed (a different option, refused by `RemovedOption`). The option's
-  values, their classes and their tables are named once, in a new module `CosmologyConcepts/Models/model_options.py`
-  (`MODEL_EXPONENTIAL`, `MODEL_INVERSE_POWER`, `MODEL_DEFAULT`, the class of each value). `tools/history_and_bbn.py`,
-  `tools/surfing_scan.py` and `tools/bbn_from_store.py` keep their own copies, unchanged.
-- **P46 — the config file (P12).** `inverse_power.yaml` beside `exponential.yaml`: the same keys and values, and
-  `model: inverse-power`. `exponential.yaml` is not changed; its model is the default.
-- **P47 — the one-loop rows (P17).** `main.py` and the plot scripts look up each `--A-values` row under the model's own
-  `one_loop_drain_model`, read through the model interface from a model built at each n of `--n-values` (at M = M_P and
-  β = 1, which the hook does not read, as `bbn_from_store` does; log 05 D6). If the n's name different drain models, or
-  the hook raises (`inverse-power` at n ∉ {1, 2}), the parse refuses with exit 2 before any Ray, naming `--A-values`,
-  `--model` and `--n-values`. `drain_strength_A` checks the one-loop law's rule on A (`check_drain_law` under
-  `DRAIN_LAW_ONE_LOOP`), which no longer names one model; every value it accepts and refuses is as today. Every printed
-  line and lookup of an exponential run is unchanged.
-- **P48 — `main.py`.** The model rows are built in the option's table (`convert_to_model`), and the grid's line names the
-  option's model. An exponential run prints every line it prints today.
-- **P49 — `plot_inputs.py`.** The models of the grid are looked up in the option's table; `exponential_models` stays, as
-  the exponential's call of the generic lookup, so its tests do not move. A model with no row stored at any stored
-  (M, β) is `PlotOptionNotStored` naming `--model` (P12: "the stored model is matched as the stored α are").
-- **P50 — the export layout,** as U10 rules.
-- **P51 — the spectrum's wall is the model's.** `AbstractModel` gains `spectrum_wall`, with no default (README §5):
-  `ExponentialModel` names `quanta_spectrum`'s exponential wall at every n (the module's table serves the exponential
-  family, P19), and `InversePowerModel` names the power wall at n = 1 and 2 and raises at any other n, as its
-  `one_loop_drain_model` does. No value of the integration reads it.
-- **P52 — the quanta tools (P19).** `tools/quanta_measures.py`, `tools/plot_quanta_history.py`,
-  `tools/plot_quanta_grid.py` and `tools/quanta_figures.py` take each row's wall from `histories.csv`'s `model` and `n`
-  through P51's hook (a missing `model` column is the exponential), and build one spectrum per wall met. `SPECTRUM_WALL`
-  goes. A row whose model has no wall at its n is refused, and counted with the refusals. On an exponential root every
-  output is byte-identical to the base's, its timing fields aside.
-- **P53 — the registered run's scope.** `RunDrivers/registered_run.py`'s `describe_scope` names the model only when it is
-  not the default, so that every exponential manifest's scope is unchanged.
-- **P54 — the Export gate's evidence**, as one-loop-drain 04 made it (`.documents/one-loop-drain/export-04/`): a mixed
-  store built through 05's test harness (no Ray), exported by the base tree and by the tip with each tree's own code;
-  the exponential's exports compared byte for byte, every path included; the power law's exports read back, and
-  `quanta_measures` run on both roots. The scripts and their outputs in `.documents/power-law-wall/export-06/`,
-  recorded in `.documents/power-law-wall-verification.md` §5.
-- **P55 — the 2026.11.0 analyses' readers** (P11: "06 checks this against the four 2026.11.0 analyses' readers"). `fig6`,
-  `fig6b`, `m-trend` and `changes` of `science-runs/2026-11-13-science-2026.11.0/`, and the relativistic-quanta
-  analysis through `quanta_measures`, are read at `main` by `git show` (they are not in this branch, and the main
-  checkout is not touched). For each, the log records what it reads (the file, its columns or paths) and whether a
-  power-law export under U10 gives it. `quanta_measures` is run on both roots (P54); the analyses themselves are not
-  run, and none of them is changed.
-- **P56 — no store change.** No table, column or key moves: `FINGERPRINT_FORMAT` stays 8 and `VERSION_LABEL` 2026.12.0.
-- **P57 — the tests,** through the stand-in cluster and temporary stores, never Ray: the option and its YAML key;
-  `inverse_power.yaml`; P47's refusals and lookups; P49's lookup and refusal; the export root and the column (U10);
-  P51's hook; the quanta tools on a power-law root; P53's scope. Existing tests change only where they pin a string
-  this prompt changes, each listed with its old and new value.
-- **P58 — the model and the counts.** 06 is written for **Opus**, not Sonnet as §2's table proposed: it spans the
-  parser, three drivers, the export, four quanta tools and a two-tree byte comparison, and the exponential must not
-  move in any of them. The five suites in full at the base and after (P14); `CLAUDE.md`'s counts updated, nothing
-  else in it.
 
 ## 7. What this campaign hands to the user
 
