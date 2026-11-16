@@ -124,6 +124,7 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED  # noqa: E402
+from CosmologyConcepts.Models.model_ids import EXPONENTIAL_MODEL  # noqa: E402
 
 # the flag (P1)
 FLAG_SAMPLES = 50
@@ -833,6 +834,13 @@ def select_from_store(
     every shard and before the M, beta, alpha, block and success filters are counted, and when there are any one
     line says so on stderr, after the last shard. A shard whose alpha_value has no drain_model column (a store
     of format 6 or before) holds fixed rows only: it is read as before and nothing is counted.
+
+    Only the rows of model_type EXPONENTIAL_MODEL are read, since run_history rebuilds a history as ExponentialModel
+    (power-law-wall prompt 05 §1.5, README §6.9 P37, P39): the join on model_serial also matches model_type, because
+    the serials of InversePowerModel's table repeat ExponentialModel's. The ScalarHistory rows of any other model,
+    whatever their drain model, are counted in the same way, and when there are any a second line says so on stderr,
+    after the first; the first counts the exponential's rows under another drain model, so that on a store of one
+    model it is as before.
     """
     from Units import Planck_units
 
@@ -843,18 +851,23 @@ def select_from_store(
 
     specs = []
     skipped = 0
+    other_model = 0
     for shard in store_shards(path):
         conn = connect_ro(shard)
         has_model = any(
             row["name"] == "drain_model"
             for row in conn.execute("pragma table_info(alpha_value)").fetchall()
         )
+        other_model += conn.execute(
+            "select count(*) from ScalarHistory where model_type != ?",
+            (EXPONENTIAL_MODEL,),
+        ).fetchone()[0]
         if has_model:
             skipped += conn.execute(
                 """select count(*) from ScalarHistory h
                    join alpha_value a on h.alpha_serial = a.serial
-                   where a.drain_model != ?""",
-                (DRAIN_MODEL_FIXED,),
+                   where a.drain_model != ? and h.model_type = ?""",
+                (DRAIN_MODEL_FIXED, EXPONENTIAL_MODEL),
             ).fetchone()[0]
         rows = conn.execute(
             """select h.serial, h.failure, h.normalization, h.phi_ref, h.z_samples,
@@ -871,9 +884,14 @@ def select_from_store(
                join tolerance ta on h.atol_serial = ta.serial
                join tolerance tr on h.rtol_serial = tr.serial
                """
-            + ("where a.drain_model = ? " if has_model else "")
+            + "where h.model_type = ? "
+            + ("and a.drain_model = ? " if has_model else "")
             + "order by h.serial",
-            (DRAIN_MODEL_FIXED,) if has_model else (),
+            (
+                (EXPONENTIAL_MODEL, DRAIN_MODEL_FIXED)
+                if has_model
+                else (EXPONENTIAL_MODEL,)
+            ),
         ).fetchall()
         conn.close()
         for r in rows:
@@ -909,6 +927,13 @@ def select_from_store(
             f"!! outward_step_scan: {skipped} ScalarHistory row{'' if skipped == 1 else 's'} of "
             f"{path} under another drain model than {DRAIN_MODEL_FIXED!r} skipped; this tool rebuilds a "
             f"history under the fixed law",
+            file=sys.stderr,
+        )
+    if other_model > 0:
+        print(
+            f"!! outward_step_scan: {other_model} ScalarHistory row{'' if other_model == 1 else 's'} of "
+            f"{path} of another model than 'ExponentialModel' skipped; this tool rebuilds a history as "
+            f"ExponentialModel",
             file=sys.stderr,
         )
     return specs

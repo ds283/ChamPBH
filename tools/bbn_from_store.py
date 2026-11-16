@@ -37,7 +37,8 @@ Run from the repository root, since PRyMordial reads PRyMrates/ and the EOS its
 table from the working directory:
 
     ./venv/bin/python tools/bbn_from_store.py STORE_STEM --beta B --M-Mp M \\
-        [--phi-init-Mp 5] [--drain-law fixed|one_loop] [--alpha A] [--variant prod pert12 pert9 ...] [--small-network] \\
+        [--phi-init-Mp 5] [--model exponential|inverse-power] [--n N] [--drain-law fixed|one_loop] [--alpha A] \\
+        [--variant prod pert12 pert9 ...] [--small-network] \\
         [--wall-clock-limit SECS] [--lowT-rtol X] [--lowT-atol X|NAME] \\
         [--csv PATH] [--tag TEXT]
     ./venv/bin/python tools/bbn_from_store.py --sm-baseline [--small-network] \\
@@ -55,11 +56,23 @@ share a file.
 
 `--drain-law` (default `fixed`) names the history's drain law, as `tools/history_and_bbn.py`'s option does:
 `--alpha` is alpha under `fixed` (0 <= alpha < 1, default 0) and A under `one_loop` (finite and > 0,
-required), and the history is matched under the code's current model of that law (`model_of_law`:
-the key of `alpha_value` is the pair (value, drain_model), one-loop-drain prompt 04).
+required), and the history is matched under that law's drain model (the key of `alpha_value` is the pair
+(value, drain_model), one-loop-drain prompt 04): `fixed`, or under `one_loop` the model's own, below.
 
-Prints one header line per history (`alpha=A` after `phi=` only at A > 0, inelastic-reflection
-prompt 10; ` A=<A> (<drain_model>)` under `one_loop`), then one line per variant:
+`--model {exponential,inverse-power}` (default exponential) and `--n N` (an integer >= 1, default 1) name the
+history's model, as `tools/history_and_bbn.py`'s options do (power-law-wall prompt 05 §1.5, README §6.9 P37, P38):
+the find query joins that model's table (ExponentialModel or InversePowerModel) and matches the history's
+`model_type` and the model's `n_value`, since the two tables' serials repeat each other. Under `one_loop` the drain
+model matched is the model's own (`one_loop_drain_model` at n: `one-loop-measured-v1` for the exponential,
+`one-loop-measured-pl-v1` for the power law at n = 1 and 2), not `model_of_law`'s; a model with no one-loop law at n
+(the power law at n other than 1 and 2) is refused at parse, exit 2, naming `--n`. A shard without the model's table
+holds none of its histories; a shard whose ScalarHistory has no `model_type` column, or whose model table has no
+`n_value` column (the hand-written imitations of the tests; no store of format 5 or later lacks them), is read
+without that match, as before.
+
+Prints one header line per history (`model=<model> n=<n>` after `M=` only away from the defaults, power-law-wall
+prompt 05; `alpha=A` after `phi=` only at A > 0, inelastic-reflection prompt 10; ` A=<A> (<drain_model>)` under
+`one_loop`), then one line per variant:
 
     store beta=... M=... phi=...: shard=... serial=... RHS=... window_samples=... stored: ...
       prod   Yp=... DoH=... He3oH=... Li7oH=... wall=... s
@@ -94,7 +107,8 @@ if str(_ROOT) not in sys.path:
 
 import PRyM.PRyM_main as PRyMmain  # noqa: E402
 from Units import Planck_units  # noqa: E402
-from config.argument_parser import alpha_fraction  # noqa: E402
+from config.argument_parser import alpha_fraction, positive_int  # noqa: E402
+from CosmologyConcepts import M_value, beta_value  # noqa: E402
 from CosmologyConcepts.drain_model import (  # noqa: E402
     DRAIN_LAW_FIXED,
     DRAIN_LAW_ONE_LOOP,
@@ -102,7 +116,11 @@ from CosmologyConcepts.drain_model import (  # noqa: E402
     DRAIN_MODEL_FIXED,
     alpha_label,
     check_drain_model,
-    model_of_law,
+)
+from CosmologyConcepts.Models import ExponentialModel, InversePowerModel  # noqa: E402
+from CosmologyConcepts.Models.model_ids import (  # noqa: E402
+    EXPONENTIAL_MODEL,
+    INVERSE_POWER_MODEL,
 )
 from config.defaults import (  # noqa: E402
     DEFAULT_DIMENSIONLESS_QUANTITY_PRECISION,
@@ -258,27 +276,96 @@ _FIND_QUERY_WITHOUT_ALPHA = """
       and sm.failure = 0
 """
 
+# --model and --n (power-law-wall prompt 05 §1.5, README §6.9 P37, P38): the option's values, as
+# tools/history_and_bbn.py's, each with its class, its table and its type id. The two queries above are the
+# exponential's; the power law's join its own table, and are otherwise the same
+MODEL_EXPONENTIAL = "exponential"
+MODEL_INVERSE_POWER = "inverse-power"
+MODEL_CLASSES = {
+    MODEL_EXPONENTIAL: ExponentialModel,
+    MODEL_INVERSE_POWER: InversePowerModel,
+}
+MODEL_TABLES = {
+    MODEL_EXPONENTIAL: ("ExponentialModel", EXPONENTIAL_MODEL),
+    MODEL_INVERSE_POWER: ("InversePowerModel", INVERSE_POWER_MODEL),
+}
+MODEL_DEFAULT = MODEL_EXPONENTIAL
+N_DEFAULT = 1
+
+_EXPONENTIAL_JOIN = "join ExponentialModel m on m.serial = sm.model_serial"
+_FIND_QUERIES = {
+    MODEL_EXPONENTIAL: (_FIND_QUERY, _FIND_QUERY_WITHOUT_ALPHA),
+    MODEL_INVERSE_POWER: tuple(
+        query.replace(
+            _EXPONENTIAL_JOIN, "join InversePowerModel m on m.serial = sm.model_serial"
+        )
+        for query in (_FIND_QUERY, _FIND_QUERY_WITHOUT_ALPHA)
+    ),
+}
+
+# the history's model type and the model's n, bound; appended before the alpha match, so that the drain model's
+# parameter stays the last
+_MODEL_TYPE_MATCH = " and sm.model_type = ?"
+_N_MATCH = " and m.n_value = ?"
+
 
 # the model of the history's alpha_value row (a key since one-loop-drain prompt 03), bound from the caller's
 # constant; a shard whose alpha_value has no drain_model column is of a format before 7 and holds fixed rows only
 _DRAIN_MODEL_MATCH = " and a.drain_model = ?"
 
 
-def _find_query(con, beta, phi_init_Mp, alpha, drain_model=DRAIN_MODEL_FIXED):
-    """
-    (sql, parameters) of the shard's find query for this alpha under this drain model; None if the shard cannot
-    hold it. A shard with no alpha_value table, or one whose alpha_value has no drain_model column, holds the
-    fixed model only (one-loop-drain prompt 04, P39), so it cannot hold another.
-    """
-    has_alpha = (
+def _has_table(con, name: str) -> bool:
+    return (
         con.execute(
-            "select 1 from sqlite_master where type = 'table' and name = 'alpha_value'"
+            "select 1 from sqlite_master where type = 'table' and name = ?", (name,)
         ).fetchone()
         is not None
     )
+
+
+def _has_column(con, table: str, column: str) -> bool:
+    return any(
+        row[1] == column
+        for row in con.execute(f"pragma table_info({table})").fetchall()
+    )
+
+
+def _find_query(
+    con,
+    beta,
+    phi_init_Mp,
+    alpha,
+    drain_model=DRAIN_MODEL_FIXED,
+    model=MODEL_DEFAULT,
+    n=N_DEFAULT,
+):
+    """
+    (sql, parameters) of the shard's find query for this alpha under this drain model, of this model (an option
+    value of --model) at this n; None if the shard cannot hold it. A shard with no alpha_value table, or one whose
+    alpha_value has no drain_model column, holds the fixed model only (one-loop-drain prompt 04, P39), so it cannot
+    hold another. The query joins the model's table and matches the history's model_type and the model's n_value
+    (power-law-wall prompt 05 §1.5, P37, P38): a shard without the power law's table holds none of its histories,
+    and a shard whose ScalarHistory has no model_type column, or whose model table no n_value column, is read
+    without that match (only the tests' hand-written imitations lack them).
+    """
+    table, type_id = MODEL_TABLES[model]
+    with_alpha, without_alpha = _FIND_QUERIES[model]
+    if model != MODEL_EXPONENTIAL and not _has_table(con, table):
+        return None
+    model_match, model_bound = "", ()
+    if _has_column(con, "ScalarHistory", "model_type"):
+        model_match, model_bound = _MODEL_TYPE_MATCH, (type_id,)
+    elif model != MODEL_EXPONENTIAL:
+        return None
+    if _has_column(con, table, "n_value"):
+        model_match, model_bound = model_match + _N_MATCH, (*model_bound, n)
+
+    has_alpha = _has_table(con, "alpha_value")
     if not has_alpha:
         if alpha == 0.0 and drain_model == DRAIN_MODEL_FIXED:
-            return _FIND_QUERY_WITHOUT_ALPHA, (beta, phi_init_Mp)
+            if model_match == "":
+                return without_alpha, (beta, phi_init_Mp)
+            return without_alpha + model_match, (beta, phi_init_Mp, *model_bound)
         return None
     has_model = any(
         row[1] == "drain_model"
@@ -291,14 +378,31 @@ def _find_query(con, beta, phi_init_Mp, alpha, drain_model=DRAIN_MODEL_FIXED):
     else:
         return None
     if alpha == 0.0:
-        return _FIND_QUERY + _ALPHA_ZERO + match, (beta, phi_init_Mp, alpha, *bound)
-    return _FIND_QUERY + _ALPHA_RELATIVE + match, (
+        return with_alpha + model_match + _ALPHA_ZERO + match, (
+            beta,
+            phi_init_Mp,
+            *model_bound,
+            alpha,
+            *bound,
+        )
+    return with_alpha + model_match + _ALPHA_RELATIVE + match, (
         beta,
         phi_init_Mp,
+        *model_bound,
         alpha,
         alpha,
         *bound,
     )
+
+
+def model_label(model: str, n: int) -> str:
+    """
+    What the header and a LookupError gain for the model, as tools/history_and_bbn.py's model_label: "" at the
+    defaults (exponential, n = 1), so that every line is as before; otherwise " model=<model> n=<n>".
+    """
+    if model == MODEL_DEFAULT and n == N_DEFAULT:
+        return ""
+    return f" model={model} n={n}"
 
 
 def _alpha_text(alpha: float, drain_model: str = DRAIN_MODEL_FIXED) -> str:
@@ -347,6 +451,8 @@ def find_model(
     *,
     alpha=0.0,
     drain_model=DRAIN_MODEL_FIXED,
+    model=MODEL_DEFAULT,
+    n=N_DEFAULT,
 ):
     """
     The one successful ScalarHistory (`failure = 0`; tuning-followups prompt 01)
@@ -359,7 +465,9 @@ def find_model(
     DEFAULT_DIMENSIONLESS_QUANTITY_PRECISION absolutely at 0, to the relative precision otherwise
     (inelastic-reflection prompt 10, ruling 8). ``drain_model`` (keyword only, default the fixed model) is the
     model of the history's alpha_value row, and ``alpha`` is then alpha under it or A under another model
-    (one-loop-drain prompt 04, P39).
+    (one-loop-drain prompt 04, P39). ``model`` and ``n`` (keyword only, defaults exponential and 1) are the
+    history's model, an option value of --model, and its index: the query joins that model's table and matches the
+    history's model_type and the model's n_value (power-law-wall prompt 05, P37, P38).
     """
     if units is None:
         units = Planck_units()
@@ -373,7 +481,7 @@ def find_model(
     for shard in shards:
         con = connect_ro(shard)
         try:
-            query = _find_query(con, beta, phi_init_Mp, alpha, drain_model)
+            query = _find_query(con, beta, phi_init_Mp, alpha, drain_model, model, n)
             for serial, M_eV, rhs, fb_logT in (
                 con.execute(*query) if query is not None else ()
             ):
@@ -400,12 +508,14 @@ def find_model(
 
     if len(found) == 0:
         raise LookupError(
-            f"no ScalarHistory with beta={beta:g} M={M_Mp:g} phi={phi_init_Mp:g}{_alpha_text(alpha, drain_model)} in {stem}"
+            f"no ScalarHistory with beta={beta:g} M={M_Mp:g}{model_label(model, n)} phi={phi_init_Mp:g}"
+            f"{_alpha_text(alpha, drain_model)} in {stem}"
         )
     if len(found) > 1:
         where = ", ".join(f"{Path(h.shard).name}:{h.serial}" for h in found)
         raise LookupError(
-            f"{len(found)} ScalarHistories match beta={beta:g} M={M_Mp:g} phi={phi_init_Mp:g}{_alpha_text(alpha, drain_model)}: {where}"
+            f"{len(found)} ScalarHistories match beta={beta:g} M={M_Mp:g}{model_label(model, n)} "
+            f"phi={phi_init_Mp:g}{_alpha_text(alpha, drain_model)}: {where}"
         )
     return found[0]
 
@@ -790,13 +900,13 @@ def _print_outcome(kind: str, out: dict):
         )
 
 
-def _law_alpha(parser, text, drain_law: str) -> float:
+def _law_alpha(parser, text, drain_law: str, drain_model: str) -> float:
     """
     --alpha under the drain law (one-loop-drain prompt 04, orchestrator note 04 ruling 4; after
     tools/history_and_bbn.py's _law_alpha). Under the fixed law, alpha_fraction's check and message, as
     argparse gave them when it was --alpha's type, and 0 where absent; under one_loop, A, required, checked by
-    check_drain_model under the code's current one-loop model. A refusal is parser.error: exit 2, naming the
-    option.
+    check_drain_model under drain_model, the model's own one-loop drain model (power-law-wall prompt 05, P38). A
+    refusal is parser.error: exit 2, naming the option.
     """
     if drain_law == DRAIN_LAW_FIXED:
         if text is None:
@@ -817,10 +927,31 @@ def _law_alpha(parser, text, drain_law: str) -> float:
     except ValueError:
         parser.error(f"argument --alpha: invalid value: {text!r}")
     try:
-        check_drain_model(model_of_law(drain_law), value, "argument --alpha")
+        check_drain_model(drain_model, value, "argument --alpha")
     except ValueError as e:
         parser.error(str(e))
     return value
+
+
+def _drain_model(parser, args) -> str:
+    """
+    The drain model the history's key names (power-law-wall prompt 05 §1.5, P38): DRAIN_MODEL_FIXED under the fixed
+    law, and under one_loop the model's own one-loop drain model at --n (AbstractModel.one_loop_drain_model),
+    never model_of_law's, read from the model built at the run's M and beta (M_P and 1 where not given; the hook
+    reads neither). A model with no one-loop law at n is parser.error: exit 2, naming --n.
+    """
+    if args.drain_law == DRAIN_LAW_FIXED:
+        return DRAIN_MODEL_FIXED
+    units = Planck_units()
+    M_Mp = 1.0 if args.M_Mp is None else args.M_Mp
+    beta = 1.0 if args.beta is None else args.beta
+    instance = MODEL_CLASSES[args.model](
+        0, M_value(0, M_Mp * units.PlanckMass), args.n, beta_value(0, beta), units
+    )
+    try:
+        return instance.one_loop_drain_model
+    except (NotImplementedError, ValueError) as e:
+        parser.error(f"argument --n: --drain-law one_loop: {e}")
 
 
 def main(argv=None) -> int:
@@ -837,12 +968,26 @@ def main(argv=None) -> int:
         help="initial phi in units of M_P (default 5)",
     )
     parser.add_argument(
+        "--model",
+        choices=tuple(MODEL_CLASSES),
+        default=MODEL_DEFAULT,
+        help="the model (default %(default)s): exponential, V_0 exp((M/phi)^n); inverse-power, "
+        "V_0 [1 + (M/phi)^n] (power-law-wall prompt 01). Away from the defaults every label names "
+        "the model and n",
+    )
+    parser.add_argument(
+        "--n",
+        type=positive_int,
+        default=N_DEFAULT,
+        help="the model's index n, an integer >= 1 (default %(default)s)",
+    )
+    parser.add_argument(
         "--drain-law",
         choices=DRAIN_LAWS,
         default=DRAIN_LAW_FIXED,
         help="the history's drain law (default %(default)s), as tools/history_and_bbn.py: fixed, with --alpha "
-        "its drained fraction; one_loop, the code's current one-loop model, with --alpha as A "
-        "(one-loop-drain prompt 04)",
+        "its drained fraction; one_loop, the model's own one-loop model, with --alpha as A "
+        "(one-loop-drain prompt 04; power-law-wall prompt 05)",
     )
     parser.add_argument(
         "--alpha",
@@ -887,8 +1032,8 @@ def main(argv=None) -> int:
     parser.add_argument("--csv", default=None, help="append one row per solve here")
     parser.add_argument("--tag", default="", help="a label written to the CSV rows")
     args = parser.parse_args(argv)
-    args.alpha = _law_alpha(parser, args.alpha, args.drain_law)
-    args.drain_model = model_of_law(args.drain_law)
+    args.drain_model = _drain_model(parser, args)
+    args.alpha = _law_alpha(parser, args.alpha, args.drain_law, args.drain_model)
 
     if not Path(os.getcwd(), "PRyMrates").is_dir():
         print(
@@ -944,6 +1089,8 @@ def main(argv=None) -> int:
         units,
         alpha=args.alpha,
         drain_model=args.drain_model,
+        model=args.model,
+        n=args.n,
     )
     logT, r = ratio_grid(h.rows, units)
     T_min_MeV, T_max_MeV = callback_domain_MeV(units)
@@ -956,7 +1103,8 @@ def main(argv=None) -> int:
     )
     shard_id = Path(h.shard).name[-7:-3]
     print(
-        f"store beta={args.beta:g} M={args.M_Mp:g} phi={args.phi_init_Mp:g}"
+        f"store beta={args.beta:g} M={args.M_Mp:g}{model_label(args.model, args.n)} "
+        f"phi={args.phi_init_Mp:g}"
         f"{_alpha_text(args.alpha, args.drain_model)}: "
         f"shard={shard_id} serial={h.serial} RHS={h.RHS_evaluations} "
         f"window_samples={len(r)} {setting}\n  stored: {stored}",
@@ -983,7 +1131,8 @@ def main(argv=None) -> int:
             row = dict(base, **out)
             row.update(
                 utc=datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                input=f"beta={args.beta:g} M={args.M_Mp:g}",
+                input=f"beta={args.beta:g} M={args.M_Mp:g}"
+                + model_label(args.model, args.n),
                 beta=args.beta,
                 M_Mp=args.M_Mp,
                 phi_init_Mp=args.phi_init_Mp,

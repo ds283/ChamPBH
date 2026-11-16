@@ -32,6 +32,8 @@ replicated_tables = [
 
 sharded_tables = {
     "ExponentialModel": "shard_key",
+    # sharded by beta, as ExponentialModel (power-law-wall prompt 05, P34)
+    "InversePowerModel": "shard_key",
     "ScalarHistory": "shard_key",
     "ScalarHistoryValue": "shard_key",
     "ScalarHistoryBounce": "shard_key",

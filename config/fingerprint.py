@@ -92,7 +92,12 @@ from config.datastore import factories
 # per owner, and ScalarHistory's names ScalarHistoryValue). ScalarHistory gains the columns of the history's
 # drain record and ScalarHistoryValue the sample masses ``log_m_eff_Mp`` and ``log_m_tracker_Mp``, which no spec
 # names.
-FINGERPRINT_FORMAT = 7
+#
+# Format 8: power-law-wall prompt 05, the store of the inverse-power-law model. The registry gains InversePowerModel
+# (ObjectFactories/InversePowerModel.py, keyed by M, n and beta) immediately after ExponentialModel, with a spec equal
+# to the exponential's, and ScalarHistory's spec maps type id 2 (INVERSE_POWER_MODEL) to InversePowerModel in its
+# polymorphic parent ``model``, beside type id 1. No other table, and no column, changes.
+FINGERPRINT_FORMAT = 8
 
 # The spec pin (campaign README P9; RunRegistryKit's docs/adoption/README.md §6, "The Q5 guard").
 # For each format that has a pin: [class, SHA-256] for every class of the registry whose factory
@@ -125,6 +130,10 @@ FINGERPRINT_FORMAT = 7
 # it a digest of its own, no longer ``beta_value``'s; only ``alpha_value``'s digest moved (its leaf
 # ``drain_model``), and the other fifteen pairs equal format 6's. ``ScalarHistory``'s spec, and so its digest, is
 # unchanged: it names its parent ``alpha`` by the same column and table, and none of its new columns.
+# Format 8 has 17 pairs (14 definitions serve them) and 14 distinct digests: ``InversePowerModel``'s spec is written
+# as ``ExponentialModel``'s and a spec does not hold its class's name, so the two share a digest and the distinct
+# count does not rise; only ``ScalarHistory``'s digest moved (its parent ``model`` maps type id 2 as well as 1), and
+# the other fifteen pairs equal format 7's.
 SPEC_DIGESTS = {
     1: [
         ["version", "02929e9353a2d7ed737e0c5336dd29b1bc64bf84693f865600ba6c66f455ec10"],
@@ -546,6 +555,67 @@ SPEC_DIGESTS = {
         [
             "ScalarHistory",
             "743fb2f2023a3a3174905b4f5b5ba2be3dadf33aa542537bcaaae1d1c084c919",
+        ],
+        [
+            "AdiabaticHistory",
+            "2e768c53e5ef4fafc0829bdc8598b1c17b1930d80184f94fe7a68afb345b8be0",
+        ],
+        ["BBNData", "acf76a00f0748895727e74cd2c907910f185bbe5ddbcd7ceea39ac37f217643d"],
+    ],
+    8: [
+        ["version", "02929e9353a2d7ed737e0c5336dd29b1bc64bf84693f865600ba6c66f455ec10"],
+        [
+            "store_tag",
+            "02929e9353a2d7ed737e0c5336dd29b1bc64bf84693f865600ba6c66f455ec10",
+        ],
+        [
+            "redshift",
+            "b6e92df7c31835a048482e7ea8c8c82b4f14ad38f82aa0c667d283ff84c15805",
+        ],
+        [
+            "tolerance",
+            "38ff5e8bf9db7d5594c3f35c38dba28114a5661a284645cc875c4f0f93a7a55f",
+        ],
+        [
+            "beta_value",
+            "c098757d4b33da64a449820f7f13c2c04112d2d319a0501ef31b184a9dc93a4a",
+        ],
+        [
+            "alpha_value",
+            "27134198fa8657502efac148e90557a6002eac95f13ddcf7aca866f88704aae4",
+        ],
+        ["M_value", "69f2da1ff5ed83829e7696d15309949849660035804c6f3ebc6704e1dc75cada"],
+        [
+            "temperature",
+            "8df9377e3eebc060df3adad53fc2298bc88798b9da8b252b190ad8beb53a6443",
+        ],
+        [
+            "phi_value",
+            "9e45a84f17fbc77aab1013efe1901f7024986dc8e8ab9d502156ab8e64472cca",
+        ],
+        [
+            "pi_value",
+            "9e45a84f17fbc77aab1013efe1901f7024986dc8e8ab9d502156ab8e64472cca",
+        ],
+        [
+            "ExponentialModel",
+            "5bb13de42840b317e7fb77486f54a7782281f2a4c4d710c1a902084acfc280a2",
+        ],
+        [
+            "InversePowerModel",
+            "5bb13de42840b317e7fb77486f54a7782281f2a4c4d710c1a902084acfc280a2",
+        ],
+        [
+            "QCD_Cosmology",
+            "af013d6dd11cfa2e7e8743baf708c582bb7950f39d715cb2c9eee46f1b36e4b0",
+        ],
+        [
+            "IntegrationSolver",
+            "6b7d69e652c00050e30d75431c082d6b984460925f3280d16ca636e2b843c402",
+        ],
+        [
+            "ScalarHistory",
+            "ee7b250afb624ad50801588666afc13a25cc1511a49904dd8d5802d729486af0",
         ],
         [
             "AdiabaticHistory",

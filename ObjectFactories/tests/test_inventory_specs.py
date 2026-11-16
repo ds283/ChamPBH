@@ -59,6 +59,7 @@ EXPECTED_ORDER = [
     "QCD_Cosmology",
     "IntegrationSolver",
     "ExponentialModel",
+    "InversePowerModel",
     "ScalarHistory",
     "AdiabaticHistory",
     "BBNData",
@@ -159,14 +160,15 @@ class TestInventoryClasses(_NoRay):
     def test_the_registry_is_accepted_and_ordered(self):
         self.assertEqual(inventory_classes(factories), EXPECTED_ORDER)
 
-    def test_thirteen_definitions_serve_sixteen_classes(self):
+    def test_fourteen_definitions_serve_seventeen_classes(self):
         # thirteen served seventeen until jordan-normalization prompt 07, which replaced
         # Lambda_value, ExponentialPotential and ExponentialCoupling with ExponentialModel; twelve
         # served fifteen until inelastic-reflection prompt 09 added alpha_value, and sixteen until
-        # one-loop-drain prompt 03 gave alpha_value a factory of its own (thirteen since)
+        # one-loop-drain prompt 03 gave alpha_value a factory of its own; thirteen served sixteen
+        # until power-law-wall prompt 05 added InversePowerModel with a factory of its own
         owners = [name for name, f in factories.items() if _spec(f) is not None]
-        self.assertEqual(len(owners), 16)
-        self.assertEqual(len({type(factories[n]) for n in owners}), 13)
+        self.assertEqual(len(owners), 17)
+        self.assertEqual(len({type(factories[n]) for n in owners}), 14)
         # five quantity entries share two factory classes, each reading its own value column; alpha_value's
         # own factory reads the pair (value, drain_model) since one-loop-drain prompt 03
         quantities = ["beta_value", "alpha_value", "M_value", "temperature"]
@@ -234,7 +236,10 @@ class TestSpecsResolve(_NoRay):
         )
         self.assertEqual(
             dict(parents["model"].types),
-            {model_ids.EXPONENTIAL_MODEL: "ExponentialModel"},
+            {
+                model_ids.EXPONENTIAL_MODEL: "ExponentialModel",
+                model_ids.INVERSE_POWER_MODEL: "InversePowerModel",
+            },
         )
 
     def test_no_parent_crosses_a_shard(self):

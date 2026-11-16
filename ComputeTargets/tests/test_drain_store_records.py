@@ -665,7 +665,7 @@ class TestTheLawThroughTheStoredPath(unittest.TestCase):
                     T_Jordan_init=mock.Mock(),
                     phi_Einstein_init=mock.Mock(),
                     pi_Einstein_init=mock.Mock(),
-                    model=mock.Mock(),
+                    model=mock.Mock(one_loop_drain_model="one-loop-measured-v1"),
                     tuning_tol=mock.Mock(tol=1e-5),
                     alpha=alpha,
                     atol=mock.Mock(tol=1e-8),

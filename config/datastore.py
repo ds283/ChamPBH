@@ -69,6 +69,7 @@ from ObjectFactories.DimensionlessQuantity import (
     sqla_dimensionless_quantity_factory,
 )
 from ObjectFactories.ExponentialModel import sqla_ExponentialModel_factory
+from ObjectFactories.InversePowerModel import sqla_InversePowerModel_factory
 from ObjectFactories.QCD_Cosmology import sqla_QCDCosmology_factory
 from ObjectFactories.ScalarHistory import (
     sqla_ScalarHistoryFactory,
@@ -98,6 +99,9 @@ factories = {
     "phi_value": sqla_dimensionful_quantity_factory(phi_value),
     "pi_value": sqla_dimensionful_quantity_factory(pi_value),
     "ExponentialModel": sqla_ExponentialModel_factory(),
+    # the inverse-power-law model, keyed (M, n, beta) as ExponentialModel is (power-law-wall prompt 05, README §6.9
+    # P33, P34); a ScalarHistory names it by model_type 2
+    "InversePowerModel": sqla_InversePowerModel_factory(),
     "QCD_Cosmology": sqla_QCDCosmology_factory(),
     "IntegrationSolver": sqla_IntegrationSolver_factory(),
     "ScalarHistory": sqla_ScalarHistoryFactory(),
@@ -140,6 +144,7 @@ serial_batch_sizes = {
     "phi_value": 200,
     "pi_value": 200,
     "ExponentialModel": 50,
+    "InversePowerModel": 50,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,
     "ScalarHistory": 20,

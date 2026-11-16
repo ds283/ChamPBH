@@ -1908,6 +1908,28 @@ def check_drain_law_model(drain_law: str, model, context: str) -> None:
         )
 
 
+def check_key_drain_model(model, alpha, context: str) -> None:
+    """
+    The drain model a history's key names, against its model (power-law-wall prompt 05 §1.4; README §4, §6.9 P36),
+    checked when a ScalarHistory is constructed, so before any lookup, tuning or integration. The key's alpha_value
+    may name DRAIN_MODEL_FIXED, under which nothing is asked of the model, or the model's own one-loop drain model
+    (AbstractModel.one_loop_drain_model). Any other drain model is a ValueError naming the model's class, its
+    one_loop_drain_model and the key's drain model. Where the model names no one-loop drain model at its parameters
+    (InversePowerModel at n other than 1 and 2), its own ValueError propagates. The guard in ScalarHistory.store,
+    which compares a payload's drain record with the key after the integration, stays.
+    """
+    key_model: str = alpha.drain_model
+    if key_model == DRAIN_MODEL_FIXED:
+        return
+    own: str = model.one_loop_drain_model
+    if key_model != own:
+        cls = type(model.model if isinstance(model, RealizedModel) else model)
+        raise ValueError(
+            f"{context}: the key names the drain model {key_model!r}, but {cls.__name__}.one_loop_drain_model is "
+            f"{own!r}: a history of this model is keyed under {DRAIN_MODEL_FIXED!r} or {own!r} only"
+        )
+
+
 def drain_regime(model: RealizedModel, assessment):
     """
     The regime of one candidate under the one-loop law (one-loop-drain prompt 01 §1.2; README §8.2, P18,
@@ -6329,6 +6351,10 @@ class ScalarHistory(DatastoreObject):
         :param label: optional label for the model
         :param tags: optional list of tags for the model
         """
+        # the key's drain model at entry (power-law-wall prompt 05 §1.4, P36): before anything is looked up or
+        # computed, through the model interface
+        check_key_drain_model(model, alpha, "ScalarHistory")
+
         self._solver_labels = solver_labels
 
         self._T_Jordan_init: temperature = T_Jordan_init

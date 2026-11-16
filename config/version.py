@@ -97,7 +97,17 @@
 # T* = 2e4 GeV, is above it. No table or column changes (FINGERPRINT_FORMAT stays 7). A 2026.10.0 store is not extended at 2026.11.0:
 # start a fresh datastore file, and read a 2026.10.0 store with the tree of its own commit (before electroweak-eos
 # prompt 01).
-VERSION_LABEL = "2026.11.0"
+# On 2026-11-16 (power-law-wall prompt 05), 2026.12.0: from 2026.12.0 an InversePowerModel (V_0 [1 + (M/phi)^n],
+# CosmologyConcepts/Models/InversePowerModel.py) and its histories can be stored. The registry gains the table
+# InversePowerModel, keyed by (M, n, beta) as ExponentialModel's is; a ScalarHistory names it by model_type 2, and its
+# key may name the power wall's one-loop drain model, "one-loop-measured-pl-v1". A ScalarHistory whose key names a
+# one-loop drain model other than its model's own is refused when it is constructed. FINGERPRINT_FORMAT is 8. No
+# exponential value, column or row moves: every exponential history, sample and bounce row is as at 2026.11.0. A
+# 2026.11.0 store is not extended at 2026.12.0, and this tree cannot read one: DatastoreKit refuses a store that lacks
+# a table the code declares (StoreSchemaMismatch from the inventory and the fingerprint, and a RuntimeError from the
+# pool on reopening it), so a 2026.11.0 store is read with the tree of its own commit (before power-law-wall prompt
+# 05), and the two models are compared through their exports (power-law-wall README §6.2 U6).
+VERSION_LABEL = "2026.12.0"
 
 # The reserved payload key of a version-keyed lookup (VERSION_SERIAL_KEY) and its reader
 # (require_version_serial) were defined here until dk-and-rpk-migration prompt 08; they are

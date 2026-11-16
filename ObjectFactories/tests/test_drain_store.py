@@ -45,7 +45,8 @@ The fixed-law histories are `test_dissipation_store`'s (M = 0.5 M_P, beta = 2, a
   neither the other's row nor its history; a lookup with no model is `fixed`; A = 0 under the one-loop model and
   an unknown model are refused before any row;
 - **the guard** (P28): a payload whose model differs from the key's stores nothing;
-- **the configuration**: the sharding, the format guard at 7 beside 1-6.
+- **the configuration**: the sharding, the format guard at 7 beside 1-6 (at 8 beside 1-7 since power-law-wall
+  prompt 05).
 
 No Ray cluster, no persistent datastore, no PRyMordial solve.
 """
@@ -563,8 +564,9 @@ class TestTheConfiguration(unittest.TestCase):
         self.assertEqual(sharded_tables["ScalarHistoryBounce"], "shard_key")
         self.assertIn("alpha_value", replicated_tables)
         self.assertNotIn("ScalarHistoryBounce", replicated_tables)
-        self.assertEqual(FINGERPRINT_FORMAT, 7)
-        self.assertEqual(sorted(SPEC_DIGESTS), [1, 2, 3, 4, 5, 6, 7])
+        # 8 since power-law-wall prompt 05 (InversePowerModel), which leaves formats 1-7's pins as they were
+        self.assertEqual(FINGERPRINT_FORMAT, 8)
+        self.assertEqual(sorted(SPEC_DIGESTS), [1, 2, 3, 4, 5, 6, 7, 8])
         six, seven = dict(SPEC_DIGESTS[6]), dict(SPEC_DIGESTS[7])
         # format 6's pin is as it was: alpha_value shared beta_value's digest
         self.assertEqual(six["alpha_value"], six["beta_value"])

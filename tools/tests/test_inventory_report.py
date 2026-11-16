@@ -264,11 +264,12 @@ class TestReportOnAStore(_InventoryStoreCase):
 
     def test_no_problem_and_every_class(self):
         self.assertEqual(self.inventory.problems, ())
-        # 16 classes and 45 records with the alpha_value row (inelastic-reflection prompt 09)
-        self.assertEqual(len(self.inventory.classes), 16)
+        # 16 classes and 45 records with the alpha_value row (inelastic-reflection prompt 09); 17 classes since
+        # power-law-wall prompt 05, which registers InversePowerModel, empty in this store
+        self.assertEqual(len(self.inventory.classes), 17)
         self.assertIn("problems: none", self.lines)
         self.assertEqual(self.lines[0], "@@ DATASTORE INVENTORY: store.db")
-        self.assertIn("read-only; 1 shard (#0); 45 records in 16 classes", self.lines)
+        self.assertIn("read-only; 1 shard (#0); 45 records in 17 classes", self.lines)
 
     def test_the_quantities(self):
         for line in (
