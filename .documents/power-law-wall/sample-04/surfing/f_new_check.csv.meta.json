@@ -1,0 +1,35 @@
+{
+  "runs": [
+    {
+      "start_time": "2026-11-15T20:07:19+00:00",
+      "git_head": "7d7c57817a2fc5bf2d6373acd01c4ac89c4a35d2",
+      "git_tracked_changes": false,
+      "version_label": "2026.11.0",
+      "options": {
+        "beta_min": null,
+        "beta_max": null,
+        "beta_step": null,
+        "beta_values": [
+          2.975,
+          2.976,
+          3.003
+        ],
+        "phi_init_Mp": 5.0,
+        "M": 0.001,
+        "T_window_low_GeV": 0.001,
+        "tuning_tolerance": 1e-05,
+        "tuning_max_integrations": 30,
+        "out": ".documents/power-law-wall/sample-04/surfing/f_new_check.csv"
+      },
+      "beta_grid": [
+        2.975,
+        2.976,
+        3.003
+      ],
+      "resumed": false,
+      "skipped": 0,
+      "python": "3.13.16",
+      "scipy": "1.17.0"
+    }
+  ]
+}

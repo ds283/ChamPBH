@@ -1,0 +1,325 @@
+# command: PYTHONPATH=. ./venv/bin/python tools/surfing_scan.py --out .documents/power-law-wall/sample-04/surfing/q_n2.csv --M 1e-3 --phi-init-Mp 5 --model inverse-power --n 2 --beta-min 1.100 --beta-max 1.150 --beta-step 0.001
+# start: 2026-11-15 20:42:30 20:42  up 15 days, 23:03, 1 user, load averages: 3.05 4.54 5.25
+-- surfing_scan: 51 beta to run, 0 already in .documents/power-law-wall/sample-04/surfing/q_n2.csv; phi*=5 M_P, M=0.001 M_P, tuned to T_CMB with tolerance 1e-05 (at most 30 integrations), window to T_J=0.001 GeV model=inverse-power n=2
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+!! tune_history (surfing_scan-beta1.1-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 2.628e-25 M_P at the floor reflection at N = 17.84064729), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.1-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.238e-03 phi_ref/phi_min-1=-2.390e-04 norm=-276.709193489 phi_ref=1.5497191572e-02 wall=7.1
+-- tune surfing_scan-beta1.1-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+6.264e-05 phi_ref/phi_min-1=-8.924e-03 norm=-276.681730349 phi_ref=1.5500895963e-02 wall=7.1
+-- tune surfing_scan-beta1.1-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.460e-05 phi_ref/phi_min-1=-1.740e-04 norm=-276.681914212 phi_ref=1.5639929889e-02 wall=7.0
+-- tune surfing_scan-beta1.1-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+4.765e-07 phi_ref/phi_min-1=+2.892e-07 norm=-276.682076283 phi_ref=1.5641872400e-02 wall=7.1
+beta=1.1 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.14337 GeV crossings=0 iterations=4 phi_ref=1.5641872400e-02 M_P V_ref=2.435001e-11 eV^4 wall=28.5 s [not captured]
+!! tune_history (surfing_scan-beta1.101-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 2.44e-25 M_P at the floor reflection at N = 17.8195662), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.101-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.212e-03 phi_ref/phi_min-1=-2.402e-04 norm=-276.70923982 phi_ref=1.5492259035e-02 wall=6.8
+-- tune surfing_scan-beta1.101-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+1.396e-05 phi_ref/phi_min-1=-8.897e-03 norm=-276.68185556 phi_ref=1.5495980753e-02 wall=6.8
+-- tune surfing_scan-beta1.101-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.768e-05 phi_ref/phi_min-1=-1.744e-04 norm=-276.681896739 phi_ref=1.5635269489e-02 wall=6.8
+-- tune surfing_scan-beta1.101-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-7.761e-07 phi_ref/phi_min-1=+2.480e-07 norm=-276.682068742 phi_ref=1.5637165795e-02 wall=6.8
+beta=1.101 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.145845 GeV crossings=0 iterations=4 phi_ref=1.5637165795e-02 M_P V_ref=2.435025e-11 eV^4 wall=27.5 s [not captured]
+!! tune_history (surfing_scan-beta1.102-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 2.279e-25 M_P at the floor reflection at N = 17.80035462), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.102-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.256e-03 phi_ref/phi_min-1=-2.399e-04 norm=-276.709286137 phi_ref=1.5487332405e-02 wall=6.7
+-- tune surfing_scan-beta1.102-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+8.405e-05 phi_ref/phi_min-1=-8.940e-03 norm=-276.681770863 phi_ref=1.5491048096e-02 wall=6.5
+-- tune surfing_scan-beta1.102-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.532e-05 phi_ref/phi_min-1=-1.740e-04 norm=-276.682017012 phi_ref=1.5629931036e-02 wall=6.5
+-- tune surfing_scan-beta1.102-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+4.391e-07 phi_ref/phi_min-1=+3.367e-07 norm=-276.682180874 phi_ref=1.5631864489e-02 wall=6.5
+beta=1.102 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.148171 GeV crossings=0 iterations=4 phi_ref=1.5631864489e-02 M_P V_ref=2.434759e-11 eV^4 wall=26.4 s [not captured]
+!! tune_history (surfing_scan-beta1.103-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 2.141e-25 M_P at the floor reflection at N = 17.78282596), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.103-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.259e-03 phi_ref/phi_min-1=-2.343e-04 norm=-276.709332438 phi_ref=1.5482411669e-02 wall=6.3
+-- tune surfing_scan-beta1.103-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.992e-05 phi_ref/phi_min-1=-8.947e-03 norm=-276.681807512 phi_ref=1.5486040133e-02 wall=6.4
+-- tune surfing_scan-beta1.103-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.390e-05 phi_ref/phi_min-1=-1.755e-04 norm=-276.681954219 phi_ref=1.5625483789e-02 wall=6.3
+-- tune surfing_scan-beta1.103-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+6.814e-07 phi_ref/phi_min-1=+2.176e-07 norm=-276.682114448 phi_ref=1.5627458097e-02 wall=6.3
+beta=1.103 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.150362 GeV crossings=0 iterations=4 phi_ref=1.5627458097e-02 M_P V_ref=2.434926e-11 eV^4 wall=25.6 s [not captured]
+!! tune_history (surfing_scan-beta1.104-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 2.022e-25 M_P at the floor reflection at N = 17.76680903), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.104-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.271e-03 phi_ref/phi_min-1=-2.408e-04 norm=-276.709378725 phi_ref=1.5477496815e-02 wall=6.3
+-- tune surfing_scan-beta1.104-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+9.488e-05 phi_ref/phi_min-1=-8.954e-03 norm=-276.681817362 phi_ref=1.5481224380e-02 wall=6.3
+-- tune surfing_scan-beta1.104-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.565e-05 phi_ref/phi_min-1=-1.743e-04 norm=-276.682094919 phi_ref=1.5620091187e-02 wall=6.3
+-- tune surfing_scan-beta1.104-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+4.563e-07 phi_ref/phi_min-1=+3.540e-07 norm=-276.682259602 phi_ref=1.5622023099e-02 wall=6.3
+beta=1.104 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.152435 GeV crossings=0 iterations=4 phi_ref=1.5622023099e-02 M_P V_ref=2.434580e-11 eV^4 wall=25.4 s [not captured]
+!! tune_history (surfing_scan-beta1.105-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.919e-25 M_P at the floor reflection at N = 17.7521473), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.105-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.277e-03 phi_ref/phi_min-1=-2.410e-04 norm=-276.709424996 phi_ref=1.5472587830e-02 wall=6.3
+-- tune surfing_scan-beta1.105-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+9.660e-05 phi_ref/phi_min-1=-8.960e-03 norm=-276.681846042 phi_ref=1.5476317112e-02 wall=6.2
+-- tune surfing_scan-beta1.105-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.551e-05 phi_ref/phi_min-1=-1.749e-04 norm=-276.682128565 phi_ref=1.5615200568e-02 wall=6.3
+-- tune surfing_scan-beta1.105-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+6.365e-07 phi_ref/phi_min-1=+7.035e-07 norm=-276.682292806 phi_ref=1.5617144115e-02 wall=6.3
+beta=1.105 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.154402 GeV crossings=0 iterations=4 phi_ref=1.5617144115e-02 M_P V_ref=2.434505e-11 eV^4 wall=25.3 s [not captured]
+!! tune_history (surfing_scan-beta1.106-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.828e-25 M_P at the floor reflection at N = 17.73869712), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.106-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.226e-03 phi_ref/phi_min-1=-2.400e-04 norm=-276.709471252 phi_ref=1.5467684703e-02 wall=6.3
+-- tune surfing_scan-beta1.106-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=-4.417e-06 phi_ref/phi_min-1=-8.910e-03 norm=-276.682042031 phi_ref=1.5471398022e-02 wall=6.3
+-- tune surfing_scan-beta1.106-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.867e-05 phi_ref/phi_min-1=-1.757e-04 norm=-276.682028971 phi_ref=1.5610949277e-02 wall=6.3
+-- tune surfing_scan-beta1.106-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-1.003e-06 phi_ref/phi_min-1=+2.227e-07 norm=-276.682204257 phi_ref=1.5612845710e-02 wall=6.3
+beta=1.106 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.156274 GeV crossings=0 iterations=4 phi_ref=1.5612845710e-02 M_P V_ref=2.434726e-11 eV^4 wall=25.4 s [not captured]
+!! tune_history (surfing_scan-beta1.107-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.749e-25 M_P at the floor reflection at N = 17.7263264), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.107-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.285e-03 phi_ref/phi_min-1=-2.403e-04 norm=-276.709517493 phi_ref=1.5462787421e-02 wall=6.4
+-- tune surfing_scan-beta1.107-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+9.288e-05 phi_ref/phi_min-1=-8.968e-03 norm=-276.681913077 phi_ref=1.5466504507e-02 wall=6.4
+-- tune surfing_scan-beta1.107-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.563e-05 phi_ref/phi_min-1=-1.749e-04 norm=-276.682184851 phi_ref=1.5605488990e-02 wall=6.3
+-- tune surfing_scan-beta1.107-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+4.867e-07 phi_ref/phi_min-1=+1.879e-07 norm=-276.682349502 phi_ref=1.5607429589e-02 wall=6.4
+beta=1.107 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.158062 GeV crossings=0 iterations=4 phi_ref=1.5607429589e-02 M_P V_ref=2.434380e-11 eV^4 wall=25.8 s [not captured]
+!! tune_history (surfing_scan-beta1.108-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.678e-25 M_P at the floor reflection at N = 17.7149152), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.108-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.290e-03 phi_ref/phi_min-1=-2.396e-04 norm=-276.709563719 phi_ref=1.5457895971e-02 wall=6.4
+-- tune surfing_scan-beta1.108-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+8.757e-05 phi_ref/phi_min-1=-8.974e-03 norm=-276.681943791 phi_ref=1.5461599982e-02 wall=6.4
+-- tune surfing_scan-beta1.108-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.523e-05 phi_ref/phi_min-1=-1.755e-04 norm=-276.68220015 phi_ref=1.5600706226e-02 wall=6.4
+-- tune surfing_scan-beta1.108-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+6.785e-07 phi_ref/phi_min-1=+3.245e-07 norm=-276.68236373 phi_ref=1.5602660179e-02 wall=6.4
+beta=1.108 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.159775 GeV crossings=0 iterations=4 phi_ref=1.5602660179e-02 M_P V_ref=2.434351e-11 eV^4 wall=25.9 s [not captured]
+!! tune_history (surfing_scan-beta1.109-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.614e-25 M_P at the floor reflection at N = 17.70435976), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.109-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.254e-03 phi_ref/phi_min-1=-2.374e-04 norm=-276.70960993 phi_ref=1.5453010342e-02 wall=6.6
+-- tune surfing_scan-beta1.109-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+2.763e-06 phi_ref/phi_min-1=-8.939e-03 norm=-276.682096485 phi_ref=1.5456679899e-02 wall=6.9
+-- tune surfing_scan-beta1.109-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.725e-05 phi_ref/phi_min-1=-1.767e-04 norm=-276.682104647 phi_ref=1.5596453274e-02 wall=7.1
+-- tune surfing_scan-beta1.109-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-5.000e-07 phi_ref/phi_min-1=+2.223e-07 norm=-276.6822756 phi_ref=1.5598387373e-02 wall=6.4
+beta=1.109 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.161423 GeV crossings=0 iterations=4 phi_ref=1.5598387373e-02 M_P V_ref=2.434571e-11 eV^4 wall=27.3 s [not captured]
+!! tune_history (surfing_scan-beta1.11-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.557e-25 M_P at the floor reflection at N = 17.6945729), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.11-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.259e-03 phi_ref/phi_min-1=-2.400e-04 norm=-276.709656126 phi_ref=1.5448130521e-02 wall=7.1
+-- tune surfing_scan-beta1.11-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+3.844e-05 phi_ref/phi_min-1=-8.942e-03 norm=-276.682127116 phi_ref=1.5451838229e-02 wall=6.7
+-- tune surfing_scan-beta1.11-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.738e-05 phi_ref/phi_min-1=-1.760e-04 norm=-276.68224025 phi_ref=1.5591077494e-02 wall=6.7
+-- tune surfing_scan-beta1.11-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-4.647e-07 phi_ref/phi_min-1=+3.028e-07 norm=-276.682410994 phi_ref=1.5593001813e-02 wall=6.6
+beta=1.11 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.163011 GeV crossings=0 iterations=4 phi_ref=1.5593001813e-02 M_P V_ref=2.434248e-11 eV^4 wall=27.4 s [not captured]
+!! tune_history (surfing_scan-beta1.111-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.506e-25 M_P at the floor reflection at N = 17.68548091), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.111-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.268e-03 phi_ref/phi_min-1=-2.390e-04 norm=-276.709702308 phi_ref=1.5443256497e-02 wall=6.9
+-- tune surfing_scan-beta1.111-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.569e-05 phi_ref/phi_min-1=-8.951e-03 norm=-276.682147265 phi_ref=1.5446948184e-02 wall=6.7
+-- tune surfing_scan-beta1.111-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.667e-05 phi_ref/phi_min-1=-1.763e-04 norm=-276.682281625 phi_ref=1.5586175816e-02 wall=6.8
+-- tune surfing_scan-beta1.111-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-1.452e-07 phi_ref/phi_min-1=+3.567e-07 norm=-276.682450147 phi_ref=1.5588116070e-02 wall=6.7
+beta=1.111 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.164545 GeV crossings=0 iterations=4 phi_ref=1.5588116070e-02 M_P V_ref=2.434159e-11 eV^4 wall=27.4 s [not captured]
+!! tune_history (surfing_scan-beta1.112-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.459e-25 M_P at the floor reflection at N = 17.67702081), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.112-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.271e-03 phi_ref/phi_min-1=-2.382e-04 norm=-276.709748474 phi_ref=1.5438388256e-02 wall=7.6
+-- tune surfing_scan-beta1.112-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+3.264e-05 phi_ref/phi_min-1=-8.955e-03 norm=-276.682183219 phi_ref=1.5442066011e-02 wall=7.1
+-- tune surfing_scan-beta1.112-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.748e-05 phi_ref/phi_min-1=-1.768e-04 norm=-276.682279345 phi_ref=1.5581504015e-02 wall=7.0
+-- tune surfing_scan-beta1.112-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-4.663e-07 phi_ref/phi_min-1=+2.742e-07 norm=-276.68245048 phi_ref=1.5583437663e-02 wall=7.0
+beta=1.112 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.166031 GeV crossings=0 iterations=4 phi_ref=1.5583437663e-02 M_P V_ref=2.434164e-11 eV^4 wall=28.9 s [not captured]
+!! tune_history (surfing_scan-beta1.113-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.416e-25 M_P at the floor reflection at N = 17.66913828), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.113-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.297e-03 phi_ref/phi_min-1=-2.384e-04 norm=-276.709794625 phi_ref=1.5433525787e-02 wall=7.5
+-- tune surfing_scan-beta1.113-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.167e-05 phi_ref/phi_min-1=-8.980e-03 norm=-276.682151864 phi_ref=1.5437206025e-02 wall=7.3
+-- tune surfing_scan-beta1.113-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.628e-05 phi_ref/phi_min-1=-1.772e-04 norm=-276.682274448 phi_ref=1.5576869138e-02 wall=7.6
+-- tune surfing_scan-beta1.113-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+7.820e-09 phi_ref/phi_min-1=+2.384e-07 norm=-276.682441908 phi_ref=1.5578827189e-02 wall=7.4
+beta=1.113 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.167472 GeV crossings=0 iterations=4 phi_ref=1.5578827189e-02 M_P V_ref=2.434191e-11 eV^4 wall=30.0 s [not captured]
+!! tune_history (surfing_scan-beta1.114-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.376e-25 M_P at the floor reflection at N = 17.66178613), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.114-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.296e-03 phi_ref/phi_min-1=-2.401e-04 norm=-276.709840761 phi_ref=1.5428669078e-02 wall=7.9
+-- tune surfing_scan-beta1.114-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+3.899e-05 phi_ref/phi_min-1=-8.979e-03 norm=-276.682201407 phi_ref=1.5432374870e-02 wall=7.8
+-- tune surfing_scan-beta1.114-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.631e-05 phi_ref/phi_min-1=-1.772e-04 norm=-276.682316161 phi_ref=1.5572012164e-02 wall=7.8
+-- tune surfing_scan-beta1.114-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-1.165e-09 phi_ref/phi_min-1=+2.487e-07 norm=-276.682483754 phi_ref=1.5573968589e-02 wall=7.9
+beta=1.114 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.168872 GeV crossings=0 iterations=4 phi_ref=1.5573968589e-02 M_P V_ref=2.434096e-11 eV^4 wall=31.7 s [not captured]
+!! tune_history (surfing_scan-beta1.115-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.34e-25 M_P at the floor reflection at N = 17.65492303), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.115-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.298e-03 phi_ref/phi_min-1=-2.382e-04 norm=-276.709886883 phi_ref=1.5423818116e-02 wall=8.7
+-- tune surfing_scan-beta1.115-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.337e-05 phi_ref/phi_min-1=-8.981e-03 norm=-276.682240798 phi_ref=1.5427493629e-02 wall=8.6
+-- tune surfing_scan-beta1.115-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.609e-05 phi_ref/phi_min-1=-1.775e-04 norm=-276.682368369 phi_ref=1.5567058216e-02 wall=8.6
+-- tune surfing_scan-beta1.115-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+1.178e-07 phi_ref/phi_min-1=+2.624e-07 norm=-276.682535225 phi_ref=1.5569023113e-02 wall=8.7
+beta=1.115 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.170233 GeV crossings=0 iterations=4 phi_ref=1.5569023113e-02 M_P V_ref=2.433977e-11 eV^4 wall=34.9 s [not captured]
+!! tune_history (surfing_scan-beta1.116-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.306e-25 M_P at the floor reflection at N = 17.64851257), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.116-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.302e-03 phi_ref/phi_min-1=-2.383e-04 norm=-276.709932989 phi_ref=1.5418972891e-02 wall=10.0
+-- tune surfing_scan-beta1.116-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.178e-05 phi_ref/phi_min-1=-8.985e-03 norm=-276.682275897 phi_ref=1.5422647710e-02 wall=9.8
+-- tune surfing_scan-beta1.116-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.644e-05 phi_ref/phi_min-1=-1.777e-04 norm=-276.682398819 phi_ref=1.5562242046e-02 wall=10.0
+-- tune surfing_scan-beta1.116-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+1.422e-08 phi_ref/phi_min-1=+2.550e-07 norm=-276.682566754 phi_ref=1.5564204116e-02 wall=9.8
+beta=1.116 model=inverse-power n=2 status=ok capture=- max=- second_dip=- deliver=0.171559 GeV crossings=0 iterations=4 phi_ref=1.5564204116e-02 M_P V_ref=2.433906e-11 eV^4 wall=39.9 s [not captured]
+!! tune_history (surfing_scan-beta1.117-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.275e-25 M_P at the floor reflection at N = 17.64252247), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.117-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.302e-03 phi_ref/phi_min-1=-2.262e-04 norm=-276.709979081 phi_ref=1.5414133390e-02 wall=8.7
+-- tune surfing_scan-beta1.117-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.507e-05 phi_ref/phi_min-1=-8.984e-03 norm=-276.682320513 phi_ref=1.5417620154e-02 wall=8.7
+-- tune surfing_scan-beta1.117-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.668e-05 phi_ref/phi_min-1=-1.790e-04 norm=-276.682453059 phi_ref=1.5557099103e-02 wall=8.7
+-- tune surfing_scan-beta1.117-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-3.782e-08 phi_ref/phi_min-1=+2.756e-07 norm=-276.682621671 phi_ref=1.5559078278e-02 wall=8.7
+beta=1.117 model=inverse-power n=2 status=ok capture=0.172719 max=- second_dip=- deliver=0.172852 GeV crossings=1 iterations=4 phi_ref=1.5559078278e-02 M_P V_ref=2.433779e-11 eV^4 wall=35.0 s
+!! tune_history (surfing_scan-beta1.118-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.246e-25 M_P at the floor reflection at N = 17.63692399), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.118-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.316e-03 phi_ref/phi_min-1=-2.376e-04 norm=-276.710025158 phi_ref=1.5409299600e-02 wall=7.8
+-- tune surfing_scan-beta1.118-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.427e-05 phi_ref/phi_min-1=-8.998e-03 norm=-276.68232418 phi_ref=1.5412960970e-02 wall=7.8
+-- tune surfing_scan-beta1.118-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.731e-05 phi_ref/phi_min-1=-1.783e-04 norm=-276.682454385 phi_ref=1.5552645844e-02 wall=7.8
+-- tune surfing_scan-beta1.118-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-2.375e-07 phi_ref/phi_min-1=+2.645e-07 norm=-276.682624872 phi_ref=1.5554602496e-02 wall=7.8
+beta=1.118 model=inverse-power n=2 status=ok capture=0.17359 max=- second_dip=- deliver=0.174113 GeV crossings=1 iterations=4 phi_ref=1.5554602496e-02 M_P V_ref=2.433777e-11 eV^4 wall=31.3 s
+!! tune_history (surfing_scan-beta1.119-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.219e-25 M_P at the floor reflection at N = 17.63169134), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.119-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.320e-03 phi_ref/phi_min-1=-2.390e-04 norm=-276.71007122 phi_ref=1.5404471511e-02 wall=7.2
+-- tune surfing_scan-beta1.119-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+5.046e-05 phi_ref/phi_min-1=-9.002e-03 norm=-276.682358528 phi_ref=1.5408154579e-02 wall=7.2
+-- tune surfing_scan-beta1.119-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.554e-05 phi_ref/phi_min-1=-1.782e-04 norm=-276.682506873 phi_ref=1.5547767800e-02 wall=7.2
+-- tune surfing_scan-beta1.119-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+4.202e-07 phi_ref/phi_min-1=+2.672e-07 norm=-276.68267202 phi_ref=1.5549750633e-02 wall=7.2
+beta=1.119 model=inverse-power n=2 status=ok capture=0.174343 max=- second_dip=- deliver=0.175345 GeV crossings=1 iterations=4 phi_ref=1.5549750633e-02 M_P V_ref=2.433669e-11 eV^4 wall=29.0 s
+!! tune_history (surfing_scan-beta1.12-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.193e-25 M_P at the floor reflection at N = 17.62680136), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.12-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.307e-03 phi_ref/phi_min-1=-2.366e-04 norm=-276.710117267 phi_ref=1.5399649110e-02 wall=6.9
+-- tune surfing_scan-beta1.12-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+1.668e-05 phi_ref/phi_min-1=-8.990e-03 norm=-276.682442595 phi_ref=1.5403293109e-02 wall=6.8
+-- tune surfing_scan-beta1.12-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.829e-05 phi_ref/phi_min-1=-1.790e-04 norm=-276.682491793 phi_ref=1.5543162174e-02 wall=6.8
+-- tune surfing_scan-beta1.12-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-6.079e-07 phi_ref/phi_min-1=+2.287e-07 norm=-276.682665648 phi_ref=1.5545111165e-02 wall=6.8
+beta=1.12 model=inverse-power n=2 status=ok capture=0.175029 max=- second_dip=- deliver=0.176549 GeV crossings=1 iterations=4 phi_ref=1.5545111165e-02 M_P V_ref=2.433690e-11 eV^4 wall=27.4 s
+!! tune_history (surfing_scan-beta1.121-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.17e-25 M_P at the floor reflection at N = 17.62223311), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.121-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.309e-03 phi_ref/phi_min-1=-2.362e-04 norm=-276.710163299 phi_ref=1.5394832385e-02 wall=6.5
+-- tune surfing_scan-beta1.121-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+2.825e-06 phi_ref/phi_min-1=-8.993e-03 norm=-276.682480458 phi_ref=1.5398469501e-02 wall=6.5
+-- tune surfing_scan-beta1.121-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.781e-05 phi_ref/phi_min-1=-1.794e-04 norm=-276.682488806 phi_ref=1.5538553778e-02 wall=6.6
+-- tune surfing_scan-beta1.121-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-4.795e-07 phi_ref/phi_min-1=+1.853e-07 norm=-276.682661499 phi_ref=1.5540515297e-02 wall=6.5
+beta=1.121 model=inverse-power n=2 status=ok capture=0.175668 max=- second_dip=- deliver=0.177727 GeV crossings=1 iterations=4 phi_ref=1.5540515297e-02 M_P V_ref=2.433706e-11 eV^4 wall=26.3 s
+!! tune_history (surfing_scan-beta1.122-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.147e-25 M_P at the floor reflection at N = 17.61796758), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.122-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.324e-03 phi_ref/phi_min-1=-2.391e-04 norm=-276.710209317 phi_ref=1.5390021325e-02 wall=6.4
+-- tune surfing_scan-beta1.122-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+6.112e-05 phi_ref/phi_min-1=-9.003e-03 norm=-276.682482793 phi_ref=1.5393702148e-02 wall=6.4
+-- tune surfing_scan-beta1.122-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.802e-05 phi_ref/phi_min-1=-1.784e-04 norm=-276.682662253 phi_ref=1.5533040137e-02 wall=6.4
+-- tune surfing_scan-beta1.122-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-3.697e-07 phi_ref/phi_min-1=+3.501e-07 norm=-276.682834559 phi_ref=1.5534988071e-02 wall=6.4
+beta=1.122 model=inverse-power n=2 status=ok capture=0.176272 max=- second_dip=- deliver=0.17888 GeV crossings=1 iterations=4 phi_ref=1.5534988071e-02 M_P V_ref=2.433292e-11 eV^4 wall=25.9 s
+!! tune_history (surfing_scan-beta1.123-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.126e-25 M_P at the floor reflection at N = 17.61398752), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.123-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.318e-03 phi_ref/phi_min-1=-2.393e-04 norm=-276.71025532 phi_ref=1.5385215918e-02 wall=6.2
+-- tune surfing_scan-beta1.123-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+3.991e-05 phi_ref/phi_min-1=-8.996e-03 norm=-276.68254741 phi_ref=1.5388898625e-02 wall=6.3
+-- tune surfing_scan-beta1.123-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.904e-05 phi_ref/phi_min-1=-1.788e-04 norm=-276.682664861 phi_ref=1.5528397873e-02 wall=6.3
+-- tune surfing_scan-beta1.123-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-7.801e-07 phi_ref/phi_min-1=+3.278e-07 norm=-276.682840559 phi_ref=1.5530333879e-02 wall=6.3
+beta=1.123 model=inverse-power n=2 status=ok capture=0.176848 max=- second_dip=- deliver=0.180009 GeV crossings=1 iterations=4 phi_ref=1.5530333879e-02 M_P V_ref=2.433284e-11 eV^4 wall=25.3 s
+!! tune_history (surfing_scan-beta1.124-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.106e-25 M_P at the floor reflection at N = 17.6102772), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.124-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.318e-03 phi_ref/phi_min-1=-2.352e-04 norm=-276.710301308 phi_ref=1.5380416153e-02 wall=6.2
+-- tune surfing_scan-beta1.124-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=-1.135e-05 phi_ref/phi_min-1=-9.003e-03 norm=-276.682590815 phi_ref=1.5384034360e-02 wall=6.2
+-- tune surfing_scan-beta1.124-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.698e-05 phi_ref/phi_min-1=-1.804e-04 norm=-276.682557242 phi_ref=1.5524352453e-02 wall=6.2
+-- tune surfing_scan-beta1.124-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-2.422e-07 phi_ref/phi_min-1=+1.463e-07 norm=-276.682727708 phi_ref=1.5526338216e-02 wall=6.2
+beta=1.124 model=inverse-power n=2 status=ok capture=0.177402 max=- second_dip=- deliver=0.181116 GeV crossings=1 iterations=4 phi_ref=1.5526338216e-02 M_P V_ref=2.433563e-11 eV^4 wall=25.0 s
+!! tune_history (surfing_scan-beta1.125-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.088e-25 M_P at the floor reflection at N = 17.60682226), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.125-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.369e-03 phi_ref/phi_min-1=-2.383e-04 norm=-276.710347281 phi_ref=1.5375622017e-02 wall=6.2
+-- tune surfing_scan-beta1.125-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+1.020e-04 phi_ref/phi_min-1=-9.049e-03 norm=-276.6824849 phi_ref=1.5379286522e-02 wall=6.2
+-- tune surfing_scan-beta1.125-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.677e-05 phi_ref/phi_min-1=-1.790e-04 norm=-276.682783071 phi_ref=1.5518619913e-02 wall=6.3
+-- tune surfing_scan-beta1.125-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+5.911e-07 phi_ref/phi_min-1=+3.694e-07 norm=-276.682951046 phi_ref=1.5520597861e-02 wall=6.4
+beta=1.125 model=inverse-power n=2 status=ok capture=0.177936 max=- second_dip=- deliver=0.1822 GeV crossings=1 iterations=4 phi_ref=1.5520597861e-02 M_P V_ref=2.433027e-11 eV^4 wall=25.4 s
+!! tune_history (surfing_scan-beta1.126-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.07e-25 M_P at the floor reflection at N = 17.60360957), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.126-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.318e-03 phi_ref/phi_min-1=-2.363e-04 norm=-276.710393239 phi_ref=1.5370833499e-02 wall=6.4
+-- tune surfing_scan-beta1.126-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=-8.186e-06 phi_ref/phi_min-1=-8.999e-03 norm=-276.682683847 phi_ref=1.5374467250e-02 wall=6.5
+-- tune surfing_scan-beta1.126-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.950e-05 phi_ref/phi_min-1=-1.804e-04 norm=-276.682659632 phi_ref=1.5514595446e-02 wall=6.5
+-- tune surfing_scan-beta1.126-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-9.121e-07 phi_ref/phi_min-1=+2.014e-07 norm=-276.68283755 phi_ref=1.5516543078e-02 wall=6.5
+beta=1.126 model=inverse-power n=2 status=ok capture=0.178454 max=- second_dip=- deliver=0.183264 GeV crossings=1 iterations=4 phi_ref=1.5516543078e-02 M_P V_ref=2.433309e-11 eV^4 wall=26.1 s
+!! tune_history (surfing_scan-beta1.127-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.053e-25 M_P at the floor reflection at N = 17.60062705), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.127-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.329e-03 phi_ref/phi_min-1=-2.358e-04 norm=-276.710439183 phi_ref=1.5366050588e-02 wall=6.7
+-- tune surfing_scan-beta1.127-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+2.953e-05 phi_ref/phi_min-1=-9.009e-03 norm=-276.682695448 phi_ref=1.5369675115e-02 wall=6.7
+-- tune surfing_scan-beta1.127-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.903e-05 phi_ref/phi_min-1=-1.801e-04 norm=-276.682782444 phi_ref=1.5509346374e-02 wall=6.6
+-- tune surfing_scan-beta1.127-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-7.133e-07 phi_ref/phi_min-1=+3.005e-07 norm=-276.682958319 phi_ref=1.5511300133e-02 wall=6.6
+beta=1.127 model=inverse-power n=2 status=ok capture=0.178958 max=- second_dip=- deliver=0.184308 GeV crossings=1 iterations=4 phi_ref=1.5511300133e-02 M_P V_ref=2.433022e-11 eV^4 wall=26.9 s
+!! tune_history (surfing_scan-beta1.128-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.037e-25 M_P at the floor reflection at N = 17.59786351), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.128-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.362e-03 phi_ref/phi_min-1=-2.369e-04 norm=-276.710485113 phi_ref=1.5361273271e-02 wall=6.9
+-- tune surfing_scan-beta1.128-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+6.314e-05 phi_ref/phi_min-1=-9.042e-03 norm=-276.682643615 phi_ref=1.5364913740e-02 wall=6.9
+-- tune surfing_scan-beta1.128-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.623e-05 phi_ref/phi_min-1=-1.802e-04 norm=-276.682828993 phi_ref=1.5504574175e-02 wall=6.9
+-- tune surfing_scan-beta1.128-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+4.690e-07 phi_ref/phi_min-1=+3.086e-07 norm=-276.682996013 phi_ref=1.5506573409e-02 wall=6.9
+beta=1.128 model=inverse-power n=2 status=ok capture=0.17945 max=- second_dip=- deliver=0.185333 GeV crossings=1 iterations=4 phi_ref=1.5506573409e-02 M_P V_ref=2.432936e-11 eV^4 wall=28.0 s
+!! tune_history (surfing_scan-beta1.129-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.022e-25 M_P at the floor reflection at N = 17.59530862), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.129-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.357e-03 phi_ref/phi_min-1=-2.390e-04 norm=-276.710531027 phi_ref=1.5356501538e-02 wall=7.4
+-- tune surfing_scan-beta1.129-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.518e-05 phi_ref/phi_min-1=-9.038e-03 norm=-276.682704202 phi_ref=1.5360173075e-02 wall=7.5
+-- tune surfing_scan-beta1.129-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.634e-05 phi_ref/phi_min-1=-1.803e-04 norm=-276.682837091 phi_ref=1.5499985622e-02 wall=7.5
+-- tune surfing_scan-beta1.129-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+3.136e-07 phi_ref/phi_min-1=+2.798e-07 norm=-276.683004733 phi_ref=1.5501983515e-02 wall=7.7
+beta=1.129 model=inverse-power n=2 status=ok capture=0.17993 max=- second_dip=- deliver=0.186339 GeV crossings=1 iterations=4 phi_ref=1.5501983515e-02 M_P V_ref=2.432921e-11 eV^4 wall=30.4 s
+!! tune_history (surfing_scan-beta1.13-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 1.008e-25 M_P at the floor reflection at N = 17.59295275), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.13-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.367e-03 phi_ref/phi_min-1=-2.360e-04 norm=-276.710576927 phi_ref=1.5351735377e-02 wall=8.5
+-- tune surfing_scan-beta1.13-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.721e-05 phi_ref/phi_min-1=-9.047e-03 norm=-276.682719188 phi_ref=1.5355358935e-02 wall=8.5
+-- tune surfing_scan-beta1.13-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.772e-05 phi_ref/phi_min-1=-1.809e-04 norm=-276.682858038 phi_ref=1.5495243772e-02 wall=8.5
+-- tune surfing_scan-beta1.13-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-1.135e-07 phi_ref/phi_min-1=+2.865e-07 norm=-276.683029734 phi_ref=1.5497229676e-02 wall=8.5
+beta=1.13 model=inverse-power n=2 status=ok capture=0.180401 max=- second_dip=- deliver=0.187327 GeV crossings=1 iterations=4 phi_ref=1.5497229676e-02 M_P V_ref=2.432866e-11 eV^4 wall=34.3 s
+!! tune_history (surfing_scan-beta1.131-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.944e-26 M_P at the floor reflection at N = 17.59078695), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.131-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.368e-03 phi_ref/phi_min-1=-2.361e-04 norm=-276.710622812 phi_ref=1.5346974776e-02 wall=9.5
+!! phi is not positive in InversePowerModel log_V at phi=-4.3173e-07 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.131))
+-- tune surfing_scan-beta1.131-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.209e-05 phi_ref/phi_min-1=-9.049e-03 norm=-276.68276199 phi_ref=1.5350598922e-02 wall=10.1
+!! phi is not positive in InversePowerModel log_V at phi=-6.1363e-05 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.131))
+-- tune surfing_scan-beta1.131-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.709e-05 phi_ref/phi_min-1=-1.811e-04 norm=-276.682885853 phi_ref=1.5490532901e-02 wall=9.9
+-- tune surfing_scan-beta1.131-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+5.173e-07 phi_ref/phi_min-1=+2.606e-07 norm=-276.683055784 phi_ref=1.5492530538e-02 wall=10.0
+beta=1.131 model=inverse-power n=2 status=ok capture=0.180863 max=- second_dip=- deliver=0.188298 GeV crossings=1 iterations=4 phi_ref=1.5492530538e-02 M_P V_ref=2.432809e-11 eV^4 wall=39.7 s
+!! tune_history (surfing_scan-beta1.132-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.814e-26 M_P at the floor reflection at N = 17.58880288), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.132-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.367e-03 phi_ref/phi_min-1=-2.372e-04 norm=-276.710668683 phi_ref=1.5342219724e-02 wall=7.7
+-- tune surfing_scan-beta1.132-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.168e-05 phi_ref/phi_min-1=-9.048e-03 norm=-276.682809951 phi_ref=1.5345859591e-02 wall=7.8
+-- tune surfing_scan-beta1.132-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.664e-05 phi_ref/phi_min-1=-1.812e-04 norm=-276.682932596 phi_ref=1.5485747820e-02 wall=7.7
+-- tune surfing_scan-beta1.132-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+2.409e-07 phi_ref/phi_min-1=+2.765e-07 norm=-276.683101198 phi_ref=1.5487752448e-02 wall=7.7
+beta=1.132 model=inverse-power n=2 status=ok capture=0.181316 max=- second_dip=- deliver=0.189252 GeV crossings=1 iterations=4 phi_ref=1.5487752448e-02 M_P V_ref=2.432705e-11 eV^4 wall=31.2 s
+!! tune_history (surfing_scan-beta1.133-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.69e-26 M_P at the floor reflection at N = 17.58699274), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.133-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.364e-03 phi_ref/phi_min-1=-2.358e-04 norm=-276.710714539 phi_ref=1.5337470210e-02 wall=7.2
+-- tune surfing_scan-beta1.133-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+3.428e-05 phi_ref/phi_min-1=-9.045e-03 norm=-276.682863662 phi_ref=1.5341087121e-02 wall=7.2
+-- tune surfing_scan-beta1.133-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.878e-05 phi_ref/phi_min-1=-1.815e-04 norm=-276.682964623 phi_ref=1.5480986598e-02 wall=7.3
+-- tune surfing_scan-beta1.133-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-4.875e-07 phi_ref/phi_min-1=+2.878e-07 norm=-276.683139699 phi_ref=1.5482963132e-02 wall=7.3
+beta=1.133 model=inverse-power n=2 status=ok capture=0.181762 max=- second_dip=- deliver=0.19019 GeV crossings=1 iterations=4 phi_ref=1.5482963132e-02 M_P V_ref=2.432617e-11 eV^4 wall=29.2 s
+!! tune_history (surfing_scan-beta1.134-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.572e-26 M_P at the floor reflection at N = 17.58534922), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.134-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.370e-03 phi_ref/phi_min-1=-2.336e-04 norm=-276.710760381 phi_ref=1.5332726221e-02 wall=7.4
+-- tune surfing_scan-beta1.134-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.479e-05 phi_ref/phi_min-1=-9.049e-03 norm=-276.682893663 phi_ref=1.5336308717e-02 wall=7.2
+-- tune surfing_scan-beta1.134-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.761e-05 phi_ref/phi_min-1=-1.818e-04 norm=-276.683025428 phi_ref=1.5476082467e-02 wall=7.2
+-- tune surfing_scan-beta1.134-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-3.668e-08 phi_ref/phi_min-1=+3.070e-07 norm=-276.683196887 phi_ref=1.5478081258e-02 wall=7.2
+beta=1.134 model=inverse-power n=2 status=ok capture=0.182201 max=- second_dip=- deliver=0.191112 GeV crossings=1 iterations=4 phi_ref=1.5478081258e-02 M_P V_ref=2.432485e-11 eV^4 wall=29.3 s
+!! tune_history (surfing_scan-beta1.135-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.459e-26 M_P at the floor reflection at N = 17.58386548), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.135-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.380e-03 phi_ref/phi_min-1=-2.355e-04 norm=-276.710806208 phi_ref=1.5327987748e-02 wall=7.9
+-- tune surfing_scan-beta1.135-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.133e-05 phi_ref/phi_min-1=-9.060e-03 norm=-276.682909591 phi_ref=1.5331598943e-02 wall=7.8
+-- tune surfing_scan-beta1.135-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.693e-05 phi_ref/phi_min-1=-1.820e-04 norm=-276.683031216 phi_ref=1.5471546249e-02 wall=7.9
+-- tune surfing_scan-beta1.135-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+1.981e-07 phi_ref/phi_min-1=+2.790e-07 norm=-276.683200702 phi_ref=1.5473557396e-02 wall=7.9
+beta=1.135 model=inverse-power n=2 status=ok capture=0.182633 max=- second_dip=- deliver=0.192019 GeV crossings=1 iterations=4 phi_ref=1.5473557396e-02 M_P V_ref=2.432481e-11 eV^4 wall=31.7 s
+!! tune_history (surfing_scan-beta1.136-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.351e-26 M_P at the floor reflection at N = 17.58253508), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.136-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.391e-03 phi_ref/phi_min-1=-2.357e-04 norm=-276.71085202 phi_ref=1.5323254779e-02 wall=10.0
+-- tune surfing_scan-beta1.136-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.287e-05 phi_ref/phi_min-1=-9.071e-03 norm=-276.682920777 phi_ref=1.5326867350e-02 wall=9.9
+-- tune surfing_scan-beta1.136-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.759e-05 phi_ref/phi_min-1=-1.823e-04 norm=-276.683046918 phi_ref=1.5466919608e-02 wall=9.9
+-- tune surfing_scan-beta1.136-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+1.361e-08 phi_ref/phi_min-1=+2.714e-07 norm=-276.683218348 phi_ref=1.5468924595e-02 wall=9.9
+beta=1.136 model=inverse-power n=2 status=ok capture=0.18306 max=- second_dip=- deliver=0.192912 GeV crossings=1 iterations=4 phi_ref=1.5468924595e-02 M_P V_ref=2.432444e-11 eV^4 wall=40.0 s
+!! tune_history (surfing_scan-beta1.137-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.247e-26 M_P at the floor reflection at N = 17.58135196), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.137-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.391e-03 phi_ref/phi_min-1=-2.358e-04 norm=-276.710897818 phi_ref=1.5318527302e-02 wall=8.5
+-- tune surfing_scan-beta1.137-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+3.913e-05 phi_ref/phi_min-1=-9.071e-03 norm=-276.682966712 phi_ref=1.5322139815e-02 wall=8.0
+-- tune surfing_scan-beta1.137-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.687e-05 phi_ref/phi_min-1=-1.824e-04 norm=-276.683081904 phi_ref=1.5462202725e-02 wall=8.0
+-- tune surfing_scan-beta1.137-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+2.416e-07 phi_ref/phi_min-1=+2.634e-07 norm=-276.683251268 phi_ref=1.5464220769e-02 wall=8.0
+beta=1.137 model=inverse-power n=2 status=ok capture=0.183481 max=- second_dip=- deliver=0.19379 GeV crossings=1 iterations=4 phi_ref=1.5464220769e-02 M_P V_ref=2.432370e-11 eV^4 wall=32.8 s
+!! tune_history (surfing_scan-beta1.138-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.148e-26 M_P at the floor reflection at N = 17.58031043), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.138-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.405e-03 phi_ref/phi_min-1=-2.354e-04 norm=-276.710943601 phi_ref=1.5313805306e-02 wall=8.3
+-- tune surfing_scan-beta1.138-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.759e-05 phi_ref/phi_min-1=-9.084e-03 norm=-276.682969629 phi_ref=1.5317410543e-02 wall=8.1
+-- tune surfing_scan-beta1.138-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.855e-05 phi_ref/phi_min-1=-1.827e-04 norm=-276.683109584 phi_ref=1.5457514843e-02 wall=8.1
+-- tune surfing_scan-beta1.138-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-2.459e-07 phi_ref/phi_min-1=+2.833e-07 norm=-276.683283779 phi_ref=1.5459512066e-02 wall=8.1
+beta=1.138 model=inverse-power n=2 status=ok capture=0.183897 max=- second_dip=- deliver=0.194654 GeV crossings=1 iterations=4 phi_ref=1.5459512066e-02 M_P V_ref=2.432298e-11 eV^4 wall=32.9 s
+!! tune_history (surfing_scan-beta1.139-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 9.053e-26 M_P at the floor reflection at N = 17.5794051), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.139-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.404e-03 phi_ref/phi_min-1=-2.343e-04 norm=-276.71098937 phi_ref=1.5309088780e-02 wall=10.0
+-- tune surfing_scan-beta1.139-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.404e-05 phi_ref/phi_min-1=-9.083e-03 norm=-276.683017315 phi_ref=1.5312676434e-02 wall=10.0
+!! phi is not positive in InversePowerModel log_V at phi=-3.9091e-06 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.139))
+-- tune surfing_scan-beta1.139-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.756e-05 phi_ref/phi_min-1=-1.830e-04 norm=-276.683146888 phi_ref=1.5452778440e-02 wall=10.2
+-- tune surfing_scan-beta1.139-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+1.113e-07 phi_ref/phi_min-1=+2.876e-07 norm=-276.683318236 phi_ref=1.5454794296e-02 wall=10.0
+beta=1.139 model=inverse-power n=2 status=ok capture=0.184308 max=- second_dip=- deliver=0.195505 GeV crossings=1 iterations=4 phi_ref=1.5454794296e-02 M_P V_ref=2.432220e-11 eV^4 wall=40.4 s
+!! tune_history (surfing_scan-beta1.14-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.962e-26 M_P at the floor reflection at N = 17.57863088), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.14-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.412e-03 phi_ref/phi_min-1=-2.355e-04 norm=-276.711035124 phi_ref=1.5304377713e-02 wall=8.6
+-- tune surfing_scan-beta1.14-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.549e-05 phi_ref/phi_min-1=-9.091e-03 norm=-276.683038984 phi_ref=1.5307983019e-02 wall=8.5
+-- tune surfing_scan-beta1.14-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.849e-05 phi_ref/phi_min-1=-1.831e-04 norm=-276.683172812 phi_ref=1.5448136667e-02 wall=8.6
+-- tune surfing_scan-beta1.14-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-1.984e-07 phi_ref/phi_min-1=+2.804e-07 norm=-276.683346891 phi_ref=1.5450139919e-02 wall=8.5
+beta=1.14 model=inverse-power n=2 status=ok capture=0.184715 max=- second_dip=- deliver=0.196343 GeV crossings=1 iterations=4 phi_ref=1.5450139919e-02 M_P V_ref=2.432156e-11 eV^4 wall=34.5 s
+!! tune_history (surfing_scan-beta1.141-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.874e-26 M_P at the floor reflection at N = 17.57798297), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.141-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.412e-03 phi_ref/phi_min-1=-2.347e-04 norm=-276.711080864 phi_ref=1.5299672093e-02 wall=8.9
+-- tune surfing_scan-beta1.141-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.138e-05 phi_ref/phi_min-1=-9.091e-03 norm=-276.683085887 phi_ref=1.5303264476e-02 wall=8.9
+-- tune surfing_scan-beta1.141-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=-1.481e-03 phi_ref/phi_min-1=-1.941e-04 norm=-276.68320768 phi_ref=1.5443437095e-02 wall=3.4
+-- tune surfing_scan-beta1.141-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+1.859e-03 phi_ref/phi_min-1=+3.164e-06 norm=-276.677964699 phi_ref=1.5473427846e-02 wall=8.8
+-- tune surfing_scan-beta1.141-M0.001-inverse-power-n2 it=4 kind=secant H/H0-1=+8.588e-04 phi_ref/phi_min-1=+6.348e-06 norm=-276.6808723 phi_ref=1.5458476643e-02 wall=8.8
+-- tune surfing_scan-beta1.141-M0.001-inverse-power-n2 it=5 kind=secant H/H0-1=+4.376e-07 phi_ref/phi_min-1=-7.145e-07 norm=-276.683377987 phi_ref=1.5445448086e-02 wall=8.8
+beta=1.141 model=inverse-power n=2 status=ok capture=0.185117 max=- second_dip=- deliver=0.197167 GeV crossings=1 iterations=6 phi_ref=1.5445448086e-02 M_P V_ref=2.432087e-11 eV^4 wall=47.8 s
+!! tune_history (surfing_scan-beta1.142-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.79e-26 M_P at the floor reflection at N = 17.5774568), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.142-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.419e-03 phi_ref/phi_min-1=-2.347e-04 norm=-276.71112659 phi_ref=1.5294971911e-02 wall=9.3
+-- tune surfing_scan-beta1.142-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.638e-05 phi_ref/phi_min-1=-9.098e-03 norm=-276.683109558 phi_ref=1.5298562364e-02 wall=9.3
+-- tune surfing_scan-beta1.142-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.784e-05 phi_ref/phi_min-1=-1.836e-04 norm=-276.683245985 phi_ref=1.5438722418e-02 wall=9.4
+-- tune surfing_scan-beta1.142-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+7.111e-08 phi_ref/phi_min-1=+2.828e-07 norm=-276.683418131 phi_ref=1.5440741972e-02 wall=9.4
+beta=1.142 model=inverse-power n=2 status=ok capture=0.185516 max=- second_dip=- deliver=0.19798 GeV crossings=1 iterations=4 phi_ref=1.5440741972e-02 M_P V_ref=2.431995e-11 eV^4 wall=37.8 s
+!! tune_history (surfing_scan-beta1.143-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.709e-26 M_P at the floor reflection at N = 17.57704805), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.143-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.422e-03 phi_ref/phi_min-1=-2.350e-04 norm=-276.711172301 phi_ref=1.5290277153e-02 wall=9.5
+-- tune surfing_scan-beta1.143-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.442e-05 phi_ref/phi_min-1=-9.100e-03 norm=-276.683146471 phi_ref=1.5293871020e-02 wall=9.4
+-- tune surfing_scan-beta1.143-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.822e-05 phi_ref/phi_min-1=-1.838e-04 norm=-276.683277151 phi_ref=1.5434057601e-02 wall=9.3
+-- tune surfing_scan-beta1.143-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-4.728e-08 phi_ref/phi_min-1=+2.846e-07 norm=-276.683450441 phi_ref=1.5436073742e-02 wall=9.4
+beta=1.143 model=inverse-power n=2 status=ok capture=0.18591 max=- second_dip=- deliver=0.19878 GeV crossings=1 iterations=4 phi_ref=1.5436073742e-02 M_P V_ref=2.431923e-11 eV^4 wall=37.9 s
+!! tune_history (surfing_scan-beta1.144-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.631e-26 M_P at the floor reflection at N = 17.57675262), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.144-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.427e-03 phi_ref/phi_min-1=-2.340e-04 norm=-276.711217997 phi_ref=1.5285587811e-02 wall=9.7
+-- tune surfing_scan-beta1.144-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.338e-05 phi_ref/phi_min-1=-9.106e-03 norm=-276.683175901 phi_ref=1.5289165720e-02 wall=9.6
+-- tune surfing_scan-beta1.144-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.819e-05 phi_ref/phi_min-1=-1.841e-04 norm=-276.683303555 phi_ref=1.5429405344e-02 wall=9.7
+-- tune surfing_scan-beta1.144-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-2.820e-08 phi_ref/phi_min-1=+2.706e-07 norm=-276.683476783 phi_ref=1.5431426447e-02 wall=9.6
+beta=1.144 model=inverse-power n=2 status=ok capture=0.186301 max=- second_dip=- deliver=0.199569 GeV crossings=1 iterations=4 phi_ref=1.5431426447e-02 M_P V_ref=2.431865e-11 eV^4 wall=38.9 s
+!! tune_history (surfing_scan-beta1.145-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.556e-26 M_P at the floor reflection at N = 17.5765666), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.145-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.432e-03 phi_ref/phi_min-1=-2.348e-04 norm=-276.71126368 phi_ref=1.5280903871e-02 wall=10.2
+-- tune surfing_scan-beta1.145-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.449e-05 phi_ref/phi_min-1=-9.110e-03 norm=-276.683208146 phi_ref=1.5284492293e-02 wall=10.3
+-- tune surfing_scan-beta1.145-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.821e-05 phi_ref/phi_min-1=-1.843e-04 norm=-276.683339031 phi_ref=1.5424739803e-02 wall=10.2
+-- tune surfing_scan-beta1.145-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+1.290e-09 phi_ref/phi_min-1=+2.800e-07 norm=-276.683512313 phi_ref=1.5426762171e-02 wall=10.3
+beta=1.145 model=inverse-power n=2 status=ok capture=0.186689 max=- second_dip=- deliver=0.200346 GeV crossings=1 iterations=4 phi_ref=1.5426762171e-02 M_P V_ref=2.431785e-11 eV^4 wall=41.3 s
+!! tune_history (surfing_scan-beta1.146-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.484e-26 M_P at the floor reflection at N = 17.57648628), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.146-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.435e-03 phi_ref/phi_min-1=-2.339e-04 norm=-276.711309348 phi_ref=1.5276225325e-02 wall=10.9
+-- tune surfing_scan-beta1.146-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.379e-05 phi_ref/phi_min-1=-9.113e-03 norm=-276.683242169 phi_ref=1.5279799114e-02 wall=10.7
+-- tune surfing_scan-beta1.146-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.825e-05 phi_ref/phi_min-1=-1.846e-04 norm=-276.683371006 phi_ref=1.5420068478e-02 wall=10.7
+-- tune surfing_scan-beta1.146-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-3.015e-09 phi_ref/phi_min-1=+2.782e-07 norm=-276.683544422 phi_ref=1.5422094343e-02 wall=10.8
+beta=1.146 model=inverse-power n=2 status=ok capture=0.187074 max=- second_dip=- deliver=0.201112 GeV crossings=1 iterations=4 phi_ref=1.5422094343e-02 M_P V_ref=2.431713e-11 eV^4 wall=43.4 s
+!! phi is not positive in InversePowerModel log_V at phi=-1.4845e-05 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.147))
+!! tune_history (surfing_scan-beta1.147-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.414e-26 M_P at the floor reflection at N = 17.57650812), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.147-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.441e-03 phi_ref/phi_min-1=-2.357e-04 norm=-276.711355001 phi_ref=1.5271552160e-02 wall=10.8
+-- tune surfing_scan-beta1.147-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.405e-05 phi_ref/phi_min-1=-9.119e-03 norm=-276.683271409 phi_ref=1.5275152399e-02 wall=10.8
+-- tune surfing_scan-beta1.147-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.826e-05 phi_ref/phi_min-1=-1.846e-04 norm=-276.683401033 phi_ref=1.5415459563e-02 wall=10.9
+-- tune surfing_scan-beta1.147-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+4.962e-08 phi_ref/phi_min-1=+2.857e-07 norm=-276.683574465 phi_ref=1.5417485537e-02 wall=11.0
+beta=1.147 model=inverse-power n=2 status=ok capture=0.187455 max=- second_dip=- deliver=0.201866 GeV crossings=1 iterations=4 phi_ref=1.5417485537e-02 M_P V_ref=2.431646e-11 eV^4 wall=43.7 s
+!! tune_history (surfing_scan-beta1.148-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.347e-26 M_P at the floor reflection at N = 17.57662876), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.148-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.444e-03 phi_ref/phi_min-1=-2.332e-04 norm=-276.71140064 phi_ref=1.5266884365e-02 wall=10.8
+-- tune surfing_scan-beta1.148-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.475e-05 phi_ref/phi_min-1=-9.122e-03 norm=-276.683305594 phi_ref=1.5270446046e-02 wall=10.8
+-- tune surfing_scan-beta1.148-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.758e-05 phi_ref/phi_min-1=-1.851e-04 norm=-276.683437252 phi_ref=1.5410750535e-02 wall=11.0
+-- tune surfing_scan-beta1.148-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+8.056e-07 phi_ref/phi_min-1=+2.868e-07 norm=-276.683608696 phi_ref=1.5412793210e-02 wall=10.8
+beta=1.148 model=inverse-power n=2 status=ok capture=0.187834 max=- second_dip=- deliver=0.202611 GeV crossings=1 iterations=4 phi_ref=1.5412793210e-02 M_P V_ref=2.431569e-11 eV^4 wall=43.6 s
+!! phi is not positive in InversePowerModel log_V at phi=-3.0376e-14 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.149))
+!! phi is not positive in InversePowerModel log_V at phi=-1.7304e-14 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.149))
+!! phi is not positive in InversePowerModel log_V at phi=-1.7304e-14 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.149))
+!! phi is not positive in InversePowerModel log_V at phi=-1.7304e-14 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.149))
+!! phi is not positive in InversePowerModel log_V at phi=-1.7304e-14 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.149))
+!! phi is not positive in InversePowerModel log_V at phi=-1.7304e-14 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.149))
+!! phi is not positive in InversePowerModel log_V at phi=-1.7304e-14 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.149))
+!! phi is not positive in InversePowerModel log_V at phi=-1.7304e-14 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.149))
+-- integrate_history (surfing_scan-beta1.149-M0.001-inverse-power-n2): integration failure
+   integrate_scalar_history (surfing_scan-beta1.149-M0.001-inverse-power-n2): step size fell below 1e-13 e-folds after repeated trial-state exceptions at N=27.74322577, phi_E=1.3171e-13, pi_E=-0.00087427: !! phi is not positive in InversePowerModel log_V at phi=-1.7304e-14 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=2,beta=1.149))
+!! integrate_history (surfing_scan-beta1.149-M0.001-inverse-power-n2): marked as total integration failure
+!! tune_history (surfing_scan-beta1.149-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.282e-26 M_P at the floor reflection at N = 17.57684498), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+!! tune_history (surfing_scan-beta1.149-M0.001-inverse-power-n2): integrate_scalar_history (surfing_scan-beta1.149-M0.001-inverse-power-n2): step size fell below 1e-13 e-folds after repeated trial-state exceptions at N=27.74322577, phi_E=1.3171e-13, pi_E=-0.00087427: !! phi is not positive in InversePowerModel log_V at p (tuning integration 0)
+beta=1.149 model=inverse-power n=2 status=failure wall=1.0 s reason=integrate_scalar_history (surfing_scan-beta1.149-M0.001-inverse-power-n2): step size fell below 1e-13 e-folds after repeated trial-state exceptions at N=27.74322577, phi_E=1.3171e-13, pi_E=-0.00087427: !! phi is not positive in InversePowerModel log_V at p
+!! tune_history (surfing_scan-beta1.15-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.219e-26 M_P at the floor reflection at N = 17.5771537), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune surfing_scan-beta1.15-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.454e-03 phi_ref/phi_min-1=-2.339e-04 norm=-276.711491875 phi_ref=1.5257564845e-02 wall=10.3
+-- tune surfing_scan-beta1.15-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+4.389e-05 phi_ref/phi_min-1=-9.131e-03 norm=-276.683367804 phi_ref=1.5261135053e-02 wall=10.3
+-- tune surfing_scan-beta1.15-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+5.850e-05 phi_ref/phi_min-1=-1.854e-04 norm=-276.683496941 phi_ref=1.5401509436e-02 wall=10.3
+-- tune surfing_scan-beta1.15-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=-1.664e-08 phi_ref/phi_min-1=+2.755e-07 norm=-276.683671119 phi_ref=1.5403542714e-02 wall=10.2
+beta=1.15 model=inverse-power n=2 status=ok capture=0.188582 max=- second_dip=- deliver=0.204068 GeV crossings=1 iterations=4 phi_ref=1.5403542714e-02 M_P V_ref=2.431429e-11 eV^4 wall=41.5 s
+# end: 2026-11-15 21:09:13 exit=1 wall=1603 s 21:09  up 15 days, 23:29, 1 user, load averages: 3.95 4.25 4.97

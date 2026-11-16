@@ -724,3 +724,335 @@ Outside them, where the prompt's own change contradicts an assertion: the footer
 (`test_drain_store_records`); `model_of_law` inverts `law_of` on the first two models only (`test_a_values_option`); the
 one-loop refusal of `InversePowerModel` moves from n = 2 to n = 3 (`test_inverse_power_model` (g), `test_model_option`
 (4)). No test that pins an exponential history, golden or fingerprint is edited.
+
+---
+
+## 4. A measured sample (prompt 04, 2026-11-15)
+
+**Tree:** the worktree on branch `power-law-wall` at `7d7c578`, unchanged: prompt 04 changes no production file. No Ray,
+no store, no registry run. The forty histories ran one at a time (19:33–19:47); the surfing scans ran at most three at
+once, never while the forty ran (19:47 onwards). Every output records `uptime` at its start and end; the one-minute load
+ranged from 2.6 to 50.9 over the forty (the peak at 19:36–19:37, from other work on the machine) and from 1.8 to
+9.5 over the scans.
+Scripts and how to run each: [`source/sample/README.md`](../prompts/power-law-wall/source/sample/README.md). Outputs:
+[`power-law-wall/sample-04/`](power-law-wall/sample-04/).
+
+**Measurements, not bounds** (README §5; P10). Every threshold below is read as the code holds it; none is changed, and
+none is called a pass or a fail on this wall. Where the measurements put a threshold's use in question, the evidence and
+the options are §4.9's, and no option is chosen.
+
+### 4.1 The forty (U7; P9, P24)
+
+`source/sample/runs.sh` ran U7's sample through the runner `sample_run.py` (the tool's own `main`, in-process, with
+`integrate_scalar_history` and the tool's `tune_history` name wrapped to keep the final `IntegrationResult` and the
+payload), tuned with the tool's defaults (φ* = 5 M_P, tolerance 10⁻⁵, at most 30 integrations, the small network).
+Each history's file, `sample-04/runs/<name>.txt`, holds the tool's lines unchanged and then the runner's `sample` and
+`cand` lines; `runs/runs.log` is the script's record. The table is `tables.py markdown`'s, from `summary.csv` (one row
+per history, every column of prompt §1.3); "load" is the one-minute load at the run's start; the tuning's wall time is
+the tool's (BBN not included); D/H is ×10⁵ as the tool prints it.
+
+| history | outcome | integrations (seed) | tuning wall s (load) | RHS / steps | reflections | candidates (one-loop) | first bounce N, T_J MeV | ln R first impact | ℓ min | f range | parked at (T_J GeV) | ΔN_eff 1 MeV | Y_p | D/H |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ip-n1-M4e-31-b1.2-fixed0.01 | ok | 1 (tracking) | 1.6 (3.86) | 14724 / 1815 | 5 | 5 (5) | 17.6679, 231.124 | 511.0736 | 15.8581 | — | 4 (2.13561e-06) | 0.00609221 | 0.2559543937 | 2.521824995 |
+| ip-n1-M4e-31-b1.2-fixed0.1 | ok | 1 (tracking) | 2.1 (3.58) | 20372 / 2636 | 9 | 9 (9) | 17.6679, 231.124 | 511.0736 | 12.958 | — | 8 (2.90976e-07) | 0.0607733 | 0.2495309517 | 2.490743146 |
+| ip-n1-M4e-31-b1.2-oneloop0.05 | ok | 1 (tracking) | 14.7 (3.88) | 218094 / 30773 | 170 | 170 (170) | 17.6679, 231.124 | 511.0736 | 3.61497 | 0.0548154–0.480552 | 169 (1.22139e-09) | 0.00168835 | 0.2564811213 | 2.576543225 |
+| ip-n1-M4e-31-b1.2-oneloop1 | ok | 1 (tracking) | 3.0 (3.62) | 38564 / 5266 | 23 | 23 (23) | 17.6679, 231.124 | 511.0736 | 6.69759 | 0.0548154–0.301419 | 22 (7.46705e-09) | 0.0337356 | 0.2519167718 | 2.625404433 |
+| ip-n1-M4e-31-b1.2-oneloop10 | ok | 1 (tracking) | 1.9 (3.29) | 17296 / 2101 | 7 | 7 (7) | 17.6679, 231.124 | 511.0736 | 28.4417 | 0.0548154–0.0796764 | 6 (0.00227078) | 0.344898 | 0.2515033032 | 2.575374946 |
+| ip-n1-M4e-31-b2.0-fixed0.01 | ok | 1 (tracking) | 10.7 (3.09) | 120211 / 16763 | 85 | 85 (85) | 20.3521, 746.688 | 530.57472 | 22.0488 | — | 84 (6.53727e-05) | 0.00526068 | 0.2469455974 | 2.459775775 |
+| ip-n1-M4e-31-b2.0-fixed0.1 | ok | 1 (tracking) | 6.8 (15.23) | 73767 / 10149 | 49 | 49 (49) | 20.3521, 746.688 | 530.57472 | 22.5007 | — | 48 (8.36254e-05) | 0.0496486 | 0.2470913297 | 2.472581604 |
+| ip-n1-M4e-31-b2.0-oneloop0.05 | ok | 1 (tracking) | 5.1 (11.33) | 56618 / 7766 | 35 | 35 (35) | 20.3521, 746.688 | 530.57472 | 15.2098 | 0.0527979–0.144871 | 34 (1.23739e-06) | 0.00147404 | 0.2468794726 | 2.468552122 |
+| ip-n1-M4e-31-b2.0-oneloop1 | ok | 1 (tracking) | 5.3 (9.20) | 59106 / 8076 | 37 | 37 (37) | 20.3521, 746.688 | 530.57472 | 21.4114 | 0.0527979–0.104747 | 36 (4.98418e-05) | 0.0285519 | 0.246653064 | 2.46445863 |
+| ip-n1-M4e-31-b2.0-oneloop10 | ok | 1 (tracking) | 2.6 (7.86) | 24074 / 3007 | 13 | 13 (13) | 20.3521, 746.688 | 530.57472 | 36.1433 | 0.0527979–0.0631102 | 12 (0.177539) | 0.139146 | 0.2487750159 | 2.505388647 |
+| ip-n1-M4e-31-b2.9-fixed0.01 | ok | 1 (tracking) | 7.5 (7.19) | 84721 / 11731 | 55 | 55 (55) | 23.8878, 1870.300 | 545.63926 | 15.6769 | — | 54 (1.51193e-06) | 0.00469605 | 0.2468780958 | 2.467993338 |
+| ip-n1-M4e-31-b2.9-fixed0.1 | ok | 1 (tracking) | 6.5 (5.77) | 65882 / 8960 | 42 | 42 (42) | 23.8878, 1870.300 | 545.63926 | 30.7329 | — | 41 (0.0107343) | 0.0372475 | 0.2473962618 | 2.470819503 |
+| ip-n1-M4e-31-b2.9-oneloop0.05 | ok | 1 (tracking) | 18.8 (50.92) | 202374 / 28408 | 150 | 150 (150) | 23.8878, 1870.300 | 545.63926 | 22.2284 | 0.0513382–0.101055 | 149 (7.15141e-05) | 0.0013339 | 0.2468061264 | 2.458114671 |
+| ip-n1-M4e-31-b2.9-oneloop1 | ok | 1 (tracking) | 8.4 (47.24) | 91506 / 12633 | 62 | 62 (62) | 23.8878, 1870.300 | 545.63926 | 24.9226 | 0.0513382–0.0905261 | 61 (0.000288382) | 0.0236461 | 0.2471307401 | 2.465725149 |
+| ip-n1-M4e-31-b2.9-oneloop10 | ok | 1 (tracking) | 2.7 (39.88) | 24610 / 3062 | 13 | 13 (13) | 23.8878, 1870.300 | 545.63926 | 37.4821 | 0.0513382–0.0609078 | 12 (0.375674) | 0.0574598 | 0.2476728803 | 2.477700099 |
+| ip-n1-M1e-33-b2.0-oneloop1 | ok | 1 (tracking) | 4.7 (31.55) | 51305 / 6962 | 31 | 31 (31) | 20.3521, 746.688 | 554.54058 | 23.3748 | 0.050513–0.0962487 | 30 (4.45703e-05) | 0.0272935 | 0.2464117175 | 2.461873183 |
+| ip-n1-M1e-15-b2.0-oneloop1 | ok | 1 (tracking) | 5.3 (25.23) | 58769 / 8011 | 38 | 38 (38) | 20.3521, 746.688 | 388.75445 | 12.0229 | 0.0720934–0.1803 | 37 (0.00017254) | 0.0392201 | 0.2471477875 | 2.470057322 |
+| ip-n1-M1e-3-b1.2-natural | **failure**: G2, W/(π²/2) = 1.6097 at N = 35.9874939, φ_E = 8.8224e-13 M_P | — | 1.4 (20.09) | — | — | — | — | — | — | — | — | — | — | — |
+| ip-n1-M1e-3-b2.0-natural | **failure**: G2, W/(π²/2) = 1.5358 at N = 37.75808722, φ_E = 4.7358e-14 M_P | — | 4.6 (20.09) | — | — | — | — | — | — | — | — | — | — | — |
+| ip-n1-M1e-3-b2.9-natural | **failure**: G2, W/(π²/2) = 1.1679 at N = 40.6223989, φ_E = 5.753e-15 M_P | — | 9.4 (18.72) | — | — | — | — | — | — | — | — | — | — | — |
+| ip-n2-M4e-31-b1.2-fixed0.01 | ok | 1 (tracking) | 1.5 (14.87) | 14724 / 1815 | 5 | 5 (5) | 17.6679, 231.124 | 308.9862 | 14.6653 | — | 4 (2.13561e-06) | 0.00609221 | 0.2559583208 | 2.52185729 |
+| ip-n2-M4e-31-b1.2-fixed0.1 | ok | 1 (tracking) | 2.0 (13.19) | 20372 / 2636 | 9 | 9 (9) | 17.6679, 231.124 | 308.9862 | 12.0484 | — | 8 (2.90976e-07) | 0.0607733 | 0.2495292897 | 2.490791564 |
+| ip-n2-M4e-31-b1.2-oneloop0.05 | ok | 1 (tracking) | 13.2 (11.39) | 197094 / 27788 | 152 | 152 (152) | 17.6679, 231.124 | 308.9862 | 3.91587 | 0.0636699–0.49997 | 151 (1.47145e-09) | 0.00196093 | 0.2565438666 | 2.573577374 |
+| ip-n2-M4e-31-b1.2-oneloop1 | ok | 1 (tracking) | 2.5 (7.96) | 28281 / 3795 | 15 | 15 (15) | 17.6679, 231.124 | 308.9862 | 8.64481 | 0.0636699–0.261494 | 14 (3.15384e-08) | 0.0391676 | 0.2517914492 | 2.543279795 |
+| ip-n2-M4e-31-b1.2-oneloop10 | ok | 1 (tracking) | 2.0 (6.96) | 18154 / 2202 | 8 | 8 (8) | 17.6679, 231.124 | 308.9862 | 29.6902 | 0.0636699–0.0811257 | 7 (0.0269517) | 0.403788 | 0.2522659389 | 2.595254876 |
+| ip-n2-M4e-31-b2.0-fixed0.01 | ok | 1 (tracking) | 10.4 (6.12) | 120211 / 16763 | 85 | 85 (85) | 20.3521, 746.688 | 320.68687 | 20.2514 | — | 84 (6.53727e-05) | 0.00526068 | 0.2469509343 | 2.459757875 |
+| ip-n2-M4e-31-b2.0-fixed0.1 | ok | 1 (tracking) | 6.8 (5.10) | 73767 / 10149 | 49 | 49 (49) | 20.3521, 746.688 | 320.68687 | 20.659 | — | 48 (8.36254e-05) | 0.0496486 | 0.2470878 | 2.472626501 |
+| ip-n2-M4e-31-b2.0-oneloop0.05 | ok | 1 (tracking) | 5.7 (5.16) | 58064 / 7927 | 36 | 36 (36) | 20.3521, 746.688 | 320.68687 | 19.2041 | 0.0613404–0.123841 | 35 (3.71779e-05) | 0.0017112 | 0.2469594413 | 2.45956218 |
+| ip-n2-M4e-31-b2.0-oneloop1 | ok | 1 (tracking) | 6.3 (4.76) | 71382 / 9808 | 48 | 48 (48) | 20.3521, 746.688 | 320.68687 | 21.6791 | 0.0613404–0.110168 | 47 (0.000148641) | 0.0329852 | 0.2472528311 | 2.468987763 |
+| ip-n2-M4e-31-b2.0-oneloop10 | ok | 1 (tracking) | 2.3 (4.59) | 21342 / 2622 | 11 | 11 (11) | 20.3521, 746.688 | 320.68687 | 33.0681 | 0.0613404–0.0730014 | 10 (0.210291) | 0.139425 | 0.2487826419 | 2.505540258 |
+| ip-n2-M4e-31-b2.9-fixed0.01 | ok | 1 (tracking) | 7.4 (4.04) | 84721 / 11731 | 55 | 55 (55) | 23.8878, 1870.300 | 329.7256 | 14.5018 | — | 54 (1.51193e-06) | 0.00469605 | 0.2468758056 | 2.467939086 |
+| ip-n2-M4e-31-b2.9-fixed0.1 | ok | 1 (tracking) | 6.0 (3.46) | 65882 / 8960 | 42 | 42 (42) | 23.8878, 1870.300 | 329.7256 | 28.0829 | — | 41 (0.0107343) | 0.0372475 | 0.2473923377 | 2.470734445 |
+| ip-n2-M4e-31-b2.9-oneloop0.05 | ok | 1 (tracking) | 17.9 (3.12) | 210773 / 29597 | 157 | 157 (157) | 23.8878, 1870.300 | 329.7256 | 20.4973 | 0.0596543–0.116301 | 156 (7.54502e-05) | 0.00154774 | 0.2468420531 | 2.458157686 |
+| ip-n2-M4e-31-b2.9-oneloop1 | ok | 1 (tracking) | 7.4 (2.60) | 81708 / 11243 | 54 | 54 (54) | 23.8878, 1870.300 | 329.7256 | 23.3625 | 0.0596543–0.102467 | 53 (0.000398885) | 0.0268139 | 0.247248914 | 2.467081351 |
+| ip-n2-M4e-31-b2.9-oneloop10 | ok | 1 (tracking) | 2.9 (6.06) | 21977 / 2689 | 11 | 11 (11) | 23.8878, 1870.300 | 329.7256 | 34.3153 | 0.0596543–0.0703977 | 10 (0.465888) | 0.0586212 | 0.2476921524 | 2.478102305 |
+| ip-n2-M1e-33-b2.0-oneloop1 | ok | 1 (tracking) | 6.8 (5.87) | 72512 / 9975 | 48 | 48 (48) | 20.3521, 746.688 | 344.65273 | 23.6107 | 0.0570639–0.101417 | 47 (7.98983e-05) | 0.030638 | 0.2468418381 | 2.466261084 |
+| ip-n2-M1e-15-b2.0-oneloop1 | ok | 1 (tracking) | 4.2 (5.44) | 39555 / 5276 | 23 | 23 (23) | 20.3521, 746.688 | 178.8666 | 5.00558 | 0.110194–0.419265 | 22 (0.000304711) | 0.0595076 | 0.247330736 | 2.476395955 |
+| ip-n2-M1e-3-b1.2-natural | ok | 4 (tracking) | 37.4 (5.51) | 301108 / 32102 | 4 | 0 (0) | 17.6679, 231.124 | — | — | — | — | 0 | 0.2534231058 | 2.507814782 |
+| ip-n2-M1e-3-b2.0-natural | ok | 4 (tracking) | 68.0 (4.64) | 543152 / 55118 | 28 | 0 (0) | 20.3521, 746.688 | — | — | — | — | 0 | 0.2422304191 | 2.343407516 |
+| ip-n2-M1e-3-b2.9-natural | ok | 4 (tracking) | 84.0 (4.40) | 736778 / 76726 | 59 | 0 (0) | 23.8878, 1870.300 | — | — | — | — | 0 | 0.2412793593 | 2.315996159 |
+
+- **Outcomes.** 37 succeeded. The three failures are R5's: n = 1 in natural mode at 10⁻³ M_P, at the guard G2 in the
+  seed's integration (tuning integration 0), at the same N and field as 01 recorded (verification §1.5), each noted and
+  not stopped on (README §6.4). No other history of the forty failed.
+- **Tuning.** Every α > 0 history tuned in one integration from the tracking seed; natural mode at n = 2 in four
+  (tracking seed). Residuals ≤ 2.5 × 10⁻⁶ in H and ≤ 5.7 × 10⁻⁶ in φ_ref (`summary.csv`).
+- **Cost.** The forty took 817 s of wall time in all, serially (`runs.log`): 11–32 s each at laboratory M and at 10⁻³³,
+  10⁻¹⁵ M_P (BBN about 8–15 s of it), 3–11 s for the n = 1 failures, 48–97 s for n = 2 in natural mode. The tuning
+  alone: 1.5–18.8 s; the longest are the A = 0.05 histories (13–19 s, 150–170 candidates, up to 218 094 RHS evaluations
+  and 30 773 accepted steps).
+- **The cascade.** Every candidate of every α > 0 history (1632 in all) is an unresolved reflection (`kind` floor),
+  assessed, and in the one-loop regime (under the fixed law, the regime `drain_regime` would give). The first bounce of
+  every history is a reflection at the exponential's N and T_J (17.6679 / 231.124 MeV at β 1.2, 20.3521 / 746.688 MeV at
+  β 2, 23.8878 / 1870.30 MeV at β 2.9).
+- **Under the one-loop law** (`one-loop-measured-pl-v1`, the record's model at every history; `consistency_mismatches`
+  0 at every history: min(0.99, A f) w_gate equals the recorded α_eff at every candidate): f runs 0.0505–0.4806 (n = 1)
+  and 0.0571–0.5000 (n = 2); A f ≤ 0.81, so **no candidate sits at `DRAIN_ALPHA_CAP`** (0.99) in the sample: the peak of
+  f (0.968 | 0.966 at ln R ≈ 23.1 | 16.7) is not reached, since ln R ≥ 39.2 at every candidate. ℓ runs 3.61–45.4. The
+  one-loop share of K is 0.9949–0.99999 and the parking leftover's the rest (no gap, classical or unassessed share).
+- **Parking.** Every α > 0 history parks, at its last candidate, and none is released (§4.5).
+
+### 4.2 Beside the exponential (U7; P25)
+
+The twenty counterparts are the 2026.11.0 main export's rows, committed verbatim with the source's SHA-256 as
+`sample-04/exponential_counterparts.csv` (`tables.py extract`, which checks the copy's SHA-256 against P25's
+`fb6a8dbb…4253`; 3 913 790 bytes). `comparison.csv` holds n = 1, n = 2 and the exponential side by side for each (M, β,
+law) in every column of prompt §1.2: success, tuning integrations and wall, reflections, injections, ln R at the first
+impact, the first bounce (N; T_J, the export's `T_deliver_GeV`), parking (N, T_J), the release, the drained shares by
+regime, ℓ_min, the least ln R drained, ΔN_eff today and at 1 MeV with their ratios to the exponential's, Y_p and D/H
+with their differences. The export carries no wall time and no first-bounce N; those columns are blank for the
+exponential.
+
+| (M, β, law) | injections n1 / n2 / exp | ln R first impact n1 / n2 / exp | parking T_J GeV n1 / n2 / exp | ℓ min n1 / n2 / exp | ΔN_eff 1 MeV n1 / n2 / exp | ratio to exp n1 / n2 | Y_p − exp n1 / n2 | D/H − exp n1 / n2 |
+|---|---|---|---|---|---|---|---|---|
+| 4e-31, 1.2, fixed 0.01 | 5 / 5 / 5 | 511.074 / 308.986 / 138.168 | 2.136e-06 / 2.136e-06 / 2.136e-06 | 15.86 / 14.67 / — | 0.006092 / 0.006092 / 0.006092 | 1 / 1 | -5.793e-13 / 3.927e-06 | 4.078e-10 / 3.23e-05 |
+| 4e-31, 1.2, fixed 0.1 | 9 / 9 / 9 | 511.074 / 308.986 / 138.168 | 2.91e-07 / 2.91e-07 / 2.91e-07 | 12.96 / 12.05 / — | 0.06077 / 0.06077 / 0.06077 | 1 / 1 | -4.458e-11 / -1.662e-06 | 1.914e-10 / 4.842e-05 |
+| 4e-31, 1.2, oneloop 0.05 | 170 / 152 / 140 | 511.074 / 308.986 / 138.168 | 1.221e-09 / 1.471e-09 / 1.819e-09 | 3.615 / 3.916 / 4.244 | 0.001688 / 0.001961 / 0.002528 | 0.667923 / 0.775758 | 0.0001071 / 0.0001699 | 0.01087 / 0.007901 |
+| 4e-31, 1.2, oneloop 1 | 23 / 15 / 21 | 511.074 / 308.986 / 138.168 | 7.467e-09 / 3.154e-08 / 1.021e-08 | 6.698 / 8.645 / 6.91 | 0.03374 / 0.03917 / 0.05045 | 0.668734 / 0.776412 | 0.001933 / 0.001808 | 0.03299 / -0.04913 |
+| 4e-31, 1.2, oneloop 10 | 7 / 8 / 6 | 511.074 / 308.986 / 138.168 | 0.002271 / 0.02695 / 0.09461 | 28.44 / 29.69 / 27.46 | 0.3449 / 0.4038 / 0.5165 | 0.667734 / 0.781747 | -0.00222 / -0.001457 | -0.05819 / -0.03831 |
+| 4e-31, 2.0, fixed 0.01 | 85 / 85 / 85 | 530.575 / 320.687 / 142.366 | 6.537e-05 / 6.537e-05 / 6.537e-05 | 22.05 / 20.25 / — | 0.005261 / 0.005261 / 0.005261 | 1 / 1 | 4.41e-11 / 5.337e-06 | -2.553e-10 / -1.79e-05 |
+| 4e-31, 2.0, fixed 0.1 | 49 / 49 / 49 | 530.575 / 320.687 / 142.366 | 8.363e-05 / 8.363e-05 / 8.363e-05 | 22.5 / 20.66 / — | 0.04965 / 0.04965 / 0.04965 | 1 / 1 | -4.834e-11 / -3.53e-06 | 1.613e-10 / 4.49e-05 |
+| 4e-31, 2.0, oneloop 0.05 | 35 / 36 / 40 | 530.575 / 320.687 / 142.366 | 1.237e-06 / 3.718e-05 / 2.881e-06 | 15.21 / 19.2 / 14.15 | 0.001474 / 0.001711 / 0.002202 | 0.669389 / 0.777088 | -3.203e-05 / 4.793e-05 | 0.004785 / -0.004205 |
+| 4e-31, 2.0, oneloop 1 | 37 / 48 / 45 | 530.575 / 320.687 / 142.366 | 4.984e-05 / 0.0001486 / 0.0001012 | 21.41 / 21.68 / 19.33 | 0.02855 / 0.03299 / 0.04189 | 0.681625 / 0.787462 | -0.0002555 / 0.0003443 | -0.00512 / -0.000591 |
+| 4e-31, 2.0, oneloop 10 | 13 / 11 / 7 | 530.575 / 320.687 / 142.366 | 0.1775 / 0.2103 / 0.3128 | 36.14 / 33.07 / 29.1 | 0.1391 / 0.1394 / 0.1411 | 0.986075 / 0.988052 | -2.842e-05 / -2.079e-05 | -0.0007543 / -0.0006027 |
+| 4e-31, 2.9, fixed 0.01 | 55 / 55 / 55 | 545.639 / 329.726 / 145.602 | 1.512e-06 / 1.512e-06 / 1.512e-06 | 15.68 / 14.5 / — | 0.004696 / 0.004696 / 0.004696 | 1 / 1 | -3.644e-11 / -2.29e-06 | -2.437e-10 / -5.425e-05 |
+| 4e-31, 2.9, fixed 0.1 | 42 / 42 / 42 | 545.639 / 329.726 / 145.602 | 0.01073 / 0.01073 / 0.01073 | 30.73 / 28.08 / — | 0.03725 / 0.03725 / 0.03725 | 0.999999 / 0.999999 | 1.332e-08 / -3.911e-06 | 0.0002018 / 0.0001167 |
+| 4e-31, 2.9, oneloop 0.05 | 150 / 157 / 103 | 545.639 / 329.726 / 145.602 | 7.151e-05 / 7.545e-05 / 5.085e-05 | 22.23 / 20.5 / 18.28 | 0.001334 / 0.001548 / 0.001988 | 0.670927 / 0.778485 | -0.0001639 / -0.000128 | -0.001596 / -0.001553 |
+| 4e-31, 2.9, oneloop 1 | 62 / 54 / 33 | 545.639 / 329.726 / 145.602 | 0.0002884 / 0.0003989 / 0.005053 | 24.92 / 23.36 / 23.87 | 0.02365 / 0.02681 / 0.03273 | 0.722496 / 0.819287 | -0.000202 / -8.379e-05 | -0.003361 / -0.002005 |
+| 4e-31, 2.9, oneloop 10 | 13 / 11 / 7 | 545.639 / 329.726 / 145.602 | 0.3757 / 0.4659 / 0.7348 | 37.48 / 34.32 / 30.16 | 0.05746 / 0.05862 / 0.06054 | 0.949112 / 0.968296 | -4.319e-05 / -2.392e-05 | -0.0009368 / -0.0005345 |
+| 1e-33, 2.0, oneloop 1 | 31 / 48 / 34 | 554.541 / 344.653 / 166.332 | 4.457e-05 / 7.99e-05 / 0.0003541 | 23.37 / 23.61 / 25.73 | 0.02729 / 0.03064 / 0.03627 | 0.752531 / 0.844745 | -0.0009411 / -0.000511 | -0.008298 / -0.00391 |
+| 1e-15, 2.0, oneloop 1 | 38 / 23 / 27 | 388.754 / 178.867 / 0.546103 | 0.0001725 / 0.0003047 / 3.426e-05 | 12.02 / 5.006 / — | 0.03922 / 0.05951 / 5.79e-08 | 677417 / 1.02783e+06 | 0.0005131 / 0.000696 | 0.00804 / 0.01438 |
+| 1e-3, 1.2, natural | — / 0 / 0 | — / — / — | — / — / — | — / — / — | — / 0 / 0 | — / — | — / 0.005317 | — / 0.1403 |
+| 1e-3, 2.0, natural | — / 0 / 0 | — / — / — | — / — / — | — / — / — | — / 0 / 0 | — / — | — / 0.005946 | — / 0.1498 |
+| 1e-3, 2.9, natural | — / 0 / 0 | — / — / — | — / — / — | — / — / — | — / 0 / 0 | — / — | — / 0.006547 | — / 0.1641 |
+
+- **Under the fixed law at laboratory M** both n equal the exponential in injections, first bounce, parking N and T_J
+  and ΔN_eff (ratio 1, or 0.999999 at β 2.9, α 0.1), as 01 found at α = 0.1 (verification §1.5); Y_p differs by ≤ 5.3 ×
+  10⁻⁶ and D/H by ≤ 2.0 × 10⁻⁴ (×10⁻⁵; n = 1 is within 5 × 10⁻¹¹ in Y_p and 4 × 10⁻¹⁰ in D/H except at β 2.9, α 0.1,
+  where the differences are 1.3 × 10⁻⁸ and 2.0 × 10⁻⁴). ln R at the first impact is 3.70–3.75 times the exponential's at
+  n = 1 and 2.2–2.3 times at n = 2.
+- **Under the one-loop law at laboratory M** ΔN_eff at 1 MeV is 0.668–0.986 of the exponential's at n = 1 and
+  0.776–0.988 at n = 2; the ratio rises with A (0.67 | 0.78 at A ≤ 1 and β ≤ 2, 0.95–0.99 at A = 10). Y_p moves by
+  −0.0022 to +0.0019, D/H by −0.058 to +0.033 (×10⁻⁵).
+- **At 10⁻³³ M_P** the ratios are 0.753 | 0.845.
+- **At 10⁻¹⁵ M_P the walls differ most** (note §0): the exponential's first impact is classical (ln R = 0.546) and it
+  drains almost nothing (ΔN_eff at 1 MeV 5.79 × 10⁻⁸, 99.1% of K the parking leftover), while the power wall drains
+  fully one-loop (ln R at the first impact 388.8 | 178.9): ΔN_eff at 1 MeV 0.0392 | 0.0595, 6.8 × 10⁵ | 1.0 × 10⁶ times
+  the exponential's, as the planner's probe found (0.0392 | 0.0595).
+- **Natural mode at 10⁻³ M_P, n = 2** reflects 4, 28 and 59 times (the exponential none), and its Y_p is 0.0053–0.0065
+  above the exponential's, D/H 0.140–0.164 (×10⁻⁵) above, as 01 recorded (verification §1.5).
+
+### 4.3 The checks (prompt §1.1, §1.2, §1.5; ruling 3)
+
+`sample-04/checks.txt` holds each comparison's output. "Identical" means every tool line equal once `wall=`,
+`PRyM_time=` and the `#` lines (the command and `uptime`) are masked, and the runner's `sample` and `cand` lines set
+aside.
+- **The runner against the plain tool** (P24), one history per law, both run in scratch, 19:29–19:31 (load 2.8–5.9):
+  n = 1, laboratory M, β 1.2, α 0.01 (12 tool lines); n = 2, laboratory M, β 2.9, A = 10 (13); n = 2, 10⁻³ M_P, β 1.2,
+  natural (15). All three identical.
+- **The overlaps** (P26): the fourteen histories 01 and 03 ran before, each against its committed file (01's twelve in
+  `model-01/out/`, 03's two `law-03/tool_route_ip_n*.txt`): **all fourteen identical** (7 to 19 tool lines), the three
+  n = 1 natural-mode failures included.
+- **The tool route against the export** (P25), `sample-04/tool-route/` (19:31–19:33, load 2.9–5.9): the exponential by
+  the plain tool at laboratory M, β 2, A = 1; 10⁻¹⁵ M_P, β 2, A = 1; 10⁻³ M_P, β 2, natural. Each quantity the tool
+  prints (tuning iterations, reflections, injections, ln R at the first impact, the parking T_J, the four drained shares
+  and the parking share, ℓ_min, ΔN_eff today and at 1 MeV, Y_p, D/H, and the first bounce's T_J) equals its export
+  column at the tool's printed digits: **all equal** (`tool-route/export_check.txt`). Natural mode prints no dissipation
+  or drain line; the export has zero injections and ΔN_eff 0.0 there. The laboratory history's output is identical to
+  03's `tool_route_exponential.txt`.
+- **The exponential's surfing reference** (prompt §1.5): `f_new.csv`'s rows at β 2.975, 2.976 and 3.003 re-run on this
+  tree (`surfing/f_new_check.csv`, 20:07–20:09, load 8.85) equal the committed rows in every column but `wall_s`.
+
+So the comparison of §4.2 is between walls, not between routes.
+
+### 4.4 R9's share (P27)
+
+ln(E/V₀) at a candidate is its `log_E_assessed` less the tuned normalization. **No history drains anything at E/V₀ <
+10³** (`thresholds.txt`, "R9's share"): the share of K(N_final) from candidates with E/V₀ < 100 and < 10³ is 0 at all 34
+α > 0 histories. The smallest ln(E/V₀) over any candidate is **11.464** (x = 9.5 × 10⁴; n = 1, laboratory M, β 1.2, A =
+0.05), then 12.213 (n = 2, same), 18.52 and 24.35 (the A = 1 histories there); every other history's is ≥ 33.30. The
+table's error in x there, 1/s_t − 1 = 1/x, is ≤ 1.05 × 10⁻⁵, and below 10⁻¹⁴ at every history at A ≥ 1 apart from those
+two (9.1 × 10⁻⁹ and 2.7 × 10⁻¹¹). The planner expected ln(E/V₀) ≥ 33 from 02's maps (all at A = α = 0.01, 0.1); under
+the one-loop law at A = 0.05 and 1 the cascade runs further, to x ≈ 10⁵, before the parking cut ends it.
+
+### 4.5 The thresholds on this wall (prompt §1.4; P10, P28)
+
+`sample-04/thresholds.txt` gives every history's numbers; the ranges here are over the 34 α > 0 histories that
+succeeded, 1632 candidates.
+
+1. **The unresolved reflection** (`UNRESOLVED_REFLECTION_FACTOR` K = 3; φ_t < 10⁻⁸ M_P or ln R > 0). **Every candidate
+   is unresolved, and both conditions hold at every one.** The largest φ_t over a history's candidates is 4.7 × 10⁻⁷¹ to
+   3.3 × 10⁻²⁹ M_P (the largest at n = 2, 10⁻¹⁵ M_P), 21 decades or more below the threshold; the smallest ln R is 39.2
+   to 460.0 (none ≤ 0). No candidate is resolved, so the gate w_gate is 1 at every candidate and `NONADIABATICITY_SCALE`
+   never enters. `unresolved_declined` is 0 everywhere.
+2. **The parking cut** (ε = 10⁻⁶ on ρ_kin,E/ρ_R,E; m_eff/H_E ≥ 10; the π guard 10⁻⁹ M_P). Every history parks, at its
+   last candidate. At the cut ρ_kin/ρ_R = 3.2 × 10⁻⁷ to 9.9 × 10⁻⁷ and m_eff/H = 2.2 × 10¹⁰ to 1.8 × 10¹⁹. The smallest
+   ratio over the candidates the test examined before the cut (index ≥ 1) is 1.0 × 10⁻⁶ to 7.1 × 10⁻⁶ (2.4 × 10⁻³ at the
+   two five-candidate histories, β 1.2, α 0.01): the cut fires at the first candidate below ε, every time. The parked
+   phase's least m_eff/H is 1.06 × 10⁴ (n = 1, 10⁻¹⁵ M_P) to 2.1 × 10¹¹; **no history is released**, and none fails at
+   the π guard. The leftover's share of K is 1.9 × 10⁻⁶ to 5.1 × 10⁻³. Parking T_J runs 1.2 × 10⁻⁹ GeV (A = 0.05, β 1.2)
+   to 0.47 GeV (A = 10, β 2.9); under the fixed law it equals the exponential's, under the one-loop law it is 0.024–13
+   times the exponential's.
+3. **The wall's rounding** (`WALL_ROUNDING_QUANTA` = 16). The drain record counts **no unresolvable assessment** at any
+   history (37 successes, natural mode's included). At the smallest x of each history, ln V − ln V_floor = ln(1 + x) is
+   1.3 × 10¹³ to 1.0 × 10¹⁴ times the width 16 ulp(|ln V₀|) that `_log_V_minus_floor` compares it with.
+4. **The surfing thresholds:** §4.6.
+5. **M_crit on this wall** (P30) — an estimate from 02's path formula, stated as one; no history was added. At fixed x,
+   ln R moves as −4 ln M (V₀ is tuned to H₀ and does not move with M), so a candidate's ln R would reach 0 at
+   M exp(ln R/4). Read per history (`thresholds.txt` §5):
+
+   | | first impact's ln R → 0 | smallest ln R of a cascade → 0 |
+   |---|---|---|
+   | power n = 1 | 1.2 × 10²⁵ (β 1.2), 1.6 × 10²⁷ (β 2), 7.0 × 10²⁸ M_P (β 2.9) | 7.3 × 10⁻²⁵ M_P (A 0.05, β 1.2) to 3.5 × 10¹⁹ M_P (A 10, β 2.9); 0.32 M_P at β 2, α 0.01 |
+   | power n = 2 | 1.4 × 10³ (β 1.2), 2.6 × 10⁴ (β 2), 2.5 × 10⁵ M_P (β 2.9) | 7.2 × 10⁻²⁷ M_P (A 0.05, β 1.2) to 0.90 M_P (A 10, β 2.9); 6.2 × 10⁻¹³ M_P at β 2, α 0.01 |
+   | exponential (export) | 4.0 × 10⁻¹⁶ (β 1.2), 1.15 × 10⁻¹⁵ (β 2), 2.6 × 10⁻¹⁵ M_P (β 2.9) | 1.5 × 10⁻²⁷ to 5.1 × 10⁻¹⁷ M_P (one-loop rows, the least ln R drained) |
+
+   - The first impact's x does not depend on M or the law (ln x = 102.142, 106.043, 109.055 at β 1.2, 2, 2.9 at every M
+     and n), so its estimate is the same from every history at a β. **On the power wall the first impact is one-loop at
+     every M up to M_P, at both n**; the exponential's first-impact column reproduces its M_crit ≈ 10⁻¹⁵ M_P. - The
+     smallest ln R depends on how far the cascade runs, which depends on the law and A, and, under the one-loop law, on
+     M itself: at β 2, A = 1 the estimate is 0.043, 0.047 and 79 M_P from the 10⁻³³, 4 × 10⁻³¹ and 10⁻¹⁵ M_P histories
+     at n = 1, and 1.2 × 10⁻¹², 1.1 × 10⁻¹¹ and 1.3 × 10⁻¹⁰ M_P at n = 2. So the "smallest ln R" column is an estimate
+     of where the late cascade turns classical, good to the M-dependence of the cascade's length, not a single M_crit. -
+     The planner's figures (note §0) are reproduced: 0.315 | 6.23 × 10⁻¹³ M_P (β 2, α 0.01), 5.23 × 10⁻¹³ | 5.32 × 10⁻²⁰
+     M_P (β 1.2, α 0.1), 1.15 × 10⁻¹⁵ and 2.57 × 10⁻¹⁵ M_P for the exponential's first impact.
+
+### 4.6 The surfing edges (U7; P29)
+
+`source/sample/scans.sh` ran `tools/surfing_scan.py --model inverse-power --n N` at M = 10⁻³ M_P, φ* = 5 M_P and the
+tool's default tuning; the exponential's Q-exp and check rows without `--model`. The fine grids were read from the
+coarse scans' `capture_kick` by `edges.py grids` (log §2.2). Every sidecar records `HEAD` `7d7c578`, no tracked change,
+and `2026.11.0`. The rows, failures, edges and costs are `surfing/edges.txt`; the figures
+`surfing/surfing_temperature_*.png`.
+
+| scan | β | rows (ok / failed) | wall (s) | load at start (1, 5, 15 min) |
+|---|---|---|---|---|
+| C-n1 | 1.10–3.50, then 3.55–5.00 (no EW capture to 3.50) | 79 (5 / 74) | 1650 + 1624 | 4.21 / 6.20 / 6.99; 3.42 / 5.39 / 6.57 |
+| C-n2 | 1.10–3.50 | 49 (49 / 0) | 4324 | 4.21 / 6.20 / 6.99 |
+| Q-exp | 1.100–1.150 | 51 (51 / 0) | 1170 | 4.21 / 6.20 / 6.99 |
+| f_new check | 2.975, 2.976, 3.003 | 3 (3 / 0) | 131 | 8.85 / 7.23 / 7.48 |
+| Q-n2 | 1.100–1.150 | 51 (50 / 1) | 1603 | 3.05 / 4.54 / 5.25 |
+| E-n2 | 2.950–3.050 | 101 (100 / 1) | 13674 | 5.06 / 6.25 / 5.91 |
+| Q-n1, E-n1 | not run (below) | — | — | — |
+
+**The edges**, each bracketed by the nearest successful rows:
+
+| wall | QCD onset, coarse | QCD onset, fine | largest β QCD captures | smallest β EW captures | uncaptured window |
+|---|---|---|---|---|---|
+| exponential | (1.10, 1.15] (S1-new) | **(1.116, 1.117]** (Q-exp) | 2.975 (F-new) | (3.002, 3.003] (F-new) | 2.976–3.002 |
+| power n = 2 | (1.10, 1.15] | **(1.116, 1.117]** | 2.975 (E-n2) | (3.002, 3.003] (E-n2) | 2.976–3.002, β 2.991 failed inside |
+| power n = 1 | (1.10, 1.30], failures at 1.15, 1.20, 1.25 | not run | 1.80 (C), every row above failed | none bracketed | — |
+
+- **n = 2 surfs as the exponential does.** At every β both scans hold where the n = 2 row succeeded (49 coarse, 50 of
+  Q's 51, 100 of E's), the capture and its kick are the same, and T_capture, T_max and T_deliver agree to 1.4 × 10⁻⁶
+  relative on C and Q and 7.9 × 10⁻⁵ on E (the largest at T_deliver of the uncaptured rows 2.980–2.985, where the first
+  bounce's T_J rises steeply with β; `edges.txt`, "Each power-law scan against the exponential's"). The QCD onset is
+  (1.116, 1.117] on both walls, against the analytic 1.1074 (README §0.3); the exponential's had no fine grid there
+  before.
+- **Two columns differ in kind**, at every β: on the power wall the first bounce is a reflection (`deliver_reflected`
+  true; the exponential's false), and where the exponential's T_max is its delivery (the bounce), the power wall's T_max
+  is blank and `n_crossings` is one fewer (10 of 49 coarse rows, 33 of Q's 50, 74 of E's). The capture is classified on
+  T_capture, which agrees to 7.3 × 10⁻⁹, so no edge moves. Recorded in log §6, not acted on.
+- **n = 2 reflects off the wall after the delivery**: 2–19 times at Q's β, 43–520 at E's, 86–510 at C's β ≥ 2.95,
+  against none on the exponential, and costs more per β: 0.84–2.8 times the exponential's wall_s on Q, 1.3–11 on C
+  (29–208 s against 19–74 s), and 3.1 times in all on E (13 663 s against F-new's 4 359 s).
+- **Failed rows.** C-n1: 73 rows at G2 (R5's failure, W/(π²/2) = 1.001–1.97 at N = 34.9–56.0; 63 in the seed's
+  integration, 10 in tuning integrations 1, 2 or 5), and β 3.20 by the tuning, **"the normalization did not converge:
+  after 30 integrations, H/H0−1 = +4.736e−04, φ_ref/φ_min−1 = −4.837e−06"**. Q-n2: β 1.149, **"step size fell below
+  1e−13 e-folds after repeated trial-state exceptions at N = 27.74322577, φ_E = 1.3171e−13, π_E = −0.00087427: phi is
+  not positive in InversePowerModel log_V"** (R4's φ ≤ 0, raised on trial states until the step underflowed). E-n2: β
+  2.991, the same kind, **"step size fell below 1e−13 e-folds after repeated trial-state exceptions at N = 36.25465665,
+  φ_E = 4.7247e−14, π_E = −0.00045465"** (in tuning integration 2; Q-n2's was in integration 0), inside the uncaptured
+  window, so it moves no edge.
+- **n = 1: no EW edge.** No row of C-n1 above 1.80 succeeds, to 5.00, so no EW capture exists to bracket and E-n1 has no
+  range; the prompt's rule makes that a measurement, not a stop. The QCD onset lies in (1.10, 1.30], with C-n1's 1.15,
+  1.20 and 1.25 failed between; the fine grid across that range would be 1.100–1.300, 201 β, more than the prompt's
+  101, so Q-n1 was not run (log §2.2 D3 gives the reading and the alternative).
+- **Every row's first bounce and delivery temperature** across each fine grid are `edges.txt`'s tables (T_deliver,
+  N_deliver), as are the uncaptured window's first bounces.
+
+### 4.7 The cost
+
+The forty: 817 s serially (§4.1). The surfing scans: 24 176 s (6.7 h) of process wall time over about 5 h (19:47 to
+00:48) with at most three at once. The base suites (log §3.1): 1205 s serially.
+
+### 4.8 The gate Sample, item by item (README §2.1)
+
+1. **Every sampled history measured under both laws, re-tuned:** the forty of U7, as ruled, by the tool route, tuned
+   with the tool's defaults; nothing added or dropped (§4.1). Every one is beside its exponential counterpart from the
+   2026.11.0 export (§4.2), and the route is checked against the export at three (§4.3).
+2. **Its failures stated:** three, R5's G2 at n = 1 in natural mode, with their reasons, N and field (§4.1); in the
+   scans, R5's G2 at 73 rows of C-n1, one tuning that did not converge (C-n1, β 3.20) and one φ ≤ 0 step underflow
+   (Q-n2, β 1.149) and one more at E-n2 β 2.991 (§4.6).
+3. **Every threshold of README §0.3 reported against its use on this wall:** the unresolved reflection, the parking
+   cut, the wall's rounding (§4.5 items 1–3), the surfing thresholds (§4.6), R9's share (§4.4) and M_crit (§4.5 item 5),
+   each with how many histories reach it and how far each sits from it. No threshold is changed (P10).
+
+### 4.9 For the user: the thresholds on this wall
+
+The user rules any threshold that does not hold on this wall before 05 builds the store (README §2 row 04). Each item
+states the evidence and the options, with what each would change. **No option is chosen here** (note 04, ruling 9).
+
+**Not put in question by the sample** (the evidence, for the user's ruling all the same):
+- **The unresolved reflection** (K = 3, 10⁻⁸ M_P): every one of 1632 candidates is unresolved by both conditions, with
+  φ_t ≤ 3.3 × 10⁻²⁹ M_P and ln R ≥ 39.2. On the exponential at laboratory M every early reflection is far below the
+  threshold too (README §0.3). On this wall at these M the threshold's value does not decide anything: any φ_t threshold
+  above 10⁻²⁹ M_P, or the ln R > 0 condition alone, gives the same histories.
+- **The parking cut** (ε = 10⁻⁶, m/H = 10, the π guard): it ends every cascade at the first candidate below ε, with
+  m_eff/H ≥ 2.2 × 10¹⁰ there and ≥ 1.06 × 10⁴ over every parked phase; none is released, no guard fires, and the
+  leftover's share of K (1.9 × 10⁻⁶ to 5.1 × 10⁻³) is of the exponential's order (1.6 × 10⁻⁷ to 2.4 × 10⁻³ at its
+  laboratory one-loop rows). The cut sits where the drain is still one-loop (ln R ≥ 39 at the cut), as on the
+  exponential.
+- **The wall's rounding** (16 quanta): no unresolvable assessment; the smallest ln(1 + x) is ≥ 1.3 × 10¹³ times the
+  width.
+- **R9's table in x:** no share of K below E/V₀ = 10³; the table's error in x is ≤ 1.05 × 10⁻⁵ at the smallest x
+  reached.
+
+**In question: the surfing thresholds at n = 1.** At M = 10⁻³ M_P, φ* = 5 M_P, 74 of C-n1's 79 coarse β fail (73 at G2,
+W/(π²/2) = 1.001–1.97 at N = 34.9–56.0, after the delivery; one tuning that did not converge, β 3.20). The five that
+succeed (1.10, 1.30, 1.35, 1.45, 1.80) capture exactly as the exponential does there. So at n = 1 the QCD onset is
+bracketed only in (1.10, 1.30], and no EW edge can be measured: the surfing thresholds measured on the exponential
+(QCD onset, EW (3.002, 3.003]) can be neither confirmed nor refuted on the n = 1 wall at this M. Options, each with what
+it changes:
+- **(a) Record it as measured**, as R5 recorded natural mode at n = 1: no further scan. The science run's surfing figure
+  and any standard analysis reading the edges at large M would have no n = 1 EW edge and an onset known to (1.10, 1.30].
+- **(b) Run the narrower Q-n1 grid** of D3's other reading, 1.250–1.300 in 0.001 (51 β; under a minute if every row
+  fails as 1.25 did, about 1.5 h if every row succeeds), and, if rows there succeed, report the onset between them. It
+  narrows the onset only where rows succeed (1.25 itself failed), and does nothing for the EW edge.
+- **(c) Scan n = 1 at another M** where the late cascade in natural mode might not reach G2 (no such M is measured; the
+  n = 1 natural-mode failures here are at N = 35–56, after the delivery at N ≈ 17.7–24). A scan outside U7, needing the
+  user's word; its edges would be at a different M from the exponential's reference.
+- **(d) Treat the n = 1 G2 failures in natural mode as a production issue** for a later campaign (the floor rule and G2
+  on a wall where the field is stepped past its turning point at φ ≈ 10⁻¹⁶–10⁻¹² M_P), and re-scan after it. Changes
+  production; not 04's or 05's scope.
+
+At n = 2 the surfing thresholds hold as on the exponential: QCD onset (1.116, 1.117] on both walls; the largest β QCD
+captures is 2.975 and EW captures from (3.002, 3.003] on both, the window 2.976–3.002 the same, with one failed row
+inside it (β 2.991, R4's φ ≤ 0).
+
+**Beside the thresholds, for the user's information** (no ruling asked): on the power wall the first impact is one-loop
+at every M ≤ M_P (first-impact M_crit 1.4 × 10³ to 7.0 × 10²⁸ M_P), so the M at which the exponential turns classical
+(about 10⁻¹⁵ M_P) has no counterpart; the late cascade would turn classical between about 10⁻²⁷ M_P and above M_P,
+depending on n, β and the law (verification §4.5 item 5). This bears on the science run's M grid (08's handover).

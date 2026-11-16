@@ -1,0 +1,108 @@
+# command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.0 4e-31 --alpha 0.01 --model inverse-power --n 1
+# start: 2026-11-15 19:34:43 19:34  up 15 days, 21:55, 1 user, load averages: 3.09 3.94 4.36
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune history_and_bbn-beta2-M4e-31-inverse-power-n1 it=0 kind=seed H/H0-1=-8.464e-08 phi_ref/phi_min-1=-9.428e-08 norm=-276.630728594 phi_ref=6.6544823963e-16 wall=10.5
+history beta=2 M=4e-31 model=inverse-power n=1: RHS=120211 accepted_steps=16763 reflections=85 samples=5437 integrations=1 alpha=0.01 wall=10.7 s
+tuning beta=2 M=4e-31 model=inverse-power n=1: normalization=-276.63072859401797 V_ref=7.257733995332848e-121 phi_ref=6.654482396259618e-16 phi_0=6.654483023672078e-16 pi_0=9.981724535508163e-16 tracking=1.0000000000000044 residual_H=-8.463525591473342e-08 residual_phi=-9.428419500689955e-08 tuning_iterations=1 plain_steps=0 secant_steps=0 guard_steps=0 seed_kind=tracking seed_normalization=-276.63072859401797 seed_phi_ref=6.654482396259618e-16
+bounce beta=2 M=4e-31 model=inverse-power n=1: N=20.352098245 T_J=746.687873 MeV phi=4.790114e-11 reflected=True
+dissipation beta=2 M=4e-31 model=inverse-power n=1: injections=85 resolved_candidates=0 unresolved_candidates=85 injected_fraction=0.00131283 rho_chi_ratio_1MeV=0.000873002 rho_chi_ratio_70keV=0.000738091 rho_chi_ratio_today=0.000736096 Delta_N_eff_1MeV=0.00526068 Delta_N_eff_today=0.00548246 log_R_first_impact=530.575 parking_N=30.6205 parking_log_T_Jordan_GeV=-9.63541 release_N=None release_log_T_Jordan_GeV=None worst_birth_margin=35.6155 worst_birth_margin_N=24.3134 birth_failing_share=0 worst_reflection_margin=36.6706 worst_reflection_margin_N=28.6731 reflection_failing_share=0 worst_tracker_margin=53.9805 worst_tracker_margin_N=30.6234 tracker_failing_share=0 unassessed_share=0.001246
+fixed_T beta=2 M=4e-31 model=inverse-power n=1: 1MeV crossings=1 phi=1.732867214e-04 ratio=-2.805578778e-02 stand_in_phi=1.731565639e-04 stand_in_ratio=-2.805676231e-02 | 70keV crossings=1 phi=2.696406374e-05 ratio=3.254721602e-03 stand_in_phi=2.583690138e-05 stand_in_ratio=3.275166091e-03
+ratio beta=2 M=4e-31 model=inverse-power n=1 [0.3,1) keV: n=131 min=0.0007361 median=0.0007361 max=0.0007361 rms_step=1.236e-14
+ratio beta=2 M=4e-31 model=inverse-power n=1 [1,3) keV: n=119 min=0.0007361 median=0.0007361 max=0.0007361 rms_step=1.308e-14
+ratio beta=2 M=4e-31 model=inverse-power n=1 [3,10) keV: n=131 min=0.0007361 median=0.0007361 max=0.0007361 rms_step=1.265e-14
+ratio beta=2 M=4e-31 model=inverse-power n=1 [10,100) keV: n=257 min=-0.01693 median=0.0007361 max=0.01581 rms_step=0.006086
+bbn beta=2 M=4e-31 model=inverse-power n=1: Yp=0.2469455974 DoH=2.459775775 He3oH=1.042134883 Li7oH=5.484356236 network=small PRyM_time=9.2 s wall=9.2 s PRyM_version=bf24c3d+ri02+sr01+bt02
+sample outcome: status=ok exit=0 reason=None
+sample tuning: integrations=1 seed_kind=tracking residual_H=-8.463525591473342e-08 residual_phi=-9.428419500689955e-08 normalization=-276.63072859401797 phi_ref_Mp=6.654482396259618e-16
+sample cascade: reflections=85 candidates=85 injections=85 resolved=0 unresolved=85 N_final=50.075643520 first_impact_log_R=530.57472 first_impact_log_x=106.04254
+sample drain: law=fixed A=None model=fixed f_min=None f_max=None alpha_eff_min=0.01 alpha_eff_max=0.01 at_cap=None log_R_min=275.35687 log_R_max=530.57472 ell_min=22.0488 ell_max=43.3735 consistency_mismatches=None
+sample parking: parked=True N=30.620499980 T_J_GeV=6.53727e-05 candidate_index=84 rho_kin_over_rho_rad=9.28875e-07 m_eff_over_H=2.18435e+14 min_m_eff_over_H=7.49003e+07 parked_steps=195 K_share_parking=0.001246 released=False release_N=None release_T_J_GeV=None release_m_eff_over_H=None release_N_check=None release_m_eff_over_H_check=None release_candidate_index=None min_ratio_before_cut=1.1155e-06 min_ratio_before_cut_index=83
+sample r9: K_final=6.917069386770248e-41 share_x_lt_100=0 share_x_lt_1000=0 log_x_min=54.998967 inv_s_t_minus_1_at_min=1.30092e-24 log_x_max=106.04254
+sample thresholds: phi_t_max_Mp=5.2037e-55 phi_t_ge_1e-8=0 log_R_min=275.35687 log_R_le_0=0 unresolvable_assessments=0 unresolved_declined=0 log1p_x_min_over_16ulp=6.0472e+13 max_wall_to_kinetic_ratio=-0
+cand idx N kind log_x phi_t_Mp log_R ell regime f alpha_eff w_gate dK_over_K resolved rho_kin_over_rho_rad
+cand 0 20.352098 floor 106.04254 3.534857e-77 530.57472 43.3735 one_loop None 0.01 1 0.269019 False 0.0430483
+cand 1 21.405138 floor 101.72487 2.651614e-75 508.98639 41.5709 one_loop None 0.01 1 0.242082 False 0.0337021
+cand 2 21.931028 floor 99.63571 2.142008e-74 498.54059 40.6987 one_loop None 0.01 1 0.245593 False 0.0298581
+cand 3 22.386274 floor 97.221343 2.395339e-73 486.46876 39.6906 one_loop None 0.01 1 0.135679 False 0.0145408
+cand 4 23.137596 floor 93.127813 1.436034e-71 466.0011 37.9813 one_loop None 0.01 1 0.0456979 False 0.00451299
+cand 5 23.762254 floor 90.345263 2.320657e-70 452.08835 36.8193 one_loop None 0.01 1 0.0344026 False 0.00323154
+cand 6 24.313389 floor 87.46283 4.144149e-69 437.67619 35.6155 one_loop None 0.01 1 0.0174657 False 0.00157627
+cand 7 26.554930 floor 73.114591 7.059865e-63 365.935 29.6217 one_loop None 0.01 1 8.03119e-05 False 7.11622e-06
+cand 8 27.267756 floor 70.671067 8.128409e-62 353.71737 28.6006 one_loop None 0.01 1 0.000120747 False 1.06733e-05
+cand 9 27.595737 floor 69.528568 2.547925e-61 348.00488 28.1232 one_loop None 0.01 1 0.00014304 False 1.26089e-05
+cand 10 27.813021 floor 68.758301 5.504393e-61 344.15354 27.8013 one_loop None 0.01 1 0.000157905 False 1.3878e-05
+cand 11 27.976861 floor 68.166026 9.952470e-61 341.19217 27.5538 one_loop None 0.01 1 0.000168187 False 1.47363e-05
+cand 12 28.109025 floor 67.681145 1.616264e-60 338.76776 27.3511 one_loop None 0.01 1 0.000175713 False 1.53471e-05
+cand 13 28.220404 floor 67.26623 2.447414e-60 336.69319 27.1777 one_loop None 0.01 1 0.000181174 False 1.57733e-05
+cand 14 28.316901 floor 66.90188 3.523243e-60 334.87144 27.0254 one_loop None 0.01 1 0.000185137 False 1.60661e-05
+cand 15 28.402324 floor 66.57436 4.888579e-60 333.23384 26.8885 one_loop None 0.01 1 0.000187779 False 1.62421e-05
+cand 16 28.479155 floor 66.276176 6.586919e-60 331.74292 26.7639 one_loop None 0.01 1 0.000189503 False 1.63374e-05
+cand 17 28.549103 floor 66.001581 8.668371e-60 330.36994 26.6491 one_loop None 0.01 1 0.000190491 False 1.63686e-05
+cand 18 28.613417 floor 65.746078 1.119183e-59 329.09243 26.5423 one_loop None 0.01 1 0.000190825 False 1.63434e-05
+cand 19 28.673056 floor 65.506043 1.422810e-59 327.89225 26.442 one_loop None 0.01 1 0.000190543 False 1.62656e-05
+cand 20 28.728761 floor 65.279213 1.785080e-59 326.75811 26.3472 one_loop None 0.01 1 0.00018978 False 1.61475e-05
+cand 21 28.781089 floor 65.064269 2.213130e-59 325.68338 26.2573 one_loop None 0.01 1 0.000188714 False 1.60044e-05
+cand 22 28.830467 floor 64.859823 2.715170e-59 324.66115 26.1719 one_loop None 0.01 1 0.00018741 False 1.58423e-05
+cand 23 28.877261 floor 64.664002 3.302484e-59 323.68205 26.09 one_loop None 0.01 1 0.000185797 False 1.56552e-05
+cand 24 28.921794 floor 64.475284 3.988410e-59 322.73846 26.0111 one_loop None 0.01 1 0.00018384 False 1.54406e-05
+cand 25 28.964344 floor 64.292899 4.786397e-59 321.82653 25.9349 one_loop None 0.01 1 0.000181614 False 1.52051e-05
+cand 26 29.005127 floor 64.11665 5.708904e-59 320.94529 25.8612 one_loop None 0.01 1 0.000179247 False 1.49595e-05
+cand 27 29.044307 floor 63.946344 6.768863e-59 320.09376 25.79 one_loop None 0.01 1 0.000176828 False 1.47114e-05
+cand 28 29.082019 floor 63.781473 7.982117e-59 319.2694 25.7211 one_loop None 0.01 1 0.000174366 False 1.44615e-05
+cand 29 29.118392 floor 63.621117 9.370435e-59 318.46763 25.6541 one_loop None 0.01 1 0.000171794 False 1.42043e-05
+cand 30 29.153553 floor 63.464476 1.095944e-58 317.68442 25.5886 one_loop None 0.01 1 0.000169067 False 1.39362e-05
+cand 31 29.187623 floor 63.310895 1.277873e-58 316.91651 25.5244 one_loop None 0.01 1 0.000166167 False 1.36557e-05
+cand 32 29.220710 floor 63.160191 1.485722e-58 316.16299 25.4614 one_loop None 0.01 1 0.000163145 False 1.33673e-05
+cand 33 29.252900 floor 63.012398 1.722358e-58 315.42403 25.3996 one_loop None 0.01 1 0.000160069 False 1.30765e-05
+cand 34 29.284259 floor 62.867543 1.990824e-58 314.69975 25.3391 one_loop None 0.01 1 0.000156991 False 1.27875e-05
+cand 35 29.314843 floor 62.725645 2.294345e-58 313.99026 25.2797 one_loop None 0.01 1 0.000153949 False 1.25035e-05
+cand 36 29.344694 floor 62.586465 2.636960e-58 313.29436 25.2216 one_loop None 0.01 1 0.000150935 False 1.22236e-05
+cand 37 29.373862 floor 62.44957 3.023821e-58 312.60989 25.1643 one_loop None 0.01 1 0.000147913 False 1.1945e-05
+cand 38 29.402395 floor 62.314557 3.460922e-58 311.93482 25.1079 one_loop None 0.01 1 0.000144857 False 1.16655e-05
+cand 39 29.430346 floor 62.181049 3.955248e-58 311.26728 25.0521 one_loop None 0.01 1 0.000141746 False 1.13835e-05
+cand 40 29.457765 floor 62.048714 4.514877e-58 310.60561 24.9967 one_loop None 0.01 1 0.000138571 False 1.10981e-05
+cand 41 29.484700 floor 61.917455 5.148147e-58 309.94931 24.9419 one_loop None 0.01 1 0.00013535 False 1.08109e-05
+cand 42 29.511193 floor 61.787267 5.863960e-58 309.29837 24.8874 one_loop None 0.01 1 0.000132112 False 1.05242e-05
+cand 43 29.537277 floor 61.658148 6.672160e-58 308.65278 24.8335 one_loop None 0.01 1 0.000128878 False 1.02397e-05
+cand 44 29.562983 floor 61.530104 7.583602e-58 308.01256 24.7799 one_loop None 0.01 1 0.000125668 False 9.95884e-06
+cand 45 29.588333 floor 61.403139 8.610242e-58 307.37774 24.7268 one_loop None 0.01 1 0.000122496 False 9.68272e-06
+cand 46 29.613349 floor 61.277172 9.766124e-58 306.7479 24.6742 one_loop None 0.01 1 0.000119364 False 9.41141e-06
+cand 47 29.638052 floor 61.152027 1.106808e-57 306.12217 24.6219 one_loop None 0.01 1 0.000116262 False 9.1441e-06
+cand 48 29.662465 floor 61.027524 1.253554e-57 305.49966 24.5698 one_loop None 0.01 1 0.000113182 False 8.88011e-06
+cand 49 29.686611 floor 60.903482 1.419102e-57 304.87945 24.5179 one_loop None 0.01 1 0.000110116 False 8.61881e-06
+cand 50 29.710515 floor 60.779713 1.606075e-57 304.26061 24.4662 one_loop None 0.01 1 0.000107059 False 8.35966e-06
+cand 51 29.734200 floor 60.656027 1.817533e-57 303.64217 24.4145 one_loop None 0.01 1 0.000104005 False 8.1022e-06
+cand 52 29.757694 floor 60.53228 2.056954e-57 303.02344 24.3627 one_loop None 0.01 1 0.000100954 False 7.84647e-06
+cand 53 29.781020 floor 60.408356 2.328328e-57 302.40382 24.3109 one_loop None 0.01 1 9.79096e-05 False 7.59265e-06
+cand 54 29.804203 floor 60.28413 2.636302e-57 301.78269 24.259 one_loop None 0.01 1 9.48741e-05 False 7.34089e-06
+cand 55 29.827267 floor 60.159468 2.986311e-57 301.15938 24.2069 one_loop None 0.01 1 9.18489e-05 False 7.09128e-06
+cand 56 29.850236 floor 60.034229 3.384742e-57 300.53318 24.1545 one_loop None 0.01 1 8.88352e-05 False 6.84387e-06
+cand 57 29.873135 floor 59.908262 3.839126e-57 299.90335 24.1018 one_loop None 0.01 1 8.58335e-05 False 6.59867e-06
+cand 58 29.895987 floor 59.781455 4.358168e-57 299.26931 24.0488 one_loop None 0.01 1 8.28484e-05 False 6.35599e-06
+cand 59 29.918817 floor 59.653728 4.951936e-57 298.63068 23.9954 one_loop None 0.01 1 7.98864e-05 False 6.11629e-06
+cand 60 29.941647 floor 59.525003 5.632223e-57 297.98705 23.9416 one_loop None 0.01 1 7.69534e-05 False 5.87999e-06
+cand 61 29.964500 floor 59.3952 6.412869e-57 297.33804 23.8873 one_loop None 0.01 1 7.4055e-05 False 5.64746e-06
+cand 62 29.987396 floor 59.264245 7.310139e-57 296.68326 23.8325 one_loop None 0.01 1 7.11959e-05 False 5.41904e-06
+cand 63 30.010356 floor 59.132062 8.343186e-57 296.02235 23.7773 one_loop None 0.01 1 6.83809e-05 False 5.19502e-06
+cand 64 30.033401 floor 58.998478 9.535568e-57 295.35443 23.7214 one_loop None 0.01 1 6.56076e-05 False 4.97518e-06
+cand 65 30.056557 floor 58.863164 1.091724e-56 294.67786 23.6648 one_loop None 0.01 1 6.28656e-05 False 4.75868e-06
+cand 66 30.079852 floor 58.725717 1.252579e-56 293.99062 23.6074 one_loop None 0.01 1 6.01436e-05 False 4.54465e-06
+cand 67 30.103326 floor 58.585649 1.440907e-56 293.29028 23.5488 one_loop None 0.01 1 5.74296e-05 False 4.33213e-06
+cand 68 30.127023 floor 58.442356 1.662905e-56 292.57382 23.4889 one_loop None 0.01 1 5.47105e-05 False 4.12011e-06
+cand 69 30.151001 floor 58.295086 1.926752e-56 291.83747 23.4273 one_loop None 0.01 1 5.19717e-05 False 3.90747e-06
+cand 70 30.175331 floor 58.143193 2.242809e-56 291.078 23.3638 one_loop None 0.01 1 4.92114e-05 False 3.69407e-06
+cand 71 30.200087 floor 57.986288 2.623825e-56 290.29348 23.2982 one_loop None 0.01 1 4.64439e-05 False 3.48096e-06
+cand 72 30.225350 floor 57.824019 3.086082e-56 289.48214 23.2303 one_loop None 0.01 1 4.3686e-05 False 3.26935e-06
+cand 73 30.251200 floor 57.656112 3.650302e-56 288.6426 23.1601 one_loop None 0.01 1 4.0957e-05 False 3.06068e-06
+cand 74 30.277720 floor 57.482457 4.342563e-56 287.77432 23.0875 one_loop None 0.01 1 3.82806e-05 False 2.85667e-06
+cand 75 30.304984 floor 57.302975 5.196301e-56 286.87691 23.0124 one_loop None 0.01 1 3.56775e-05 False 2.65881e-06
+cand 76 30.333079 floor 57.116641 6.260631e-56 285.94524 22.9345 one_loop None 0.01 1 3.31342e-05 False 2.46606e-06
+cand 77 30.362123 floor 56.921779 7.607562e-56 284.97093 22.853 one_loop None 0.01 1 3.06269e-05 False 2.2766e-06
+cand 78 30.392283 floor 56.715893 9.346750e-56 283.9415 22.7669 one_loop None 0.01 1 2.81243e-05 False 2.08806e-06
+cand 79 30.423811 floor 56.495132 1.165563e-55 282.8377 22.6746 one_loop None 0.01 1 2.55844e-05 False 1.8973e-06
+cand 80 30.457082 floor 56.254932 1.482017e-55 281.6367 22.5741 one_loop None 0.01 1 2.29856e-05 False 1.70272e-06
+cand 81 30.492607 floor 55.990709 1.930208e-55 280.31558 22.4636 one_loop None 0.01 1 2.03432e-05 False 1.50542e-06
+cand 82 30.531064 floor 55.69731 2.588367e-55 278.84859 22.3409 one_loop None 0.01 1 1.76931e-05 False 1.30805e-06
+cand 83 30.573314 floor 55.369971 3.590766e-55 277.21189 22.204 one_loop None 0.01 1 1.51021e-05 False 1.1155e-06
+cand 84 30.620500 floor 54.998967 5.203699e-55 275.35687 22.0488 one_loop None 0.01 1 1.25859e-05 False 9.28875e-07
+# end: 2026-11-15 19:35:05 exit=0 wall=22 s 19:35  up 15 days, 21:55, 1 user, load averages: 15.23 6.46 5.24

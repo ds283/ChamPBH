@@ -1,0 +1,264 @@
+# command: PYTHONPATH=. ./venv/bin/python tools/surfing_scan.py --out .documents/power-law-wall/sample-04/surfing/q_exp.csv --M 1e-3 --phi-init-Mp 5 --beta-min 1.100 --beta-max 1.150 --beta-step 0.001
+# start: 2026-11-15 19:47:20 19:47  up 15 days, 22:08, 1 user, load averages: 4.21 6.20 6.99
+-- surfing_scan: 51 beta to run, 0 already in .documents/power-law-wall/sample-04/surfing/q_exp.csv; phi*=5 M_P, M=0.001 M_P, tuned to T_CMB with tolerance 1e-05 (at most 30 integrations), window to T_J=0.001 GeV
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune surfing_scan-beta1.1-M0.001 it=0 kind=seed H/H0-1=-1.122e-02 phi_ref/phi_min-1=-3.845e-03 norm=-276.85095344 phi_ref=4.0683582459e-02 wall=5.6
+-- tune surfing_scan-beta1.1-M0.001 it=1 kind=plain H/H0-1=+2.790e-04 phi_ref/phi_min-1=-1.605e-02 norm=-276.816343756 phi_ref=4.0840621052e-02 wall=5.7
+-- tune surfing_scan-beta1.1-M0.001 it=2 kind=secant H/H0-1=+2.429e-04 phi_ref/phi_min-1=-5.259e-04 norm=-276.817219006 phi_ref=4.1525702314e-02 wall=5.6
+-- tune surfing_scan-beta1.1-M0.001 it=3 kind=secant H/H0-1=-6.462e-07 phi_ref/phi_min-1=+3.158e-07 norm=-276.817953393 phi_ref=4.1534360111e-02 wall=5.7
+beta=1.1 status=ok capture=- max=- second_dip=- deliver=0.14337 GeV crossings=0 iterations=4 phi_ref=4.1534360111e-02 M_P V_ref=2.168569e-11 eV^4 wall=22.9 s [not captured]
+-- tune surfing_scan-beta1.101-M0.001 it=0 kind=seed H/H0-1=-1.121e-02 phi_ref/phi_min-1=-3.849e-03 norm=-276.851045441 phi_ref=4.0663479026e-02 wall=5.3
+-- tune surfing_scan-beta1.101-M0.001 it=1 kind=plain H/H0-1=+2.946e-04 phi_ref/phi_min-1=-1.602e-02 norm=-276.816485188 phi_ref=4.0820595254e-02 wall=5.9
+-- tune surfing_scan-beta1.101-M0.001 it=2 kind=secant H/H0-1=+2.392e-04 phi_ref/phi_min-1=-5.241e-04 norm=-276.817408275 phi_ref=4.1503232474e-02 wall=5.6
+-- tune surfing_scan-beta1.101-M0.001 it=3 kind=secant H/H0-1=+1.314e-06 phi_ref/phi_min-1=+2.066e-06 norm=-276.818130846 phi_ref=4.1512054953e-02 wall=5.4
+beta=1.101 status=ok capture=- max=- second_dip=- deliver=0.145846 GeV crossings=0 iterations=4 phi_ref=4.1512054953e-02 M_P V_ref=2.168213e-11 eV^4 wall=22.6 s [not captured]
+-- tune surfing_scan-beta1.102-M0.001 it=0 kind=seed H/H0-1=-1.119e-02 phi_ref/phi_min-1=-3.840e-03 norm=-276.851137396 phi_ref=4.0643403125e-02 wall=5.2
+-- tune surfing_scan-beta1.102-M0.001 it=1 kind=plain H/H0-1=+2.639e-04 phi_ref/phi_min-1=-1.601e-02 norm=-276.816622714 phi_ref=4.0800076738e-02 wall=5.4
+-- tune surfing_scan-beta1.102-M0.001 it=2 kind=secant H/H0-1=+2.472e-04 phi_ref/phi_min-1=-5.261e-04 norm=-276.817451648 phi_ref=4.1483372863e-02 wall=5.2
+-- tune surfing_scan-beta1.102-M0.001 it=3 kind=secant H/H0-1=-1.488e-06 phi_ref/phi_min-1=+2.296e-06 norm=-276.818199402 phi_ref=4.1491755192e-02 wall=5.3
+beta=1.102 status=ok capture=- max=- second_dip=- deliver=0.148171 GeV crossings=0 iterations=4 phi_ref=4.1491755192e-02 M_P V_ref=2.168090e-11 eV^4 wall=21.4 s [not captured]
+-- tune surfing_scan-beta1.103-M0.001 it=0 kind=seed H/H0-1=-1.122e-02 phi_ref/phi_min-1=-3.837e-03 norm=-276.851229305 phi_ref=4.0623354694e-02 wall=5.1
+-- tune surfing_scan-beta1.103-M0.001 it=1 kind=plain H/H0-1=+3.134e-04 phi_ref/phi_min-1=-1.605e-02 norm=-276.816619628 phi_ref=4.0779815411e-02 wall=5.1
+-- tune surfing_scan-beta1.103-M0.001 it=2 kind=secant H/H0-1=+2.337e-04 phi_ref/phi_min-1=-5.308e-04 norm=-276.817599752 phi_ref=4.1461714760e-02 wall=5.6
+-- tune surfing_scan-beta1.103-M0.001 it=3 kind=secant H/H0-1=+2.948e-06 phi_ref/phi_min-1=+1.190e-06 norm=-276.818305245 phi_ref=4.1471185892e-02 wall=5.2
+beta=1.103 status=ok capture=- max=- second_dip=- deliver=0.150362 GeV crossings=0 iterations=4 phi_ref=4.1471185892e-02 M_P V_ref=2.167886e-11 eV^4 wall=21.2 s [not captured]
+-- tune surfing_scan-beta1.104-M0.001 it=0 kind=seed H/H0-1=-1.121e-02 phi_ref/phi_min-1=-3.834e-03 norm=-276.851321169 phi_ref=4.0603333670e-02 wall=5.3
+-- tune surfing_scan-beta1.104-M0.001 it=1 kind=plain H/H0-1=+2.684e-04 phi_ref/phi_min-1=-1.603e-02 norm=-276.816751021 phi_ref=4.0759597746e-02 wall=5.0
+-- tune surfing_scan-beta1.104-M0.001 it=2 kind=secant H/H0-1=+2.411e-04 phi_ref/phi_min-1=-5.313e-04 norm=-276.81759366 phi_ref=4.1442933157e-02 wall=5.0
+-- tune surfing_scan-beta1.104-M0.001 it=3 kind=secant H/H0-1=-1.348e-07 phi_ref/phi_min-1=+9.011e-07 norm=-276.818323596 phi_ref=4.1451913044e-02 wall=5.2
+beta=1.104 status=ok capture=- max=- second_dip=- deliver=0.152435 GeV crossings=0 iterations=4 phi_ref=4.1451913044e-02 M_P V_ref=2.167871e-11 eV^4 wall=20.8 s [not captured]
+-- tune surfing_scan-beta1.105-M0.001 it=0 kind=seed H/H0-1=-1.122e-02 phi_ref/phi_min-1=-3.830e-03 norm=-276.851412987 phi_ref=4.0583339992e-02 wall=5.1
+-- tune surfing_scan-beta1.105-M0.001 it=1 kind=plain H/H0-1=+2.876e-04 phi_ref/phi_min-1=-1.605e-02 norm=-276.816812225 phi_ref=4.0739383204e-02 wall=5.1
+-- tune surfing_scan-beta1.105-M0.001 it=2 kind=secant H/H0-1=+2.363e-04 phi_ref/phi_min-1=-5.331e-04 norm=-276.817713649 phi_ref=4.1421881089e-02 wall=5.3
+-- tune surfing_scan-beta1.105-M0.001 it=3 kind=secant H/H0-1=+2.465e-06 phi_ref/phi_min-1=+3.334e-06 norm=-276.818428491 phi_ref=4.1431248889e-02 wall=5.5
+beta=1.105 status=ok capture=- max=- second_dip=- deliver=0.154402 GeV crossings=0 iterations=4 phi_ref=4.1431248889e-02 M_P V_ref=2.167669e-11 eV^4 wall=21.2 s [not captured]
+-- tune surfing_scan-beta1.106-M0.001 it=0 kind=seed H/H0-1=-1.121e-02 phi_ref/phi_min-1=-3.835e-03 norm=-276.85150476 phi_ref=4.0563373598e-02 wall=5.2
+-- tune surfing_scan-beta1.106-M0.001 it=1 kind=plain H/H0-1=+3.186e-04 phi_ref/phi_min-1=-1.604e-02 norm=-276.816912184 phi_ref=4.0719515513e-02 wall=5.1
+-- tune surfing_scan-beta1.106-M0.001 it=2 kind=secant H/H0-1=+2.342e-04 phi_ref/phi_min-1=-5.293e-04 norm=-276.817908137 phi_ref=4.1399437300e-02 wall=5.3
+-- tune surfing_scan-beta1.106-M0.001 it=3 kind=secant H/H0-1=+1.781e-06 phi_ref/phi_min-1=-3.275e-06 norm=-276.818614871 phi_ref=4.1408806015e-02 wall=5.3
+beta=1.106 status=ok capture=- max=- second_dip=- deliver=0.156274 GeV crossings=0 iterations=4 phi_ref=4.1408806015e-02 M_P V_ref=2.167294e-11 eV^4 wall=21.1 s [not captured]
+-- tune surfing_scan-beta1.107-M0.001 it=0 kind=seed H/H0-1=-1.118e-02 phi_ref/phi_min-1=-3.834e-03 norm=-276.851596487 phi_ref=4.0543434426e-02 wall=5.1
+-- tune surfing_scan-beta1.107-M0.001 it=1 kind=plain H/H0-1=+2.902e-04 phi_ref/phi_min-1=-1.598e-02 norm=-276.817111599 phi_ref=4.0699468440e-02 wall=5.3
+-- tune surfing_scan-beta1.107-M0.001 it=2 kind=secant H/H0-1=+2.405e-04 phi_ref/phi_min-1=-5.341e-04 norm=-276.818021153 phi_ref=4.1378385923e-02 wall=5.1
+-- tune surfing_scan-beta1.107-M0.001 it=3 kind=secant H/H0-1=+2.515e-06 phi_ref/phi_min-1=+8.646e-06 norm=-276.818748422 phi_ref=4.1387550626e-02 wall=5.3
+beta=1.107 status=ok capture=- max=- second_dip=- deliver=0.158062 GeV crossings=0 iterations=4 phi_ref=4.1387550626e-02 M_P V_ref=2.167031e-11 eV^4 wall=21.0 s [not captured]
+-- tune surfing_scan-beta1.108-M0.001 it=0 kind=seed H/H0-1=-1.118e-02 phi_ref/phi_min-1=-3.822e-03 norm=-276.851688169 phi_ref=4.0523522414e-02 wall=5.3
+-- tune surfing_scan-beta1.108-M0.001 it=1 kind=plain H/H0-1=+2.629e-04 phi_ref/phi_min-1=-1.599e-02 norm=-276.817194136 phi_ref=4.0679005163e-02 wall=5.1
+-- tune surfing_scan-beta1.108-M0.001 it=2 kind=secant H/H0-1=+2.460e-04 phi_ref/phi_min-1=-5.317e-04 norm=-276.818019911 phi_ref=4.1359554499e-02 wall=5.5
+-- tune surfing_scan-beta1.108-M0.001 it=3 kind=secant H/H0-1=-2.286e-06 phi_ref/phi_min-1=-4.332e-07 norm=-276.818764849 phi_ref=4.1368228022e-02 wall=5.6
+beta=1.108 status=ok capture=- max=- second_dip=- deliver=0.159775 GeV crossings=0 iterations=4 phi_ref=4.1368228022e-02 M_P V_ref=2.167020e-11 eV^4 wall=21.8 s [not captured]
+-- tune surfing_scan-beta1.109-M0.001 it=0 kind=seed H/H0-1=-1.119e-02 phi_ref/phi_min-1=-3.825e-03 norm=-276.851779806 phi_ref=4.0503637502e-02 wall=5.5
+-- tune surfing_scan-beta1.109-M0.001 it=1 kind=plain H/H0-1=+3.069e-04 phi_ref/phi_min-1=-1.600e-02 norm=-276.817255542 phi_ref=4.0659176594e-02 wall=5.6
+-- tune surfing_scan-beta1.109-M0.001 it=2 kind=secant H/H0-1=+2.354e-04 phi_ref/phi_min-1=-5.335e-04 norm=-276.818215829 phi_ref=4.1337239265e-02 wall=5.7
+-- tune surfing_scan-beta1.109-M0.001 it=3 kind=secant H/H0-1=+2.767e-06 phi_ref/phi_min-1=+3.147e-06 norm=-276.818927039 phi_ref=4.1346697954e-02 wall=5.4
+beta=1.109 status=ok capture=- max=- second_dip=- deliver=0.161423 GeV crossings=0 iterations=4 phi_ref=4.1346697954e-02 M_P V_ref=2.166696e-11 eV^4 wall=22.6 s [not captured]
+-- tune surfing_scan-beta1.11-M0.001 it=0 kind=seed H/H0-1=-1.117e-02 phi_ref/phi_min-1=-3.823e-03 norm=-276.851871398 phi_ref=4.0483779628e-02 wall=5.5
+-- tune surfing_scan-beta1.11-M0.001 it=1 kind=plain H/H0-1=+2.928e-04 phi_ref/phi_min-1=-1.598e-02 norm=-276.817399362 phi_ref=4.0639132949e-02 wall=5.5
+-- tune surfing_scan-beta1.11-M0.001 it=2 kind=secant H/H0-1=+2.396e-04 phi_ref/phi_min-1=-5.325e-04 norm=-276.818316861 phi_ref=4.1316620339e-02 wall=5.5
+-- tune surfing_scan-beta1.11-M0.001 it=3 kind=secant H/H0-1=+1.485e-06 phi_ref/phi_min-1=+3.504e-06 norm=-276.819041216 phi_ref=4.1325755473e-02 wall=5.7
+beta=1.11 status=ok capture=- max=- second_dip=- deliver=0.163011 GeV crossings=0 iterations=4 phi_ref=4.1325755473e-02 M_P V_ref=2.166475e-11 eV^4 wall=22.4 s [not captured]
+-- tune surfing_scan-beta1.111-M0.001 it=0 kind=seed H/H0-1=-1.119e-02 phi_ref/phi_min-1=-3.817e-03 norm=-276.851962944 phi_ref=4.0463948730e-02 wall=5.8
+-- tune surfing_scan-beta1.111-M0.001 it=1 kind=plain H/H0-1=+2.847e-04 phi_ref/phi_min-1=-1.600e-02 norm=-276.817441005 phi_ref=4.0618998751e-02 wall=5.7
+-- tune surfing_scan-beta1.111-M0.001 it=2 kind=secant H/H0-1=+2.418e-04 phi_ref/phi_min-1=-5.351e-04 norm=-276.818333733 phi_ref=4.1297547584e-02 wall=5.8
+-- tune surfing_scan-beta1.111-M0.001 it=3 kind=secant H/H0-1=+3.280e-08 phi_ref/phi_min-1=+1.586e-06 norm=-276.819065276 phi_ref=4.1306646364e-02 wall=6.0
+beta=1.111 status=ok capture=- max=- second_dip=- deliver=0.164545 GeV crossings=0 iterations=4 phi_ref=4.1306646364e-02 M_P V_ref=2.166447e-11 eV^4 wall=23.6 s [not captured]
+-- tune surfing_scan-beta1.112-M0.001 it=0 kind=seed H/H0-1=-1.119e-02 phi_ref/phi_min-1=-3.815e-03 norm=-276.852054445 phi_ref=4.0444144749e-02 wall=5.7
+-- tune surfing_scan-beta1.112-M0.001 it=1 kind=plain H/H0-1=+2.890e-04 phi_ref/phi_min-1=-1.600e-02 norm=-276.81753714 phi_ref=4.0599024352e-02 wall=5.7
+-- tune surfing_scan-beta1.112-M0.001 it=2 kind=secant H/H0-1=+2.410e-04 phi_ref/phi_min-1=-5.327e-04 norm=-276.818442932 phi_ref=4.1276935425e-02 wall=5.7
+-- tune surfing_scan-beta1.112-M0.001 it=3 kind=secant H/H0-1=+5.530e-06 phi_ref/phi_min-1=+1.507e-05 norm=-276.819171837 phi_ref=4.1285970400e-02 wall=5.6
+-- tune surfing_scan-beta1.112-M0.001 it=4 kind=secant H/H0-1=-5.419e-06 phi_ref/phi_min-1=-1.522e-05 norm=-276.819187365 phi_ref=4.1284965507e-02 wall=5.6
+-- tune surfing_scan-beta1.112-M0.001 it=5 kind=secant H/H0-1=-2.283e-06 phi_ref/phi_min-1=-6.386e-06 norm=-276.819179746 phi_ref=4.1285469416e-02 wall=5.6
+beta=1.112 status=ok capture=- max=- second_dip=- deliver=0.166031 GeV crossings=0 iterations=6 phi_ref=4.1285469416e-02 M_P V_ref=2.166226e-11 eV^4 wall=34.3 s [not captured]
+-- tune surfing_scan-beta1.113-M0.001 it=0 kind=seed H/H0-1=-1.118e-02 phi_ref/phi_min-1=-3.814e-03 norm=-276.852145902 phi_ref=4.0424367624e-02 wall=5.8
+-- tune surfing_scan-beta1.113-M0.001 it=1 kind=plain H/H0-1=+2.889e-04 phi_ref/phi_min-1=-1.599e-02 norm=-276.817653336 phi_ref=4.0579148074e-02 wall=5.7
+-- tune surfing_scan-beta1.113-M0.001 it=2 kind=secant H/H0-1=+2.388e-04 phi_ref/phi_min-1=-5.353e-04 norm=-276.818558921 phi_ref=4.1256134166e-02 wall=5.9
+-- tune surfing_scan-beta1.113-M0.001 it=3 kind=secant H/H0-1=+1.252e-06 phi_ref/phi_min-1=+2.030e-06 norm=-276.819281393 phi_ref=4.1265419145e-02 wall=5.8
+beta=1.113 status=ok capture=- max=- second_dip=- deliver=0.167472 GeV crossings=0 iterations=4 phi_ref=4.1265419145e-02 M_P V_ref=2.166031e-11 eV^4 wall=23.5 s [not captured]
+-- tune surfing_scan-beta1.114-M0.001 it=0 kind=seed H/H0-1=-1.117e-02 phi_ref/phi_min-1=-3.812e-03 norm=-276.852237313 phi_ref=4.0404617295e-02 wall=5.8
+-- tune surfing_scan-beta1.114-M0.001 it=1 kind=plain H/H0-1=+2.865e-04 phi_ref/phi_min-1=-1.597e-02 norm=-276.817774161 phi_ref=4.0559211776e-02 wall=5.8
+-- tune surfing_scan-beta1.114-M0.001 it=2 kind=secant H/H0-1=+2.386e-04 phi_ref/phi_min-1=-5.361e-04 norm=-276.818672425 phi_ref=4.1235403813e-02 wall=5.8
+-- tune surfing_scan-beta1.114-M0.001 it=3 kind=secant H/H0-1=+1.210e-06 phi_ref/phi_min-1=+1.874e-06 norm=-276.819394385 phi_ref=4.1244732990e-02 wall=5.9
+beta=1.114 status=ok capture=- max=- second_dip=- deliver=0.168872 GeV crossings=0 iterations=4 phi_ref=4.1244732990e-02 M_P V_ref=2.165813e-11 eV^4 wall=23.7 s [not captured]
+-- tune surfing_scan-beta1.115-M0.001 it=0 kind=seed H/H0-1=-1.117e-02 phi_ref/phi_min-1=-3.808e-03 norm=-276.852328679 phi_ref=4.0384893701e-02 wall=5.7
+-- tune surfing_scan-beta1.115-M0.001 it=1 kind=plain H/H0-1=+2.919e-04 phi_ref/phi_min-1=-1.597e-02 norm=-276.817865402 phi_ref=4.0539253268e-02 wall=5.7
+-- tune surfing_scan-beta1.115-M0.001 it=2 kind=secant H/H0-1=+2.398e-04 phi_ref/phi_min-1=-5.373e-04 norm=-276.818780094 phi_ref=4.1214681466e-02 wall=5.7
+-- tune surfing_scan-beta1.115-M0.001 it=3 kind=secant H/H0-1=+1.082e-06 phi_ref/phi_min-1=+2.517e-06 norm=-276.81950554 phi_ref=4.1223991380e-02 wall=5.8
+beta=1.115 status=ok capture=- max=- second_dip=- deliver=0.170233 GeV crossings=0 iterations=4 phi_ref=4.1223991380e-02 M_P V_ref=2.165599e-11 eV^4 wall=23.1 s [not captured]
+-- tune surfing_scan-beta1.116-M0.001 it=0 kind=seed H/H0-1=-1.117e-02 phi_ref/phi_min-1=-3.805e-03 norm=-276.852420001 phi_ref=4.0365196782e-02 wall=4.4
+-- tune surfing_scan-beta1.116-M0.001 it=1 kind=plain H/H0-1=+2.898e-04 phi_ref/phi_min-1=-1.597e-02 norm=-276.817966554 phi_ref=4.0519383419e-02 wall=4.3
+-- tune surfing_scan-beta1.116-M0.001 it=2 kind=secant H/H0-1=+2.405e-04 phi_ref/phi_min-1=-5.369e-04 norm=-276.818874645 phi_ref=4.1194406293e-02 wall=4.4
+-- tune surfing_scan-beta1.116-M0.001 it=3 kind=secant H/H0-1=+6.785e-07 phi_ref/phi_min-1=+1.674e-06 norm=-276.819602094 phi_ref=4.1203650845e-02 wall=4.8
+beta=1.116 status=ok capture=- max=- second_dip=- deliver=0.171559 GeV crossings=0 iterations=4 phi_ref=4.1203650845e-02 M_P V_ref=2.165415e-11 eV^4 wall=18.3 s [not captured]
+-- tune surfing_scan-beta1.117-M0.001 it=0 kind=seed H/H0-1=-1.116e-02 phi_ref/phi_min-1=-3.802e-03 norm=-276.852511278 phi_ref=4.0345526479e-02 wall=6.0
+-- tune surfing_scan-beta1.117-M0.001 it=1 kind=plain H/H0-1=+2.915e-04 phi_ref/phi_min-1=-1.596e-02 norm=-276.818067018 phi_ref=4.0499502410e-02 wall=5.9
+-- tune surfing_scan-beta1.117-M0.001 it=2 kind=secant H/H0-1=+2.401e-04 phi_ref/phi_min-1=-5.377e-04 norm=-276.8189805 phi_ref=4.1173867553e-02 wall=5.9
+-- tune surfing_scan-beta1.117-M0.001 it=3 kind=secant H/H0-1=+9.233e-07 phi_ref/phi_min-1=+1.893e-06 norm=-276.819706928 phi_ref=4.1183163940e-02 wall=6.1
+beta=1.117 status=ok capture=0.172719 max=0.172852 second_dip=- deliver=0.172852 GeV crossings=2 iterations=4 phi_ref=4.1183163940e-02 M_P V_ref=2.165215e-11 eV^4 wall=24.1 s
+-- tune surfing_scan-beta1.118-M0.001 it=0 kind=seed H/H0-1=-1.115e-02 phi_ref/phi_min-1=-3.784e-03 norm=-276.85260251 phi_ref=4.0325882732e-02 wall=6.3
+-- tune surfing_scan-beta1.118-M0.001 it=1 kind=plain H/H0-1=+2.802e-04 phi_ref/phi_min-1=-1.596e-02 norm=-276.818193856 phi_ref=4.0479036725e-02 wall=6.8
+-- tune surfing_scan-beta1.118-M0.001 it=2 kind=secant H/H0-1=+2.388e-04 phi_ref/phi_min-1=-5.421e-04 norm=-276.819072758 phi_ref=4.1153523051e-02 wall=6.0
+-- tune surfing_scan-beta1.118-M0.001 it=3 kind=secant H/H0-1=+1.380e-07 phi_ref/phi_min-1=-8.799e-07 norm=-276.819796037 phi_ref=4.1163062026e-02 wall=6.0
+beta=1.118 status=ok capture=0.17359 max=0.174113 second_dip=- deliver=0.174113 GeV crossings=2 iterations=4 phi_ref=4.1163062026e-02 M_P V_ref=2.165047e-11 eV^4 wall=25.3 s
+-- tune surfing_scan-beta1.119-M0.001 it=0 kind=seed H/H0-1=-1.116e-02 phi_ref/phi_min-1=-3.794e-03 norm=-276.852693697 phi_ref=4.0306265482e-02 wall=6.0
+-- tune surfing_scan-beta1.119-M0.001 it=1 kind=plain H/H0-1=+2.897e-04 phi_ref/phi_min-1=-1.597e-02 norm=-276.818241758 phi_ref=4.0459767728e-02 wall=6.1
+-- tune surfing_scan-beta1.119-M0.001 it=2 kind=secant H/H0-1=+2.419e-04 phi_ref/phi_min-1=-5.385e-04 norm=-276.819149728 phi_ref=4.1133650753e-02 wall=7.7
+-- tune surfing_scan-beta1.119-M0.001 it=3 kind=secant H/H0-1=-4.707e-07 phi_ref/phi_min-1=-8.834e-07 norm=-276.819881731 phi_ref=4.1142860111e-02 wall=5.8
+beta=1.119 status=ok capture=0.174343 max=0.175345 second_dip=- deliver=0.175345 GeV crossings=2 iterations=4 phi_ref=4.1142860111e-02 M_P V_ref=2.164888e-11 eV^4 wall=25.9 s
+-- tune surfing_scan-beta1.12-M0.001 it=0 kind=seed H/H0-1=-1.116e-02 phi_ref/phi_min-1=-3.796e-03 norm=-276.85278484 phi_ref=4.0286674669e-02 wall=6.1
+-- tune surfing_scan-beta1.12-M0.001 it=1 kind=plain H/H0-1=+3.028e-04 phi_ref/phi_min-1=-1.595e-02 norm=-276.818350168 phi_ref=4.0440204720e-02 wall=5.7
+-- tune surfing_scan-beta1.12-M0.001 it=2 kind=secant H/H0-1=+2.354e-04 phi_ref/phi_min-1=-5.404e-04 norm=-276.819298134 phi_ref=4.1112523825e-02 wall=5.9
+-- tune surfing_scan-beta1.12-M0.001 it=3 kind=secant H/H0-1=+2.350e-06 phi_ref/phi_min-1=+1.627e-06 norm=-276.8200103 phi_ref=4.1122227181e-02 wall=5.9
+beta=1.12 status=ok capture=0.175029 max=0.176549 second_dip=- deliver=0.176549 GeV crossings=2 iterations=4 phi_ref=4.1122227181e-02 M_P V_ref=2.164636e-11 eV^4 wall=23.8 s
+-- tune surfing_scan-beta1.121-M0.001 it=0 kind=seed H/H0-1=-1.113e-02 phi_ref/phi_min-1=-3.793e-03 norm=-276.852875938 phi_ref=4.0267110235e-02 wall=5.4
+-- tune surfing_scan-beta1.121-M0.001 it=1 kind=plain H/H0-1=+2.810e-04 phi_ref/phi_min-1=-1.591e-02 norm=-276.818524268 phi_ref=4.0420416148e-02 wall=5.5
+-- tune surfing_scan-beta1.121-M0.001 it=2 kind=secant H/H0-1=+2.448e-04 phi_ref/phi_min-1=-5.402e-04 norm=-276.819405735 phi_ref=4.1091891245e-02 wall=5.5
+-- tune surfing_scan-beta1.121-M0.001 it=3 kind=secant H/H0-1=-1.186e-06 phi_ref/phi_min-1=+1.450e-06 norm=-276.8201469 phi_ref=4.1100987094e-02 wall=5.5
+beta=1.121 status=ok capture=0.175668 max=0.177727 second_dip=- deliver=0.177727 GeV crossings=2 iterations=4 phi_ref=4.1100987094e-02 M_P V_ref=2.164367e-11 eV^4 wall=22.1 s
+-- tune surfing_scan-beta1.122-M0.001 it=0 kind=seed H/H0-1=-1.113e-02 phi_ref/phi_min-1=-3.785e-03 norm=-276.852966992 phi_ref=4.0247572120e-02 wall=5.6
+-- tune surfing_scan-beta1.122-M0.001 it=1 kind=plain H/H0-1=+2.919e-04 phi_ref/phi_min-1=-1.593e-02 norm=-276.818607823 phi_ref=4.0400472602e-02 wall=5.4
+-- tune surfing_scan-beta1.122-M0.001 it=2 kind=secant H/H0-1=+2.137e-04 phi_ref/phi_min-1=-5.344e-04 norm=-276.819522391 phi_ref=4.1071517052e-02 wall=5.4
+-- tune surfing_scan-beta1.122-M0.001 it=3 kind=secant H/H0-1=-2.611e-07 phi_ref/phi_min-1=+2.022e-06 norm=-276.820170373 phi_ref=4.1082241289e-02 wall=5.4
+beta=1.122 status=ok capture=0.176272 max=0.17888 second_dip=- deliver=0.17888 GeV crossings=2 iterations=4 phi_ref=4.1082241289e-02 M_P V_ref=2.164340e-11 eV^4 wall=22.1 s
+-- tune surfing_scan-beta1.123-M0.001 it=0 kind=seed H/H0-1=-1.112e-02 phi_ref/phi_min-1=-3.787e-03 norm=-276.853058001 phi_ref=4.0228060265e-02 wall=5.6
+-- tune surfing_scan-beta1.123-M0.001 it=1 kind=plain H/H0-1=+2.811e-04 phi_ref/phi_min-1=-1.590e-02 norm=-276.818735984 phi_ref=4.0380979316e-02 wall=5.8
+-- tune surfing_scan-beta1.123-M0.001 it=2 kind=secant H/H0-1=+2.462e-04 phi_ref/phi_min-1=-5.400e-04 norm=-276.819617682 phi_ref=4.1051134257e-02 wall=5.3
+-- tune surfing_scan-beta1.123-M0.001 it=3 kind=secant H/H0-1=+5.438e-07 phi_ref/phi_min-1=+6.993e-07 norm=-276.820363003 phi_ref=4.1060128178e-02 wall=5.3
+beta=1.123 status=ok capture=0.176848 max=0.180009 second_dip=- deliver=0.180009 GeV crossings=2 iterations=4 phi_ref=4.1060128178e-02 M_P V_ref=2.163952e-11 eV^4 wall=22.3 s
+-- tune surfing_scan-beta1.124-M0.001 it=0 kind=seed H/H0-1=-1.116e-02 phi_ref/phi_min-1=-3.781e-03 norm=-276.853148966 phi_ref=4.0208574614e-02 wall=5.5
+-- tune surfing_scan-beta1.124-M0.001 it=1 kind=plain H/H0-1=+3.030e-04 phi_ref/phi_min-1=-1.597e-02 norm=-276.81869332 phi_ref=4.0361168790e-02 wall=5.7
+-- tune surfing_scan-beta1.124-M0.001 it=2 kind=secant H/H0-1=+2.348e-04 phi_ref/phi_min-1=-5.450e-04 norm=-276.819641605 phi_ref=4.1032544974e-02 wall=5.3
+-- tune surfing_scan-beta1.124-M0.001 it=3 kind=secant H/H0-1=+2.595e-06 phi_ref/phi_min-1=+1.056e-06 norm=-276.820352206 phi_ref=4.1042466544e-02 wall=5.3
+beta=1.124 status=ok capture=0.177402 max=0.181116 second_dip=- deliver=0.181116 GeV crossings=2 iterations=4 phi_ref=4.1042466544e-02 M_P V_ref=2.163998e-11 eV^4 wall=22.2 s
+-- tune surfing_scan-beta1.125-M0.001 it=0 kind=seed H/H0-1=-1.116e-02 phi_ref/phi_min-1=-3.781e-03 norm=-276.853239886 phi_ref=4.0189115106e-02 wall=5.4
+-- tune surfing_scan-beta1.125-M0.001 it=1 kind=plain H/H0-1=+3.216e-04 phi_ref/phi_min-1=-1.596e-02 norm=-276.818788723 phi_ref=4.0341651025e-02 wall=5.4
+-- tune surfing_scan-beta1.125-M0.001 it=2 kind=secant H/H0-1=+2.334e-04 phi_ref/phi_min-1=-5.440e-04 norm=-276.819793726 phi_ref=4.1011361521e-02 wall=5.4
+-- tune surfing_scan-beta1.125-M0.001 it=3 kind=secant H/H0-1=+2.949e-06 phi_ref/phi_min-1=-1.569e-07 norm=-276.820499196 phi_ref=4.1021342246e-02 wall=5.4
+beta=1.125 status=ok capture=0.177936 max=0.1822 second_dip=- deliver=0.1822 GeV crossings=2 iterations=4 phi_ref=4.1021342246e-02 M_P V_ref=2.163707e-11 eV^4 wall=21.9 s
+-- tune surfing_scan-beta1.126-M0.001 it=0 kind=seed H/H0-1=-1.112e-02 phi_ref/phi_min-1=-3.776e-03 norm=-276.853330763 phi_ref=4.0169681684e-02 wall=5.5
+-- tune surfing_scan-beta1.126-M0.001 it=1 kind=plain H/H0-1=+2.635e-04 phi_ref/phi_min-1=-1.590e-02 norm=-276.819014562 phi_ref=4.0321934162e-02 wall=5.4
+-- tune surfing_scan-beta1.126-M0.001 it=2 kind=secant H/H0-1=+2.479e-04 phi_ref/phi_min-1=-5.435e-04 norm=-276.81984237 phi_ref=4.0991992085e-02 wall=5.7
+-- tune surfing_scan-beta1.126-M0.001 it=3 kind=secant H/H0-1=-2.253e-06 phi_ref/phi_min-1=+1.192e-06 norm=-276.820593803 phi_ref=4.1001001894e-02 wall=5.8
+beta=1.126 status=ok capture=0.178454 max=0.183264 second_dip=- deliver=0.183264 GeV crossings=2 iterations=4 phi_ref=4.1001001894e-02 M_P V_ref=2.163529e-11 eV^4 wall=22.7 s
+-- tune surfing_scan-beta1.127-M0.001 it=0 kind=seed H/H0-1=-1.113e-02 phi_ref/phi_min-1=-3.773e-03 norm=-276.853421595 phi_ref=4.0150274290e-02 wall=5.9
+-- tune surfing_scan-beta1.127-M0.001 it=1 kind=plain H/H0-1=+2.738e-04 phi_ref/phi_min-1=-1.591e-02 norm=-276.819077043 phi_ref=4.0302323465e-02 wall=5.8
+-- tune surfing_scan-beta1.127-M0.001 it=2 kind=secant H/H0-1=+2.399e-04 phi_ref/phi_min-1=-5.466e-04 norm=-276.819936374 phi_ref=4.0971955412e-02 wall=5.5
+-- tune surfing_scan-beta1.127-M0.001 it=3 kind=secant H/H0-1=+4.308e-06 phi_ref/phi_min-1=+2.047e-06 norm=-276.820663774 phi_ref=4.0981590863e-02 wall=5.8
+beta=1.127 status=ok capture=0.178958 max=0.184308 second_dip=- deliver=0.184308 GeV crossings=2 iterations=4 phi_ref=4.0981590863e-02 M_P V_ref=2.163402e-11 eV^4 wall=23.3 s
+-- tune surfing_scan-beta1.128-M0.001 it=0 kind=seed H/H0-1=-1.112e-02 phi_ref/phi_min-1=-3.771e-03 norm=-276.853512383 phi_ref=4.0130892867e-02 wall=5.8
+-- tune surfing_scan-beta1.128-M0.001 it=1 kind=plain H/H0-1=+2.821e-04 phi_ref/phi_min-1=-1.590e-02 norm=-276.819183848 phi_ref=4.0282799082e-02 wall=5.8
+-- tune surfing_scan-beta1.128-M0.001 it=2 kind=secant H/H0-1=+2.465e-04 phi_ref/phi_min-1=-5.462e-04 norm=-276.820068538 phi_ref=4.0951211580e-02 wall=5.7
+-- tune surfing_scan-beta1.128-M0.001 it=3 kind=secant H/H0-1=-8.481e-07 phi_ref/phi_min-1=+2.252e-06 norm=-276.820815013 phi_ref=4.0960439148e-02 wall=5.8
+beta=1.128 status=ok capture=0.17945 max=0.185332 second_dip=- deliver=0.185332 GeV crossings=2 iterations=4 phi_ref=4.0960439148e-02 M_P V_ref=2.163102e-11 eV^4 wall=23.3 s
+-- tune surfing_scan-beta1.129-M0.001 it=0 kind=seed H/H0-1=-1.113e-02 phi_ref/phi_min-1=-3.769e-03 norm=-276.853603126 phi_ref=4.0111537356e-02 wall=6.3
+-- tune surfing_scan-beta1.129-M0.001 it=1 kind=plain H/H0-1=+2.929e-04 phi_ref/phi_min-1=-1.592e-02 norm=-276.819240276 phi_ref=4.0263287108e-02 wall=6.0
+-- tune surfing_scan-beta1.129-M0.001 it=2 kind=secant H/H0-1=+2.402e-04 phi_ref/phi_min-1=-5.473e-04 norm=-276.820158061 phi_ref=4.0931421273e-02 wall=5.9
+-- tune surfing_scan-beta1.129-M0.001 it=3 kind=secant H/H0-1=+9.770e-07 phi_ref/phi_min-1=+2.360e-06 norm=-276.820885441 phi_ref=4.0941082762e-02 wall=6.2
+beta=1.129 status=ok capture=0.17993 max=0.186339 second_dip=- deliver=0.186338 GeV crossings=2 iterations=4 phi_ref=4.0941082762e-02 M_P V_ref=2.162975e-11 eV^4 wall=24.6 s
+-- tune surfing_scan-beta1.13-M0.001 it=0 kind=seed H/H0-1=-1.112e-02 phi_ref/phi_min-1=-3.767e-03 norm=-276.853693826 phi_ref=4.0092207700e-02 wall=6.0
+-- tune surfing_scan-beta1.13-M0.001 it=1 kind=plain H/H0-1=+2.957e-04 phi_ref/phi_min-1=-1.590e-02 norm=-276.819361925 phi_ref=4.0243790172e-02 wall=6.0
+-- tune surfing_scan-beta1.13-M0.001 it=2 kind=secant H/H0-1=+2.401e-04 phi_ref/phi_min-1=-5.477e-04 norm=-276.820288188 phi_ref=4.0910725289e-02 wall=6.0
+-- tune surfing_scan-beta1.13-M0.001 it=3 kind=secant H/H0-1=+4.123e-06 phi_ref/phi_min-1=+1.183e-05 norm=-276.821015116 phi_ref=4.0920412141e-02 wall=6.1
+-- tune surfing_scan-beta1.13-M0.001 it=4 kind=secant H/H0-1=-3.392e-06 phi_ref/phi_min-1=-1.033e-05 norm=-276.821026619 phi_ref=4.0919645777e-02 wall=5.9
+-- tune surfing_scan-beta1.13-M0.001 it=5 kind=secant H/H0-1=-1.668e-06 phi_ref/phi_min-1=-5.061e-06 norm=-276.821021513 phi_ref=4.0920001200e-02 wall=5.9
+beta=1.13 status=ok capture=0.180401 max=0.187327 second_dip=- deliver=0.187327 GeV crossings=2 iterations=6 phi_ref=4.0920001200e-02 M_P V_ref=2.162708e-11 eV^4 wall=36.2 s
+-- tune surfing_scan-beta1.131-M0.001 it=0 kind=seed H/H0-1=-1.112e-02 phi_ref/phi_min-1=-3.767e-03 norm=-276.853784482 phi_ref=4.0072903843e-02 wall=5.5
+-- tune surfing_scan-beta1.131-M0.001 it=1 kind=plain H/H0-1=+2.934e-04 phi_ref/phi_min-1=-1.589e-02 norm=-276.819459486 phi_ref=4.0224415373e-02 wall=5.4
+-- tune surfing_scan-beta1.131-M0.001 it=2 kind=secant H/H0-1=+2.407e-04 phi_ref/phi_min-1=-5.467e-04 norm=-276.82037883 phi_ref=4.0890917197e-02 wall=5.3
+-- tune surfing_scan-beta1.131-M0.001 it=3 kind=secant H/H0-1=+2.918e-07 phi_ref/phi_min-1=+7.280e-07 norm=-276.82110764 phi_ref=4.0900521732e-02 wall=5.3
+beta=1.131 status=ok capture=0.180863 max=0.188297 second_dip=- deliver=0.188297 GeV crossings=2 iterations=4 phi_ref=4.0900521732e-02 M_P V_ref=2.162547e-11 eV^4 wall=21.8 s
+-- tune surfing_scan-beta1.132-M0.001 it=0 kind=seed H/H0-1=-1.111e-02 phi_ref/phi_min-1=-3.762e-03 norm=-276.853875094 phi_ref=4.0053625726e-02 wall=5.9
+-- tune surfing_scan-beta1.132-M0.001 it=1 kind=plain H/H0-1=+2.935e-04 phi_ref/phi_min-1=-1.589e-02 norm=-276.819562705 phi_ref=4.0204871555e-02 wall=6.1
+-- tune surfing_scan-beta1.132-M0.001 it=2 kind=secant H/H0-1=+2.388e-04 phi_ref/phi_min-1=-5.474e-04 norm=-276.820482201 phi_ref=4.0870862345e-02 wall=6.2
+-- tune surfing_scan-beta1.132-M0.001 it=3 kind=secant H/H0-1=+6.504e-07 phi_ref/phi_min-1=-2.003e-08 norm=-276.8212055 phi_ref=4.0880599644e-02 wall=6.0
+beta=1.132 status=ok capture=0.181316 max=0.189252 second_dip=- deliver=0.189252 GeV crossings=2 iterations=4 phi_ref=4.0880599644e-02 M_P V_ref=2.162361e-11 eV^4 wall=24.5 s
+-- tune surfing_scan-beta1.133-M0.001 it=0 kind=seed H/H0-1=-1.110e-02 phi_ref/phi_min-1=-3.760e-03 norm=-276.853965662 phi_ref=4.0034373293e-02 wall=5.8
+-- tune surfing_scan-beta1.133-M0.001 it=1 kind=plain H/H0-1=+2.956e-04 phi_ref/phi_min-1=-1.587e-02 norm=-276.819685965 phi_ref=4.0185478974e-02 wall=5.7
+-- tune surfing_scan-beta1.133-M0.001 it=2 kind=secant H/H0-1=+2.394e-04 phi_ref/phi_min-1=-5.478e-04 norm=-276.820612002 phi_ref=4.0850276208e-02 wall=5.8
+-- tune surfing_scan-beta1.133-M0.001 it=3 kind=secant H/H0-1=+5.746e-07 phi_ref/phi_min-1=+2.096e-07 norm=-276.821336861 phi_ref=4.0860000993e-02 wall=5.8
+beta=1.133 status=ok capture=0.181762 max=0.19019 second_dip=- deliver=0.19019 GeV crossings=2 iterations=4 phi_ref=4.0860000993e-02 M_P V_ref=2.162103e-11 eV^4 wall=23.4 s
+-- tune surfing_scan-beta1.134-M0.001 it=0 kind=seed H/H0-1=-1.110e-02 phi_ref/phi_min-1=-3.757e-03 norm=-276.854056186 phi_ref=4.0015146488e-02 wall=5.9
+-- tune surfing_scan-beta1.134-M0.001 it=1 kind=plain H/H0-1=+2.970e-04 phi_ref/phi_min-1=-1.588e-02 norm=-276.81977186 phi_ref=4.0166050898e-02 wall=5.9
+-- tune surfing_scan-beta1.134-M0.001 it=2 kind=secant H/H0-1=+2.373e-04 phi_ref/phi_min-1=-5.500e-04 norm=-276.820702139 phi_ref=4.0830527069e-02 wall=5.9
+-- tune surfing_scan-beta1.134-M0.001 it=3 kind=secant H/H0-1=+1.773e-06 phi_ref/phi_min-1=+1.876e-06 norm=-276.821420997 phi_ref=4.0840467710e-02 wall=5.8
+beta=1.134 status=ok capture=0.182201 max=0.191112 second_dip=- deliver=0.191112 GeV crossings=2 iterations=4 phi_ref=4.0840467710e-02 M_P V_ref=2.161947e-11 eV^4 wall=23.8 s
+-- tune surfing_scan-beta1.135-M0.001 it=0 kind=seed H/H0-1=-1.110e-02 phi_ref/phi_min-1=-3.754e-03 norm=-276.854146667 phi_ref=3.9995945254e-02 wall=6.0
+-- tune surfing_scan-beta1.135-M0.001 it=1 kind=plain H/H0-1=+2.867e-04 phi_ref/phi_min-1=-1.587e-02 norm=-276.819866158 phi_ref=4.0146660510e-02 wall=6.2
+-- tune surfing_scan-beta1.135-M0.001 it=2 kind=secant H/H0-1=+2.410e-04 phi_ref/phi_min-1=-5.487e-04 norm=-276.820764873 phi_ref=4.0811247865e-02 wall=5.9
+-- tune surfing_scan-beta1.135-M0.001 it=3 kind=secant H/H0-1=+2.873e-08 phi_ref/phi_min-1=+1.604e-07 norm=-276.821495181 phi_ref=4.0820890584e-02 wall=6.0
+beta=1.135 status=ok capture=0.182633 max=0.192019 second_dip=- deliver=0.192019 GeV crossings=2 iterations=4 phi_ref=4.0820890584e-02 M_P V_ref=2.161812e-11 eV^4 wall=24.3 s
+-- tune surfing_scan-beta1.136-M0.001 it=0 kind=seed H/H0-1=-1.110e-02 phi_ref/phi_min-1=-3.750e-03 norm=-276.854237103 phi_ref=3.9976769534e-02 wall=4.9
+-- tune surfing_scan-beta1.136-M0.001 it=1 kind=plain H/H0-1=+2.943e-04 phi_ref/phi_min-1=-1.588e-02 norm=-276.819955648 phi_ref=4.0127255430e-02 wall=4.9
+-- tune surfing_scan-beta1.136-M0.001 it=2 kind=secant H/H0-1=+2.413e-04 phi_ref/phi_min-1=-5.501e-04 norm=-276.820877675 phi_ref=4.0791163373e-02 wall=4.9
+-- tune surfing_scan-beta1.136-M0.001 it=3 kind=secant H/H0-1=+6.651e-07 phi_ref/phi_min-1=+1.686e-06 norm=-276.821608357 phi_ref=4.0800854046e-02 wall=4.9
+beta=1.136 status=ok capture=0.18306 max=0.192912 second_dip=- deliver=0.192912 GeV crossings=2 iterations=4 phi_ref=4.0800854046e-02 M_P V_ref=2.161593e-11 eV^4 wall=19.8 s
+-- tune surfing_scan-beta1.137-M0.001 it=0 kind=seed H/H0-1=-1.110e-02 phi_ref/phi_min-1=-3.748e-03 norm=-276.854327497 phi_ref=3.9957619272e-02 wall=6.0
+-- tune surfing_scan-beta1.137-M0.001 it=1 kind=plain H/H0-1=+2.980e-04 phi_ref/phi_min-1=-1.587e-02 norm=-276.820043333 phi_ref=4.0107955273e-02 wall=6.0
+-- tune surfing_scan-beta1.137-M0.001 it=2 kind=secant H/H0-1=+2.424e-04 phi_ref/phi_min-1=-5.527e-04 norm=-276.820976439 phi_ref=4.0771174060e-02 wall=6.0
+-- tune surfing_scan-beta1.137-M0.001 it=3 kind=secant H/H0-1=-3.237e-08 phi_ref/phi_min-1=+1.622e-06 norm=-276.821710582 phi_ref=4.0780912986e-02 wall=6.0
+beta=1.137 status=ok capture=0.183481 max=0.19379 second_dip=- deliver=0.19379 GeV crossings=2 iterations=4 phi_ref=4.0780912986e-02 M_P V_ref=2.161398e-11 eV^4 wall=24.2 s
+-- tune surfing_scan-beta1.138-M0.001 it=0 kind=seed H/H0-1=-1.110e-02 phi_ref/phi_min-1=-3.746e-03 norm=-276.854417846 phi_ref=3.9938494413e-02 wall=6.1
+-- tune surfing_scan-beta1.138-M0.001 it=1 kind=plain H/H0-1=+2.942e-04 phi_ref/phi_min-1=-1.587e-02 norm=-276.820143307 phi_ref=4.0088672056e-02 wall=6.0
+-- tune surfing_scan-beta1.138-M0.001 it=2 kind=secant H/H0-1=+2.417e-04 phi_ref/phi_min-1=-5.506e-04 norm=-276.821064868 phi_ref=4.0751589034e-02 wall=6.0
+-- tune surfing_scan-beta1.138-M0.001 it=3 kind=secant H/H0-1=+3.179e-07 phi_ref/phi_min-1=+1.188e-06 norm=-276.821797033 phi_ref=4.0761266844e-02 wall=6.0
+beta=1.138 status=ok capture=0.183897 max=0.194654 second_dip=- deliver=0.194654 GeV crossings=2 iterations=4 phi_ref=4.0761266844e-02 M_P V_ref=2.161237e-11 eV^4 wall=24.3 s
+-- tune surfing_scan-beta1.139-M0.001 it=0 kind=seed H/H0-1=-1.109e-02 phi_ref/phi_min-1=-3.743e-03 norm=-276.854508152 phi_ref=3.9919394901e-02 wall=5.1
+-- tune surfing_scan-beta1.139-M0.001 it=1 kind=plain H/H0-1=+2.957e-04 phi_ref/phi_min-1=-1.586e-02 norm=-276.820251885 phi_ref=4.0069389726e-02 wall=5.0
+-- tune surfing_scan-beta1.139-M0.001 it=2 kind=secant H/H0-1=+2.403e-04 phi_ref/phi_min-1=-5.541e-04 norm=-276.821178053 phi_ref=4.0731468208e-02 wall=4.8
+-- tune surfing_scan-beta1.139-M0.001 it=3 kind=secant H/H0-1=+6.982e-07 phi_ref/phi_min-1=+1.802e-06 norm=-276.82190602 phi_ref=4.0741387204e-02 wall=4.8
+beta=1.139 status=ok capture=0.184308 max=0.195505 second_dip=- deliver=0.195505 GeV crossings=2 iterations=4 phi_ref=4.0741387204e-02 M_P V_ref=2.161027e-11 eV^4 wall=19.9 s
+-- tune surfing_scan-beta1.14-M0.001 it=0 kind=seed H/H0-1=-1.109e-02 phi_ref/phi_min-1=-3.740e-03 norm=-276.854598415 phi_ref=3.9900320679e-02 wall=5.8
+-- tune surfing_scan-beta1.14-M0.001 it=1 kind=plain H/H0-1=+2.952e-04 phi_ref/phi_min-1=-1.586e-02 norm=-276.820344356 phi_ref=4.0050124710e-02 wall=5.8
+-- tune surfing_scan-beta1.14-M0.001 it=2 kind=secant H/H0-1=+2.416e-04 phi_ref/phi_min-1=-5.540e-04 norm=-276.821269123 phi_ref=4.0711836773e-02 wall=5.8
+-- tune surfing_scan-beta1.14-M0.001 it=3 kind=secant H/H0-1=+2.300e-07 phi_ref/phi_min-1=+1.387e-06 norm=-276.822001029 phi_ref=4.0721664134e-02 wall=5.8
+beta=1.14 status=ok capture=0.184715 max=0.196342 second_dip=- deliver=0.196342 GeV crossings=2 iterations=4 phi_ref=4.0721664134e-02 M_P V_ref=2.160848e-11 eV^4 wall=23.4 s
+-- tune surfing_scan-beta1.141-M0.001 it=0 kind=seed H/H0-1=-1.109e-02 phi_ref/phi_min-1=-3.737e-03 norm=-276.854688634 phi_ref=3.9881271693e-02 wall=5.7
+-- tune surfing_scan-beta1.141-M0.001 it=1 kind=plain H/H0-1=+2.989e-04 phi_ref/phi_min-1=-1.585e-02 norm=-276.820447511 phi_ref=4.0030880122e-02 wall=5.7
+-- tune surfing_scan-beta1.141-M0.001 it=2 kind=secant H/H0-1=+2.405e-04 phi_ref/phi_min-1=-5.551e-04 norm=-276.82138351 phi_ref=4.0691763286e-02 wall=5.7
+-- tune surfing_scan-beta1.141-M0.001 it=3 kind=secant H/H0-1=+8.444e-07 phi_ref/phi_min-1=+2.014e-06 norm=-276.822112075 phi_ref=4.0701708250e-02 wall=5.7
+beta=1.141 status=ok capture=0.185117 max=0.197167 second_dip=- deliver=0.197167 GeV crossings=2 iterations=4 phi_ref=4.0701708250e-02 M_P V_ref=2.160634e-11 eV^4 wall=23.2 s
+-- tune surfing_scan-beta1.142-M0.001 it=0 kind=seed H/H0-1=-1.108e-02 phi_ref/phi_min-1=-3.736e-03 norm=-276.85477881 phi_ref=3.9862247886e-02 wall=5.6
+-- tune surfing_scan-beta1.142-M0.001 it=1 kind=plain H/H0-1=+2.947e-04 phi_ref/phi_min-1=-1.584e-02 norm=-276.820551131 phi_ref=4.0011713673e-02 wall=5.6
+-- tune surfing_scan-beta1.142-M0.001 it=2 kind=secant H/H0-1=+2.404e-04 phi_ref/phi_min-1=-5.552e-04 norm=-276.821474413 phi_ref=4.0672201948e-02 wall=5.6
+-- tune surfing_scan-beta1.142-M0.001 it=3 kind=secant H/H0-1=+3.496e-07 phi_ref/phi_min-1=+7.450e-07 norm=-276.822202821 phi_ref=4.0682147487e-02 wall=5.6
+beta=1.142 status=ok capture=0.185516 max=0.19798 second_dip=- deliver=0.19798 GeV crossings=2 iterations=4 phi_ref=4.0682147487e-02 M_P V_ref=2.160463e-11 eV^4 wall=22.8 s
+-- tune surfing_scan-beta1.143-M0.001 it=0 kind=seed H/H0-1=-1.108e-02 phi_ref/phi_min-1=-3.733e-03 norm=-276.854868942 phi_ref=3.9843249205e-02 wall=5.7
+-- tune surfing_scan-beta1.143-M0.001 it=1 kind=plain H/H0-1=+2.982e-04 phi_ref/phi_min-1=-1.584e-02 norm=-276.820642394 phi_ref=3.9992546614e-02 wall=5.7
+-- tune surfing_scan-beta1.143-M0.001 it=2 kind=secant H/H0-1=+2.412e-04 phi_ref/phi_min-1=-5.561e-04 norm=-276.821576186 phi_ref=4.0652432459e-02 wall=5.6
+-- tune surfing_scan-beta1.143-M0.001 it=3 kind=secant H/H0-1=+2.126e-07 phi_ref/phi_min-1=+9.959e-07 norm=-276.82230707 phi_ref=4.0662364233e-02 wall=5.7
+beta=1.143 status=ok capture=0.18591 max=0.19878 second_dip=- deliver=0.19878 GeV crossings=2 iterations=4 phi_ref=4.0662364233e-02 M_P V_ref=2.160264e-11 eV^4 wall=23.0 s
+-- tune surfing_scan-beta1.144-M0.001 it=0 kind=seed H/H0-1=-1.108e-02 phi_ref/phi_min-1=-3.730e-03 norm=-276.854959031 phi_ref=3.9824275593e-02 wall=5.6
+-- tune surfing_scan-beta1.144-M0.001 it=1 kind=plain H/H0-1=+2.962e-04 phi_ref/phi_min-1=-1.584e-02 norm=-276.820745627 phi_ref=3.9973376239e-02 wall=5.6
+-- tune surfing_scan-beta1.144-M0.001 it=2 kind=secant H/H0-1=+2.407e-04 phi_ref/phi_min-1=-5.557e-04 norm=-276.821673319 phi_ref=4.0632848292e-02 wall=5.6
+-- tune surfing_scan-beta1.144-M0.001 it=3 kind=secant H/H0-1=+7.510e-07 phi_ref/phi_min-1=+1.633e-06 norm=-276.822402868 phi_ref=4.0642782927e-02 wall=5.6
+beta=1.144 status=ok capture=0.186301 max=0.199569 second_dip=- deliver=0.199569 GeV crossings=2 iterations=4 phi_ref=4.0642782927e-02 M_P V_ref=2.160082e-11 eV^4 wall=22.7 s
+-- tune surfing_scan-beta1.145-M0.001 it=0 kind=seed H/H0-1=-1.108e-02 phi_ref/phi_min-1=-3.729e-03 norm=-276.855049077 phi_ref=3.9805326997e-02 wall=5.3
+-- tune surfing_scan-beta1.145-M0.001 it=1 kind=plain H/H0-1=+2.980e-04 phi_ref/phi_min-1=-1.583e-02 norm=-276.820841371 phi_ref=3.9954328525e-02 wall=5.3
+-- tune surfing_scan-beta1.145-M0.001 it=2 kind=secant H/H0-1=+2.404e-04 phi_ref/phi_min-1=-5.577e-04 norm=-276.821774583 phi_ref=4.0613049823e-02 wall=5.4
+-- tune surfing_scan-beta1.145-M0.001 it=3 kind=secant H/H0-1=+4.051e-07 phi_ref/phi_min-1=+5.861e-07 norm=-276.822503298 phi_ref=4.0623091264e-02 wall=5.3
+beta=1.145 status=ok capture=0.186689 max=0.200346 second_dip=- deliver=0.200346 GeV crossings=2 iterations=4 phi_ref=4.0623091264e-02 M_P V_ref=2.159891e-11 eV^4 wall=21.6 s
+-- tune surfing_scan-beta1.146-M0.001 it=0 kind=seed H/H0-1=-1.107e-02 phi_ref/phi_min-1=-3.727e-03 norm=-276.85513908 phi_ref=3.9786403361e-02 wall=3.9
+-- tune surfing_scan-beta1.146-M0.001 it=1 kind=plain H/H0-1=+2.977e-04 phi_ref/phi_min-1=-1.583e-02 norm=-276.820939066 phi_ref=3.9935234370e-02 wall=3.8
+-- tune surfing_scan-beta1.146-M0.001 it=2 kind=secant H/H0-1=+2.408e-04 phi_ref/phi_min-1=-5.577e-04 norm=-276.821871429 phi_ref=4.0593567984e-02 wall=3.8
+-- tune surfing_scan-beta1.146-M0.001 it=3 kind=secant H/H0-1=+1.445e-06 phi_ref/phi_min-1=+3.911e-06 norm=-276.822601119 phi_ref=4.0603582507e-02 wall=3.9
+beta=1.146 status=ok capture=0.187074 max=0.201112 second_dip=- deliver=0.201111 GeV crossings=2 iterations=4 phi_ref=4.0603582507e-02 M_P V_ref=2.159706e-11 eV^4 wall=15.6 s
+-- tune surfing_scan-beta1.147-M0.001 it=0 kind=seed H/H0-1=-1.107e-02 phi_ref/phi_min-1=-3.722e-03 norm=-276.85522904 phi_ref=3.9767504631e-02 wall=5.2
+-- tune surfing_scan-beta1.147-M0.001 it=1 kind=plain H/H0-1=+2.984e-04 phi_ref/phi_min-1=-1.582e-02 norm=-276.821039146 phi_ref=3.9916075722e-02 wall=5.2
+-- tune surfing_scan-beta1.147-M0.001 it=2 kind=secant H/H0-1=+2.404e-04 phi_ref/phi_min-1=-5.595e-04 norm=-276.821973453 phi_ref=4.0573772521e-02 wall=5.2
+-- tune surfing_scan-beta1.147-M0.001 it=3 kind=secant H/H0-1=+7.188e-07 phi_ref/phi_min-1=+1.786e-06 norm=-276.822702011 phi_ref=4.0583889793e-02 wall=5.2
+beta=1.147 status=ok capture=0.187455 max=0.201866 second_dip=- deliver=0.201866 GeV crossings=2 iterations=4 phi_ref=4.0583889793e-02 M_P V_ref=2.159513e-11 eV^4 wall=21.0 s
+-- tune surfing_scan-beta1.148-M0.001 it=0 kind=seed H/H0-1=-1.107e-02 phi_ref/phi_min-1=-3.720e-03 norm=-276.855318957 phi_ref=3.9748630752e-02 wall=5.4
+-- tune surfing_scan-beta1.148-M0.001 it=1 kind=plain H/H0-1=+2.985e-04 phi_ref/phi_min-1=-1.582e-02 norm=-276.821136356 phi_ref=3.9897049323e-02 wall=5.4
+-- tune surfing_scan-beta1.148-M0.001 it=2 kind=secant H/H0-1=+2.409e-04 phi_ref/phi_min-1=-5.588e-04 norm=-276.822071135 phi_ref=4.0554292057e-02 wall=5.4
+-- tune surfing_scan-beta1.148-M0.001 it=3 kind=secant H/H0-1=+8.786e-07 phi_ref/phi_min-1=+2.228e-06 norm=-276.822801324 phi_ref=4.0564338476e-02 wall=5.4
+beta=1.148 status=ok capture=0.187834 max=0.202611 second_dip=- deliver=0.202611 GeV crossings=2 iterations=4 phi_ref=4.0564338476e-02 M_P V_ref=2.159325e-11 eV^4 wall=21.7 s
+-- tune surfing_scan-beta1.149-M0.001 it=0 kind=seed H/H0-1=-1.106e-02 phi_ref/phi_min-1=-3.717e-03 norm=-276.855408831 phi_ref=3.9729781672e-02 wall=4.0
+-- tune surfing_scan-beta1.149-M0.001 it=1 kind=plain H/H0-1=+2.987e-04 phi_ref/phi_min-1=-1.581e-02 norm=-276.821235737 phi_ref=3.9878020686e-02 wall=4.0
+-- tune surfing_scan-beta1.149-M0.001 it=2 kind=secant H/H0-1=+2.405e-04 phi_ref/phi_min-1=-5.606e-04 norm=-276.822171107 phi_ref=4.0534628006e-02 wall=4.0
+-- tune surfing_scan-beta1.149-M0.001 it=3 kind=secant H/H0-1=+5.482e-07 phi_ref/phi_min-1=+1.403e-06 norm=-276.822900237 phi_ref=4.0544774739e-02 wall=4.0
+beta=1.149 status=ok capture=0.188209 max=0.203344 second_dip=- deliver=0.203344 GeV crossings=2 iterations=4 phi_ref=4.0544774739e-02 M_P V_ref=2.159137e-11 eV^4 wall=16.2 s
+-- tune surfing_scan-beta1.15-M0.001 it=0 kind=seed H/H0-1=-1.106e-02 phi_ref/phi_min-1=-3.715e-03 norm=-276.855498662 phi_ref=3.9710957334e-02 wall=5.4
+-- tune surfing_scan-beta1.15-M0.001 it=1 kind=plain H/H0-1=+2.983e-04 phi_ref/phi_min-1=-1.581e-02 norm=-276.821334906 phi_ref=3.9859013811e-02 wall=5.4
+-- tune surfing_scan-beta1.15-M0.001 it=2 kind=secant H/H0-1=+2.408e-04 phi_ref/phi_min-1=-5.615e-04 norm=-276.822269151 phi_ref=4.0515100004e-02 wall=5.5
+-- tune surfing_scan-beta1.15-M0.001 it=3 kind=secant H/H0-1=+4.353e-07 phi_ref/phi_min-1=+1.442e-06 norm=-276.822999213 phi_ref=4.0525263904e-02 wall=5.4
+beta=1.15 status=ok capture=0.188582 max=0.204068 second_dip=- deliver=0.204068 GeV crossings=2 iterations=4 phi_ref=4.0525263904e-02 M_P V_ref=2.158949e-11 eV^4 wall=22.0 s
+# end: 2026-11-15 20:06:50 exit=0 wall=1170 s 20:06  up 15 days, 22:27, 1 user, load averages: 6.64 6.72 7.32

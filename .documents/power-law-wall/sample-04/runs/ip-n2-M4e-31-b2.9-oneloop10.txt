@@ -1,0 +1,35 @@
+# command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 2
+# start: 2026-11-15 19:42:40 19:42  up 15 days, 22:03, 1 user, load averages: 6.06 8.98 7.99
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune history_and_bbn-beta2.9-M4e-31-inverse-power-n2 it=0 kind=seed H/H0-1=-1.751e-06 phi_ref/phi_min-1=-4.354e-06 norm=-276.630728594 phi_ref=6.2514896323e-21 wall=2.6
+history beta=2.9 M=4e-31 model=inverse-power n=2: RHS=21977 accepted_steps=2689 reflections=11 samples=5926 integrations=1 drain_law=one_loop A=10 model=one-loop-measured-pl-v1 wall=2.9 s
+tuning beta=2.9 M=4e-31 model=inverse-power n=2: normalization=-276.63072859401797 V_ref=7.257733995332848e-121 phi_ref=6.25148963229753e-21 phi_0=6.251516853197775e-21 pi_0=6.251516853197613e-21 tracking=0.6666666666666493 residual_H=-1.7512170580324948e-06 residual_phi=-4.354287299390691e-06 tuning_iterations=1 plain_steps=0 secant_steps=0 guard_steps=0 seed_kind=tracking seed_normalization=-276.63072859401797 seed_phi_ref=6.25148963229753e-21
+bounce beta=2.9 M=4e-31 model=inverse-power n=2: N=23.887819947 T_J=1870.300090 MeV phi=3.184970e-11 reflected=True
+dissipation beta=2.9 M=4e-31 model=inverse-power n=2: injections=11 resolved_candidates=0 unresolved_candidates=11 injected_fraction=0.018345 rho_chi_ratio_1MeV=0.0097281 rho_chi_ratio_70keV=0.00815404 rho_chi_ratio_today=0.00812165 Delta_N_eff_1MeV=0.0586212 Delta_N_eff_today=0.0604902 log_R_first_impact=329.726 parking_N=25.3622 parking_log_T_Jordan_GeV=-0.763811 release_N=None release_log_T_Jordan_GeV=None worst_birth_margin=36.0906 worst_birth_margin_N=25.3306 birth_failing_share=0 worst_reflection_margin=36.3649 worst_reflection_margin_N=25.346 reflection_failing_share=0 worst_tracker_margin=35.467 worst_tracker_margin_N=25.3697 tracker_failing_share=0 unassessed_share=6.13585e-06
+drain beta=2.9 M=4e-31 model=inverse-power n=2: candidates=11 one_loop=11 gap=0 classical=0 unassessed=0 K_share_one_loop=0.999994 K_share_gap=0 K_share_classical=0 K_share_unassessed=0 K_share_parking=6.13585e-06 ell_min=34.3153 unresolvable_assessments=0 unresolved_declined=0
+fixed_T beta=2.9 M=4e-31 model=inverse-power n=2: 1MeV crossings=1 phi=4.225204814e-32 ratio=9.728100548e-03 stand_in_phi=4.225207791e-32 stand_in_ratio=9.728100405e-03 | 70keV crossings=1 phi=1.663099285e-30 ratio=8.154037610e-03 stand_in_phi=1.663214916e-30 stand_in_ratio=8.154044456e-03
+ratio beta=2.9 M=4e-31 model=inverse-power n=2 [0.3,1) keV: n=131 min=0.008122 median=0.008122 max=0.008122 rms_step=1.266e-14
+ratio beta=2.9 M=4e-31 model=inverse-power n=2 [1,3) keV: n=119 min=0.008122 median=0.008122 max=0.008122 rms_step=1.324e-14
+ratio beta=2.9 M=4e-31 model=inverse-power n=2 [3,10) keV: n=131 min=0.008122 median=0.008122 max=0.008122 rms_step=1.333e-14
+ratio beta=2.9 M=4e-31 model=inverse-power n=2 [10,100) keV: n=257 min=0.008122 median=0.008122 max=0.008299 rms_step=1.474e-06
+bbn beta=2.9 M=4e-31 model=inverse-power n=2: Yp=0.2476921524 DoH=2.478102305 He3oH=1.044776971 Li7oH=5.45676281 network=small PRyM_time=8.3 s wall=8.3 s PRyM_version=bf24c3d+ri02+sr01+bt02
+sample outcome: status=ok exit=0 reason=None
+sample tuning: integrations=1 seed_kind=tracking residual_H=-1.7512170580324948e-06 residual_phi=-4.354287299390691e-06 normalization=-276.63072859401797 phi_ref_Mp=6.25148963229753e-21
+sample cascade: reflections=11 candidates=11 injections=11 resolved=0 unresolved=11 N_final=54.575647811 first_impact_log_R=329.7256 first_impact_log_x=109.05544
+sample drain: law=one_loop A=10 model=one-loop-measured-pl-v1 f_min=0.0596543 f_max=0.0703977 alpha_eff_min=0.596543 alpha_eff_max=0.703977 at_cap=0 log_R_min=279.53977 log_R_max=329.7256 ell_min=34.3153 ell_max=40.6095 consistency_mismatches=0
+sample parking: parked=True N=25.362194992 T_J_GeV=0.465888 candidate_index=10 rho_kin_over_rho_rad=3.46955e-07 m_eff_over_H=1.0565e+18 min_m_eff_over_H=3.60392e+10 parked_steps=297 K_share_parking=6.13585e-06 released=False release_N=None release_T_J_GeV=None release_m_eff_over_H=None release_N_check=None release_m_eff_over_H_check=None release_candidate_index=None min_ratio_before_cut=1.13816e-06 min_ratio_before_cut_index=9
+sample r9: K_final=5.011092844318834e-32 share_x_lt_100=0 share_x_lt_1000=0 log_x_min=92.326837 inv_s_t_minus_1_at_min=7.99768e-41 log_x_max=109.05544
+sample thresholds: phi_t_max_Mp=3.57719e-51 phi_t_ge_1e-8=0 log_R_min=279.53977 log_R_le_0=0 unresolvable_assessments=0 unresolved_declined=0 log1p_x_min_over_16ulp=1.01514e+14 max_wall_to_kinetic_ratio=-0
+cand idx N kind log_x phi_t_Mp log_R ell regime f alpha_eff w_gate dK_over_K resolved rho_kin_over_rho_rad
+cand 0 23.887820 floor 109.05544 8.336257e-55 329.7256 40.6095 one_loop 0.0596543 0.596543 1 0.625291 False 0.0196476
+cand 1 24.678358 floor 104.88611 6.703948e-54 317.21759 39.0411 one_loop 0.0620131 0.620131 1 0.237416 False 0.00685588
+cand 2 25.003886 floor 102.56631 2.138301e-53 310.25819 38.1684 one_loop 0.0634081 0.634081 1 0.0877393 False 0.00240944
+cand 3 25.166825 floor 100.8909 4.941739e-53 305.23196 37.538 one_loop 0.0644553 0.644553 1 0.0320436 False 0.000851377
+cand 4 25.254476 floor 99.498305 9.914655e-53 301.05418 37.014 one_loop 0.0653524 0.653524 1 0.0114607 False 0.00029739
+cand 5 25.303174 floor 98.240018 1.859993e-52 297.27932 36.5406 one_loop 0.0661846 0.661846 1 0.00400718 False 0.000102085
+cand 6 25.330579 floor 97.04435 3.381794e-52 293.69231 36.0906 one_loop 0.0669954 0.669954 1 0.00136918 False 3.43438e-05
+cand 7 25.346032 floor 95.873067 6.074183e-52 290.17847 35.6499 one_loop 0.0678091 0.678091 1 0.000456949 False 1.13027e-05
+cand 8 25.354707 floor 94.704368 1.089602e-51 286.67237 35.21 one_loop 0.0686409 0.686409 1 0.000148824 False 3.63264e-06
+cand 9 25.359537 floor 93.525105 1.964905e-51 283.13458 34.7662 one_loop 0.0695012 0.695012 1 4.72417e-05 False 1.13816e-06
+cand 10 25.362195 floor 92.326837 3.577191e-51 279.53977 34.3153 one_loop 0.0703977 0.703977 1 1.45918e-05 False 3.46955e-07
+# end: 2026-11-15 19:42:53 exit=0 wall=13 s 19:42  up 15 days, 22:03, 1 user, load averages: 5.87 8.85 7.96
