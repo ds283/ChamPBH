@@ -3,7 +3,7 @@
 **Subject:** registered builds under real Ray from two trees: the exponential at the campaign's base `a7e0978` and at the
 tip, bitwise; the power law at n = 1, 2 under both laws, straight and interrupted and resumed, by value and against 04's
 tool route; both potentials in one store; the readers on every store (P59–P72).
-**Commit:** this commit, on branch `power-law-wall`, on top of `945bf5d`
+**Commit:** `bbd99f4`, on branch `power-law-wall`, on top of `945bf5d`
 **Date:** 2026-11-16, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE.** The gate R holds (§4), with the user's ruling (a) on the stop at §2.2.
 - **Sixteen registered runs into five stores** in the main checkout's `var/datastores/`: base (3 runs, 20 exponential

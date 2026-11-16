@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-16 · **Status: LIVE — 7 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–06 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-16 · **Status: LIVE — 7 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -27,7 +27,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 04 | Measure a sample | U7's forty histories under both laws beside the exponential's; the thresholds of README §0.3, the surfing edges, R9's share, M_crit (P24–P32) | Opus | ✍️ | ✅ | `05f6920` | [`logs/04-measure-a-sample.md`](logs/04-measure-a-sample.md) |
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6); the key's drain model at entry and the joins by model type (P33–P44) | Opus | ✍️ | ✅ | `bdb6ae7` | [`logs/05-the-store.md`](logs/05-the-store.md) |
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11); the one-loop rows under the model's own drain model, the quanta tools' wall by row, the scope; every potential under `<output>/<label>/<model>/` (R12, P45–P58) | Opus | ✍️ | ✅ | `fda2df2` | [`logs/06-drivers-and-exports.md`](logs/06-drivers-and-exports.md) |
-| 07 | Rehearse | registered builds, exponential bitwise, power law resumed; U7's grid in five stores (the exponential at `a7e0978` and the tip, the power law straight and resumed, both potentials in one store), against 04, the readers on every store (P59–P72) | Opus | ✍️ | ✅ | this commit | [`logs/07-rehearse.md`](logs/07-rehearse.md) |
+| 07 | Rehearse | registered builds, exponential bitwise, power law resumed; U7's grid in five stores (the exponential at `a7e0978` and the tip, the power law straight and resumed, both potentials in one store), against 04, the readers on every store (P59–P72) | Opus | ✍️ | ✅ | `bbd99f4` | [`logs/07-rehearse.md`](logs/07-rehearse.md) |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -513,6 +513,91 @@ overlapped one 3 s run of `test_models_main`; nothing else ran beside them.
   refuses a power-law root with n = 1 and 2 at one (β, M) (§3), and 2026.11.0's `changes.py` key has no `n`; both
   bear on the science run, not on 07.
 
+**Orchestrator review of prompt 07 (2026-11-16).** All seven checks of note 07 §3 pass, with the user's ruling (a) on
+the agent's stop at §2.2. The re-runs below were made by the orchestrator at `bbd99f4`, from scratch scripts in the
+session scratchpad (read-only `sqlite3` with `mode=ro`, none committed), one at a time, with the one-minute load 5–10
+during the review.
+- **The gate at dispatch** (2026-11-16, 18:40 local). `HEAD` was `945bf5d`, the note's own commit, and the worktree held
+  `?? venv` only. The main checkout was at `9df9e13` and clean. The registry held 62 runs, all finished; the lock was free
+  and ports 6380, 6381, 8267 and 52367 free. The load was 5.67 / 17.86 / 19.33 (falling); 113 GB free.
+- **The stop.** At §2.2 `compare_stores.py` on `pl` and `pl-resumed` exited 1, its only differences the three R5 failure
+  rows and their tags, whose `failure_reason` carries main.py's run label. I confirmed it from the agent's output before
+  putting it to the user, who ruled "(a) please"; relayed in those words, and the agent resumed.
+1. *Scope.* `bbd99f4`'s parent is `945bf5d`. Its 203 files are prompt §7's list: the verification document, the log,
+   the board, `.documents/OPEN_ISSUES.md`, and `rehearse-07/` (12 scripts and 187 small text files under `out/`, no PDF or
+   PNG). No code, test, config, `CLAUDE.md`, `.gitignore` or `PRyM/` file; nothing under `var/`. The worktree holds
+   `?? venv` only, the main checkout is clean at `9df9e13`, `git worktree list` shows the two trees, the branch has no
+   upstream. `$MAIN/var` gained only `datastores/power-law-wall-07-*` (five stores, 16 shards and a sidecar each) and
+   `runs/power-law-wall-07-*` (16).
+2. *The counts,* by discovery, mine: 26, 226 + 557, 175, 312, 79.
+3. *The cluster, the registry and the trees.*
+   - `ray_cluster.sh status` exit 0 and the lock's `status`: free, no process, the four ports free.
+   - `runregistrykit list`: 78 runs, all finished; this prompt's 16 are 15 `done` and `pl-resumed-a` `killed`.
+   - Every manifest's `git_head` and script hash, read by me: the three base runs `a7e0978` and `7b93fae4…`, which is my
+     own SHA-256 of `git show a7e0978:main.py`; the thirteen tip runs `945bf5d` and `27056364…`, my SHA-256 of the tip's
+     `main.py`. `git_dirty` is True in all sixteen, as the log says (the `venv` link; the untracked `rehearse-07/`).
+   - The probes as committed: every process (driver, task, actor) of each tree imports that tree's modules from that
+     tree's root as working directory, at 2026.11.0 / 7 for the base and 2026.12.0 / 8 for the tip, and reads
+     `Xav_EOS_data.csv` `690090c8…119d` and `PRyMrates/` (84 files) `49b4cea2…9224` in both.
+   - The sidecars: `fingerprint_format` 7 for `base`, 8 for the other four; `pl` and `pl-resumed` both `9d4fcf02…ff7a`.
+4. *Bitwise, independently.* My script matches histories by (potential, M, β, n, drain model, α) across the sixteen
+   shards and compares every shared column of `ScalarHistory`, `ScalarHistoryValue` (by redshift), `ScalarHistoryBounce`
+   (by ordinal), `AdiabaticHistory`/`Value` and `BBNData`/`Value` by `float.hex`, serials, timestamps, labels and timing
+   columns aside, and `failure_reason` under the ruled mask:
+   - `base`/`exp`: 20 matched each way, 2 983 822 values, no difference;
+   - `pl`/`pl-resumed`: 40 matched, 5 537 764 values, no difference; the three reasons equal only under the mask;
+   - `mixed`/`exp` (the exponential): 20, 2 983 822, none; `mixed`/`pl` (the power law at n = 1), both ways: 20,
+     2 547 734, none, three reasons equal under the mask.
+   My counts sit a few hundred below the agent's (2 984 336, 5 538 777, 2 548 230) because I skip every `_serial`
+   column and `extra_data`, which the agent resolves and compares; nothing compared by both differs.
+5. *R, independently.*
+   - `tools/compare_stores.py` on `pl` and `pl-resumed`, run by me: exit 1, `problems: none`, its output equal to the
+     agent's (timing lines aside): `ScalarHistory` and `_tags` 3 and 3 on one side, the failure rows. `store fingerprint`
+     on each: `9d4fcf02…ff7a`, format 8, `problems: none`. The stores' bytes were unchanged by both.
+   - Against 04, five histories of my choosing, from `pl`: n = 1 at 10⁻³³ M_P (A = 1), n = 2 at laboratory M, β = 2.9,
+     A = 0.05 (157 candidates), n = 2 natural mode at 10⁻³ M_P, β = 1.2, n = 1 natural mode at 10⁻³ M_P, β = 2 (a failure),
+     and n = 1 at laboratory M, β = 1.2, α = 0.1. The tuning line's fifteen values bit for bit by `repr`, Y_p and D/H at
+     ten digits, ΔN_eff at the printed six, and the first and last `cand` rows (index, N, kind, ln R, ℓ, regime,
+     α_eff, w_gate, resolved) at their printed formats: 111 values, no difference. The failure's stored reason, label
+     masked, is a prefix of 04's. A fixed-law history's printed candidates are not held (`bounce_rows` NULL), as
+     `compare_04.py` lists them.
+6. *The readers and the exports.*
+   - `export-base` against `export-exp/…/exponential/`, by my own comparison, R5's `quanta_*` left out: 40 paths each;
+     31 byte-identical, `histories.csv` identical once `model` (`exponential` throughout) is removed, and 8 `data.csv`
+     differing only in `scalar_compute_time`, `NP_compute_time` and `BBN_compute_time`.
+   - `export-mixed/…/exponential/` against `export-exp`: 63 paths, 55 identical, 8 timing-only. `export-mixed/…/inverse-power/`
+     against `export-pl`: pl's 61 extra files all under `_n=2` paths; 50 identical, 7 `data.csv` timing-only;
+     `quanta_histories.csv` equal to pl's n = 1 rows in order; `histories.csv` equal to them but for `failure_reasons`,
+     which are equal under the ruled mask.
+   - `tools/quanta_measures.py` re-run by me on a copy of `export-pl`'s root (6.9 s): exit 0, "measured 22, skipped as
+     fixed-law 48, failed histories 26"; all 45 of its files byte-identical to the agent's; `spectrum_model` is
+     `R8-power-n1-v1` on the 11 n = 1 rows and `R8-power-n2-v1` on the 11 n = 2 rows.
+   - R4: the four logs (three refusals, one re-run) end in the named refusal, exit 2, and no output directory holds a
+     file. R6's four re-solves equal the stored Y_p and D/H at ten digits. Every one of the 90 store files recorded in
+     `shasums.txt` has its last recorded SHA-256 now.
+   - One of `plot-pl`'s figures looked at (`M=0.00097413eV_n=1/Delta_N_eff.png`, laboratory M, n = 1): five rows
+     ordered as expected, A = 10 the highest; the legend covers A = 10's point at β = 2.9, as the log notes.
+   - **Found in the review, not in the log:** R4's first refusal (`--models inverse-power` on `exp`, with the A rows)
+     prints the right refusal and exits 2, but its log also holds two Ray "Unhandled error" tracebacks
+     (`ReadOnlyMiss` for A = 1 and 10 under `one-loop-measured-pl-v1`). `plot_inputs._get_parameter` reads the lookups one
+     by one and raises at the first miss; the others' errors are never retrieved, and Ray prints them as the driver
+     exits. Nothing is written, and the refusal is right. Opened as `[07-a-refused-plot-leaves-ray-errors-unretrieved]`
+     (§3).
+7. *The records.*
+   - The log has §5.1's seven parts. It records rulings 1–9 of note 07 §0 with their classes, and D1–D15, three of them
+     UNINTENDED DRIFT (D9 malformed R1 calls, D10 bugs in the agent's own scripts, D15 one throwaway file in `/tmp`). D1
+     records the stop and the user's ruling in their words. Its §7 gives 08 the stores, the exports, the gate and the costs.
+   - The verification document loses no line; §6 is appended, the commands verbatim.
+   - The board has row 07, the gate R in §2, §3's new issue, the baselines and the history line;
+     `.documents/OPEN_ISSUES.md` has the issue under §1.26, and the count was 34.
+   - `black --check` passes on the ten committed Python files. The Ray token's contents appear nowhere in the commit (the
+     matches for `ray-cpbh` are `ray_cluster.sh`'s own status output).
+   - "This commit" is replaced by `bbd99f4` in the log and on the board.
+- **For 08**, from the log's §7: the five stores stay in `$MAIN/var/datastores/power-law-wall-07-*`. The science run's
+  handover takes the costs measured here (laboratory M about the exponential's; the n = 2 natural mode at 10⁻³ M_P about
+  twice), `--n-values` one list per run, `plot_quanta_grid`'s refusal at two n (§3), and `compare_stores`' blindness to
+  two builds that hold a failure (§3).
+
 ## 2. The gates
 
 As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Close (08).
@@ -622,6 +707,18 @@ As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Expor
   - *Next step:* for a later prompt: a `MASKED_FRAGMENTS` entry for `ScalarHistory.failure_reason` in `compare_stores.py`,
     and a ruling on whether the stored reason should leave the label out, or be cut after it, so that its numbers survive
     whatever the job name.
+
+- **`[07-a-refused-plot-leaves-ray-errors-unretrieved]`** (opened by the orchestrator's review of prompt 07, 2026-11-16;
+  this board, "Orchestrator review of prompt 07", check 6).
+  - *What:* when a plot script is refused for an option the store does not hold, and the option names several values
+    (R4: `plot_by_beta.py --models inverse-power --A-values 0.05 1 10` on `exp`), the refusal names the first and the
+    script exits 2, but its log ends with a Ray "Unhandled error" traceback for each other missed value (`ReadOnlyMiss`
+    for A = 1 and 10). `plot_inputs._get_parameter` reads the lookups one by one and raises at the first miss; the
+    remaining refs' errors are never retrieved, and Ray prints them as the driver exits.
+  - *Impact:* cosmetic. Nothing is written and the refusal is right, but a refusal log reads like a crash, and only the
+    first missing value is named.
+  - *Next step:* for a later prompt: gather the lookups' outcomes before refusing (and name every missing value), or
+    retrieve the remaining refs before raising.
 
 ### 3.1 Assigned to this campaign
 
@@ -738,5 +835,8 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
 - 2026-11-16: prompt 07 dispatched at `945bf5d`. It stopped at the gate R §2.2: `compare_stores` on `pl` and `pl-resumed`
   differed only in three failure rows, whose stored reasons carry main.py's run label. The user ruled, in their words,
   "(a) please": the label a run-dependent fragment for 07, compared masked and to the shorter cut; `compare_stores.py`
-  unchanged; one issue opened. 07 then landed (this commit); the gate R holds. One issue opened (§3,
+  unchanged; one issue opened. 07 then landed (`bbd99f4`); the gate R holds. One issue opened (§3,
   `[07-failure-reason-carries-the-run-label]`).
+- 2026-11-16: prompt 07 reviewed by the orchestrator (this board, "Orchestrator review of prompt 07"); all seven checks
+  pass. One issue opened by the review (§3, `[07-a-refused-plot-leaves-ray-errors-unretrieved]`). 08 is written only when
+  the user asks for it.

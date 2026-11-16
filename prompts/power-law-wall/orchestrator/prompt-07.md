@@ -1,6 +1,7 @@
 # Orchestrator — prompt 07, the rehearsal
 
-**Written** 2026-11-16 with the prompt, at the user's request: "Please write 07 and its orchestration note." Not
+**Used for 07** (dispatched 2026-11-16 at `945bf5d`; stopped at the gate R §2.2, ruled (a) by the user;
+landed `bbd99f4`; reviewed on the board, "Orchestrator review of prompt 07"). **Written** 2026-11-16 with the prompt, at the user's request: "Please write 07 and its orchestration note." Not
 dispatched. P59–P72 (README §6.11) stand unless the user rules otherwise; none needs a ruling first. 07 is dispatched at
 the user's word.
 
