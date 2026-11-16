@@ -393,6 +393,17 @@ The list below is the proposal as it was put.
 - **P32 — the counts.** The suites run in full at the base. Since the commit changes nothing they import, the counts after
   are taken by discovery (P14).
 
+### 6.8 Ruled by the user after 04, 2026-11-16, in their words
+
+On prompt 04's measurements (verification §4.9; board, "Orchestrator review of prompt 04"):
+- **R11, the surfing thresholds at n = 1.** Asked whether R5's "note it and move on" also covers the n = 1 surfing scan
+  at 10⁻³ M_P (74 of 79 coarse β failing, 73 of them at G2; the QCD onset bracketed only in (1.10, 1.30]; no EW edge),
+  the user ruled: "I'm not going to chase this now. Note it and move on." That is option (a) of verification §4.9: the
+  scan is recorded as measured, no further scan is run, no issue is opened and no fix is planned. The science run's
+  surfing figure and any standard analysis reading the edges at large M have no n = 1 EW edge, and an onset known only
+  to (1.10, 1.30]. At n = 2 the exponential's edges hold. Every other threshold of §0.3 holds on this wall as measured,
+  so none is changed before 05.
+
 ## 7. What this campaign hands to the user
 
 - A tree that builds, stores, exports and plots the power-law model under both drain laws at any n, beside an

@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-16 · **Status: LIVE — 4 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; the surfing thresholds at n = 1 go to the user, verification §4.9); 01–04 reviewed; P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-16 · **Status: LIVE — 4 of 8 prompts landed (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds); 01–04 reviewed; R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -446,3 +446,6 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   (verification §4.9).
 - 2026-11-16: prompt 04 reviewed by the orchestrator (this board, "Orchestrator review of prompt 04"); all six checks
   pass. The surfing thresholds at n = 1 (verification §4.9) go to the user before 05; 05 is not written.
+- 2026-11-16: R11 ruled by the user on the surfing thresholds at n = 1, in their words: "I'm not going to chase this
+  now. Note it and move on." Option (a) of verification §4.9: recorded as measured, no further scan, no issue (README
+  §6.8). The user asked for 05 and its orchestrator note.
