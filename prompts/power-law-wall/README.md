@@ -5,6 +5,10 @@ campaign for the inverse power law potential with `n=1` and `n=2`". R1–R3 rule
 and U1–U7 as proposed (§6.2); P1–P14 stand unless ruled otherwise (§6.3). Cut from `main` at `a7e0978`, after the
 2026.11.0 plan was committed (U1). No prompt is written.
 
+**Re-planned** 2026-11-17, after 07 landed, on the user's rulings R13–R17 on the definition of k_ex (§6.12): k_ex is
+½E^{1/2}|V‴/V″| on every potential and at every use, so prompts 07b (re-measure), 07c (the definition in production)
+and 07d (rehearse again) are inserted before 08, and the exponential's one-loop law is refitted under a new drain model.
+
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):** the session of 2026-11-09, "ChamPBH pipeline direction"
 (the feasibility map of the power-law wall); `one-loop-drain` README §8.9–§8.10 and its side-campaign
 [`source/crossover/`](../one-loop-drain/source/crossover/README.md), which measured the drain law on V₀e^{M/φ} and on
@@ -92,13 +96,20 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
   large M; tuning success, failures, cost, regime shares, parking, the thresholds of §0.3 and the surfing thresholds.
 - **The store, the keys and the registry** (05); **the drivers and exports** (06); **a registered rehearsal** (07);
   **the documents and the handover** (08).
+- **The definition of k_ex** (07b–07d; R13–R17, §6.12): everything measured in, or classified by, k_ex re-measured
+  (07b); one definition, ½E^{1/2}|V‴/V″|, at every use in production, the exponential's one-loop law refitted under a
+  new drain model, and the spectrum tables re-measured (07c); 07's grid rebuilt at the tip (07d).
 
 **Out of scope:**
 - The science run of record and its figures (§7; the user's).
 - The 2PI (Kadanoff–Baym) run on the power wall for x_* and the associated piece (U5); ChamKadanoffBaym's work.
 - Any change to the exponential model's results. Every exponential history is bitwise as at the base (P2). *(Amended
-  2026-11-15 by R8, §6.5: the exponential's spectrum, read only by the post-processing, is redone.)*
-- The wall back-reaction notes' power-law chain (λ ≈ n/φ), except as 02 needs it.
+  2026-11-15 by R8, §6.5: the exponential's spectrum, read only by the post-processing, is redone.)* *(Amended
+  2026-11-17 by R13–R17, §6.12: k_ex takes the V‴ form on every potential, so the exponential's stored k_ex, ℓ, peak
+  estimates and margins move, and its one-loop law is refitted under a new drain model. Its fixed-law and natural-mode
+  trajectories read no k_ex and do not move.)*
+- The wall back-reaction notes' power-law chain (λ ≈ n/φ), except as 02 needs it. The briefing notes and the writeup
+  (eq:kex-over-wt, which writes k_ex with −d ln V/dφ) are the user's and are not changed here (§6.12).
 - The open issues of the exponential run (`science-runs/plan-science-2026.11.0/PLAN.md` §5), unless one blocks a
   gate here.
 - The packages, `thirdparty/`, `PRyM/`.
@@ -114,11 +125,15 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 | 05 | `05-the-store.md` | model type id 2, its table and factory keyed (M, n, β), the registry, sharding, the `types` maps, `FINGERPRINT_FORMAT` 8 and `VERSION_LABEL` (U6), `compare_stores`, `inventory_report`, `bbn_from_store`, `outward_step_scan`; tests in a temporary store. *(As written 2026-11-16 on P33–P44: also the key's drain model checked at `ScalarHistory`'s construction, and every raw join of a model table filtered by `model_type`.)* | Opus |
 | 06 | `06-drivers-and-exports.md` | `main.py`'s model option and its config file; `plot_inputs`, `plot_by_beta`, `plot_ScalarHistory`, `extract_common`, `pipeline_selection` through the model interface; the model in `histories.csv` and in the export paths (P11); the exponential exports byte-identical. *(Added 2026-11-15, P17, P19: the one-loop drain model taken from the model, where they name `DRAIN_MODEL_ONE_LOOP`; the quanta tools' spectrum wall taken from the export's model column.)* *(As written 2026-11-16 on R12 and P45–P58: `--models`, a list, for `main.py` and the plot scripts; each potential's one-loop rows under its own drain model; every export under `<output>/<label>/<model>/` with a `model` column, for every potential; `spectrum_wall` on the model and the quanta tools by row; the registered run's scope; the gate's evidence by two trees on a harness store; Opus, P58.)* | Sonnet |
 | 07 | `07-rehearse.md` | registered builds on the isolated cluster: the exponential at base and tip, bitwise; the power law at n = 1, 2 under both laws, interrupted and resumed, by value and against 04 *(As written 2026-11-16 on P59–P72: U7's grid; five stores, the exponential at `a7e0978` and at the tip, the power law straight and resumed, and both potentials in one store; one cluster per tree; the readers and the quanta tools on every store.)* | Opus |
+| 07b | `07b-remeasure-k-ex.md` | *(Inserted 2026-11-17 on R13–R17, §6.12.)* Research in `source/kex/`, no production change: the definition and its check against Erickcek et al.; every stage-2 point of crossover and of 02 re-chained, its regime re-classified; new stage-2 points where the exponential's regime moved; the candidate laws for `one-loop-exponential-v2` against them, at n = 1 and 2; the power wall's law shown unchanged; the three spectrum tables and x_* in the new x; the mapped paths re-chained; the inventory of every use of k_ex for 07c. Then U13 | Opus |
+| 07c | `07c-k-ex-in-production.md` | *(Inserted 2026-11-17.)* As 07b's measurements and U11–U13 rule: the third-derivative hook on every model; k_ex = ½E^{1/2}\|V‴/V″\| in `classical_turning_point` and `one_loop_turnaround`; the exponential's law under `one-loop-exponential-v2`, `one-loop-measured-v1` retired; the spectrum tables and x_* re-measured; every other use of the inventory; the label; tests re-pinned with old and new values | Opus |
+| 07d | `07d-rehearse-again.md` | *(Inserted 2026-11-17.)* 07's grid rebuilt at the tip in fresh stores, registered, on the isolated cluster; every history whose law reads no ℓ equal to 07's in its integration and BBN, with only the k_ex columns moving; the exponential's one-loop histories under v2 against 07's under v1, measured; the readers on every store | Opus |
 | 08 | `08-close.md` | `.documents/power-law-wall-verification.md`, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the science run (its grid's inputs from 04), the issues and the indexes | Opus |
 
 Written one at a time, each after the previous one lands and is reviewed. 03 waits for U3–U5, and is dropped if they
 rule the law and spectrum carried over unchanged with `_drain_L` alone, which then moves into 04's first commit by
-ruling. 06 needs only 05's schema; 08 needs 07's stores.
+ruling. 06 needs only 05's schema; 08 needs 07's stores. *(Added 2026-11-17:)* 07c waits for 07b's measurements and the
+user's U11–U13; 08 needs 07d's stores in place of 07's.
 
 ### 2.1 The gates
 
@@ -131,6 +146,9 @@ ruling. 06 needs only 05's schema; 08 needs 07's stores.
 | **Store** | power-law histories round-trip in a temporary store; the exponential store's fingerprint golden unchanged apart from the format | 05 |
 | **Export** | the exponential exports byte-identical to the base's on the same store; the power-law exports carry the model and read back *(amended 2026-11-16 by R12, §6.10: every potential's exports are under `<output>/<label>/<model>/` with a `model` column, so the exponential's equal the base's once that directory and column are accounted for, P54)* | 06 |
 | **R** | exponential builds bitwise base to tip; power-law builds resumed by value; inventories "problems: none" *(made exact 2026-11-16 by P64–P68, §6.11: also the power-law builds against 04's tool route, both potentials in one store equal to each alone, and the readers on every store)* | 07 |
+| **Remeasure** *(added 2026-11-17)* | the definition reproduces Erickcek et al.'s Eqs. (66) and (71); the old chain reproduces every recorded ℓ; every stage-2 point re-chained and every new point validated as crossover's stage 2 was; the candidate laws' residuals stated at n = 1 and 2 beside v1's; the three tables and x_* measured in the new x; the inventory complete; nothing ruled by the agent | 07b |
+| **Consistent** *(added 2026-11-17)* | one k_ex at every use of 07b's inventory; each model's V‴ hook equal to its closed form and to the centred difference of V″; the law as ruled equal to its reference implementation; the spectrum kernels within 10⁻⁷ of quadrature on the new tables; every history whose law reads no ℓ bitwise in its integration by the tool route; the suites at their counts or above | 07c |
+| **R2** *(added 2026-11-17)* | 07's grid rebuilt at the tip: the power law (both laws) and the exponential's fixed-law and natural-mode histories equal to 07's in every value but the k_ex columns, which are listed; the exponential's one-loop histories measured against 07's; resumed by value; inventories "problems: none"; the readers on every store | 07d |
 | **Close** | documents, issues, indexes and the handover written; the suites at their counts | 08 |
 
 ## 3. Stores
@@ -154,6 +172,9 @@ ruling. 06 needs only 05's schema; 08 needs 07's stores.
   (P17), and has the quanta tools take the spectrum's wall from the export's model column (P19).
 - **04 → the user → 05.** The sample; the user rules any threshold that does not hold on this wall.
 - **05 → 06 → 07.** The schema, the drivers, the rehearsal stores.
+- **07b → the user → 07c → 07d** *(added 2026-11-17)*. 07b's re-measurements and inventory; the user rules the
+  exponential law's form (U13), the power wall's drain-model name (U11) and the label (U12); 07c puts one k_ex into
+  production with them; 07d rebuilds 07's grid on it, and 08 reads 07d's stores.
 - **08 → the science run.** The handover: what a power-law run of record needs, the grid's inputs from 04, the
   standard analyses it repeats and what each needs (convention 8).
 
@@ -165,7 +186,10 @@ ruling. 06 needs only 05's schema; 08 needs 07's stores.
   post-processing, is redone as the power wall's is, so its relativistic-quanta outputs change; nothing stored or
   exported moves.)* *(Amended 2026-11-16 by R12, §6.10: the potentials are treated symmetrically in the exports, so
   the exponential's exports move under `exponential/` and gain a `model` column; every exponential history, stored row
-  and golden stays bitwise.)*
+  and golden stays bitwise.)* *(Amended 2026-11-17 by R13–R17, §6.12, from 07c on: k_ex has one definition on every
+  potential, so the exponential's k_ex, ℓ, peak estimates and margins move, and so does every one-loop exponential
+  history, under its refitted law. What still does not move is stated per prompt: every history whose law reads no ℓ
+  (the fixed law, natural mode, and the power wall under both laws) keeps its integration and BBN bitwise.)*
 - **The integration stays decoupled from the potential.** Anything whose meaning depends on the wall's form goes in
   the model class, with no generic default; `ComputeTargets/ScalarHistory.py` gains no power-law expression (the user's
   ruling of 2026-11-05).
@@ -613,6 +637,124 @@ They rest on the planner's survey at `c7ba5ca` (orchestrator note 07 §0).
   by `sqlite3` `mode=ro`. `out/` holds small text only.
 - **P72 — no code change; one commit.** No code, test, golden or configuration changes. A run not ended 60 minutes after
   its launch is a stop. Opus, as §2 plans.
+
+### 6.12 The definition of k_ex: ruled by the user, 2026-11-16 and 17, and re-planned 2026-11-17
+
+**What was found.** On 2026-11-16 the user passed on a ruling from the agent writing up the work: k_ex is the inverse
+duration of the mass pulse V″(φ̄(t)) at the turnaround, k_ex = ½E^{1/2}|V‴/V″| (Erickcek et al., arXiv:1310.5149,
+Eq. (64)), whereas `one_loop_turnaround` takes λ_ta = −d ln V/dφ, and `classical_turning_point` λ_t likewise. The planner
+checked the paper: Eq. (64) is k_ex = ½[V_D′V‴/(2V″)]^{1/2} at φ̄_ta, where V_D(φ̄_ta) = φ̇²/2; with the dressing
+V_D ∝ (V″)², as the one-loop turnaround takes it, V_D′ = 2E V‴/V″ there and Eq. (64) becomes ½E^{1/2}|V‴/V″|. It
+reproduces their Eq. (71) on the power wall and Eq. (66) to leading order in (φ̄_ta/M)ⁿ on the exponential. New over old
+is exactly (n + 2)/n · (1 + u)/u on the power wall, u = (M/φ)ⁿ, and 1 + O(1/u) on the exponential (at n = 1, 1.044 at
+u = 90, 1.099 at 40, 1.38 at 10).
+
+**Ruled by the user, in their words:**
+- **R13, the scope.** "The V''' form applies to every potential type."
+- **R14, the exponential's law.** "Drain law: yes, we need to change the drain law." Then: "[Drain] law for the exponential
+  potential: agree, needs a refit. We get a new drain model. We are going to need to distinguish the exponential drain
+  laws from the inverse power law ones. Presumably `one-loop-exponential-v2`?" The planner reads the name as the user's,
+  and the power wall's as U11.
+- **R15, one k_ex.** "there is only one `k_ex`. If we change it, we change all occurrences of it." And: "Code change:
+  yes, we want to be sure that everywhere we use `k_ex`, we are using a consistent definition for it." So the classical
+  turning point's k_ex and ℓ_t, the one-loop turnaround's k_ex and ℓ, the spectrum tables' x = k/k_ex and every constant
+  measured in that x take the new form.
+- **R16, the classical turning point.** "this isn't a judgement call. As far as I can see, the correct answer is that the
+  potential difference should absorb all the KE. I don't actually see where V' comes into that at all." φ_t is the root
+  of V(φ_t) − V_floor = E and reads no V′; it, ω_t and ln R do not change. V′ entered only through the k_ex attached to
+  φ_t, which R15 changes.
+- **R17, re-measure.** "Remeasuring the table: yes, we'd better do this; a number of things will need re-measuring. Best
+  to do the job right, the first time."
+- **The route.** "prompt 07 has landed so we have an opportunity implement this now, if that seems prudent", and "The
+  prompts can go into `power-law-wall`."
+
+**What the planner's probe found** (orchestrator note 07b §0; scratch, not committed). Crossover's 107 stage-2 rows on
+V₀e^{M/φ}, re-chained in their own (L, ln R):
+- the old form reproduces every recorded ℓ to the printed digits and crossover's fit to the last digit (b₀ = 0.9691,
+  c = 0.4099; the gap's 0.0198, 1.5601, 1.5472, 0.841), so the re-chaining is sound;
+- with the V‴ form, ℓ rises by 0.035 at L = 132, 0.24 at L = 52 and 1.0–2.3 at L ≲ 10, where the late cascade at
+  laboratory M sits;
+- **20 rows change regime**: the chain now has a solution where it had none, so points measured as gap become one-loop,
+  at ℓ = 0.14–2.4, with f = 0.16–0.84;
+- **v1's form does not carry over**: refitted on the crossover's on-curve rows, the one-loop branch's largest miss is
+  0.19 (rms 0.079) against v1's 0.074, and the rows below ℓ = 1 have f = 0.16–0.78 where v1's plateau says 0.9; the gap,
+  on its 21 remaining rows, fits better than before (0.047).
+
+So the exponential's law needs its form re-measured, not only its constants: which rule separates the regimes, and what
+f does at small ℓ, are measurements for 07b and a ruling for the user (U13). The power wall's law reads neither ℓ nor the
+difference between one-loop and gap (R7), so it does not change. On the power wall the new k_ex/ω_t is
+(n + 2)/(2√(n(n + 1))) at every E/V₀, so R9's error of the table near the floor disappears.
+
+**P73–P90** stand unless the user rules otherwise. U11–U13 are the user's; none is needed before 07b is dispatched,
+U11 and U12 before 07c is written, U13 after 07b.
+
+- **P73 — where.** Three prompts inserted before 08: 07b (research), 07c (production), 07d (rehearse again). 08 keeps
+  its number and is written after 07d.
+- **P74 — 07b is research** in `prompts/power-law-wall/source/kex/`, as 02 was in `source/wall/`: copies of the scripts
+  it needs from crossover and from `source/wall/`, each with a header naming its source and commit, and its own chain
+  with both forms. It changes no production code, no crossover file and no file of `source/wall/`.
+- **P75 — the definition.** k_ex = ½E^{1/2}|V‴/V″| at the point the estimate is taken: φ_t for the classical turning
+  point, φ_ta for the one-loop turnaround. V″ = V[(ln V)″ + (ln V)′²] as now; V‴ = V[(ln V)‴ + 3(ln V)′(ln V)″ +
+  (ln V)′³], through a new hook `_d3_logV_dphi3` on every model, with no generic default (the user's ruling of
+  2026-11-05: a new potential's breakage is loud). The named tuples' λ fields become the pulse rate |V‴/V″|, under a
+  new name. 07c.
+- **P76 — the check of the form.** 07b derives Erickcek et al.'s Eqs. (66) and (71) from P75 and compares them with the
+  chain's k_ex at stated points, so that the factor ½ and the point of evaluation are confirmed, not assumed.
+- **P77 — every stage-2 point re-chained.** Crossover's three scans (`stage2_scan`, `stage2_mscan`, `stage2_n2`) and 02's
+  power-wall scans, each row in its own (L, ln R, n): ℓ, m_ta and φ_ta in both forms, the regime in both, and the rows
+  that move, tabled. No recorded fraction is re-used without its row's new regime.
+- **P78 — new stage-2 points.** Stage 2 sets its mode grid from the chain's k_ex, so (i) three recorded points are re-run
+  with the grid set from the new k_ex, and must give the recorded fraction within stage 2's stated precision (the
+  measurement does not depend on the label); and (ii) the exponential's moved region is measured more densely: on the
+  laboratory curve and crossover's other mapped curves, from the gap's entry down to R = 1, enough points to fit at
+  n = 1, and a few at n = 2 (U15). Validated as crossover's stage 2 was.
+- **P79 — the candidate laws for `one-loop-exponential-v2`.** Against every exponential point in its new regime, at n = 1
+  and 2: (i) v1's form refitted (A held at 2.69, b₀ and c fitted); (ii) with A free; (iii) the regimes split at an ℓ
+  threshold, with the gap's form below it; (iv) any form the agent proposes, stated with its reason; the plateau and the
+  cap reported as measured. For each, the largest residual, the rms and the mean over one-loop and gap points
+  separately, beside v1's 0.074 and 0.062. Measured, not ruled (U13).
+- **P80 — the power wall's law unchanged.** On 02's rows: the regime moves, and f_n(ln R) giving each row the same
+  value, since it reads neither ℓ nor the one-loop/gap difference. The law, S_n and `one-loop-measured-pl-v1`'s constants
+  do not move (its name is U11).
+- **P81 — the spectrum tables re-measured**, by `source/wall/spectrum_table.py`'s method, at the three references, in
+  x = k/k_ex with the new k_ex: the exponential at `WallN(90, 1)` (planner: k_ex/ω_t = 0.516395, from 0.494535), the
+  power wall at n = 1 and 2 (1.060660 and 0.816497, from 0.353553 and 0.408248). X_LO = 10⁻³ ω_t/k_ex, X_HI by
+  orchestrator note 03 ruling 5's rule; x_p, the slope, κ_hi, the tail's share, the spline check; the exponential's shape
+  over L = 40–134 (P21); on the power wall, the table's error near the floor (R9), which the planner expects to vanish.
+- **P82 — x_*.** It was measured as a momentum, q = 0.0029 ω_t, in the 2PI run on the exponential; 0.0058 is that
+  over k_ex = ω_t/2. In the new x on the exponential's reference it is 0.0029/0.516395 = 0.005616 (planner), carried to
+  every wall in x as R10 rules, and flagged as before. 07b prints it; 07c sets it.
+- **P83 — the paths.** Crossover's cascade maps, 02's maps (1148 power-wall candidates) and 04's sample candidates,
+  re-chained: ℓ in both forms, the regime in both, and f under v1 and each candidate of P79 on the exponential. A
+  measurement of where the change matters; ΔN_eff is 07d's to measure in histories.
+- **P84 — the inventory.** Every place in the tree that computes or reads k_ex, ℓ, ℓ_t, λ_t, λ_ta or the chain's
+  existence, and every constant measured in x = k/k_ex or fitted against ℓ: file, line, what it is, and what 07c does to
+  it. Production, `tools/`, tests and goldens; records (closed campaigns' `source/`, `.documents/`, `science-runs/`) are
+  listed as records and not changed. Note 07b §0 gives the planner's list as a start.
+- **P85 — the drain models.** The exponential's refitted law is `one-loop-exponential-v2` (R14), a new value of
+  `alpha_value.drain_model` (P8), named by `ExponentialModel.one_loop_drain_model`. `one-loop-measured-v1` is retired:
+  its law reads ℓ in the old form, which no longer exists at the tip, so the tip refuses it at entry with a message
+  naming R13. It stays a known name, so that a store or option naming it is refused, not misread.
+- **P86 — what 07c re-pins.** Every test or golden that pins a k_ex, ℓ, λ, regime count, law constant, spectrum constant
+  or drain-model name, each listed with its old and new value. A test of a history whose law reads no ℓ moves only in
+  those columns; an integration value that moves there is a stop.
+- **P87 — the gate R2.** 07d rebuilds 07's five-store grid at the tip (the base's store is not rebuilt: 07 holds it).
+  Every history whose law reads no ℓ equals 07's in every stored value but the k_ex columns (k_ex, ℓ, ℓ_t, the pulse
+  rate, the peak, log q, the regime label, the birth margin and the margins' records), which are listed; the exponential's
+  one-loop histories under v2 are compared with 07's under v1 as a measurement (ΔN_eff, Y_p, D/H, the drained share).
+- **P88 — the thresholds.** `MARGIN_THRESHOLD` (ln 10, the birth margin ln(k_ex/m) among them) is not changed. 07d
+  reports how the failing shares move. A change is the user's.
+- **P89 — the standard analyses** (convention 8). The exponential's one-loop law changes what Figure 6 reads, and k_ex,
+  the tables and x_* change what Relativistic quanta reads, for both potentials. A rebuild after this campaign repeats
+  both for the exponential as well as the power law. Their inputs keep their files and columns unless 07c renames one,
+  in which case 07c amends `science-runs/README.md`'s row.
+- **P90 — the counts.** As P14.
+
+| | Proposed | Alternatives |
+|---|---|---|
+| **U11** — the power wall's drain-model name | **(a) rename `one-loop-measured-pl-v1` to `one-loop-inverse-power-v1`** in 07c, so that every one-loop drain model names its potential, as R14 names the exponential's and as R12 treats the potentials. Its law does not change, so it stays v1. No store of record holds the old name: only 07's rehearsal stores | (b) keep `one-loop-measured-pl-v1` |
+| **U12** — the label | **(a) `VERSION_LABEL` 2026.13.0**, since stored values change meaning: 07's rehearsal stores were made under 2026.12.0 with the old k_ex, and the label is the guard against reusing a store whose values mean something else (`config/version.py`). `FINGERPRINT_FORMAT` stays 8 unless 07c changes a table or column | (b) keep 2026.12.0, which no store of record uses, and have the user retire 07's stores |
+| **U13** — the exponential's law | **ruled after 07b**, on P79's residuals, as U3 was after 02 | — |
 
 
 ## 7. What this campaign hands to the user
