@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-11-16 · **35 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-11-17 · **36 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -62,9 +62,10 @@ the measured law closed, 2026-11-05; prompt 03 closed two, 2026-11-06; prompt 08
 closed 2026-11-07, 11 of 11 prompts landed, with these three open; §1.23); 3 on the `electroweak-eos` board
 (planned 2026-11-12, with none opened or assigned; one opened from prompt 01's stop the same day and assigned to its
 prompt 01a, §1.24, which closed it and opened one the same day; prompt 02 opened one, 2026-11-13; prompt 03 opened one, 2026-11-13, from the user's open point (U12 (a), P26), and the
-campaign closed the same day, 4 of 4 prompts landed, with these three open; §1.25); 3 on the `power-law-wall` board
+campaign closed the same day, 4 of 4 prompts landed, with these three open; §1.25); 4 on the `power-law-wall` board
 (planned 2026-11-13, with none opened or assigned; prompts 01–05 opened none; prompt 06 opened one, 2026-11-16; prompt 07
-opened one, 2026-11-16, from its stop at the gate R, ruled (a) by the user, and its review one; §1.26).
+opened one, 2026-11-16, from its stop at the gate R, ruled (a) by the user, and its review one; prompt 07b opened one,
+2026-11-17; §1.26).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -422,7 +423,8 @@ prompt 02, one by prompt 03; none assigned.
 
 ### 1.26 `power-law-wall` — [board §3](../prompts/power-law-wall/IMPLEMENTATION_STATE.md)
 
-Planned 2026-11-13; live. One opened by prompt 06, two by prompt 07 (one by its review); none assigned.
+Planned 2026-11-13; live. One opened by prompt 06, two by prompt 07 (one by its review), one by prompt 07b; none
+assigned.
 
 - `[06-plot-quanta-grid-refuses-two-n-at-one-cell]` — `tools/plot_quanta_grid.py` groups a root's rows by (drain model,
   A) and refuses two rows in one (β, M) cell, so a power-law root with n = 1 and 2 at one (β, M) has every grid figure
@@ -433,3 +435,7 @@ Planned 2026-11-13; live. One opened by prompt 06, two by prompt 07 (one by its 
 - `[07-a-refused-plot-leaves-ray-errors-unretrieved]` — a plot refused for several missing values names the first and
   exits 2, but Ray prints an "Unhandled error" traceback for each other miss, never retrieved. *(`power-law-wall`;
   prompt 07's review)*
+- `[07b-the-one-loop-fixed-point-needs-more-than-100-iterations-near-the-chain-end]` — near the fold where the chain
+  stops having a solution the fixed point converges slowly (195 and 107 iterations at two of 07b's new points), and
+  production's `ONE_LOOP_MAX_ITERATIONS` = 100 would call such a candidate gap where born.chain (200) finds one.
+  *(`power-law-wall`; prompt 07b)*

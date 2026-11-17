@@ -1,0 +1,15 @@
+# stage2_kex.py reference-kmax; start: 11:48  up 17 days, 14:09, 1 user, load averages: 21.70 21.24 15.94
+# the gap reference point (2197 A0.01 #512) in both forms at several k_max = cmax k_ref: whether its difference from the record is the label or the grid's upper end
+# start #512 lambda cmax 30 (running 1, load 21.70)
+# start #512 lambda cmax 60 (running 2, load 21.70)
+# start #512 lambda cmax 120 (running 3, load 21.70)
+# start #512 v3 cmax 7.5 (running 4, load 21.70)
+#512 lambda cmax 30      frac 0.15937 passes 2 k_ref 1.9260e-01 k_max 5.7779e+00 modes 198 steps 32566 |dE/E| 7.1e-10 | 7 s, load 21.70 -> 19.84
+#512 v3 cmax 7.5         frac 0.15944 passes 2 k_ref 7.6261e-01 k_max 5.7196e+00 modes 198 steps 32238 |dE/E| 7.2e-10 | 7 s, load 21.70 -> 19.84
+# start #512 v3 cmax 30 (running 3, load 19.84)
+# start #512 v3 cmax 60 (running 4, load 19.84)
+#512 lambda cmax 60      frac 0.15685 passes 2 k_ref 1.9262e-01 k_max 1.1557e+01 modes 222 steps 65081 |dE/E| 3.5e-10 | 15 s, load 21.70 -> 18.89
+#512 lambda cmax 120     frac 0.15623 passes 2 k_ref 1.9262e-01 k_max 2.3115e+01 modes 247 steps 130135 |dE/E| 1.6e-10 | 30 s, load 21.70 -> 17.98
+#512 v3 cmax 30          frac 0.15623 passes 2 k_ref 7.6271e-01 k_max 2.2881e+01 modes 246 steps 128819 |dE/E| 1.6e-10 | 28 s, load 19.84 -> 17.14
+#512 v3 cmax 60          frac 0.15608 passes 2 k_ref 7.6271e-01 k_max 4.5763e+01 modes 270 steps 257621 |dE/E| 5.9e-11 | 56 s, load 19.84 -> 16.51
+# stage2_kex.py reference-kmax end (66 s): 11:49  up 17 days, 14:10, 1 user, load averages: 15.51 19.44 15.67

@@ -1,0 +1,51 @@
+# spectrum_kex.py kex; start: 12:04  up 17 days, 14:25, 1 user, load averages: 3.52 4.54 8.25
+
+## kex: k_ex/omega_t at the three references; start: 12:04  up 17 days, 14:25, 1 user, load averages: 3.52 4.54 8.25
+exponential  old (lambda) 0.4945353550468402; new (v3): chain 0.5163952511757223, closed form 0.5163952511757223, rel +0.0e+00 (holds 1e-14); new/old 1.044202898551; X_LO = 1e-3/k_ex 0.0019365011543448793 (old 0.002022100118413747)
+power-n1     old (lambda) 0.3535533905932738; new (v3): chain 1.0606601717798214, closed form 1.0606601717798212, rel +2.2e-16 (holds 1e-14); new/old 3.000000000000; X_LO = 1e-3/k_ex 0.0009428090415820633 (old 0.00282842712474619)
+power-n2     old (lambda) 0.408248290463863; new (v3): chain 0.816496580927726, closed form 0.8164965809277261, rel -1.1e-16 (holds 1e-14); new/old 2.000000000000; X_LO = 1e-3/k_ex 0.0012247448713915891 (old 0.0024494897427831783)
+x_* = 0.0029 omega_t / k_ex at the exponential's reference: 0.005615853347600149 (U4's 0.0058 = 0.0029/(1/2); in the old x at L = 90, 0.005864)
+x_* carried in k/omega_t on power-n1: 0.0027341462205879834 (R10 carries it in x: 0.005616 on every wall)
+x_* carried in k/omega_t on power-n2: 0.003551760127035608 (R10 carries it in x: 0.005616 on every wall)
+# spectrum_kex.py kex end (0 s): 12:04  up 17 days, 14:25, 1 user, load averages: 3.52 4.54 8.25
+# spectrum_kex.py table; start: 12:04  up 17 days, 14:25, 1 user, load averages: 3.52 4.54 8.25
+
+## table: the three tables in the new x; start: 12:04  up 17 days, 14:25, 1 user, load averages: 3.52 4.54 8.25
+exponential  the tail's share under the model at x_hi = 3: 4.224e-03, 3.5: 7.352e-04
+exponential  k_ex/omega_t 0.5163952511757223 (old 0.4945353550468402); X_LO 0.0019365011543448797 (k/omega_t 1e-3), X_HI 3.5 (k/omega_t 1.80738); 151 nodes, step 0.049998 in ln x; |beta|^2 at X_LO 4.2123e-09, at X_HI 6.5327e-09, max 1.42787e-04
+   spline against 150 direct midpoints: max rel 2.50e-06 (at x = 3.414), rms 2.27e-07; derivative of the wrong sign at 0 points below the peak and 0 above (of 6001)
+   x_p 0.619424 (parabola 0.617043; k_peak/omega_t 0.319867); local slope d ln s/d ln x at X_LO 2.0000 (spline), 2.0000 (direct); kappa_hi 4.342684 (spline), 4.342784 (direct)
+   under the model at c_a = 0: M1/M3 0.903405, J 0.872770; the tail's share 7.352e-04, the k^2 piece's 9.186e-17  (13 s)
+   cross-check in k/omega_t: 1 nodes shared with the old table (to 1e-12 in k), largest |d ln|beta|^2| there 1.3e-07; at the other 149 new nodes inside the old table, against its spline, largest 4.3e-07 (the old table's spline precision is 2.8e-6 relative)
+power-n1     the tail's share under the model at x_hi = 3: 8.029e-06
+power-n1     k_ex/omega_t 1.0606601717798214 (old 0.3535533905932738); X_LO 0.0009428090415820634 (k/omega_t 1e-3), X_HI 3 (k/omega_t 3.18198); 163 nodes, step 0.049786 in ln x; |beta|^2 at X_LO 1.4469e-04, at X_HI 3.3749e-09, max 7.67704e-02
+   spline against 162 direct midpoints: max rel 4.09e-06 (at x = 2.926), rms 3.77e-07; derivative of the wrong sign at 0 points below the peak and 0 above (of 6481)
+   x_p 0.155250 (parabola 0.154912; k_peak/omega_t 0.164667); local slope d ln s/d ln x at X_LO 1.6649 (spline), 1.6649 (direct); kappa_hi 6.545990 (spline), 6.546190 (direct)
+   under the model at c_a = 0: M1/M3 4.178280, J 1.775255; the tail's share 8.029e-06, the k^2 piece's 9.400e-15  (22 s)
+   cross-check in k/omega_t: 1 nodes shared with the old table (to 1e-12 in k), largest |d ln|beta|^2| there 1.9e-08; at the other 154 new nodes inside the old table, against its spline, largest 2.4e-06 (the old table's spline precision is 2.8e-6 relative)
+power-n2     the tail's share under the model at x_hi = 3: 1.449e-04
+power-n2     k_ex/omega_t 0.816496580927726 (old 0.408248290463863); X_LO 0.001224744871391589 (k/omega_t 1e-3), X_HI 3 (k/omega_t 2.44949); 158 nodes, step 0.049705 in ln x; |beta|^2 at X_LO 7.3012e-06, at X_HI 7.1345e-08, max 3.38962e-02
+   spline against 157 direct midpoints: max rel 2.53e-06 (at x = 2.926), rms 2.28e-07; derivative of the wrong sign at 0 points below the peak and 0 above (of 6281)
+   x_p 0.253372 (parabola 0.252752; k_peak/omega_t 0.206877); local slope d ln s/d ln x at X_LO 1.9863 (spline), 1.9863 (direct); kappa_hi 5.467311 (spline), 5.467431 (direct)
+   under the model at c_a = 0: M1/M3 2.435723, J 1.378406; the tail's share 1.449e-04, the k^2 piece's 9.331e-16  (13 s)
+   cross-check in k/omega_t: 1 nodes shared with the old table (to 1e-12 in k), largest |d ln|beta|^2| there 6.0e-08; at the other 154 new nodes inside the old table, against its spline, largest 2.5e-06 (the old table's spline precision is 2.8e-6 relative)
+# literals written to .documents/power-law-wall/kex-07b/spectrum_tables.txt; table end: 12:05  up 17 days, 14:26, 1 user, load averages: 7.67 5.58 8.43
+# spectrum_kex.py table end (48 s): 12:05  up 17 days, 14:26, 1 user, load averages: 7.67 5.58 8.43
+# spectrum_kex.py shape; start: 12:05  up 17 days, 14:26, 1 user, load averages: 7.67 5.58 8.43
+
+## shape: each table by ruling 5's rule at step 0.05 in the new ln x; moments at c_a = 0; start: 12:05  up 17 days, 14:26, 1 user, load averages: 7.67 5.58 8.43
+# the exponential's shape over L (WallN(L, 1), k_ex(v3) exact at each L), against L = 90's new table
+exponential L = 40: k_ex/omega_t 0.536164, x_lo 0.0018651, x_hi 3.5 (tail share 5.5e-04), midpoints max 2.9e-06; x_p 0.57004, J 0.91234, M1/M3 0.99468, kappa_hi 4.4203; against the reference: x_p x0.9203, J x1.0453, M1/M3 x1.1010, kappa_hi x1.0179  (9 s)
+exponential L = 90: k_ex/omega_t 0.516395, x_lo 0.0019365, x_hi 3.5 (tail share 7.4e-04), midpoints max 2.5e-06; x_p 0.61942, J 0.87277, M1/M3 0.90341, kappa_hi 4.3427; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000  (13 s)
+exponential L = 134: k_ex/omega_t 0.511071, x_lo 0.0019567, x_hi 3.5 (tail share 8.0e-04), midpoints max 2.5e-06; x_p 0.63360, J 0.86202, M1/M3 0.87950, kappa_hi 4.3226; against the reference: x_p x1.0229, J x0.9877, M1/M3 x0.9735, kappa_hi x0.9954  (17 s)
+# R9 on the power wall: the spectrum measured at E/V0 = x in its own new x (k_ex(v3) at that x), against the new reference table (x = 1e40) at the same x, at the measured nodes inside the reference's range
+power-n1 x = E/V0 = 1000, s_t 0.9990, k_ex/omega_t 1.060660: k_ex/omega_t 1.060660, x_lo 0.00094281, x_hi 3 (tail share 8.0e-06), midpoints max 4.1e-06; x_p 0.15525, J 1.77526, M1/M3 4.17828, kappa_hi 6.5460; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000; |ln|beta|^2 - reference at the same x| max 1.8e-07 over 162 nodes  (21 s)
+power-n1 x = E/V0 = 10, s_t 0.9091, k_ex/omega_t 1.060660: k_ex/omega_t 1.060660, x_lo 0.00094281, x_hi 3 (tail share 8.0e-06), midpoints max 4.1e-06; x_p 0.15525, J 1.77526, M1/M3 4.17828, kappa_hi 6.5460; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000; |ln|beta|^2 - reference at the same x| max 1.2e-07 over 163 nodes  (21 s)
+power-n1 x = E/V0 = 1, s_t 0.5000, k_ex/omega_t 1.060660: k_ex/omega_t 1.060660, x_lo 0.00094281, x_hi 3 (tail share 8.0e-06), midpoints max 4.1e-06; x_p 0.15525, J 1.77526, M1/M3 4.17828, kappa_hi 6.5460; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000; |ln|beta|^2 - reference at the same x| max 0.0e+00 over 163 nodes  (21 s)
+power-n1 x = E/V0 = 0.9302 (laboratory curve, R = 1), s_t 0.4819, k_ex/omega_t 1.060660: k_ex/omega_t 1.060660, x_lo 0.00094281, x_hi 3 (tail share 8.0e-06), midpoints max 4.1e-06; x_p 0.15525, J 1.77526, M1/M3 4.17828, kappa_hi 6.5460; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000; |ln|beta|^2 - reference at the same x| max 9.5e-08 over 163 nodes  (21 s)
+power-n2 x = E/V0 = 1000, s_t 0.9990, k_ex/omega_t 0.816497: k_ex/omega_t 0.816497, x_lo 0.0012247, x_hi 3 (tail share 1.4e-04), midpoints max 2.5e-06; x_p 0.25337, J 1.37841, M1/M3 2.43572, kappa_hi 5.4673; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000; |ln|beta|^2 - reference at the same x| max 1.0e-07 over 158 nodes  (12 s)
+power-n2 x = E/V0 = 10, s_t 0.9091, k_ex/omega_t 0.816497: k_ex/omega_t 0.816497, x_lo 0.0012247, x_hi 3 (tail share 1.4e-04), midpoints max 2.5e-06; x_p 0.25337, J 1.37841, M1/M3 2.43572, kappa_hi 5.4673; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000; |ln|beta|^2 - reference at the same x| max 1.7e-07 over 158 nodes  (12 s)
+power-n2 x = E/V0 = 1, s_t 0.5000, k_ex/omega_t 0.816497: k_ex/omega_t 0.816497, x_lo 0.0012247, x_hi 3 (tail share 1.4e-04), midpoints max 2.5e-06; x_p 0.25337, J 1.37841, M1/M3 2.43572, kappa_hi 5.4673; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000; |ln|beta|^2 - reference at the same x| max 0.0e+00 over 158 nodes  (12 s)
+power-n2 x = E/V0 = 0.4261 (laboratory curve, R = 1), s_t 0.2988, k_ex/omega_t 0.816497: k_ex/omega_t 0.816497, x_lo 0.0012247, x_hi 3 (tail share 1.4e-04), midpoints max 2.5e-06; x_p 0.25337, J 1.37841, M1/M3 2.43572, kappa_hi 5.4673; against the reference: x_p x1.0000, J x1.0000, M1/M3 x1.0000, kappa_hi x1.0000; |ln|beta|^2 - reference at the same x| max 3.4e-07 over 158 nodes  (12 s)
+# shape end: 12:09  up 17 days, 14:29, 1 user, load averages: 18.97 10.59 9.73
+# spectrum_kex.py shape end (219 s): 12:09  up 17 days, 14:29, 1 user, load averages: 18.97 10.59 9.73

@@ -1,0 +1,9 @@
+# stage2_kex.py reference; start: 11:37  up 17 days, 13:58, 1 user, load averages: 7.53 13.24 12.32
+# the grid's reference: recorded points re-run with the grid from the new k_ex (run_point_kex, form v3); per line: the result, both forms' regime, ell and k_ex (chain or classical), the recorded fraction
+# start one-loop: 2197 A0.05 #107 (running 1, load 7.53)
+# start gap -> one-loop: 2197 A0.01 #183 (running 2, load 7.53)
+# start gap: 2197 A0.01 #512 (running 3, load 7.53)
+one-loop: 2197 A0.05 #107          n=1 L=  7.88500 lnR=  23.8330 | frac 0.71722 balance 0.71722 vout/vin 0.5318 back True  eps_turn 1.6e+03 |dE/E| 3.5e-11 passes 1 modes 350 | lambda: one_loop ell 1.9868 k_ex 2.24489e-02; v3: one_loop ell 3.1258 k_ex 6.26094e-02 | recorded 0.7171, diff +0.0001: within +-0.006 (within crossover's +-0.002) | 19 s, load 7.53 -> 7.62
+gap -> one-loop: 2197 A0.01 #183   n=1 L=  3.61900 lnR=  13.7910 | frac 0.82626 balance 0.82626 vout/vin 0.4163 back True  eps_turn 9.7e+01 |dE/E| 3.6e-11 passes 1 modes 289 | lambda: gap ell none k_ex 3.95853e-01; v3: one_loop ell 1.3642 k_ex 1.62906e-01 | recorded 0.8264, diff -0.0001: within +-0.006 (within crossover's +-0.002) | 24 s, load 7.53 -> 12.06
+gap: 2197 A0.01 #512               n=1 L=  1.35400 lnR=   4.8650 | frac 0.15623 balance 0.15623 vout/vin 0.9181 back True  eps_turn 8.5e+01 |dE/E| 1.6e-10 passes 2 modes 246 | lambda: gap ell none k_ex 2.73615e-01; v3: gap ell none k_ex 9.61430e-01 | recorded 0.1594, diff -0.0032: within +-0.006 (outside crossover's +-0.002) | 27 s, load 7.53 -> 11.57
+# stage2_kex.py reference end (28 s): 11:38  up 17 days, 13:59, 1 user, load averages: 11.57 13.61 12.48

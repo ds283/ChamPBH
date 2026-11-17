@@ -1616,3 +1616,307 @@ grep -r -F -l -f ~/.ray/auth_token <each committed path>
 - **The `Delta_N_eff` legend** covers a point (A = 10 at β = 2.9, upper panel, n = 1).
 - **Equal model digests**: in mixed, `ExponentialModel` and `InversePowerModel` have the same fingerprint digest
   (`132ac557…`), one spec and the same (M, n, β) rows (P33's design); the fingerprint does not tell the two tables' rows apart.
+
+## 7. k_ex re-measured (prompt 07b, 2026-11-17)
+
+**Tree:** branch `power-law-wall` at `e4ae58b` (after `a64d8af`, which adds prompt 07b). No code changed: the definition
+is measured here and put into production by 07c. §1–§6 above are unchanged, and were correct for the k_ex they used.
+**Scripts:** [`prompts/power-law-wall/source/kex/`](../prompts/power-law-wall/source/kex/README.md), each with a
+docstring giving its command; the copies of crossover's scripts (`crossover/`, at `18add05`) and of 02's (`wall/`, at
+`c798d02`), each with a header naming its source. **Outputs:** [`power-law-wall/kex-07b/`](power-law-wall/kex-07b/).
+Orchestrator note 07b's rulings 1–8 governed. The machine was shared: one-minute loads of 3.5–43 over the session, the
+load beside every stage-2 timing.
+
+The definition, by R13–R15: k_ex = ½E^{1/2}|V‴/V″|, at φ_t (the classical turning point) and at φ_ta (the one-loop
+turnaround), E the kinetic energy at delivery measured from the floor. The code today takes ½E^{1/2}λ, λ = −d ln V/dφ.
+Below, "old" is that form (`"lambda"` in the scripts) and "new" the ruled one (`"v3"`).
+
+### 7.1 The definition against Erickcek et al. (prompt §1.1; P75, P76) — [`definition.txt`](power-law-wall/kex-07b/definition.txt)
+
+**The reduction.** Their Eq. (64) is k_ex = ½[V_D′V‴/(2V″)]^{1/2} at φ̄_ta, with V_D(φ̄_ta) = φ̇²_M/2 = E. The code's
+dressing is V_D = m⁴ℓ/32π² with m² = V″. Holding ℓ fixed, V_D ∝ (V″)², so V_D′/V_D = 2V‴/V″ and, at the turnaround,
+V_D′ = 2EV‴/V″; Eq. (64) becomes ½[2E(V‴)²/(2(V″)²)]^{1/2} = ½E^{1/2}|V‴/V″|. Their own V_D = (κ/2)(V″)² (Eq. (60)) is of
+this kind with κ constant, so for them the step is exact.
+
+**What it leaves out.** With ℓ = ln(k_ex/m) varying along the approach at fixed k_ex, ℓ′ = −V‴/(2V″), so
+V_D′/V_D = (V‴/V″)(2 − 1/(2ℓ)) and k_ex is multiplied by (1 − 1/(4ℓ))^{1/2}: 0.987 at ℓ = 10, 0.959 at 3.1, 0.904 at 1.36,
+0.866 at ℓ = 1, and undefined below ℓ = 1/4.
+
+**Measured** at twelve points (three per wall and n) at the new chain's φ_ta, Eq. (64) evaluated numerically (V_D′ by a
+centred difference) against the chain's k_ex: largest relative difference 4.0e-9 (tolerance 1e-7, the difference's own
+error). With the code's dressing in place of (V″)², the ratio to the chain's k_ex equals (1 − 1/4ℓ)^{1/2} to 3.4e-9 at
+every point.
+
+**The power wall, Eq. (71).** |V‴/V″| = (n + 2)/φ exactly and E^{1/2} = |φ̇_M|/√2, so k_ex = (n + 2)|φ̇_M|/(2√2 φ_ta),
+their Eq. (71). The chain's k_ex against it at six points (x = 1e40, 1e3, 1e2; n = 1, 2): largest 4.4e-16 (tolerance
+1e-13).
+
+**The exponential, Eq. (66).** With u = (M/φ)ⁿ, (ln V)′ = −nu/φ, (ln V)″ = n(n + 1)u/φ², (ln V)‴ = −n(n + 1)(n + 2)u/φ³,
+
+    |V‴/V″| / (−d ln V/dφ) = [n²u² + 3n(n + 1)u + (n + 1)(n + 2)] / [nu(nu + n + 1)] = 1 + 2(n + 1)/(nu) + O(u⁻²).
+
+At n = 1: 1.383 at u = 10, 1.099 at 40, 1.004 at 1000; at n = 2: 1.030, 1.002, 1.000. Its leading term,
+λE^{1/2}/2 = (n/2)(M/φ)^{n+1}E^{1/2}/M, is their Eq. (66) with V_D = E. The chain's new/old ratio at its φ_ta against the
+closed form, six points: largest 2.2e-16 (tolerance 1e-13); Eq. (66)'s term equals the old k_ex exactly at each, and
+u(ratio − 1) is 3.37–3.75 at n = 1 (→ 4) and 2.48–2.97 at n = 2 (→ 3) at u = 1.2–50.5.
+
+**On the power wall** new/old = (n + 2)(1 + u)/(nu) exactly, 3 and 2 at large u (ln 3 = 1.0986, ln 2 = 0.6931 in ℓ_t).
+
+**What does not change (R16).** At nine mapped candidates (02's maps: the exponential at laboratory M, β = 2; the power
+wall at 1e-15 M_P, n = 1, 2; first, middle, last), production's `classical_turning_point` against
+`kexchain.production_v3_classical` (its body with the rate replaced): φ_t, ln ω_t² and ln R equal bit for bit at all nine.
+ℓ_t moves from −0.7025…−0.7107 to −0.6656…−0.6423 (exponential), from −1.0397 to +0.0589 (n = 1) and −0.8959 to −0.2027
+(n = 2): ln of 3/(2√2) and 2/√6.
+
+**The breakage record** (prompt §3). Each broken form through the same checks:
+
+| form | E64 | E71 | E66 | regime moves on crossover's 107 n = 1 rows |
+|---|---|---|---|---|
+| the ruled \|V‴/V″\| | 4.0e-9 | 4.4e-16 | 2.2e-16 | 20 |
+| \|V‴/V′\| | 10.8 | no chain | 728 | 41 |
+| the ½ dropped | 0.50 | 1.00 | 1.00 | 31 |
+| the rate at φ_t inside the chain | 0.999 | 919 | 13.4 | 24 |
+
+Each is caught by all three of E64, E71 and E66.
+
+### 7.2 The chain and the production hooks (prompt §1.2; P74) — [`precision.txt`](power-law-wall/kex-07b/precision.txt)
+
+`kexchain.chain(w, R, form)` is born.chain with the rate a choice; with `"lambda"` it equals the copied born.chain bit for
+bit at all 371 re-chained rows (§7.3). At 40 mapped candidates (16 exponential: 02's three maps and four of crossover's
+2197 at A = 0.01 near the floor, ℓ_old 0.08–3.0; 12 on each power wall), the new chain's ℓ and φ_ta/φ_t against
+`production_v3_turnaround`, one_loop_turnaround's loop with ln k_ex = ln|V‴/V″| + ½ ln E − ln 2 and (ln V)‴ by a centred
+difference of `_d2_logV_dphi2` (step 1e-5 φ/(1 + |(ln V)′|φ)), in Planck units: largest relative difference 1.9e-11
+(tolerance 1e-9). The old chain against production's own one_loop_turnaround at the same points: 5.1e-13. The search
+starts at 100 M: at φ = M the late 2197 candidates are inside their turnaround and production returns None there.
+
+### 7.3 Every stage-2 point re-chained (prompt §1.3; P77) — [`rechain.txt`](power-law-wall/kex-07b/rechain.txt)
+
+371 rows: crossover's `stage2_scan` (59), `stage2_mscan` (48) and `stage2_n2` (63), and 02's `stage2_scan` (201; its
+only scan file). Inputs as the runs used them (cascade rows from their cascade maps, curve rows from `lnR_on`).
+- **Bitwise:** the old chain equals the copied born.chain at 371 of 371 rows.
+- **The record:** ℓ_old against the recorded ℓ at all 199 rows that record one, within the printed digits (plus, for
+  02's rows, the inputs' printed digits propagated); largest difference 5.0e-4 at two rows whose value lies on the third
+  decimal's rounding boundary (4.078500 printed 4.079; 1.485503 printed 1.486). No row has a chain on one side only.
+- **Regime moves**, all gap → one-loop: 33 on the exponential (20 of crossover's 107 at n = 1, 13 of 63 at n = 2) and 52
+  on the power wall (34 curve rows, 18 grid rows). The exponential's n = 1 moves are the planner's twenty: 2197 #183,
+  #250, #348, #430 (ℓ_new 1.364, 1.109, 0.758, 0.470), the grid at L = 1.3 (ln R 5–25), L = 2, 3 (ln R 10–25), L = 4, 6
+  (ln R 10), and L-M8e-18 #3 (0.358). At n = 2: L = 2 (ln R 8–40), L = 4 (8, 12, 25, 30, 40), L = 8 (8).
+- **ℓ_new − ℓ_old** (both chains exist): exponential n = 1, 46 rows, 1.27–2.32 at L in [4, 6), 0.99–1.65 in [6, 8),
+  0.68–1.19 in [8, 10), 0.82–1.02 in [10, 15), 0.49–0.62 in [15, 30), 0.24 at L = 52, 0.05–0.18 in [60, 100),
+  0.036–0.10 at L ≥ 100; n = 2, 36 rows, 1.46–1.95 at L = 4, 0.56–3.71 at L = 8, 0.035–0.042 at L = 100. Power wall
+  n = 1, 59 rows: 1.1006–1.21 at ln x ≥ 40 (→ ln 3), up to 4.08 near the floor; n = 2, 58 rows: 0.695–0.91 at
+  ln x ≥ 40 (→ ln 2), up to 6.39 near the floor.
+- **No chain at ln R > 0**, by the chain's test (both forms counted): ℓ ≤ 0 at 167, the turnaround inside φ_t at 20.
+- **Iterations:** one old-form chain needed more than production's 100 (02's curve-1e-15-n1 at ℓ = 0.100: 138). §7.4's
+  new points near the chain's end need up to 195 (§3 issue).
+
+### 7.4 New stage-2 points (prompt §1.4; P78; ruling 3, 4) — [`stage2_*.txt`](power-law-wall/kex-07b/)
+
+`run_point_kex` is crossover's `run_point` with the chain and the turn's crossing rate in the chosen form.
+
+**The grid's reference** ([`stage2_reference.txt`](power-law-wall/kex-07b/stage2_reference.txt); loads 7.5–12.1):
+
+| point | old → new regime | recorded f | f, grid from the new k_ex | difference |
+|---|---|---|---|---|
+| 2197 A0.05 #107 (L 7.885, ln R 23.833) | one-loop (ℓ 1.987 → 3.126) | 0.7171 | 0.71722 | +0.0001 |
+| 2197 A0.01 #183 (3.619, 13.791) | gap → one-loop (ℓ_new 1.364) | 0.8264 | 0.82626 | −0.0001 |
+| 2197 A0.01 #512 (1.354, 4.865) | gap, both | 0.1594 | 0.15623 | −0.0032 |
+
+All three are within the prompt's ±6e-3 (ruling 4: no stop). The gap point lies outside crossover's own stated ±2e-3, so
+it was examined ([`stage2_reference_kmax.txt`](power-law-wall/kex-07b/stage2_reference_kmax.txt)): its grid's top,
+30 k_ref, is 5.78 ω_t in the old form (the old classical k_ex/ω_t is 0.19 at L = 1.35) and 22.9 in the new; at the same
+k_max both forms give the same fraction (old at 120 k_ref: 0.15623; new at 7.5 k_ref: 0.15944; the record 0.15937), and
+the fraction converges to 0.1561 (new at 60 k_ref: 0.15608). The difference is the record's convergence in k_max, not a
+dependence on the label.
+
+**The new points** ([`stage2_new.txt`](power-law-wall/kex-07b/stage2_new.txt); 2–26 s each at loads 7.8–12.2; none
+near 30 minutes). Between the gap's entry under the old form and R = 1, at target ℓ_new so that every 0.5-wide bin of ℓ_new
+that the curve's mapped history reaches there holds four on-curve points with crossover's rows:
+
+| curve | L | ln R | ℓ_new | f | v_out/v_in | back | ε at the turn | \|ΔE/E\| |
+|---|---|---|---|---|---|---|---|---|
+| lab n=1 | 1.37807 | 5.0033 | 0.120 | 0.15719 | 0.9175 | yes | 9.0e1 | 1.4e-10 |
+| lab n=1 | 1.47989 | 5.5601 | 0.250 | 0.17461 | 0.9081 | yes | 1.1e2 | 1.9e-10 |
+| lab n=1 | 1.63781 | 6.3730 | 0.370 | 0.22336 | 0.8804 | yes | 1.4e2 | 2.0e-10 |
+| lab n=1 | 1.92910 | 7.7413 | 0.550 | 0.33566 | 0.8143 | yes | 1.7e2 | 1.9e-10 |
+| lab n=1 | 2.10998 | 8.5222 | 0.650 | 0.41473 | 0.7643 | yes | 3.8e1 | 1.6e-10 |
+| lab n=1 | 2.60348 | 10.4512 | 0.900 | 0.65299 | 0.5883 | yes | 5.1e1 | 1.0e-10 |
+| lab n=1 | 3.31586 | 12.8626 | 1.230 | 0.79931 | 0.4474 | yes | 8.0e1 | 4.3e-11 |
+| lab n=1 | 3.88445 | 14.5678 | 1.480 | 0.85877 | 0.3753 | yes | 1.1e2 | 3.4e-11 |
+| L-M8e-18 | 93.76582 | 6.6055 | 0.305 | 0.71787 | 0.5312 | yes | 2.4e1 | 6.2e-10 |
+| L-M8e-18 | 93.78930 | 6.6310 | 0.330 | 0.72109 | 0.5281 | yes | 2.5e1 | 6.3e-10 |
+| L-M8e-18 | 93.86594 | 6.7141 | 0.390 | 0.73119 | 0.5185 | yes | 2.5e1 | 5.8e-10 |
+| lab n=2 | 1.29141 | 6.4376 | 0.300 | 0.26243 | 0.8586 | yes | 1.2e2 | 2.7e-10 |
+| lab n=2 | 1.91490 | 8.8780 | 0.700 | 0.53896 | 0.6789 | yes | 4.0e1 | 1.7e-10 |
+| lab n=2 | 2.73019 | 11.4483 | 1.100 | 0.79316 | 0.4547 | yes | 6.6e1 | 7.6e-11 |
+| lab n=2 | 3.52507 | 13.5721 | 1.450 | 0.86411 | 0.3686 | yes | 1.1e2 | 4.6e-11 |
+
+Every one is gap in the old form (no chain) and one-loop in the new; frac(modes) equals the balance to the printed
+digits; k_ex in both forms is printed per point. The bins: on the laboratory curve [0, 0.5), [0.5, 1) and [1, 1.5) each
+hold four (with 2197 #430, #348, #250, #183); the sliver [1.50, 1.53] below the old gap entry holds none. On L-M8e-18 the
+new chain begins at ℓ_new ≈ 0.297 (its fixed point folds there), so the curve reaches only [0.297, 0.41]: four points
+with #3. L-M1e-16 and L-M5e-16: their histories' candidates below the old gap entry (L ≤ 100.7; L = 106 at ln R 3.3)
+have no chain in either form, so no bin is reached. At n = 2, four on the laboratory curve.
+
+**Validation** ([`stage2_validate.txt`](power-law-wall/kex-07b/stage2_validate.txt),
+[`stage2_born_offcurve.txt`](power-law-wall/kex-07b/stage2_born_offcurve.txt)) at three new points (lab n = 1, ℓ_new 1.48
+and 1.23; lab n = 2, 1.45):
+- **energy**, at every point: ≤ 6.3e-10;
+- **the classical limit** (loop off, 8π²ρ against walls.py's test field, tolerance 1e-4): 4.6e-7, 2.7e-6, 6.3e-7;
+- **the Born limit** (tolerance 2e-3): at the points themselves k_IR = 10 m_ta is 2.3–2.9 k_ex, outside the Born
+  reduction: born.run returns −5.5 to −10 and stage 2's cut run breaks its energy budget (1e5) — recorded, not a result.
+  At the same L off the curve, at the ln R where ℓ_new = 6 (k_IR = 0.025 k_ex): +8.4e-4, +8.4e-4, +8.3e-4;
+- **convergence** (crossover's V4 variants, tolerance ±6e-3): largest 1.1e-4, 9.2e-4, 1.4e-4 (halving k_min each time).
+
+### 7.5 The candidate laws for `one-loop-exponential-v2` (prompt §1.5; P79; U13) — [`fits.txt`](power-law-wall/kex-07b/fits.txt)
+
+**The method reproduces crossover.** Run on crossover's rows as its `fit_law.scan_rows` reads them: b 0.0505; one-loop
+B0 0.9691, C 0.41 (max 0.074, rms 0.021, 27 points); gap 0.0198, 1.5601, 1.5472, 0.841 (max 0.062, rms 0.024, 34) —
+fit_law.txt to its printed digits. Note §0.3's refit (crossover's rows, its selection) is reproduced too: B0 0.3977,
+C 0.5070, max 0.190, rms 0.079 (25); gap 0.0230, 1.7972, 1.3795, 1.0496, max 0.047 (21).
+
+**Measured, not fitted:** the cap (largest f) 0.986 (n = 1) and 0.990 (n = 2) where the field was still in, 0.921 and
+0.923 where it came back out; the plateau, the one-loop points below ℓ_new = 1 that came back out: n = 1 mean 0.507
+(0.157–0.802, 18 points), n = 2 mean 0.618 (0.262–0.821, 8) — against v1's 0.9.
+
+**The residuals** (fit − f; max |res| / rms / mean; points), each in its new regime. "Below 1" is the one-loop points
+with ℓ_new < 1 (v1's plateau region). Selections: fit_law's (one-loop: a chain, ℓ ≥ 1, back out; gap: no chain,
+ln R > 0.3, back out, no curve set, no grid row above ln R = 15); at n = 2 crossover's U15 cut ln(V₀/M⁴) ≤ 10 in every
+group; and note §0.3's (fit_law's gap exclusions applied to the one-loop points too), which leaves out the off-curve grid
+corners L ≤ 8, ln R = 20, 25 that the new form turns from gap into one-loop.
+
+n = 1, fit_law's selection (43 one-loop, 18 below 1, 21 gap):
+
+| law | parameters | one-loop | below 1 | gap |
+|---|---|---|---|---|
+| v1, crossover's rows, old form | — | 0.074 / 0.021 / +0.002 (27) | 0.098 / 0.063 / +0.046 (6) | 0.061 / 0.024 / −0.000 (34) |
+| v1, new points, old form | — | — | — | 0.067 / 0.038 / +0.015 (11) |
+| v1, every point, new form | — | 0.262 / 0.130 / −0.077 | 0.743 / 0.453 / +0.393 | 0.043 / 0.016 / −0.001 |
+| (i) | A 2.69, B0 0.3042, C 0.4106; plateau 0.507; G 0.0230, R0 1.7972, P 1.3795, Q 1.0496 | 0.353 / 0.098 / +0.004 | 0.350 / 0.225 / −0.000 | 0.047 / 0.014 / −0.002 |
+| (ii) | A 3.2946, B0 0.6320, C 0.3278; plateau, gap as (i) | 0.376 / 0.096 / +0.007 | as (i) | as (i) |
+| (iii) | ℓ_g 2.25; A 2.69, B0 −1.0140, C 0.0001; G 0.0188, R0 1.6383, P 1.5300, Q 0.9959 | 0.618 / 0.113 / +0.028 | 0.070 / 0.033 / −0.000 | 0.046 / 0.015 / −0.001 |
+| (iv) | G 0.0180, R0 1.6111, P 1.5461, Q 1.0093, B0 −0.1041, C 0.3132 | 0.417 / 0.083 / +0.005 | 0.071 / 0.032 / −0.000 | 0.046 / 0.015 / −0.002 |
+
+n = 1, note §0.3's selection (27, 17, 21):
+
+| law | parameters | one-loop | below 1 | gap |
+|---|---|---|---|---|
+| v1, crossover's rows, old form | — | 0.033 / 0.012 / +0.002 (16) | 0.091 / 0.049 / +0.028 (4) | 0.061 / 0.024 / −0.000 (34) |
+| v1, every point, new form | — | 0.262 / 0.118 / −0.081 | 0.743 / 0.466 / +0.411 | 0.043 / 0.016 / −0.001 |
+| (i) | A 2.69, B0 0.5000, C 0.5302; plateau 0.489; gap as above | 0.188 / 0.080 / +0.004 | 0.332 / 0.219 / −0.000 | 0.047 / 0.014 / −0.002 |
+| (ii) | A 3.8016, B0 0.9126, C 0.2940 | 0.159 / 0.073 / +0.009 | as (i) | as (i) |
+| (iii) | ℓ_g 1.55; A 2.69, B0 −1.2248, C −0.0878; G 0.0180, R0 1.6100, P 1.5462, Q 1.0081 | 0.070 / 0.024 / +0.004 | 0.071 / 0.033 / −0.000 | 0.046 / 0.015 / −0.002 |
+| (iv) | the same six as (iii) | as (iii) | as (iii) | as (iii) |
+
+n = 2, crossover's U15 selection (28, 8, 14):
+
+| law | parameters | one-loop | below 1 | gap |
+|---|---|---|---|---|
+| v1, crossover's rows, old form | — | 0.125 / 0.048 / −0.029 (22) | 0.112 / 0.074 / +0.052 (5) | 0.102 / 0.046 / −0.037 (19) |
+| v1, new points, old form | — | — | — | 0.075 / 0.047 / −0.040 (4) |
+| v1, every point, new form | — | 0.275 / 0.098 / −0.066 | 0.638 / 0.339 / +0.282 | 0.064 / 0.037 / −0.031 |
+| (i) | A 2.69, B0 0.2668, C 0.3632; plateau 0.618; G 0.1285, R0 2.8156, P 0.5166, Q 0.5802 | 0.177 / 0.066 / +0.001 | 0.355 / 0.189 / −0.000 | 0.045 / 0.022 / −0.002 |
+| (ii) | A 3.0730, B0 0.3802, C 0.2876 | 0.166 / 0.064 / +0.006 | as (i) | as (i) |
+| (iii) | ℓ_g 1.55; A 2.69, B0 −1.1529, C −0.0354; G 0.0169, R0 1.3235, P 1.6721, Q 0.8620 | 0.039 / 0.015 / +0.002 | 0.041 / 0.027 / −0.001 | 0.056 / 0.025 / −0.004 |
+| (iv) | the same six as (iii) | as (iii) | as (iii) | as (iii) |
+
+(iv), proposed here: y = min(G(ln R − R0)^P(1 + Q ln L), 2.69/(ℓ + B0 − C ln L)), the second infinite where there is no
+chain; its reason is R7's structure on the power wall (a rising and a falling branch switched where they cross, f
+continuous), with L kept in each branch. Where its fit converged to (iii)'s split (three of the four fits) its parameters
+equal (iii)'s to four digits. In (iii) and (iv) the one-loop branch's B0 ≈ −1.2 is v1's 0.97 less roughly the shift of ℓ
+(ℓ_new − ℓ_old ≈ 1–2.3 at L < 10). Every point with each law's value is listed in fits.txt.
+
+**What moves the law.** v1 on the new points in the old form (all of them gap there) misses by at most 0.067 (n = 1) and
+0.075 (n = 2), within its own gap accuracy: the new points alone do not move it. v1 read in the new ℓ misses by 0.26
+(one-loop) and 0.74 (below 1, where its plateau 0.9 meets f = 0.16–0.82).
+
+### 7.6 The power wall's law, unchanged (prompt §1.6; P80) — [`powerlaw.txt`](power-law-wall/kex-07b/powerlaw.txt)
+
+At all 201 of 02's rows, `fit_fn.fraction_power(n, ln R)`, production's `InversePowerModel._drain_fraction` with the old
+form's regime and ℓ, and with the new form's, are equal bit for bit; 52 rows change regime (gap → one-loop). 03's gate Law
+reference re-run unchanged (02's own `fit_fn.py gate`, `python -B`): its output equals `law-03/gate_law.txt` but for the
+two `uptime` lines (122 019 evaluations per (n, units) bit for bit; 1148 candidates bit for bit). S_n reads no k_ex:
+`stage1a_power.py` integrates over k/ω_t on `ks = np.geomspace(1e-3, 10.0, 241)` (line 56); k_ex appears there only as the
+loop-off check's grid end (`kref = n * sqrt(w.E) / 2.0`, line 89).
+
+### 7.7 The spectrum tables and x_* (prompt §1.7; P81, P82) — [`spectrum.txt`](power-law-wall/kex-07b/spectrum.txt), [`spectrum_tables.txt`](power-law-wall/kex-07b/spectrum_tables.txt)
+
+| | exponential (WallN(90, 1)) | power n = 1 | power n = 2 |
+|---|---|---|---|
+| k_ex/ω_t, old | 0.4945353550468402 | 0.3535533905932738 | 0.408248290463863 |
+| k_ex/ω_t, new (chain) | 0.5163952511757223 | 1.0606601717798214 | 0.816496580927726 |
+| closed form, rel | 0 | +2.2e-16 | −1.1e-16 |
+| X_LO = 1e-3/(k_ex/ω_t) | 0.0019365011543448797 | 0.0009428090415820634 | 0.001224744871391589 |
+| X_HI (tail share at each candidate) | 3.5 (3: 4.2e-3; 3.5: 7.4e-4) | 3 (8.0e-6) | 3 (1.4e-4) |
+| nodes, step in ln x | 151, 0.049998 | 163, 0.049786 | 158, 0.049705 |
+| spline vs midpoints, max rel | 2.5e-6 | 4.1e-6 | 2.5e-6 |
+| monotone either side of the peak | yes | yes | yes |
+| x_p (k_peak/ω_t) | 0.619424 (0.31987) | 0.155250 (0.16467) | 0.253372 (0.20688) |
+| local slope at X_LO (spline, direct) | 2.0000, 2.0000 | 1.6649, 1.6649 | 1.9863, 1.9863 |
+| κ_hi (spline, direct) | 4.342684, 4.342784 | 6.545990, 6.546190 | 5.467311, 5.467431 |
+| tail's share; k² piece's | 7.4e-4; 9.2e-17 | 8.0e-6; 9.4e-15 | 1.4e-4; 9.3e-16 |
+| cross-check vs the old table in k/ω_t | 1 shared node 1.3e-7; 149 others vs its spline ≤ 4.3e-7 | 1.9e-8; 154 ≤ 2.4e-6 | 6.0e-8; 154 ≤ 2.5e-6 |
+
+The bounce does not depend on k_ex: in k/ω_t the new tables equal the old within the old table's spline precision
+(2.8e-6). x_p, X_HI and κ_hi move only as labels (k_peak/ω_t is unchanged: 0.6468 × 0.4945 = 0.3199). The literals, as
+`quanta_spectrum.py` writes them, are in `spectrum_tables.txt`, x_hi the rule's value (3.0, not exp(ln 3)).
+
+**The exponential's shape over L** (P21), each in its own new x, against L = 90's: L = 40, k_ex/ω_t 0.5362, x_p ×0.920,
+J ×1.045, M1/M3 ×1.101, κ_hi ×1.018; L = 134, 0.5111, ×1.023, ×0.988, ×0.974, ×0.995. In the old x (03, verification
+§3.5) the same spread was −3.2% to +0.9% in x_p: the new k_ex/ω_t varies more with L (0.536 to 0.511) than the old.
+
+**R9 on the power wall.** At E/V₀ = 1e3, 10, 1 and the laboratory curve's R = 1 point (0.930 at n = 1, 0.426 at n = 2),
+the spectrum measured at E/V₀ in its own new x against the new reference table at the same x: largest |Δ ln|β|²| 1.8e-7
+(n = 1) and 3.4e-7 (n = 2), against 03's factor 1/s_t (×2.08 and ×3.35 in x at R = 1). The planner's expectation holds:
+k_ex/ω_t = (n + 2)/(2√(n(n + 1))) at every E/V₀, so R9's error is gone.
+
+**x_*** = 0.0029 ω_t / k_ex at the exponential's reference: 0.005615853347600149 (0.0058 = 0.0029/(1/2) today; 0.005864 in
+the old x at L = 90). Carried in k/ω_t instead, it would be 0.002734 (n = 1) and 0.003552 (n = 2); R10 carries it in x,
+0.005616 on every wall.
+
+### 7.8 The paths (prompt §1.8; P83) — [`paths.txt`](power-law-wall/kex-07b/paths.txt), [`paths_candidates.txt`](power-law-wall/kex-07b/paths_candidates.txt)
+
+65 histories (crossover's six cascade maps, 02's 25 maps, 04's 34 non-natural runs), 17 377 candidates; 327 change
+regime, all gap → one-loop on the exponential: 325 in 2197 at A = 0.01 and 2 in L-M8e-18; none on the power wall. The old
+ℓ against the record: ≤ 1.3e-4 on crossover's maps (L from ln(E/V₀) at 4 decimals), ≤ 5.0e-6 on 02's, ≤ 5.0e-5 on 04's.
+The largest change of ℓ: 1.45 (2197 A0.01), 1.34 (2197 A0.05), 0.05–0.24 on the other exponential histories; 0.70–0.80
+(n = 2) and 1.10–1.27 (n = 1) on the power wall. ℓ_t moves by 0.032–0.074 on the exponential's assessed bounces, but by
+up to 20.5 in 2197's classical tail (L down to 4e-9, where the wall is V₀(1 + M/φ) and new/old → 3/L); by ln 3 and ln 2
+on the power wall.
+
+**The drained share** (a first-order measure): K_X = Σ_c α_X,c ε_c with ε_c = (E_c/V₀)e^{4N_c} from the recorded
+ln(E/V₀) and N, the trajectory held fixed (on 04's runs, α_rec ε scaled to the recorded Σ ΔK/K reproduces each ΔK_c/K
+to 9.3e-6 relative). On the exponential, K_X/K_v1 for (i)–(iv) under fit_law's selection | note §0.3's, at each
+history's A (1 for 02's fixed-law maps): 2197 A0.01 0.968, 1.026, 1.005, 0.977 | 0.978, 1.075, 1.003, 1.003; 2197 A0.05
+0.993, 1.116, 1.005, 1.005 | 1.009, 1.217, 1.001, 1.001; R-865 and 02's three laboratory maps 1.016–1.018, 1.207–1.210,
+0.998–1.000, 1.015–1.017 | 1.027–1.029, 1.363–1.370, 0.993–0.994, 0.993–0.994; L-M8e-18 1.144, 1.097, 1.008, 1.132 |
+1.237, 1.097, 0.967, 0.967; L-M1e-16 1.042, 1.042, 0.976, 0.977 | 1.042, 1.031, 0.977, 0.977; L-M5e-16 1.032, 1.032,
+1.007, 1.007 (both). On the power wall K_new/K_old = 1.000000 at every history: f_n(ln R) is the same, and 04's recorded
+f equals it at every candidate.
+
+### 7.9 The inventory (prompt §1.9; P84) — [`inventory.md`](power-law-wall/kex-07b/inventory.md)
+
+278 rows (production 118, tools 19, tests 98, goldens 7, docstrings 15, documents of record 7, records 14), compiled by
+`git grep -n` at `e4ae58b`, each hit read in place. No golden holds a k_ex column or an ℓ-dependent value, and none is under
+a law that reads ℓ. Its last section lists 20 items beyond note §0.4's list, among them: the kernels' grid ends against
+the new x_lo (power-n1's 9.43e-4 is below `G_Y_MIN` = 1e-3; x_lo e^{OMEGA_U_MAX} falls to 7.6 against the docstring's
+"≥ 16.4"); `classical_turning_point_before_fix` in `test_unresolvable_turning_points.py`, a verbatim copy of the old
+method; tests that pin whether the chain has a solution (`test_wall_model`, `test_margins`, `test_drain_store`); the
+notes' worked example k_ex = 5.6e13 GeV in `test_wall_model`; the third hook reaching test stand-ins; fixed-law histories
+moving in their k_ex columns through `margin_inputs`; `model_of_law`; the export columns; and `CLAUDE.md`'s mentions.
+
+### 7.10 The hand-back
+
+**For U13** (the user's; nothing here is a recommendation): the candidates (i)–(iv) and their residuals at n = 1 and 2
+beside v1's (§7.5), and the drained-share change on the mapped histories (§7.8). In the new ℓ, the points below ℓ = 1
+have f = 0.16–0.82, which v1's 0.9 plateau misses by up to 0.74; (i) and (ii), which keep a plateau, miss there by 0.33–0.36
+whatever their one-loop branch; (iii) and (iv), which give that region the gap's form in (ln R, L), miss by ≤ 0.071 there,
+and by ≤ 0.070 (n = 1, note's selection) and 0.039 (n = 2) on the one-loop points, but by 0.42–0.62 with the off-curve
+grid corners kept (fit_law's selection at n = 1). Which points the law must describe (the corners or not) is part of
+the choice.
+
+**For 07c:** the tables and x_* (§7.7, `spectrum_tables.txt`); the inventory (§7.9); the production-precision chain
+(§7.2: the hooks give the new ℓ to 1.9e-11 with a centred third derivative). For U11 and U12, nothing here changes them:
+the power wall's law is unchanged (§7.6), and the stored ℓ, k_ex and regime labels of every history move (§7.8), which is
+what U12's new label guards. Two things for 07c's design: the fixed point near the chain's end needs more than production's
+100 iterations (§3 issue), and on the exponential the classical tail's k_ex moves by up to e^{20} (§7.8).
