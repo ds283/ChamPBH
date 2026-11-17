@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-17 · **Status: LIVE — 8 of 11 prompts landed (07b landed 2026-11-17, the gate Remeasure holds, one issue opened; U13 waits on the user); re-planned 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|, on every potential and at every use; the exponential's one-loop law refitted under `one-loop-exponential-v2`; README §6.12, P73–P90; U11–U12 ruled as proposed, U13 open), with 07b–07d inserted before 08 (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-17 · **Status: LIVE — 8 of 11 prompts landed (07b landed 2026-11-17, the gate Remeasure holds, one issue opened; U13 waits on the user); re-planned 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|, on every potential and at every use; the exponential's one-loop law refitted under `one-loop-exponential-v2`; README §6.12, P73–P90; U11–U12 ruled as proposed, U13 open), with 07b–07d inserted before 08 (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07b reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -28,7 +28,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 05 | The store | type id 2, its table, the registry, `FINGERPRINT_FORMAT` 8, the label (U6); the key's drain model at entry and the joins by model type (P33–P44) | Opus | ✍️ | ✅ | `bdb6ae7` | [`logs/05-the-store.md`](logs/05-the-store.md) |
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11); the one-loop rows under the model's own drain model, the quanta tools' wall by row, the scope; every potential under `<output>/<label>/<model>/` (R12, P45–P58) | Opus | ✍️ | ✅ | `fda2df2` | [`logs/06-drivers-and-exports.md`](logs/06-drivers-and-exports.md) |
 | 07 | Rehearse | registered builds, exponential bitwise, power law resumed; U7's grid in five stores (the exponential at `a7e0978` and the tip, the power law straight and resumed, both potentials in one store), against 04, the readers on every store (P59–P72) | Opus | ✍️ | ✅ | `bbd99f4` | [`logs/07-rehearse.md`](logs/07-rehearse.md) |
-| 07b | Re-measure k_ex | research in `source/kex/`: the definition against Erickcek et al.; every stage-2 point re-chained, new points where the exponential's regime moved; the candidate laws for `one-loop-exponential-v2` at n = 1, 2; the power wall's law unchanged; the tables and x_* in the new x; the paths; the inventory (R13–R17, P73–P90); then U13 | Opus | ✍️ | ✅ | this commit | [`logs/07b-remeasure-k-ex.md`](logs/07b-remeasure-k-ex.md) |
+| 07b | Re-measure k_ex | research in `source/kex/`: the definition against Erickcek et al.; every stage-2 point re-chained, new points where the exponential's regime moved; the candidate laws for `one-loop-exponential-v2` at n = 1, 2; the power wall's law unchanged; the tables and x_* in the new x; the paths; the inventory (R13–R17, P73–P90); then U13 | Opus | ✍️ | ✅ | `0223d50` | [`logs/07b-remeasure-k-ex.md`](logs/07b-remeasure-k-ex.md) |
 | 07c | k_ex in production | the V‴ hook, one k_ex at every use, the law as U13 rules, the tables, the label (U11–U12) | Opus | ⬜ | ⬜ | — | — |
 | 07d | Rehearse again | 07's grid at the tip; histories whose law reads no ℓ equal to 07's but the k_ex columns; the exponential's one-loop histories measured against 07's | Opus | ⬜ | ⬜ | — | — |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
@@ -40,7 +40,7 @@ a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written
 01 (dispatched 2026-11-14 at `75ac6fb`); [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-14 with prompt 02, used for
 02 (dispatched 2026-11-14 at `35f6359`); [`prompt-03.md`](orchestrator/prompt-03.md), written 2026-11-15 with prompt 03,
 used for 03 (dispatched 2026-11-15 at `7c60226`, after U8 and U9 were ruled as proposed, R9 and R10), and its §0 holds the f_n(ln R) fit the user ruled R7 on and the
-spectrum probes R8 was ruled on; [`prompt-04.md`](orchestrator/prompt-04.md), written 2026-11-15 with prompt 04, not dispatched, and its §0 holds the planner's probe at `99cc79b` (surfing at 10⁻³ M_P, one-loop histories at 10⁻¹⁵ and 10⁻³³ M_P, the M_crit estimate); [`prompt-07.md`](orchestrator/prompt-07.md), written 2026-11-16 with prompt 07, not dispatched, and its §0 holds the planner's survey at `c7ba5ca` (the registry's roots in the main checkout, the data files equal at `a7e0978` and the tip, 04's costs and print formats). [`prompt-07b.md`](orchestrator/prompt-07b.md), written 2026-11-17 with prompt 07b, not dispatched, and its §0 holds the planner's reading of Erickcek et al. §V B, the size of the change on each wall, crossover's stage-2 rows re-chained at `c798d02` (20 move from gap to one-loop; v1's form misses by 0.19 in the new ℓ) and the inventory as far as the planner took it. Note 02's §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
+spectrum probes R8 was ruled on; [`prompt-04.md`](orchestrator/prompt-04.md), written 2026-11-15 with prompt 04, not dispatched, and its §0 holds the planner's probe at `99cc79b` (surfing at 10⁻³ M_P, one-loop histories at 10⁻¹⁵ and 10⁻³³ M_P, the M_crit estimate); [`prompt-07.md`](orchestrator/prompt-07.md), written 2026-11-16 with prompt 07, not dispatched, and its §0 holds the planner's survey at `c7ba5ca` (the registry's roots in the main checkout, the data files equal at `a7e0978` and the tip, 04's costs and print formats). [`prompt-07b.md`](orchestrator/prompt-07b.md), written 2026-11-17 with prompt 07b, used for 07b (dispatched 2026-11-17 at `e4ae58b`; landed `0223d50`), and its §0 holds the planner's reading of Erickcek et al. §V B, the size of the change on each wall, crossover's stage-2 rows re-chained at `c798d02` (20 move from gap to one-loop; v1's form misses by 0.19 in the new ℓ) and the inventory as far as the planner took it. Note 02's §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
 crossover scripts' absolute tolerances failing at large E/V₀.
 
 **Planner's probe for 01 (2026-11-13, at `c540caa`, not committed).** A scratch power-law model through
@@ -601,6 +601,62 @@ during the review.
   twice), `--n-values` one list per run, `plot_quanta_grid`'s refusal at two n (§3), and `compare_stores`' blindness to
   two builds that hold a failure (§3).
 
+**Orchestrator review of prompt 07b (2026-11-17).** All six checks of note 07b §3 pass. The re-runs below were made by
+the orchestrator at `0223d50`, serially, from scratch scripts in the session scratchpad (none committed), with the
+one-minute load 3.5–5.0 during the review.
+- **The gate at dispatch** (2026-11-17, 11:23 local). `HEAD` was `e4ae58b`, with `a64d8af` and `bbd99f4` ancestors; the
+  worktree held `?? venv` only; `source/kex/` and `kex-07b/` did not exist; the verification document ended at §6;
+  crossover was last changed at `18add05`; `AbstractModel.py:873` still took `lambda_ta = -self._d_logV_dphi(...)`. The
+  registry held no run `running` or stale. The load was 24.51 / 14.90 / 13.00. The main checkout was not read: the
+  session's brief forbids it, and 07b needs nothing from it.
+- **The paper.** arXiv:1310.5149 fetched as PDF into the scratchpad (the one fetch), its text extracted with
+  `pdftotext -layout` (2018 lines); §V B and Eqs. (62)–(72) are in it. Not committed.
+- **No stop.** The agent ran without one.
+1. *Scope.* `0223d50`'s parent is `e4ae58b`. Its 43 files are ruling 8's: `source/kex/` (22: README, nine scripts, five
+   crossover copies at `18add05`, seven `source/wall/` copies at `c798d02`), `kex-07b/` (17 text files), the verification
+   document, the log, the board and `.documents/OPEN_ISSUES.md`. Nothing outside `prompts/power-law-wall/`,
+   `.documents/power-law-wall/`, the verification document and the index; no `venv`. Crossover's directory, `source/wall/`
+   and `CLAUDE.md` are unchanged from `e4ae58b`, and no `__pycache__` is under `prompts/power-law-wall/source/` or
+   crossover's directory, before or after my re-runs. The branch has no upstream; nothing is pushed.
+2. *The re-chaining.* `rechain.py`, re-run by me with `python -B`: its output equals the committed `rechain.txt` in every
+   line but the two `uptime` lines (507 lines; 371 rows, bitwise to the copied `born.chain` at 371 of 371, every recorded
+   ℓ within its printed digits). The 20 n = 1 moves of note §0.3 are exactly crossover's n = 1 moves in the table
+   (2197 ×4, grid L = 1.3 ×5, 2.0 ×4, 3.0 ×4, 4.0 and 6.0 at ln R = 10, L-M8e-18 #3). The old-form fit is check 4's.
+   One figure the hand-back abbreviates: at n = 2 ℓ_new − ℓ_old reaches 3.71 in L ∈ [8, 10) (`rechain.txt` :483–:489),
+   above the 1.46–1.95 the hand-back quotes at L = 4.
+3. *One new point and one grid-reference point*, re-run by me serially through `stage2_kex.task_point`: the reference
+   2197 A0.01 #183 (gap → one-loop) gives f 0.82626, balance 0.82626, v_out/v_in 0.4163, |ΔE/E| 3.6e-11, 289 modes,
+   23 s at load 4.44 → 4.65; the new point "lab n=1 ℓ_new~0.55" gives f 0.33566, v_out/v_in 0.8143, |ΔE/E| 1.9e-10,
+   261 modes, 14 s at 4.65 → 4.37. Both equal the committed rows at every printed digit.
+4. *The fits.* `fits.py`, re-run: `fits.txt` equal to the committed file but for its two `uptime` lines, and
+   `fits.json` (which it rewrites in place) byte-identical (`git status` clean after). It prints crossover's constants
+   reproduced. Candidate (i) at n = 1 under fit_law's selection, recomputed by my own script from `fits.json`'s
+   parameters, the per-point f and prompt §1.5's selection: one-loop max |res| 0.3530 (rms 0.0983, 43 points), plateau
+   0.3495 (0.2249, 18), gap 0.0470 (0.0144, 21), as committed (0.353, 0.350, 0.047).
+5. *The tables and x_*.* `spectrum_kex.py table` re-run into the scratchpad (49 s, the pool of four, load 3.6–5.0): the
+   literals file is byte-identical (`cmp`) to the committed `spectrum_tables.txt`, all three walls. The power walls'
+   k_ex/ω_t, 1.0606601717798214 and 0.816496580927726, equal (n + 2)/(2√(n(n + 1))) to 2.1e-16 and 1.4e-16 relative.
+   x_* = 0.0029/0.5163952511757223 = 0.005615853347600149, and each X_LO = 10⁻³/(k_ex/ω_t), to the last digit; in k/ω_t
+   on the power walls 0.0029/(k_ex/ω_t) = 0.002734 and 0.003552, as stated.
+6. *The inventory and the records.*
+   - A fresh `git grep` of the note's pattern outside `prompts/`, `.documents/`, `science-runs/`, `thirdparty/` and
+     `PRyM/` hits 46 files; every one is in `inventory.md` (16 by file name alone) but `tools/tests/test_build_w_table.py`,
+     whose only hit is "chec**k_ex**its" in a test name.
+   - The log has §5.1's sections, 22 classed deviation entries (D1–D14 and rulings 1–8); verification §7.1–§7.10 exist;
+     `kex-07b/` and `source/kex/` exist, the latter with a README.
+   - The board has row 07b, its items, the gate Remeasure and the §3 issue
+     `[07b-the-one-loop-fixed-point-needs-more-than-100-iterations-near-the-chain-end]`, which is in
+     `.documents/OPEN_ISSUES.md` (35 → 36, 2026-11-17).
+   - `CLAUDE.md` is unchanged. Counts by discovery, mine: 26, 226 + 557, 175, 312, 79, the base's.
+   - "This commit" is replaced by `0223d50` in the log and on the board.
+- **For the user.** (a) Ruling 4: the gap reference point #512 is off its record by −0.0032, inside the prompt's ±6×10⁻³
+  and outside crossover's own ±2×10⁻³. The agent showed that both forms give the same fraction at the same k_max
+  (0.15623), so the difference is the record's grid top, not the label (`stage2_reference_kmax.txt`; log §6 item 2); it
+  did not stop, reading ruling 4's "stated precision" as the prompt's ±6×10⁻³. (b) D13: the spectrum runs were started
+  beside the stage-2 validation, and the load reached 32.9; every stage-2 start was at a load of 12.2 or less, so ruling 3
+  held for the stage-2 points. (c) Which points the exponential's law must describe (fit_law's selection or note §0.3's)
+  moves every candidate's one-loop residual (0.35–0.62 against 0.07–0.19 at n = 1); that choice is part of U13.
+
 ## 2. The gates
 
 As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Remeasure (07b), Consistent (07c), R2 (07d), Close (08). The last three are not yet met.
@@ -888,6 +944,8 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   prompt 07b and its orchestrator note written; not dispatched.
 - 2026-11-17: U11 (the power wall's law renamed `one-loop-inverse-power-v1` in 07c) and U12 (`VERSION_LABEL` 2026.13.0
   in 07c) ruled by the user as proposed: "U11 and U12 as proposed; dispatch 07b in a fresh session". U13 after 07b.
-- 2026-11-17: prompt 07b dispatched at `e4ae58b`, and landed (this commit); the gate Remeasure holds. One issue opened
+- 2026-11-17: prompt 07b dispatched at `e4ae58b`, and landed (`0223d50`); the gate Remeasure holds. One issue opened
   (§3, `[07b-the-one-loop-fixed-point-needs-more-than-100-iterations-near-the-chain-end]`). The candidate laws for
   `one-loop-exponential-v2` go to the user (U13; verification §7.5, §7.10); 07c is not written.
+- 2026-11-17: prompt 07b reviewed by the orchestrator (this board, "Orchestrator review of prompt 07b"); all six checks
+  pass. No issue opened by the review. 07c is written only when the user has ruled U13 and asks for it.

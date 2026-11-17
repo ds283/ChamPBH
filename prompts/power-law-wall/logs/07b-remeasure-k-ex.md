@@ -4,7 +4,7 @@
 point of crossover and 02 re-chained; new stage-2 points where the exponential's regime moved; the candidate laws for
 `one-loop-exponential-v2` at n = 1 and 2; the power wall's law shown unchanged; the three spectrum tables and x_* in the
 new x; the mapped paths; the inventory for 07c (P73–P90).
-**Commit:** this commit, on branch `power-law-wall`, on top of `e4ae58b`
+**Commit:** `0223d50`, on branch `power-law-wall`, on top of `e4ae58b`
 **Date:** 2026-11-17, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`; the inventory
 compiled by a subagent from its brief, D10)
 **Result:** **COMPLETE.** The gate Remeasure holds (§4). Nothing is ruled: U13 is the user's.

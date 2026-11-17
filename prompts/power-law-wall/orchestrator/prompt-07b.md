@@ -1,6 +1,7 @@
 # Orchestrator — prompt 07b, re-measure everything that k_ex defines
 
-**Written** 2026-11-17 with the prompt, on the user's rulings R13–R17 (README §6.12) and their words for the prompts:
+**Used for 07b** (dispatched 2026-11-17 at `e4ae58b`; landed `0223d50` with no stop; reviewed on the board,
+"Orchestrator review of prompt 07b"). **Written** 2026-11-17 with the prompt, on the user's rulings R13–R17 (README §6.12) and their words for the prompts:
 "The prompts can go into `power-law-wall`." Not dispatched. P73–P90 stand unless the user rules otherwise; U11–U13 are
 the user's, and none is needed before 07b. 07b is dispatched at the user's word.
 
