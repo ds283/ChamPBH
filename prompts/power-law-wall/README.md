@@ -750,6 +750,14 @@ U11 and U12 before 07c is written, U13 after 07b.
   in which case 07c amends `science-runs/README.md`'s row.
 - **P90 — the counts.** As P14.
 
+**Ruled by the user, 2026-11-17, in their words:** "U11 and U12 as proposed; dispatch 07b in a fresh session". So:
+- **U11 (a):** 07c renames `one-loop-measured-pl-v1` to `one-loop-inverse-power-v1`; the power wall's law and constants
+  do not change.
+- **U12 (a):** 07c sets `VERSION_LABEL` 2026.13.0; `FINGERPRINT_FORMAT` stays 8 unless 07c changes a table or column.
+- U13 is ruled after 07b.
+
+The table below is the proposal as it was put.
+
 | | Proposed | Alternatives |
 |---|---|---|
 | **U11** — the power wall's drain-model name | **(a) rename `one-loop-measured-pl-v1` to `one-loop-inverse-power-v1`** in 07c, so that every one-loop drain model names its potential, as R14 names the exponential's and as R12 treats the potentials. Its law does not change, so it stays v1. No store of record holds the old name: only 07's rehearsal stores | (b) keep `one-loop-measured-pl-v1` |
