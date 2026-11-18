@@ -2144,3 +2144,22 @@ where the law has one):
 - **Which points the law must describe:** every option above misses the off-curve corners (ln(V₀/M⁴) > 10) by 0.6–0.7
   (S3 drops them; S1 keeps them, where (v-L) and (vi) do better, 0.41–0.42).
 - **No cap** is needed by any residual (§8.5); measured f near the peak reaches 0.993 with the field not back out.
+
+### 8.9 The figures (added 2026-11-18 at the user's request, for reference)
+
+Three figures made by 07b2 (`minform_figs.py`, committed in `2f638e0`), kept as part of the record of the exponential's
+law in the new k_ex. Each is drawn from the outputs above; nothing in them is not in a text file of `kex-07b2/`.
+
+- **Figure 8.1** — [`f_vs_lnR.png`](../prompts/power-law-wall/source/kex/fig/f_vs_lnR.png): the measured fraction f
+  against ln R, one panel per set of points. In the `grid` and `n2-grid` panels L is fixed and ln R varies, so ℓ_new
+  varies along each panel (it rises with ln R where the chain exists, and is undefined in the gap). In the `curve` panels
+  the points lie on one history's path, where L and ln R move together at fixed ln(V₀/M⁴). The blue line is (v) on S3
+  with the new points, the dashed line v1 in the old chain; grey shading is outside S3 (ln(V₀/M⁴) > 10). f rises with
+  ln R through the gap and into the one-loop regime, peaks at ℓ_new ≈ 1.9, and then falls.
+- **Figure 8.2** — [`f_vs_ell.png`](../prompts/power-law-wall/source/kex/fig/f_vs_ell.png): f against ℓ_new (log
+  axis) for every point inside S3 where the chain has a solution, at every L and ln R, coloured by ln L. Nothing is held
+  fixed. Above the peak (ℓ_new ≳ 2) the points from every L and ln R lie on one curve, the fall 1 − exp(−A/(ℓ − ℓ₀))
+  drawn in blue: there f depends on ℓ alone. Below the peak they spread by L, because there f follows the rise, which
+  depends on ln R and L and not on ℓ alone.
+- **Figure 8.3** — [`prediction.png`](../prompts/power-law-wall/source/kex/fig/prediction.png): each of the 36 new
+  points' measured f against the f that (v), fitted without them, predicted in `prediction.json` before they ran (§8.4).
