@@ -30,7 +30,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 07 | Rehearse | registered builds, exponential bitwise, power law resumed; U7's grid in five stores (the exponential at `a7e0978` and the tip, the power law straight and resumed, both potentials in one store), against 04, the readers on every store (P59–P72) | Opus | ✍️ | ✅ | `bbd99f4` | [`logs/07-rehearse.md`](logs/07-rehearse.md) |
 | 07b | Re-measure k_ex | research in `source/kex/`: the definition against Erickcek et al.; every stage-2 point re-chained, new points where the exponential's regime moved; the candidate laws for `one-loop-exponential-v2` at n = 1, 2; the power wall's law unchanged; the tables and x_* in the new x; the paths; the inventory (R13–R17, P73–P90); then U13 | Opus | ✍️ | ✅ | `0223d50` | [`logs/07b-remeasure-k-ex.md`](logs/07b-remeasure-k-ex.md) |
 | 07b2 | Measure the min(rise, fall) form | research in `source/kex/`: the exponential's law as min(rise in ln R, fall A/(ℓ − ℓ₀) in the new ℓ) and its variants at n = 1, 2, on three selections like for like beside v1 and 07b's (i)–(iv); errors, leave-one-set-out; new points predicted before they are fitted; the crossing, the cap, the edges; the paths; the reference implementation (P91–P98); then U13 | Opus | ✍️ | ✅ | `2f638e0` | [`logs/07b2-measure-the-min-form.md`](logs/07b2-measure-the-min-form.md) |
-| 07c | k_ex in production | the V‴ hook, one k_ex at every use, the law as U13 rules, the tables, the label (U11–U12) | Opus | ⬜ | ⬜ | — | — |
+| 07c | k_ex in production | the V‴ hook, one k_ex at every use, the law as U13 rules (in `ExponentialModel`, P99), the drain-model names, the tables and x_*, the iteration cap, the label (U11–U12; P99–P110, U14) | Opus | ✍️ | ⬜ | — | — |
 | 07d | Rehearse again | 07's grid at the tip; histories whose law reads no ℓ equal to 07's but the k_ex columns; the exponential's one-loop histories measured against 07's | Opus | ⬜ | ⬜ | — | — |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
 
@@ -1016,3 +1016,8 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
 - 2026-11-18: U13 ruled by the user (README §6.13): `one-loop-exponential-v2` is 07b2's min(rise, fall) form, its fall
   (A, ℓ₀) shared by n = 1 and 2 and its rise per n, the constants 07b2's joint fit on ln(V₀/M⁴) ≤ 10 with the new points.
   U11–U13 are now ruled; 07c is written when the user asks for it.
+- 2026-11-18: the orchestrator's probe after 07b committed at the user's request (`source/kex/probe-07b/`), and 07b2's
+  figures cited in verification §8.9.
+- 2026-11-18: prompt 07c written at the user's word ("We are ready to write 07c, so please do so"), on P99–P110 (README
+  §6.14), with no orchestrator note. U14 (the exponential's one-loop law at n other than 1 and 2) is the user's before
+  07c is dispatched.
