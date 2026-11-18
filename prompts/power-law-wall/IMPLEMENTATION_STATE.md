@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-18 · **Status: LIVE — 9 of 12 prompts landed (07b2 landed 2026-11-18, the gate Form holds, no issue opened: the min(rise, fall) form and its variants measured; U13 ruled 2026-11-18, the joint fit (fall shared, rise per n) on ln(V₀/M⁴) ≤ 10, README §6.13, P91–P98; 07b landed 2026-11-17, the gate Remeasure holds, one issue opened); re-planned 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|, on every potential and at every use; the exponential's one-loop law refitted under `one-loop-exponential-v2`; README §6.12, P73–P90; U11–U12 ruled as proposed, U13 ruled after 07b2), with 07b–07d inserted before 08 (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07b2 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-18 · **Status: LIVE — 10 of 12 prompts landed (07c landed 2026-11-18, the gate Consistent holds, one issue closed and one opened: one k_ex, ½E^{1/2}|V‴/V″|, at every use; the exponential's law `one-loop-exponential-v2` in `ExponentialModel`; the power wall's renamed `one-loop-inverse-power-v1`; the label 2026.13.0; 07b2 landed 2026-11-18, the gate Form holds, no issue opened: the min(rise, fall) form and its variants measured; U13 ruled 2026-11-18, the joint fit (fall shared, rise per n) on ln(V₀/M⁴) ≤ 10, README §6.13, P91–P98; 07b landed 2026-11-17, the gate Remeasure holds, one issue opened); re-planned 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|, on every potential and at every use; the exponential's one-loop law refitted under `one-loop-exponential-v2`; README §6.12, P73–P90; U11–U12 ruled as proposed, U13 ruled after 07b2), with 07b–07d inserted before 08 (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07b2 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -30,7 +30,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 07 | Rehearse | registered builds, exponential bitwise, power law resumed; U7's grid in five stores (the exponential at `a7e0978` and the tip, the power law straight and resumed, both potentials in one store), against 04, the readers on every store (P59–P72) | Opus | ✍️ | ✅ | `bbd99f4` | [`logs/07-rehearse.md`](logs/07-rehearse.md) |
 | 07b | Re-measure k_ex | research in `source/kex/`: the definition against Erickcek et al.; every stage-2 point re-chained, new points where the exponential's regime moved; the candidate laws for `one-loop-exponential-v2` at n = 1, 2; the power wall's law unchanged; the tables and x_* in the new x; the paths; the inventory (R13–R17, P73–P90); then U13 | Opus | ✍️ | ✅ | `0223d50` | [`logs/07b-remeasure-k-ex.md`](logs/07b-remeasure-k-ex.md) |
 | 07b2 | Measure the min(rise, fall) form | research in `source/kex/`: the exponential's law as min(rise in ln R, fall A/(ℓ − ℓ₀) in the new ℓ) and its variants at n = 1, 2, on three selections like for like beside v1 and 07b's (i)–(iv); errors, leave-one-set-out; new points predicted before they are fitted; the crossing, the cap, the edges; the paths; the reference implementation (P91–P98); then U13 | Opus | ✍️ | ✅ | `2f638e0` | [`logs/07b2-measure-the-min-form.md`](logs/07b2-measure-the-min-form.md) |
-| 07c | k_ex in production | the V‴ hook, one k_ex at every use, the law as U13 rules (in `ExponentialModel`, P99), the drain-model names, the tables and x_*, the iteration cap, the label (U11–U12; P99–P110, U14) | Opus | ✍️ | ⬜ | — | — |
+| 07c | k_ex in production | the V‴ hook, one k_ex at every use, the law as U13 rules (in `ExponentialModel`, P99), the drain-model names, the tables and x_*, the iteration cap, the label (U11–U12; P99–P110, U14) | Opus | ✍️ | ✅ | this commit | [`logs/07c-k-ex-in-production.md`](logs/07c-k-ex-in-production.md) |
 | 07d | Rehearse again | 07's grid at the tip; histories whose law reads no ℓ equal to 07's but the k_ex columns; the exponential's one-loop histories measured against 07's | Opus | ⬜ | ⬜ | — | — |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
 
@@ -692,7 +692,7 @@ rests on one grid.
 
 ## 2. The gates
 
-As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Remeasure (07b), Form (07b2), Consistent (07c), R2 (07d), Close (08). The last three are not yet met.
+As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Remeasure (07b), Form (07b2), Consistent (07c), R2 (07d), Close (08). The last two are not yet met.
 
 - **Model — holds** (prompt 01, 2026-11-14; log 01 §4, `.documents/power-law-wall-verification.md` §1): every hook
   equals its closed form and the centred difference of the hook below it from 1e-90 M to 10 M_P at n = 1, 2 (M = 4e-31
@@ -802,6 +802,21 @@ As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Expor
   - **the paths re-mapped:** the nine exponential histories, K_X/K_v1 0.93–1.01 under (v), 07b's shares recomputed equal;
   - **the reference implementation** `minform.fraction` equal to all 3595 fitted values in `minform.json` bit for bit.
 
+- **Consistent — holds** (prompt 07c, 2026-11-18; log 07c §4, `.documents/power-law-wall-verification.md` §9):
+  - **one k_ex at every use of 07b's inventory:** every row changed, re-pinned, renamed or shown to hold; the `git grep`
+    finds only the retired names' refusals, dated comments and the verbatim copy of the old method; the production chain
+    within 2.6e-11 of 07b's `production_v3_*` at its 40 candidates, φ_t, ln ω_t² and ln R bitwise (R16);
+  - **the V‴ hooks:** equal to their closed forms (202 points per check, worst 0.0026 of the tolerance) and to the
+    centred difference of V″ (5.9e-10) on both models, from 1e-90 M to 10 M_P where (ln V)‴ is within float range;
+  - **the law as ruled:** `one-loop-exponential-v2` equal to `minform.fraction` bit for bit at the 146 fitted points and
+    28 synthetic inputs covering every branch;
+  - **the spectrum:** the kernels within 2.2e-10 of quadrature on the new tables (270 evaluations); `G_Y_MIN` 5e-4 and
+    `OMEGA_U_MAX` 9 on their docstrings' criteria;
+  - **the tool route:** histories 1–4 (natural mode, the fixed law, the power wall at n = 1, 2 under the one-loop law)
+    bitwise in every sample, tuning and BBN value, only the k_ex columns moving; history 5 measured;
+  - **the cap:** all 333 stage-2 points with a chain converge within 400, the largest 195;
+  - **the suites:** no count fell.
+
 ## 3. Active and unresolved issues
 
 - **`[06-plot-quanta-grid-refuses-two-n-at-one-cell]`** (opened by prompt 06, 2026-11-16; log 06 §6). `tools/plot_quanta_grid.py`
@@ -847,6 +862,26 @@ As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Expor
   - *Next step:* for a later prompt: gather the lookups' outcomes before refusing (and name every missing value), or
     retrieve the remaining refs before raising.
 
+- **`[07c-the-third-hook-leaves-float-range-below-phi-1e-103-mp]`** (opened by prompt 07c, 2026-11-18; log 07c §6,
+  `.documents/power-law-wall-verification.md` §9.8).
+  - *What:* k_ex's pulse rate reads (ln V)‴, which near the wall is about n(n + 1)(n + 2)/φ³ and leaves float range below
+    φ ≈ 1e-103 in the units' field (M_P = 1 in Planck units); (ln V)″ ~ 1/φ², all the turning points needed before 07c,
+    reached 1e-154. There the hook raises `ComputationFailureError` naming itself, and so do `classical_turning_point` and
+    `one_loop_turnaround`, where before 07c they returned. `test_inverse_power_model` (d)'s points at n = 1, ln E = −60,
+    M = 4e-31 and 1e-16 M_P (φ_t = 1.3e-126 and 1.3e-112 M_P) now assert the raise.
+  - *Impact:* none on any history of record, by estimate: on the power wall at n = 1, φ_t ≈ M V₀/E with E/V₀ ≲ 1e64 from
+    T* = 2e4 GeV, so a first impact reaches the limit only for M ≲ 1e-39 M_P; 07's grid's least M is 1e-33 M_P (φ_t ≈
+    1e-97 M_P, |(ln V)‴| about 1e17 below the largest float); at n = 2 and on the exponential (φ_t = M L^{−1/n}) nowhere
+    near. A grid at smaller M on the power wall at n = 1 would see assessments fail.
+  - *Next step:* a ruling on whether the pulse rate should be formed from scaled hooks (φ^k (ln V)^(k), or ln|V‴|), which
+    the hook's interface as P102 states it does not allow; 07d reports the least φ_t of its grid.
+
+### 3.1 Assigned to this campaign
+
+None.
+
+## 4. Resolved issues
+
 - **`[07b-the-one-loop-fixed-point-needs-more-than-100-iterations-near-the-chain-end]`** (opened by prompt 07b, 2026-11-17;
   log 07b §6, `.documents/power-law-wall-verification.md` §7.3, §7.4).
   - *What:* near the fold where the one-loop chain stops having a solution, its fixed point (ℓ → m_ta → φ_ta → k_ex → ℓ)
@@ -859,14 +894,10 @@ As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Expor
     The fraction there is continuous across the fold only if the law is (candidate (iv) of §7.5 is; v1 and (i)–(iii) are
     not).
   - *Next step:* 07c's to rule with U13: raise the cap, accelerate the fixed point, or accept it as measured.
-
-### 3.1 Assigned to this campaign
-
-None.
-
-## 4. Resolved issues
-
-None.
+  - **Closed by prompt 07c, 2026-11-18** (log 07c §4, `.documents/power-law-wall-verification.md` §9.2), as P103 ruled:
+    `ONE_LOOP_MAX_ITERATIONS` is 400, and production's `one_loop_turnaround` converges within it at every stage-2 point of
+    07b and 07b2 whose new chain has a solution (333 of 422 rows), the largest count 195 (07b's laboratory point,
+    ℓ = 0.1200), then 107 (L-M8e-18). `test_k_ex` (c) pins the slowest point.
 
 ## 5. Baselines
 
@@ -905,6 +936,12 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   - At the base `dec7793`: 26, 783 (226 + 557), 175, 312, 79, in full (69 s, 152 s, 550 s, 158 s, 322 s, 27 s at one-minute
     loads of 13.6, 9.1, 6.2, 5.3, 23.1 and 19.4 at their starts).
   - After 07b2: the same counts by discovery (no file the suites import changed).
+  - The same two worktree failures and no other.
+- **07c, 2026-11-18, in the worktree:**
+  - At the base `c4258ef`: 26, 783 (226 + 557), 175, 312, 79, in full (69 s, 154 s, 561 s, 160 s, 30 s, 318 s at one-minute
+    loads of 65.5, 41.9, 37.1, 38.3, 28.9 and 52.1 at their starts; CosmologyModels, the two ComputeTargets halves,
+    ObjectFactories, RunDrivers, tools).
+  - After 07c: 26, 805 (226 + 579), 175, 312, 79, in full (67 s, 152 s, 556 s, 158 s, 26 s, 320 s at one-minute loads of 5.3, 5.3, 12.0, 4.6, 4.6 and 5.5 at their starts).
   - The same two worktree failures and no other.
 
 ### History of the status line
@@ -1023,3 +1060,7 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   07c is dispatched.
 - 2026-11-18: U14 ruled by the user (README §6.14): "U14: yes, for now, refuse `n >= 3`. I am only expecting to do
   production runs for `n=1` and `n=2`." 07c's §1.3 made exact; 07c is dispatched at the user's word.
+- 2026-11-18: prompt 07c dispatched at `c4258ef`, and landed (this commit); the gate Consistent holds. One issue closed
+  (`[07b-the-one-loop-fixed-point-needs-more-than-100-iterations-near-the-chain-end]`, §4) and one opened
+  (`[07c-the-third-hook-leaves-float-range-below-phi-1e-103-mp]`, §3). The exponential's one-loop history at laboratory M
+  (β 2, A 1) moves under v2: ΔN_eff 0.04462 → 0.04163 at T_CMB (verification §9.7). 07d is written when the user asks.

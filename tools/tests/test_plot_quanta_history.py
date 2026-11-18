@@ -233,8 +233,8 @@ class TestTheFigure(ExportMixin, unittest.TestCase):
     def test_the_footer(self):
         text = " ".join(t.get_text() for t in self.fig.texts)
         for needle in (
-            "one-loop-measured-v1 A=1.0 M_Mp=1e-20 n=1 beta=2.0",
-            "R8-exponential-v1",  # the exponential's spectrum model (power-law-wall prompt 03)
+            "one-loop-exponential-v2 A=1.0 M_Mp=1e-20 n=1 beta=2.0",
+            "R8-exponential-v2",  # the exponential's spectrum model (power-law-wall prompt 03)
             "c_a = 1",
             "generations 5, bounce rows 9",
             "delta_stim",
@@ -253,7 +253,7 @@ class TestTheFigure(ExportMixin, unittest.TestCase):
         )
         self.assertEqual(
             self.stem.relative_to(self.root).parts[:4],
-            ("one-loop-measured-v1", "A=1", "plots", "beta=2"),
+            ("one-loop-exponential-v2", "A=1", "plots", "beta=2"),
         )
 
     def test_a_parking_leftover_draws_the_parking_curve(self):
@@ -277,7 +277,8 @@ class TestTheRun(ExportMixin, unittest.TestCase):
         self.assertEqual(len(figs), 5)
         self.assertIn("figures written 5, refused 0, no quanta files 1", text)
         self.assertIn(
-            "no quanta files one-loop-measured-v1 A=1.0 M_Mp=2e-20 n=1 beta=3.0", text
+            "no quanta files one-loop-exponential-v2 A=1.0 M_Mp=2e-20 n=1 beta=3.0",
+            text,
         )
         self.assertIn("skipped as fixed-law 2, marker rows 1, failed histories 1", text)
 

@@ -17,14 +17,15 @@
 The one-loop drain law on the power wall (power-law-wall prompt 03 §1.2, §1.4, §3; README §6.5 R6, R7, §6.6 P15-P18;
 orchestrator note 03, rulings 3 and 4).
 
-- (a) The drain models: law_of of one-loop-measured-pl-v1 is the one-loop law; DRAIN_MODELS keeps the two it had first;
-  model_of_law is unchanged; alpha_value accepts the pair (A, one-loop-measured-pl-v1) and refuses A = 0 under it; the
+- (a) The drain models: law_of of one-loop-inverse-power-v1 is the one-loop law; DRAIN_MODELS keeps the two it had first;
+  model_of_law is gone (power-law-wall prompt 07c, P101); alpha_value accepts the pair (A, one-loop-inverse-power-v1) and refuses A = 0 under it; the
   regimes are the same objects in drain_model and ComputeTargets.ScalarHistory.
-- (b) The hooks: each model's one-loop drain model (ExponentialModel one-loop-measured-v1; InversePowerModel at n = 1, 2
-  one-loop-measured-pl-v1, a ValueError naming the class, the hook and n at n = 3), realized or not; AbstractModel's
+- (b) The hooks: each model's one-loop drain model (ExponentialModel one-loop-exponential-v2; InversePowerModel at n = 1, 2
+  one-loop-inverse-power-v1, a ValueError naming the class, the hook and n at n = 3), realized or not; AbstractModel's
   _drain_fraction and one_loop_drain_model raise, naming the class.
-- (c) The check at entry (check_drain_law_model) under the one-loop law: refuses a model with neither _drain_L nor
-  _drain_fraction, one with both, one with no one_loop_drain_model, and InversePowerModel at n = 3, naming the class,
+- (c) The check at entry (check_drain_law_model) under the one-loop law: refuses a model with no _drain_fraction
+  (since power-law-wall prompt 07c, README §6.14 P99, the fraction is required and _drain_L optional, so a model with
+  both is accepted), one with no one_loop_drain_model, and InversePowerModel at n = 3, naming the class,
   the hooks and n; accepts InversePowerModel at n = 1, 2 and ExponentialModel; the fixed law checks nothing.
 - (d) The law: InversePowerModel._drain_fraction against fraction_power, copied verbatim below from
   prompts/power-law-wall/source/wall/fit_fn.py with its literals (ruling 3), bitwise, at n = 1, 2 over
@@ -32,7 +33,7 @@ orchestrator note 03, rulings 3 and 4).
   the switch; 0 unassessed; the regime refused when unknown; and through drain_alpha_effective with the model:
   min(0.99, A f) w_gate, reading neither ell nor L.
 - (e) A short one-loop integration on the power wall (n = 2, M = 4e-31 M_P, beta = 2, A = 1, untuned at the seed, from
-  T* = 2e4 GeV to T_J = 100 MeV): it succeeds, its record names one-loop-measured-pl-v1, and every candidate has L None,
+  T* = 2e4 GeV to T_J = 100 MeV): it succeeds, its record names one-loop-inverse-power-v1, and every candidate has L None,
   and alpha_eff equal to drain_alpha_effective at its own regime, ln E and ln R.
 
 Everything but (e) is instant; (e) is timed in its docstring. No Ray, no store, no PRyMordial.
@@ -104,9 +105,10 @@ def exponential(n: int = 1) -> ExponentialModel:
 
 
 class _Neither(ExponentialModel):
-    """ExponentialModel with AbstractModel's _drain_L restored: neither the L law nor its own fraction."""
+    """ExponentialModel with AbstractModel's _drain_L and _drain_fraction restored: neither L nor its own fraction."""
 
     _drain_L = AbstractModel._drain_L
+    _drain_fraction = AbstractModel._drain_fraction
 
 
 class _Both(InversePowerModel):
@@ -135,30 +137,66 @@ class TestTheDrainModels(unittest.TestCase):
     """(a)"""
 
     def test_a_the_new_model(self):
-        self.assertEqual(dm.DRAIN_MODEL_ONE_LOOP_PL, "one-loop-measured-pl-v1")
-        self.assertEqual(dm.law_of(dm.DRAIN_MODEL_ONE_LOOP_PL), dm.DRAIN_LAW_ONE_LOOP)
+        self.assertEqual(
+            dm.DRAIN_MODEL_ONE_LOOP_INVERSE_POWER, "one-loop-inverse-power-v1"
+        )
+        self.assertEqual(
+            dm.law_of(dm.DRAIN_MODEL_ONE_LOOP_INVERSE_POWER), dm.DRAIN_LAW_ONE_LOOP
+        )
         self.assertEqual(
             dm.DRAIN_MODELS,
-            ("fixed", "one-loop-measured-v1", "one-loop-measured-pl-v1"),
+            ("fixed", "one-loop-exponential-v2", "one-loop-inverse-power-v1"),
         )
-        self.assertEqual(dm.model_of_law(dm.DRAIN_LAW_ONE_LOOP), "one-loop-measured-v1")
-        self.assertEqual(dm.model_of_law(dm.DRAIN_LAW_FIXED), "fixed")
+        self.assertFalse(hasattr(dm, "model_of_law"))
         self.assertEqual(
-            dm.check_drain_model(dm.DRAIN_MODEL_ONE_LOOP_PL, 1.0, "test"),
+            dm.check_drain_model(dm.DRAIN_MODEL_ONE_LOOP_INVERSE_POWER, 1.0, "test"),
             dm.DRAIN_LAW_ONE_LOOP,
         )
         self.assertEqual(
-            dm.alpha_label(1.0, dm.DRAIN_MODEL_ONE_LOOP_PL),
-            "A = 1 (one-loop-measured-pl-v1)",
+            dm.alpha_label(1.0, dm.DRAIN_MODEL_ONE_LOOP_INVERSE_POWER),
+            "A = 1 (one-loop-inverse-power-v1)",
         )
 
+    def test_a_the_retired_names_are_refused(self):
+        """
+        Power-law-wall prompt 07c (README §6.14 P101): "one-loop-measured-v1" (R13) and "one-loop-measured-pl-v1" (U11)
+        stay known and are refused wherever a drain model is read, each with a message naming its ruling and its
+        successor: law_of, check_drain_model, alpha_label, alpha_value, and alpha_value's factory before any query.
+        """
+        from ObjectFactories.alpha_value import sqla_alpha_value_factory
+
+        self.assertEqual(
+            set(dm.RETIRED_DRAIN_MODELS),
+            {"one-loop-measured-v1", "one-loop-measured-pl-v1"},
+        )
+        for name, ruling, successor in (
+            ("one-loop-measured-v1", "R13", "one-loop-exponential-v2"),
+            ("one-loop-measured-pl-v1", "U11", "one-loop-inverse-power-v1"),
+        ):
+            self.assertNotIn(name, dm.DRAIN_MODELS)
+            for call in (
+                lambda: dm.law_of(name, "ctx"),
+                lambda: dm.check_drain_model(name, 1.0, "ctx"),
+                lambda: dm.alpha_label(1.0, name),
+                lambda: alpha_value(0, 1.0, name),
+                lambda: sqla_alpha_value_factory().build(
+                    {"value": 1.0, "drain_model": name}, None, None, None, None, None
+                ),
+            ):
+                with self.subTest(name=name):
+                    with self.assertRaises(ValueError) as ctx:
+                        call()
+                    message = str(ctx.exception)
+                    for needle in (name, "retired", ruling, successor):
+                        self.assertIn(needle, message)
+
     def test_a_alpha_value_takes_the_pair(self):
-        row = alpha_value(0, 1.0, dm.DRAIN_MODEL_ONE_LOOP_PL)
-        self.assertEqual(row.drain_model, "one-loop-measured-pl-v1")
+        row = alpha_value(0, 1.0, dm.DRAIN_MODEL_ONE_LOOP_INVERSE_POWER)
+        self.assertEqual(row.drain_model, "one-loop-inverse-power-v1")
         self.assertEqual(float(row), 1.0)
         for bad in (0.0, -1.0, float("inf")):
             with self.assertRaises(ValueError):
-                alpha_value(0, bad, dm.DRAIN_MODEL_ONE_LOOP_PL)
+                alpha_value(0, bad, dm.DRAIN_MODEL_ONE_LOOP_INVERSE_POWER)
 
     def test_a_the_regimes_are_one_set(self):
         for name in (
@@ -180,18 +218,23 @@ class TestTheHooks(unittest.TestCase):
     def test_b_each_models_one_loop_drain_model(self):
         for n in (1, 2):
             e = exponential(n)
-            self.assertEqual(e.one_loop_drain_model, dm.DRAIN_MODEL_ONE_LOOP)
+            self.assertEqual(
+                e.one_loop_drain_model, dm.DRAIN_MODEL_ONE_LOOP_EXPONENTIAL
+            )
             self.assertEqual(
                 e.realize(NORMALIZATION, 0.0).one_loop_drain_model,
-                dm.DRAIN_MODEL_ONE_LOOP,
+                dm.DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
             )
+            # since power-law-wall prompt 07c the exponential's law is its own fraction, and L is recorded (P99)
             self.assertTrue(e.drain_L_implemented)
-            self.assertFalse(e.drain_fraction_implemented)
+            self.assertTrue(e.drain_fraction_implemented)
             p = power(n)
-            self.assertEqual(p.one_loop_drain_model, dm.DRAIN_MODEL_ONE_LOOP_PL)
+            self.assertEqual(
+                p.one_loop_drain_model, dm.DRAIN_MODEL_ONE_LOOP_INVERSE_POWER
+            )
             self.assertEqual(
                 p.realize(NORMALIZATION, 0.0).one_loop_drain_model,
-                dm.DRAIN_MODEL_ONE_LOOP_PL,
+                dm.DRAIN_MODEL_ONE_LOOP_INVERSE_POWER,
             )
             self.assertFalse(p.drain_L_implemented)
             self.assertTrue(p.drain_fraction_implemented)
@@ -239,11 +282,14 @@ class TestTheCheckAtEntry(unittest.TestCase):
 
     def test_c_neither(self):
         m = _Neither(0, M_value(0, 4.0e-31 * Mp), 1, beta_value(0, 2.0), _units)
-        self.refused(m, "_Neither", "_drain_L", "_drain_fraction", "neither")
+        self.refused(m, "_Neither", "_drain_fraction", "does not implement")
 
     def test_c_both(self):
+        """P99: _drain_fraction is required under the one-loop law and _drain_L optional, so both is accepted."""
         m = _Both(0, M_value(0, 4.0e-31 * Mp), 1, beta_value(0, 2.0), _units)
-        self.refused(m, "_Both", "_drain_L", "_drain_fraction", "both")
+        for s in (m, m.realize(NORMALIZATION, 0.0)):
+            for law in (SM.DRAIN_LAW_ONE_LOOP, SM.DRAIN_LAW_FIXED):
+                self.assertIsNone(SM.check_drain_law_model(law, s, "ctx"))
 
     def test_c_no_drain_model(self):
         m = _NoDrainModel(0, M_value(0, 4.0e-31 * Mp), 1, beta_value(0, 2.0), _units)
@@ -340,26 +386,29 @@ class TestTheLaw(unittest.TestCase):
                 regime = "classical" if lr <= 0.0 else "gap"
                 for A, w in ((1.0, 1.0), (0.05, 1.0), (10.0, 0.5), (1.0, 0.0)):
                     got = SM.drain_alpha_effective(
-                        regime, None, None, lr, A, w, model=m, log_E=3.0
+                        regime, None, lr, A, w, model=m, log_E=3.0
                     )
                     self.assertEqual(got, min(0.99, A * fraction_power(n, lr)) * w)
             self.assertEqual(
                 SM.drain_alpha_effective(
-                    "unassessed", None, None, None, 1.0, 1.0, model=m, log_E=None
+                    "unassessed", None, None, 1.0, 1.0, model=m, log_E=None
                 ),
                 0.0,
             )
-        # the exponential through the same call takes the L law, as without the model
+        # the exponential through the same call takes its own fraction too (power-law-wall prompt 07c, P99), and the
+        # call without a model is refused: the module holds no law of its own
         e = exponential(1).realize(NORMALIZATION, 0.0)
-        for args in (
-            ("one_loop", 12.0, 100.0, 300.0),
-            ("gap", None, 40.0, 10.0),
-            ("classical", None, 50.0, -1.0),
+        for regime, ell, lr in (
+            ("one_loop", 12.0, 300.0),
+            ("gap", None, 10.0),
+            ("classical", None, -1.0),
         ):
             self.assertEqual(
-                SM.drain_alpha_effective(*args, 1.0, 1.0, model=e, log_E=0.0),
-                SM.drain_alpha_effective(*args, 1.0, 1.0),
+                SM.drain_alpha_effective(regime, ell, lr, 1.0, 1.0, model=e, log_E=3.0),
+                min(0.99, e.drain_fraction(regime, ell, 3.0, lr)),
             )
+            with self.assertRaises(TypeError):
+                SM.drain_alpha_effective(regime, ell, lr, 1.0, 1.0)
 
 
 class TestAShortIntegration(unittest.TestCase):
@@ -396,7 +445,7 @@ class TestAShortIntegration(unittest.TestCase):
         self.assertFalse(data.get("failure", False), data.get("failure_reason"))
         drain = data["drain"]
         self.assertEqual(drain.law, SM.DRAIN_LAW_ONE_LOOP)
-        self.assertEqual(drain.model, "one-loop-measured-pl-v1")
+        self.assertEqual(drain.model, "one-loop-inverse-power-v1")
         self.assertEqual(drain.A, 1.0)
         self.assertGreater(len(drain.candidates), 0)
         self.assertEqual(len(drain.candidates), len(data["injections"]))
@@ -407,7 +456,6 @@ class TestAShortIntegration(unittest.TestCase):
                 SM.drain_alpha_effective(
                     c.regime,
                     c.ell,
-                    c.L,
                     c.log_R,
                     1.0,
                     c.w_gate,

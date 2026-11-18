@@ -92,7 +92,8 @@ to the tuning or the integration. Under fixed, --alpha is as above and every lin
 one_loop, --alpha is the law's strength A, which must be given, finite and > 0, with no upper bound (the
 law's cap clamps); it is refused at parse otherwise, exit 2. The history line then names
 `drain_law=one_loop A=<A> model=<the drain model>` where alpha=A stood (one-loop-drain prompt 02c: the
-model is the record's DrainRecord.model, `one-loop-measured-v1`), the dissipation line follows as at
+model is the record's DrainRecord.model, the model's own: `one-loop-exponential-v2` for the exponential and
+`one-loop-inverse-power-v1` for the power wall since power-law-wall prompt 07c), the dissipation line follows as at
 alpha > 0, and a `drain` line follows it: the candidates, their counts by regime (one_loop, gap,
 classical, unassessed), the shares of K(N_final) drained in each regime and the parking leftover's
 (`K_share_<regime>`, `K_share_parking`; None where K(N_final) is 0), the least ell of a one-loop

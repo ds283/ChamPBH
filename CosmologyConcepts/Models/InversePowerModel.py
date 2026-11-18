@@ -40,7 +40,8 @@ continuation to phi <= 0 is wanted is the user's to rule (prompt 01 §1.6).
 _drain_L is not implemented: the power wall has no large parameter L (its local index is n), and the one-loop
 law of the exponential family does not describe it (power-law-wall prompt 02). Its one-loop law is its own
 (power-law-wall prompt 03; README §6.5 R6, R7, §6.6 P15, P16), _drain_fraction, stored under the drain model
-one_loop_drain_model = "one-loop-measured-pl-v1", at n = 1 and 2 only:
+one_loop_drain_model = "one-loop-inverse-power-v1" (named "one-loop-measured-pl-v1" until power-law-wall prompt 07c,
+U11; its law and constants unchanged), at n = 1 and 2 only:
 
     f = R S_n                     at ln R <= 0 (the classical branch, R6),
     f = 1 - exp(-y)               above, with y = G_n (ln R - R0_n)^P_n below the switch ln R_x,n and
@@ -57,7 +58,7 @@ from ComputeTargets.exceptions import ComputationFailureError
 from ComputeTargets.quanta_spectrum import WALL_POWER_N1, WALL_POWER_N2
 from CosmologyConcepts import M_value, beta_value, FieldLike, GetFieldValue
 from CosmologyConcepts.drain_model import (
-    DRAIN_MODEL_ONE_LOOP_PL,
+    DRAIN_MODEL_ONE_LOOP_INVERSE_POWER,
     DRAIN_REGIMES,
     REGIME_CLASSICAL,
     REGIME_UNASSESSED,
@@ -77,7 +78,7 @@ _SEED_RTOL = 1.0e-14
 _SEED_MAX_ITERATIONS = 200
 
 # the one-loop drain law on this wall (power-law-wall prompt 03 §1.2; README §6.5 R6, R7, §6.6 P15, P18), stored under
-# DRAIN_MODEL_ONE_LOOP_PL, keyed by n (defined at n = 1 and 2 only). Each constant with its source; the same decimal
+# DRAIN_MODEL_ONE_LOOP_INVERSE_POWER, keyed by n (defined at n = 1 and 2 only). Each constant with its source; the same decimal
 # literals as the reference implementation, fraction_power in prompts/power-law-wall/source/wall/fit_fn.py
 # (orchestrator note 03, ruling 3), so that the two are equal bit for bit:
 #   DRAIN_PL_S:       S_n, the classical wall's production energy ratio, constant in E/V_0 (R6, "yes, just use the
@@ -168,10 +169,11 @@ class InversePowerModel(AbstractModel):
     @property
     def one_loop_drain_model(self) -> str:
         # the drain model the one-loop law is stored under (AbstractModel.one_loop_drain_model; README §6.6 P16, P17):
-        # DRAIN_MODEL_ONE_LOOP_PL at n = 1 and 2; a ValueError at any other n, where the law is undefined (R7)
+        # DRAIN_MODEL_ONE_LOOP_INVERSE_POWER at n = 1 and 2 (renamed by power-law-wall prompt 07c, U11); a ValueError
+        # at any other n, where the law is undefined (R7)
         if self._n not in DRAIN_PL_S:
             raise self._undefined_at_n("one_loop_drain_model")
-        return DRAIN_MODEL_ONE_LOOP_PL
+        return DRAIN_MODEL_ONE_LOOP_INVERSE_POWER
 
     @property
     def spectrum_wall(self) -> str:
@@ -263,6 +265,27 @@ class InversePowerModel(AbstractModel):
         if value == float("inf"):
             raise self._failure(
                 "d2_logV_dphi2", phi_float, f"overflow ((ln V)'' = {value!r})"
+            )
+        return value
+
+    def _d3_logV_dphi3(self, normalization, phi: FieldLike) -> float:
+        # (ln V)''' = -s [n (n + 1)(n + 2) - 3 n^2 (n + 1) s + 2 n^3 s^2]/phi^3 (power-law-wall prompt 07c;
+        # AbstractModel._d3_logV_dphi3), from ds/dphi = -n s (1 - s)/phi; divided by phi three times, as (ln V)'' by phi
+        # twice, so that phi^3 cannot underflow. The bracket is positive on 0 <= s <= 1 (2n at s = 1), so |V'''/V''| is
+        # exactly (n + 2)/phi. An overflow raises, naming the hook
+        phi_float, log_u = self._log_u("d3_logV_dphi3", phi)
+        s = self._s(log_u)
+        n = self._n
+        value = (
+            -s
+            * (n * (n + 1) * (n + 2) - 3 * n * n * (n + 1) * s + 2 * n * n * n * s * s)
+            / phi_float
+            / phi_float
+            / phi_float
+        )
+        if value == float("-inf"):
+            raise self._failure(
+                "d3_logV_dphi3", phi_float, f"overflow ((ln V)''' = {value!r})"
             )
         return value
 

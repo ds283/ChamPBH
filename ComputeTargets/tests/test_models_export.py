@@ -47,16 +47,16 @@ BASE_HISTORIES_CSV = (
     b"beta,M_Mp,n,phi_init_Mp,alpha,drain_model,normalization,V_ref_eV4,phi_ref_Mp,phi_0_Mp,tracking,residual_H,residual_phi,tuning_iterations,Yp_BBN,D_over_H,He3_over_H,Li7_over_H,delta_Yp,delta_D_over_H,T_deliver_GeV,phi_1MeV_Mp,phi_70keV_Mp,rho_ratio_1MeV,rho_ratio_70keV,Delta_N_eff_today,Delta_N_eff_1MeV,reflections,injections,injected_fraction,log_R_first_impact,parking_T_GeV,release_T_GeV,birth_failing_share,reflection_failing_share,tracker_failing_share,unassessed_share,drained_share_one_loop,drained_share_gap,drained_share_classical,drained_share_unassessed,parking_share,candidates_one_loop,candidates_gap,candidates_classical,candidates_unassessed,ell_min,log_R_min_drain,unresolvable_assessments,unresolved_declined,all_worst_birth_margin,all_worst_birth_margin_N,all_birth_failing_share,all_worst_reflection_margin,all_worst_reflection_margin_N,all_reflection_failing_share,all_worst_tracker_margin,all_worst_tracker_margin_N,all_tracker_failing_share,bounce_rows,failure_reasons\r\n"
     b"1.185,4e-31,1,5.0,0.1,fixed,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,stand-in failure\r\n"
     b"2.0,4e-31,1,5.0,0.1,fixed,,,,,,,,,0.2468,2.46,1.04,5.42,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,\r\n"
-    b"1.5,4e-31,1,5.0,1.0,one-loop-measured-v1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,no ScalarHistory row in the store\r\n"
-    b"2.0,4e-31,1,5.0,1.0,one-loop-measured-v1,,,,,,,,,0.2468,2.46,1.04,5.42,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,\r\n"
+    b"1.5,4e-31,1,5.0,1.0,one-loop-exponential-v2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,no ScalarHistory row in the store\r\n"
+    b"2.0,4e-31,1,5.0,1.0,one-loop-exponential-v2,,,,,,,,,0.2468,2.46,1.04,5.42,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,\r\n"
 )
 
 
 RECORDS = (
     (2.0, 0.1, "fixed", []),
     (1.185, 0.1, "fixed", ["stand-in failure"]),
-    (2.0, 1.0, "one-loop-measured-v1", []),
-    (1.5, 1.0, "one-loop-measured-v1", ["no ScalarHistory row in the store"]),
+    (2.0, 1.0, "one-loop-exponential-v2", []),
+    (1.5, 1.0, "one-loop-exponential-v2", ["no ScalarHistory row in the store"]),
 )
 
 
@@ -125,8 +125,8 @@ class TestTheRoot(unittest.TestCase):
             ec.alpha_path(root, 0.1, "fixed"), Path("/x/out/L/inverse-power/alpha=0.1")
         )
         self.assertEqual(
-            ec.alpha_path(root, 1.0, "one-loop-measured-pl-v1"),
-            Path("/x/out/L/inverse-power/one-loop-measured-pl-v1/A=1"),
+            ec.alpha_path(root, 1.0, "one-loop-inverse-power-v1"),
+            Path("/x/out/L/inverse-power/one-loop-inverse-power-v1/A=1"),
         )
 
     def test_the_plot_scripts_form_every_root_through_it(self):

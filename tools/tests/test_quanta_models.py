@@ -17,8 +17,8 @@
 The quanta tools take each row's wall from its potential (power-law-wall prompt 06 §1.8, §1.10; README §6.10 P51-P53).
 
 On a power-law root (`<output>/<label>/inverse-power/`) written by 04's writers from constructed rows
-(tools/tests/quanta_exports.py), with one history at n = 1 and one at n = 2 under `one-loop-measured-pl-v1`:
-- `quanta_measures` measures each with its own wall's spectrum (`R8-power-n1-v1`, `R8-power-n2-v1`): every output row
+(tools/tests/quanta_exports.py), with one history at n = 1 and one at n = 2 under `one-loop-inverse-power-v1`:
+- `quanta_measures` measures each with its own wall's spectrum (`R8-power-n1-v2`, `R8-power-n2-v2`): every output row
   names it, and ln n_g is the one that wall's spectrum gives; the summary names both, in the order met;
 - a row whose potential has no wall at its n (`inverse-power` at n = 3), or names no potential the code knows, is refused
   and counted in the refusals, with the reason, and nothing of it is written; the others are measured;
@@ -53,7 +53,7 @@ from tools.tests import quanta_exports as qe
 from tools.tests.test_quanta_measures import constructed, samples_for
 
 UNITS = Planck_units()
-PL = "one-loop-measured-pl-v1"
+PL = "one-loop-inverse-power-v1"
 POWER = "inverse-power"
 
 
@@ -129,7 +129,7 @@ class TestEachRowItsWall(_PowerRoot):
         self.assertEqual(rc, 0, text)
         self.assertIn("measured 2,", text)
         self.assertIn(
-            "quanta_measures (R8-power-n1-v1, R8-power-n2-v1, assoc scale 1)", text
+            "quanta_measures (R8-power-n1-v2, R8-power-n2-v2, assoc scale 1)", text
         )
         expected = {1: qs.WALL_POWER_N1, 2: qs.WALL_POWER_N2}
         by_n = {int(r["n"]): r for r in self.read(self.root / "quanta_histories.csv")}
@@ -219,7 +219,7 @@ class TestTheFigureTools(_PowerRoot):
         rows = qf.read_checked(self.root / "quanta_histories.csv", 1.0, expected)
         self.assertEqual(
             sorted(r["spectrum_model"] for r in rows),
-            ["R8-power-n1-v1", "R8-power-n2-v1"],
+            ["R8-power-n1-v2", "R8-power-n2-v2"],
         )
         # a row that names the other n's model is refused
         path = self.root / "quanta_histories.csv"
@@ -227,14 +227,14 @@ class TestTheFigureTools(_PowerRoot):
         with open(path, newline="") as f:
             fields = csv.DictReader(f).fieldnames
         for r in rows:
-            r["spectrum_model"] = "R8-power-n1-v1"
+            r["spectrum_model"] = "R8-power-n1-v2"
         with open(path, "w", newline="") as f:
             w = csv.DictWriter(f, fieldnames=fields)
             w.writeheader()
             w.writerows(rows)
         with self.assertRaises(qf.FigureRefused) as ctx:
             qf.read_checked(path, 1.0, expected)
-        self.assertIn("R8-power-n2-v1", str(ctx.exception))
+        self.assertIn("R8-power-n2-v2", str(ctx.exception))
 
     def test_both_figure_tools_draw_both_and_name_both_models(self):
         self.build()
@@ -242,7 +242,7 @@ class TestTheFigureTools(_PowerRoot):
         rc = pg.run(self.root, output=self._dir / "figs", out=out)
         self.assertEqual(rc, 0, out.getvalue())
         self.assertIn(
-            "plot_quanta_grid (R8-power-n1-v1, R8-power-n2-v1, assoc scale 1)",
+            "plot_quanta_grid (R8-power-n1-v2, R8-power-n2-v2, assoc scale 1)",
             out.getvalue(),
         )
         out = io.StringIO()
@@ -250,7 +250,7 @@ class TestTheFigureTools(_PowerRoot):
         self.assertEqual(rc, 0, out.getvalue())
         self.assertIn("figures written 2", out.getvalue())
         self.assertIn(
-            "plot_quanta_history (R8-power-n1-v1, R8-power-n2-v1, assoc scale 1)",
+            "plot_quanta_history (R8-power-n1-v2, R8-power-n2-v2, assoc scale 1)",
             out.getvalue(),
         )
 

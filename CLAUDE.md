@@ -137,13 +137,13 @@ invariants that hold across all of them:
   convention T_ν = T_γ. The per-sample ρ_χ/ρ_R is a payload key beside the samples, not a field of
   `SampleValues`, and a `ScalarHistoryValue` column. α is a key of every history, in its own table
   `alpha_value`, whose row is the pair (value, `drain_model`) since `one-loop-drain` 03: `"fixed"`, where the
-  value is α, or `"one-loop-measured-v1"`, the one-loop law's model and version, where it is A
+  value is α, or `"one-loop-exponential-v2"` or `"one-loop-inverse-power-v1"`, the one-loop law's model and version, where it is A
   (`CosmologyConcepts/drain_model.py`); a lookup that names no model is `"fixed"`.
 - **The plot scripts** (`plot_by_beta.py`, `plot_ScalarHistory.py`) read a store read-only, through
   `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used: the
   tolerances, T*, φ*, `--tuning-tolerance` (a key of every history), `--alpha-values` (an α with no stored
   `alpha_value` row under the fixed model; each α's output goes under `<label>/alpha=<α>/`, α = 0 included),
-  `--A-values` (an A with no stored `alpha_value` row under the one-loop model, `one-loop-measured-v1`, even when the
+  `--A-values` (an A with no stored `alpha_value` row under the one-loop model, `one-loop-exponential-v2` or `one-loop-inverse-power-v1`, even when the
   same value is stored as an α, as an α stored only as an A is refused likewise; each A's output goes under
   `<label>/<drain_model>/A=<A>/`) and `--n-values` (an n with no stored model). `--tuning-max-integrations` is not
   matched; it is not a key. `main.py` and the plot scripts hold the `--alpha-values` rows first and the `--A-values`

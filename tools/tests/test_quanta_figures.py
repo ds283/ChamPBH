@@ -44,13 +44,16 @@ import numpy as np
 import extract_common as ec
 from ComputeTargets import quanta_spectrum as qs
 from ComputeTargets.dark_radiation import DarkRadiationLedger
-from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED, DRAIN_MODEL_ONE_LOOP
+from CosmologyConcepts.drain_model import (
+    DRAIN_MODEL_FIXED,
+    DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
+)
 from Units import Planck_units
 from tools import quanta_figures as qf
 from tools import quanta_measures as qm
 from tools.tests import quanta_exports as qe
 
-ONE_LOOP = DRAIN_MODEL_ONE_LOOP
+ONE_LOOP = DRAIN_MODEL_ONE_LOOP_EXPONENTIAL
 UNITS = Planck_units()
 # the spectrum model these exponential exports' rows expect (power-law-wall prompt 06: each row's wall is its
 # potential's; quanta_figures.SPECTRUM_WALL is gone)
@@ -340,11 +343,11 @@ class TestTheModelCheck(ExportMixin, unittest.TestCase):
 class TestWhereThingsGo(ExportMixin, unittest.TestCase):
     def test_to_output_replaces_the_root(self):
         root = Path("/x/out/QCD")
-        p = root / "one-loop-measured-v1/A=1/plots/quanta_grid"
+        p = root / "one-loop-exponential-v2/A=1/plots/quanta_grid"
         self.assertEqual(qf.to_output(root, p, None), p)
         self.assertEqual(
             qf.to_output(root, p, Path("/y/QCD")),
-            Path("/y/QCD/one-loop-measured-v1/A=1/plots/quanta_grid"),
+            Path("/y/QCD/one-loop-exponential-v2/A=1/plots/quanta_grid"),
         )
 
     def test_plots_dir_replaces_csv_and_nothing_else(self):
@@ -352,7 +355,8 @@ class TestWhereThingsGo(ExportMixin, unittest.TestCase):
         d = self.dirs[(1.0, 2.0, 1e-20)]
         p = qf.plots_dir(self.root, d)
         self.assertEqual(
-            p.relative_to(self.root).parts[:3], ("one-loop-measured-v1", "A=1", "plots")
+            p.relative_to(self.root).parts[:3],
+            ("one-loop-exponential-v2", "A=1", "plots"),
         )
         self.assertEqual(
             p.relative_to(self.root).parts[3:], d.relative_to(self.root).parts[3:]

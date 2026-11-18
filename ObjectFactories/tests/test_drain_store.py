@@ -78,7 +78,7 @@ from ObjectFactories.tests.test_version_keyed_lookups import LABEL_A
 
 SM = dh.SM
 FIXED = "fixed"
-ONE_LOOP = "one-loop-measured-v1"
+ONE_LOOP = "one-loop-exponential-v2"
 
 # (beta, M/M_P, A) under the one-loop law
 P2197 = (1.185, 4.0e-31, 1.0)

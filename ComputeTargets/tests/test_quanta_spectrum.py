@@ -130,7 +130,10 @@ class TestTheWalls(unittest.TestCase):
             "SPECTRUM_MODEL",
         ):
             self.assertFalse(hasattr(qs, name), name)
-        self.assertEqual(qs.X_STAR, 0.0058)
+        # x_* in the one k_ex (power-law-wall prompt 07c, P104): 0.0029 omega_t over the exponential reference's
+        # k_ex/omega_t, 0.5163952511757223; 0.0058 before, over k_ex = omega_t/2
+        self.assertEqual(qs.X_STAR, 0.005615853347600149)
+        self.assertAlmostEqual(qs.X_STAR, 0.0029 / 0.5163952511757223, places=17)
         self.assertEqual(qs.ASSOC_COEFFICIENT, 49.0)
 
 
@@ -139,19 +142,28 @@ class TestTheTables(unittest.TestCase):
 
     def test_the_table_reference_points(self):
         t = qs._TABLES
-        self.assertEqual(t["exponential"].k_ex_over_omega_t, 0.4945353550468402)
-        self.assertEqual(t["power-n1"].k_ex_over_omega_t, 0.3535533905932738)
-        self.assertEqual(t["power-n2"].k_ex_over_omega_t, 0.408248290463863)
+        # in the one k_ex, E^{1/2}|V'''/V''|/2 (power-law-wall prompt 07c, 07b's spectrum_tables.txt); on the power wall
+        # (n + 2)/(2 sqrt(n(n + 1)))
+        self.assertEqual(t["exponential"].k_ex_over_omega_t, 0.5163952511757223)
+        self.assertEqual(t["power-n1"].k_ex_over_omega_t, 1.0606601717798214)
+        self.assertEqual(t["power-n2"].k_ex_over_omega_t, 0.816496580927726)
+        for w, n in (("power-n1", 1), ("power-n2", 2)):
+            self.assertAlmostEqual(
+                t[w].k_ex_over_omega_t, (n + 2) / (2.0 * sqrt(n * (n + 1))), places=15
+            )
         for w in qs.WALLS:
             with self.subTest(wall=w):
                 # the lower edge is k/omega_t = 1e-3 (R8)
                 self.assertAlmostEqual(
                     t[w].x_lo * t[w].k_ex_over_omega_t, 1e-3, places=17
                 )
-                self.assertEqual(len(t[w].ln_beta2), {"exponential": 153}.get(w, 156))
+                self.assertEqual(
+                    len(t[w].ln_beta2),
+                    {"exponential": 151, "power-n1": 163, "power-n2": 158}[w],
+                )
         self.assertEqual(
             (t["exponential"].x_hi, t["power-n1"].x_hi, t["power-n2"].x_hi),
-            (4.0, 6.5, 5.5),
+            (3.5, 3.0, 3.0),
         )
 
     def test_x_squared_below_the_table(self):
@@ -210,7 +222,7 @@ class TestTheTables(unittest.TestCase):
 
     def test_x_p(self):
         """x_p is the spline's maximum: its derivative vanishes there, and no node exceeds it."""
-        expected = {"exponential": 0.646803, "power-n1": 0.465750, "power-n2": 0.506743}
+        expected = {"exponential": 0.619424, "power-n1": 0.155250, "power-n2": 0.253372}
         for w in qs.WALLS:
             d = qs._DIRECT[w]
             with self.subTest(wall=w):
@@ -296,7 +308,11 @@ class TestTheMoments(unittest.TestCase):
                         self.assertLess(abs(s.moment(k) / m - 1.0), 1e-12, k)
 
     def test_the_associated_piece_moves_I_by_its_share(self):
-        """At c_a = 1 the associated piece carries a few 1e-5 of I on the exponential and up to 1e-3 on the power wall."""
+        """
+        At c_a = 1 the associated piece carries a few 1e-5 of I on the exponential, about 1.6e-3 on the power wall at
+        n = 2 and 1.6e-2 at n = 1 (in the one k_ex of power-law-wall prompt 07c, where x_* = 0.0056 lies nearer
+        power-n1's peak, x_p = 0.155; before it, up to 1e-3 on the power wall).
+        """
         shares = {}
         for w in qs.WALLS:
             shares[w] = (qs.spectrum(w, 1.0).I - qs.spectrum(w, 0.0).I) / qs.spectrum(
@@ -304,16 +320,20 @@ class TestTheMoments(unittest.TestCase):
             ).I
         self.assertGreater(shares["exponential"], 4e-5)
         self.assertLess(shares["exponential"], 7e-5)
-        for w in ("power-n1", "power-n2"):
-            self.assertGreater(shares[w], 1e-4)
-            self.assertLess(shares[w], 2e-3)
+        self.assertGreater(shares["power-n2"], 1e-4)
+        self.assertLess(shares["power-n2"], 2e-3)
+        self.assertGreater(shares["power-n1"], 1e-2)
+        self.assertLess(shares["power-n1"], 2e-2)
 
     def test_the_shape_s_measurements(self):
-        """J and M1/M3 at c_a = 0 as spectrum_table.py's `table` measured them (to its trapezoid's accuracy)."""
+        """
+        J and M1/M3 at c_a = 0 as 07b's spectrum_kex.py measured them in the one k_ex (.documents/power-law-wall/kex-07b/
+        spectrum.txt; power-law-wall prompt 07c), to its trapezoid's accuracy.
+        """
         expected = {
-            "exponential": (0.835827, 0.828542),
-            "power-n1": (0.591750, 0.464252),
-            "power-n2": (0.689202, 0.608930),
+            "exponential": (0.872770, 0.903405),
+            "power-n1": (1.775255, 4.178280),
+            "power-n2": (1.378406, 2.435723),
         }
         for w, (J, r1) in expected.items():
             s = qs.spectrum(w, 0.0)

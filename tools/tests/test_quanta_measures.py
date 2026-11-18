@@ -59,13 +59,16 @@ from scipy.integrate import quad
 
 import extract_common as ec
 from ComputeTargets import quanta_spectrum as qs
-from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED, DRAIN_MODEL_ONE_LOOP
+from CosmologyConcepts.drain_model import (
+    DRAIN_MODEL_FIXED,
+    DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
+)
 from ObjectFactories.ScalarHistory import LINEAR_MP4, to_column
 from Units import GeV_units, Mpc_units, Planck_units
 from tools import quanta_measures as qm
 from tools.tests import quanta_exports as qe
 
-ONE_LOOP = DRAIN_MODEL_ONE_LOOP
+ONE_LOOP = DRAIN_MODEL_ONE_LOOP_EXPONENTIAL
 EPS = 2.0**-52
 PROBE = qe.ROOT / "prompts/one-loop-drain/source/probe/all_generations.py"
 
@@ -202,6 +205,24 @@ def probe_slip(rows):
         slips.append(abs(theta(x, b) - theta(a, x)))
         kH.append(exp(x["log_k_ex"]) / x["H_before"])
     return slips, kH
+
+
+def probe_slip_scale(rows):
+    """
+    The larger of the two phases whose difference is each interior row's slip, max(|theta(x, b)|, |theta(a, x)|), as
+    probe_slip forms them: the scale of the slip's rounding, since a difference carries the error of its terms (power-law-wall
+    prompt 07c: at its stored history's smallest slip the two phases cancel to 1 part in 473).
+    """
+    out = []
+    for j in range(1, len(rows) - 1):
+        a, x, b = rows[j - 1], rows[j], rows[j + 1]
+        Q = exp(x["log_k_ex"] + x["N"])
+
+        def theta(p, q):
+            return Q * exp(-0.5 * (p["N"] + q["N"])) * (q["N"] - p["N"]) / p["H_before"]
+
+        out.append(max(abs(theta(x, b)), abs(theta(a, x))))
+    return out
 
 
 def rel(a, b):
@@ -866,7 +887,17 @@ class TestAStoredHistory(_DrainStoreCase):
             if r["source"] == "candidate" and r["log_k_ex_Mp"] != ""
         ]
         slips, _ = probe_slip(assessed)
-        self.assertLess(rel(float(h["phase_slip_min"]), min(slips)), 1e-12)
+        # the slip is a difference of two phases, each formed in another order by the tool (exp of one sum) and the
+        # probe (a product of exps), to a few eps of the exponents (|ln Q| + N + |ln H| ~ 100-200); so the two agree to
+        # 1e-12 of the larger phase, not of the slip itself. Until power-law-wall prompt 07c the test took 1e-12 of the
+        # slip, which held while no slip cancelled much; with the one k_ex this history's smallest cancels to 1 in 473
+        i = min(range(len(slips)), key=lambda k: slips[k])
+        scale = probe_slip_scale(assessed)[i]
+        self.assertLess(
+            abs(float(h["phase_slip_min"]) - slips[i]),
+            1e-12 * scale,
+            (slips[i], scale),
+        )
 
     def test_the_probe_with_the_peak_collapsed(self):
         """The Derive gate's §2.2: the tool's E with s = delta(x - 1), read from the exports, against the probe's

@@ -31,20 +31,21 @@ writing the row, its samples and its bounce rows with the datastore's own insert
   in `model_type` only among the key's columns; a lookup under each model finds its own history and never the
   other's;
 - **two real round trips** (the costs below): one tuned power-law history at laboratory M (4e-31 M_P), beta = 2,
-  n = 1, under the fixed law at alpha = 0.1 and one under the one-loop law at A = 1 (`one-loop-measured-pl-v1`),
+  n = 1, under the fixed law at alpha = 0.1 and one under the one-loop law at A = 1 (`one-loop-inverse-power-v1`),
   each `tune_history`'s own payload at `test_injection`'s setup, stored and read back with every tuning, dissipation
   and drain-record column, the first bounce and the fixed-temperature columns, every sample (its fields, its masses
   and its rho_chi/rho_R) and every bounce row equal, as `test_tuned_history_round_trip`, `test_dissipation_store`
   and `test_drain_store` require of the exponential's; the realized model rebuilt as the `InversePowerModel` it was
   computed with;
-- **the key's drain model at entry** (§1.4, P36): an `InversePowerModel` (n = 1, 2) under `one-loop-measured-v1`,
-  and an `ExponentialModel` under `one-loop-measured-pl-v1`, are refused when the `ScalarHistory` is constructed,
+- **the key's drain model at entry** (§1.4, P36): an `InversePowerModel` (n = 1, 2) under `one-loop-exponential-v2`,
+  and an `ExponentialModel` under `one-loop-inverse-power-v1`, are refused when the `ScalarHistory` is constructed,
   before any tuning or integration; under the fixed model both are accepted, and an `InversePowerModel` at n = 3
   too; at n = 3 under a one-loop model the model's own `ValueError` propagates;
 - **the inventory**: a store holding a history of each model reads with no problem, each history's `model` parent
   resolved to its own table;
 - **the configuration**: the registry's order and batch size, the sharding, no drop group; the spec, equal to the
-  exponential's; the format guard at 8 beside 1-7; `VERSION_LABEL` 2026.12.0.
+  exponential's; the format guard at 8 beside 1-7; `VERSION_LABEL` 2026.13.0 (2026.12.0 until power-law-wall prompt
+  07c, which changed no table).
 
 No Ray cluster, no persistent datastore, no PRyMordial solve. Cost: the two tunings, each one integration at its
 tracking seed (prompt 04 measured 5.3-6.8 s for these histories, at loads of 9-15), shared by the round-trip tests
@@ -80,7 +81,7 @@ from ObjectFactories.tests.test_dissipation_store import (
 from ObjectFactories.tests.test_drain_store import FIXED, ONE_LOOP, _DrainStoreCase
 
 SM = dh.SM
-PL = "one-loop-measured-pl-v1"
+PL = "one-loop-inverse-power-v1"
 
 # the round trips: laboratory M, beta = 2, n = 1 (power-law-wall prompt 04's ip-n1-M4e-31-b2.0-fixed0.1 and
 # ip-n1-M4e-31-b2.0-oneloop1), at test_injection's setup (dissipation_histories)
@@ -462,7 +463,7 @@ class TestAFixedLawPowerHistoryRoundTrips(_RoundTrip):
 
 
 class TestAOneLoopPowerHistoryRoundTrips(_RoundTrip):
-    """Under the one-loop law at A = 1 (one-loop-measured-pl-v1): one tuning (about 5-10 s), shared through
+    """Under the one-loop law at A = 1 (one-loop-inverse-power-v1): one tuning (about 5-10 s), shared through
     tuned_power_payload."""
 
     def test_every_column_sample_and_bounce_row(self):
@@ -666,7 +667,7 @@ class TestTheConfiguration(unittest.TestCase):
         self.assertEqual(set(eight) - set(seven), {"InversePowerModel"})
         self.assertEqual(set(seven) - set(eight), set())
         self.assertEqual({n for n in seven if seven[n] != eight[n]}, {"ScalarHistory"})
-        self.assertEqual(VERSION_LABEL, "2026.12.0")
+        self.assertEqual(VERSION_LABEL, "2026.13.0")
 
 
 if __name__ == "__main__":

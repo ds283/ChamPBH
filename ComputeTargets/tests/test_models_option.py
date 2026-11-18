@@ -23,10 +23,11 @@
   `--n-values`' help names both potentials' V; `--potential-type` still refused with its message;
 - **the config files**: `exponential.yaml` and `inverse_power.yaml` parse to the same values but `models`;
 - **the one-loop rows (P47)**: `--models inverse-power --n-values 1 2 --A-values 1` parses, its drain model
-  `one-loop-measured-pl-v1`; `--models exponential inverse-power --A-values 1` gives each potential its own drain model;
+  `one-loop-inverse-power-v1`; `--models exponential inverse-power --A-values 1` gives each potential its own drain model;
   with n = 3, or n = 1 3, under `inverse-power` and `--A-values` the parse is refused (exit 2, naming `--A-values`,
   `--models`, `--n-values`, the potential and the n), also through a parser whose `error` is replaced; the fixed law
-  alone with `inverse-power` at n = 3 parses; an exponential command without `--models` parses as before;
+  alone with `inverse-power` at n = 3 parses; an exponential command without `--models` parses as before, but at n = 3
+  under `--A-values` it is refused since power-law-wall prompt 07c (U14);
   `drain_strength_A` accepts and refuses the values it did, with the same message;
 - **the names (§1.1)** and **the hook (P52)**: each value's class and table, the value of a model object or class,
   `spectrum_wall` at n = 1, 2 and 3 on both potentials, each name a wall of `quanta_spectrum.WALLS`.
@@ -56,8 +57,8 @@ from config.argument_parser import (
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ["--database", "unused.db"]
-PL = "one-loop-measured-pl-v1"
-V1 = "one-loop-measured-v1"
+PL = "one-loop-inverse-power-v1"
+V1 = "one-loop-exponential-v2"
 
 
 def _parse(argv):
@@ -194,8 +195,13 @@ class TestTheOneLoopRows(unittest.TestCase):
             {p: mo.one_loop_drain_model_over(p, args.n_values) for p in args.models},
             {"exponential": V1, "inverse-power": PL},
         )
-        # the exponential's at every n
-        self.assertEqual(mo.one_loop_drain_model_over("exponential", [1, 2, 3]), V1)
+        # the exponential's at n = 1 and 2 only since power-law-wall prompt 07c (U14, ruled (a): "for now, refuse
+        # `n >= 3`"); before it, at every n
+        self.assertEqual(mo.one_loop_drain_model_over("exponential", [1, 2]), V1)
+        with self.assertRaises(ValueError) as ctx:
+            mo.one_loop_drain_model_over("exponential", [1, 2, 3])
+        self.assertIn("n = 3", str(ctx.exception))
+        self.assertIn("U14", str(ctx.exception))
 
     def test_no_one_loop_law_at_an_n_is_refused_at_parse(self):
         for n_values in (["3"], ["1", "3"]):
@@ -216,11 +222,13 @@ class TestTheOneLoopRows(unittest.TestCase):
                     code, text = refusal
                     self.assertEqual(code, 2)
                     flat = " ".join(text.split())
+                    # the first potential of --models without a law at n = 3 is named: since power-law-wall
+                    # prompt 07c (U14) the exponential has none there either
                     for word in (
                         "--A-values",
                         "--models",
                         "--n-values",
-                        "inverse-power",
+                        models[0],
                         "n = 3",
                     ):
                         self.assertIn(word, flat)
@@ -262,11 +270,27 @@ class TestTheOneLoopRows(unittest.TestCase):
                 self.assertIsNone(refusal)
                 self.assertEqual(args.models, ["inverse-power"])
 
+    def test_the_exponential_at_n_3_is_refused_under_A_values(self):
+        """
+        U14 (power-law-wall prompt 07c, ruled (a)): the exponential has a one-loop law at n = 1 and 2 only, so
+        --A-values with n = 3 is refused at parse, naming the potential and the n; the fixed law alone parses at n = 3.
+        """
+        args, refusal = _parse(BASE + ["--n-values", "1", "2", "3", "--A-values", "1"])
+        self.assertIsNone(args)
+        code, text = refusal
+        self.assertEqual(code, 2)
+        flat = " ".join(text.split())
+        for word in ("--A-values", "exponential", "n = 3", "U14"):
+            self.assertIn(word, flat)
+        args, refusal = _parse(BASE + ["--n-values", "1", "2", "3"])
+        self.assertIsNone(refusal)
+        self.assertEqual(args.models, ["exponential"])
+
     def test_an_exponential_command_parses_as_before(self):
         for argv in (
             [],
             ["--A-values", "1", "0.5"],
-            ["--n-values", "1", "2", "3", "--A-values", "1"],
+            ["--n-values", "1", "2", "--A-values", "1"],
             ["--no-alpha-values", "--A-values", "0.05", "1", "10"],
         ):
             with self.subTest(argv=argv):

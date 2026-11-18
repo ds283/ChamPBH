@@ -450,7 +450,9 @@ class TestTheEstimateByR(unittest.TestCase):
     ln R <= 0 are classical; the three with 0 < log10 R <= 2.92 are "classical_gap" (the chain raises:
     "no one-loop turnaround"), carrying 0.5877 of K; the one at log10 R >= 3.00 is one-loop, carrying
     0.2812, with birth margin its ell > 0 bitwise. The shares to log 07b's four digits and their rounding,
-    5e-5 (orchestrator note 08, ruling 9). About 6 s at a load of 10-20.
+    5e-5 (orchestrator note 08, ruling 9). In the one k_ex of power-law-wall prompt 07c the chain reaches lower R,
+    but at this history's energies the gap generations stay gap and the counts and shares hold. About 6 s at a load
+    of 10-20.
     """
 
     @classmethod
@@ -514,7 +516,8 @@ class TestTheEstimateByR(unittest.TestCase):
 class TestTheClassicalBirthMargin(unittest.TestCase):
     """
     (4) M = 0.5 M_P, beta = 2: every generation is classical, and its birth margin is its ell_t
-    bitwise, and negative (on the exponential wall k_ex/omega_t -> 1/2). About 3 s at a load of 10-20,
+    bitwise, and negative (on the exponential wall k_ex/omega_t is about 0.52 at L = 90 in the one k_ex of
+    power-law-wall prompt 07c, larger at small L but below 1 here; it tended to 1/2 before). About 3 s at a load of 10-20,
     shared with (7) and (8).
     """
 

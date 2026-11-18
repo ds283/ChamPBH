@@ -31,7 +31,10 @@ The items are those of prompt §1.8:
       copy of the method as it was before the fix (`classical_turning_point_before_fix`, kept here);
   (3) where it is False, `classical_turning_point` returns what the copy returns, bitwise, or raises
       with the copy's message: at the boundary and above it, and at the twelve inputs of
-      test_wall_rounding that the shipped search refused;
+      test_wall_rounding that the shipped search refused. Since power-law-wall prompt 07c the copy, kept a
+      verbatim copy of the old method, computes the old k_ex (-d ln V/dphi E^{1/2}/2), which R13-R15 retire,
+      so only the fields k_ex does not define are compared: phi_t, ln omega_t^2 and ln R (R16: these read no
+      k_ex); the pulse rate, ln k_ex and ell_t are the new method's and are tested in test_k_ex;
   (4) the 19 failing inputs of orchestrator note 01 (2197 and 2188 from the drain probe's logs, the nine
       stored failures of the 2026.8.0 store and the eight failures of the nine on the fixed tree), as
       literals: each now returns None with the predicate holding, and each raises with the copy;
@@ -44,6 +47,7 @@ import importlib
 import sys
 import time
 import unittest
+from collections import namedtuple
 from math import exp, inf, isfinite, log, nextafter
 
 from ComputeTargets.exceptions import ComputationFailureError
@@ -239,10 +243,20 @@ def make_model(beta: float, M_over_Mp: float) -> ExponentialModel:
     )
 
 
+# the tuple the method returned before power-law-wall prompt 07c, with its old field lambda_t, which the copy below
+# builds in place of AM.ClassicalTurningPoint (whose fourth field is now pulse_rate_t)
+ClassicalTurningPointBeforeFix = namedtuple(
+    "ClassicalTurningPointBeforeFix",
+    ["phi_t", "log_omega_t_squared", "log_R", "lambda_t", "log_k_ex", "ell_t"],
+)
+
+
 def classical_turning_point_before_fix(model, normalization, phi: float, log_E: float):
     """
     AbstractModel.classical_turning_point as it was on the merged tree (1561b60), before this prompt:
-    the method's body verbatim, with self written as model and the module's names qualified by AM.
+    the method's body verbatim, with self written as model and the module's names qualified by AM (and,
+    since power-law-wall prompt 07c, its tuple built as ClassicalTurningPointBeforeFix, the old fields).
+    It computes the old k_ex, lambda_t E^{1/2}/2; compare it only in the fields k_ex does not define.
     """
     context = model._wall_context(
         "classical_turning_point", normalization, phi=phi, log_E=log_E
@@ -276,7 +290,7 @@ def classical_turning_point_before_fix(model, normalization, phi: float, log_E: 
         )
     log_omega_t_squared = model._log_V(normalization, phi_t) + log(q)
     log_k_ex = log(lambda_t) + 0.5 * log_E - AM._LOG_2
-    result = AM.ClassicalTurningPoint(
+    result = ClassicalTurningPointBeforeFix(
         phi_t=phi_t,
         log_omega_t_squared=log_omega_t_squared,
         log_R=2.0 * log_omega_t_squared - AM._LOG_8_PI_SQUARED - log_E,
@@ -290,14 +304,24 @@ def classical_turning_point_before_fix(model, normalization, phi: float, log_E: 
 
 
 def outcome(call):
-    """("returned", the result as a tuple of float.hex, or None) or ("raised", the message)."""
+    """
+    ("returned", the result's phi_t, ln omega_t^2 and ln R as a tuple of float.hex, or None) or ("raised", the
+    message). Only the three fields k_ex does not define (R16) are kept: the copy computes the old k_ex
+    (power-law-wall prompt 07c).
+    """
     try:
         result = call()
     except ComputationFailureError as e:
         return ("raised", e.message)
     if result is None:
         return ("returned", None)
-    return ("returned", tuple(float(v).hex() for v in result))
+    return (
+        "returned",
+        tuple(
+            float(v).hex()
+            for v in (result.phi_t, result.log_omega_t_squared, result.log_R)
+        ),
+    )
 
 
 def least_finite(log_V_floor: float):

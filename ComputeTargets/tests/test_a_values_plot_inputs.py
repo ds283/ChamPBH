@@ -42,7 +42,10 @@ import ray
 
 import plot_inputs
 from ComputeTargets.tests import test_plot_inputs as tpi
-from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED, DRAIN_MODEL_ONE_LOOP
+from CosmologyConcepts.drain_model import (
+    DRAIN_MODEL_FIXED,
+    DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
+)
 from StoreFixtures import standin_pool as sp
 from config.datastore import serial_batch_sizes
 from config.sharding import read_table_config
@@ -74,7 +77,9 @@ def _build_store(directory: Path, fixed=FIXED_ROWS, one_loop=ONE_LOOP_ROWS) -> P
             for A in one_loop:
                 ray.get(
                     pool.object_get(
-                        "alpha_value", value=A, drain_model=DRAIN_MODEL_ONE_LOOP
+                        "alpha_value",
+                        value=A,
+                        drain_model=DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
                     )
                 )
         finally:
@@ -115,7 +120,7 @@ def _parameters(pool, alphas, As=None, extra=()):
     if As is not None:
         kwargs["A_values"] = list(As)
         # the exponential's own one-loop drain model, which the drivers pass for it (power-law-wall prompt 06, P47)
-        kwargs["A_drain_models"] = ["one-loop-measured-v1"]
+        kwargs["A_drain_models"] = ["one-loop-exponential-v2"]
     return plot_inputs.parameters(pool, **kwargs)
 
 
@@ -152,13 +157,13 @@ class TestAParameters(tpi._ReadOnlyCase):
             [
                 (0.5, DRAIN_MODEL_FIXED),
                 (0.0, DRAIN_MODEL_FIXED),
-                (1.0, DRAIN_MODEL_ONE_LOOP),
-                (0.5, DRAIN_MODEL_ONE_LOOP),
+                (1.0, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
+                (0.5, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
             ],
         )
         self.assertEqual(
             [(a.value, a.drain_model) for a in other.alphas],
-            [(0.0, DRAIN_MODEL_FIXED), (0.5, DRAIN_MODEL_ONE_LOOP)],
+            [(0.0, DRAIN_MODEL_FIXED), (0.5, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL)],
         )
         # each a stored row, and 0.5 is two rows: the same value under two models
         for a in rows.alphas:
@@ -193,8 +198,8 @@ class TestAParameters(tpi._ReadOnlyCase):
         e = ctx.exception
         self.assertEqual(e.class_name, "alpha_value")
         self.assertEqual(e.option, "--A-values")
-        self.assertEqual(e.value, "0.25 (one-loop-measured-v1)")
-        self.assertIn("--A-values 0.25 (one-loop-measured-v1)", str(e))
+        self.assertEqual(e.value, "0.25 (one-loop-exponential-v2)")
+        self.assertIn("--A-values 0.25 (one-loop-exponential-v2)", str(e))
         self.assertEqual(e.__cause__.class_name, "alpha_value")
 
     def test_an_alpha_stored_only_as_an_A_is_refused_naming_the_option(self):
@@ -219,7 +224,7 @@ class TestAParameters(tpi._ReadOnlyCase):
                 rows = _parameters(pool, [0.25], [0.75])
         self.assertEqual(
             [(a.value, a.drain_model) for a in rows.alphas],
-            [(0.25, "fixed"), (0.75, DRAIN_MODEL_ONE_LOOP)],
+            [(0.25, "fixed"), (0.75, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL)],
         )
 
     def test_the_first_missing_row_in_the_order_is_named_after_the_parameters(self):

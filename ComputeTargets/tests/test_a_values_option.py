@@ -22,13 +22,14 @@ orchestrator note 04, rulings 2, 3, 4 and 5).
     (exit 2, the option named, the rule's message from `check_drain_model`, before any Ray); duplicates collapse
     in the order of first appearance; the help says what A is, that it names the code's current one-loop model, that
     it is a key, and that alpha = 0 is still built; `--alpha-values` is unchanged;
-(2) the drivers, by `ast`: `main.py` looks up one row per A with `drain_model=DRAIN_MODEL_ONE_LOOP`, by the name and
+(2) the drivers, by `ast`: `main.py` looks up one row per A with `drain_model=DRAIN_MODEL_ONE_LOOP_EXPONENTIAL`, by the name and
     never a string literal, after the alpha rows; each driver calls `run_pipeline` once per row; both plot scripts
     pass both lists to `plot_inputs.parameters`; no driver writes a model's name; every per-row path and label in
     the drivers and in `extract_common` passes the row's model (ruling 3);
 (3) the helpers: `alpha_path` and `alpha_label` under both models, the fixed-law strings by literal in all three
-    spellings of alpha (ruling 2), `alpha=0` for -0 as parsed, no default model, and `model_of_law` inverting
-    `law_of` (ruling 4).
+    spellings of alpha (ruling 2), `alpha=0` for -0 as parsed, no default model, and `law_of` on every model with
+    `model_of_law` gone (ruling 4's inverse, removed by power-law-wall prompt 07c, README §6.14 P101: nothing in
+    production called it).
 
 No Ray cluster, no datastore, no integration. Instant.
 """
@@ -44,12 +45,12 @@ from pathlib import Path
 from CosmologyConcepts.drain_model import (
     DRAIN_LAWS,
     DRAIN_MODEL_FIXED,
-    DRAIN_MODEL_ONE_LOOP,
+    DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
     DRAIN_MODELS,
     alpha_label,
     law_of,
-    model_of_law,
 )
+from CosmologyConcepts import drain_model as _dm
 from config.argument_parser import (
     create_argument_parser,
     distinct_values,
@@ -60,7 +61,7 @@ from extract_common import _cosmology_line, alpha_path
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ["--database", "unused.db"]
 DRIVERS = ("main.py", "plot_by_beta.py", "plot_ScalarHistory.py")
-ONE_LOOP = "one-loop-measured-v1"
+ONE_LOOP = "one-loop-exponential-v2"
 
 
 def _parse(argv):
@@ -302,7 +303,10 @@ class TestTheDriversCarryA(unittest.TestCase):
             with self.subTest(script=name):
                 text = (ROOT / name).read_text()
                 self.assertNotIn(ONE_LOOP, text)
-                self.assertNotIn("one-loop-measured", text)
+                # no one-loop model's name at all, the power wall's and the retired ones included (power-law-wall
+                # prompt 07c)
+                for name in (DRAIN_MODELS[2], *_dm.RETIRED_DRAIN_MODELS):
+                    self.assertNotIn(name, text)
 
     def test_2_plot_inputs_looks_the_A_rows_up_under_the_constant(self):
         tree = _tree("plot_inputs.py")
@@ -372,24 +376,24 @@ class TestTheHelpers(unittest.TestCase):
 
     def test_3_the_one_loop_path_carries_the_model_and_A(self):
         self.assertEqual(
-            alpha_path("out/label", 1.0, DRAIN_MODEL_ONE_LOOP),
-            Path("out/label/one-loop-measured-v1/A=1"),
+            alpha_path("out/label", 1.0, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
+            Path("out/label/one-loop-exponential-v2/A=1"),
         )
         self.assertEqual(
-            alpha_path(Path("out"), 0.123456789, DRAIN_MODEL_ONE_LOOP),
-            Path("out/one-loop-measured-v1/A=0.12346"),
+            alpha_path(Path("out"), 0.123456789, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
+            Path("out/one-loop-exponential-v2/A=0.12346"),
         )
         self.assertEqual(
-            alpha_path("out", 1000.0, DRAIN_MODEL_ONE_LOOP),
-            Path("out/one-loop-measured-v1/A=1000"),
+            alpha_path("out", 1000.0, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
+            Path("out/one-loop-exponential-v2/A=1000"),
         )
         # the same value under the two models is two directories, and a glob of alpha=* never reads the one-loop one
         self.assertNotEqual(
             alpha_path("out", 0.5, DRAIN_MODEL_FIXED),
-            alpha_path("out", 0.5, DRAIN_MODEL_ONE_LOOP),
+            alpha_path("out", 0.5, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
         )
         self.assertFalse(
-            alpha_path("out", 0.5, DRAIN_MODEL_ONE_LOOP)
+            alpha_path("out", 0.5, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL)
             .relative_to("out")
             .parts[0]
             .startswith("alpha=")
@@ -421,35 +425,37 @@ class TestTheHelpers(unittest.TestCase):
     def test_3_the_one_loop_label_is_the_same_in_every_spelling(self):
         for spelling in ("α", "alpha", r"$\alpha$"):
             self.assertEqual(
-                alpha_label(1.0, ONE_LOOP, spelling), "A = 1 (one-loop-measured-v1)"
+                alpha_label(1.0, ONE_LOOP, spelling), "A = 1 (one-loop-exponential-v2)"
             )
-        self.assertEqual(alpha_label(0.5, ONE_LOOP), "A = 0.5 (one-loop-measured-v1)")
         self.assertEqual(
-            alpha_label(1000.0, ONE_LOOP), "A = 1000 (one-loop-measured-v1)"
+            alpha_label(0.5, ONE_LOOP), "A = 0.5 (one-loop-exponential-v2)"
+        )
+        self.assertEqual(
+            alpha_label(1000.0, ONE_LOOP), "A = 1000 (one-loop-exponential-v2)"
         )
         self.assertEqual(
             _cosmology_line("lab", 2.0, ONE_LOOP),
-            "Cosmology: lab, A = 2 (one-loop-measured-v1)",
+            "Cosmology: lab, A = 2 (one-loop-exponential-v2)",
         )
         with self.assertRaises(ValueError):
             alpha_label(1.0, "no-such-model")
 
     def test_3_the_constants_are_the_ones_the_strings_above_name(self):
         self.assertEqual(DRAIN_MODEL_FIXED, "fixed")
-        self.assertEqual(DRAIN_MODEL_ONE_LOOP, ONE_LOOP)
+        self.assertEqual(DRAIN_MODEL_ONE_LOOP_EXPONENTIAL, ONE_LOOP)
 
-    def test_3_model_of_law_inverts_law_of(self):
-        # power-law-wall prompt 03 (README §6.6 P17): the power wall's one-loop-measured-pl-v1 shares the one-loop law,
-        # and model_of_law still returns one-loop-measured-v1 for it, so the inverse holds on the first two models
-        for model in DRAIN_MODELS[:2]:
-            self.assertEqual(model_of_law(law_of(model)), model)
-        self.assertEqual(model_of_law(law_of(DRAIN_MODELS[2])), DRAIN_MODEL_ONE_LOOP)
-        for law in DRAIN_LAWS:
-            self.assertEqual(law_of(model_of_law(law)), law)
-        self.assertEqual(model_of_law("fixed"), DRAIN_MODEL_FIXED)
-        self.assertEqual(model_of_law("one_loop"), DRAIN_MODEL_ONE_LOOP)
+    def test_3_law_of_covers_the_models_and_model_of_law_is_gone(self):
+        # power-law-wall prompt 07c (README §6.14 P101): model_of_law, which returned the exponential's model as "the"
+        # one-loop model, is removed (nothing in production called it); each potential names its own
+        # (AbstractModel.one_loop_drain_model), and law_of maps every model to its law
+        self.assertFalse(hasattr(_dm, "model_of_law"))
+        self.assertFalse(hasattr(_dm, "_MODEL_OF_LAW"))
+        self.assertEqual(
+            [law_of(model) for model in DRAIN_MODELS],
+            [DRAIN_LAWS[0], DRAIN_LAWS[1], DRAIN_LAWS[1]],
+        )
         with self.assertRaises(ValueError) as ctx:
-            model_of_law("nonsense", "ctx")
+            law_of("nonsense", "ctx")
         self.assertTrue(str(ctx.exception).startswith("ctx:"))
 
     def test_3_A_is_finite_and_positive_by_check_drain_model(self):

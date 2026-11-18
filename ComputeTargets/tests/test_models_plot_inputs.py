@@ -49,8 +49,8 @@ from config.sharding import read_table_config
 from config.version import VERSION_LABEL
 
 UNITS = Planck_units()
-V1 = "one-loop-measured-v1"
-PL = "one-loop-measured-pl-v1"
+V1 = "one-loop-exponential-v2"
+PL = "one-loop-inverse-power-v1"
 M_EV = 1.0e25
 
 _MODULE = {}
@@ -296,7 +296,7 @@ class TestTheARows(_ReadOnlyCase):
 
     def test_an_A_stored_only_under_the_other_potentials_model_is_refused(self):
         with self.read_only("mixed") as pool:
-            # 0.5 is stored under one-loop-measured-v1 only
+            # 0.5 is stored under one-loop-exponential-v2 only
             self.assertEqual(
                 [
                     (a.value, a.drain_model)

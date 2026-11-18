@@ -164,7 +164,7 @@ class TestTheInventoryNamesAlpha(_AlphaStoreCase):
         self.assertIn("values = [ 0, 0.1 ]", lines)
 
 
-ONE_LOOP = "one-loop-measured-v1"
+ONE_LOOP = "one-loop-exponential-v2"
 
 
 class TestTheInventoryNamesTheModel(_AlphaStoreCase):

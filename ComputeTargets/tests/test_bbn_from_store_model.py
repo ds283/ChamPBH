@@ -23,8 +23,8 @@ find query reads, with the model tables' `n_value` and the history's `model_type
 the histories (serial: model, n, drain model, value)
 
     10: exponential, 1, fixed, 0          20: inverse-power, 1, fixed, 0      30: inverse-power, 2, fixed, 0
-    40: exponential, 1, one-loop-measured-v1, 1                           50: inverse-power, 1, one-loop-measured-pl-v1, 1
-    60: inverse-power, 1, one-loop-measured-v1, 1 (a row no ScalarHistory may now be constructed with; P36)
+    40: exponential, 1, one-loop-exponential-v2, 1                           50: inverse-power, 1, one-loop-inverse-power-v1, 1
+    60: inverse-power, 1, one-loop-exponential-v2, 1 (a row no ScalarHistory may now be constructed with; P36)
 
 - the find query matches the model's table, `model_type` and `n_value`: each (model, n) finds its own history and
   never the other model's of the same serial; an (model, n) with no history is a `LookupError` naming the model and
@@ -50,8 +50,8 @@ import numpy as np
 
 from CosmologyConcepts.drain_model import (
     DRAIN_MODEL_FIXED,
-    DRAIN_MODEL_ONE_LOOP,
-    DRAIN_MODEL_ONE_LOOP_PL,
+    DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
+    DRAIN_MODEL_ONE_LOOP_INVERSE_POWER,
 )
 from CosmologyConcepts.Models.model_ids import EXPONENTIAL_MODEL, INVERSE_POWER_MODEL
 from Units import Planck_units
@@ -70,8 +70,8 @@ HISTORIES = [
 # (alpha serial, value, drain model)
 ALPHAS = [
     (1, 0.0, DRAIN_MODEL_FIXED),
-    (2, 1.0, DRAIN_MODEL_ONE_LOOP),
-    (3, 1.0, DRAIN_MODEL_ONE_LOOP_PL),
+    (2, 1.0, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
+    (3, 1.0, DRAIN_MODEL_ONE_LOOP_INVERSE_POWER),
 ]
 
 
@@ -172,13 +172,14 @@ class TestFindModelByModelAndN(_ModelStoreCase):
 
     def test_under_the_one_loop_law_each_model_matches_its_own_drain_model(self):
         self.assertEqual(
-            self.find(drain_model=DRAIN_MODEL_ONE_LOOP, alpha=1.0).serial, 40
+            self.find(drain_model=DRAIN_MODEL_ONE_LOOP_EXPONENTIAL, alpha=1.0).serial,
+            40,
         )
         self.assertEqual(
             self.find(
                 model="inverse-power",
                 n=1,
-                drain_model=DRAIN_MODEL_ONE_LOOP_PL,
+                drain_model=DRAIN_MODEL_ONE_LOOP_INVERSE_POWER,
                 alpha=1.0,
             ).serial,
             50,
@@ -226,7 +227,7 @@ class TestTheOptions(_ModelStoreCase):
                 ("--drain-law", "one_loop", "--alpha", "1"),
                 "exponential",
                 1,
-                DRAIN_MODEL_ONE_LOOP,
+                DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
             ),
             (
                 ("--model", "inverse-power", "--n", "2"),
@@ -238,7 +239,7 @@ class TestTheOptions(_ModelStoreCase):
                 ("--model", "inverse-power", "--drain-law", "one_loop", "--alpha", "1"),
                 "inverse-power",
                 1,
-                DRAIN_MODEL_ONE_LOOP_PL,
+                DRAIN_MODEL_ONE_LOOP_INVERSE_POWER,
             ),
             (
                 (
@@ -253,7 +254,7 @@ class TestTheOptions(_ModelStoreCase):
                 ),
                 "inverse-power",
                 2,
-                DRAIN_MODEL_ONE_LOOP_PL,
+                DRAIN_MODEL_ONE_LOOP_INVERSE_POWER,
             ),
         ):
             with self.subTest(extra=extra):

@@ -63,9 +63,9 @@ required), and the history is matched under that law's drain model (the key of `
 history's model, as `tools/history_and_bbn.py`'s options do (power-law-wall prompt 05 §1.5, README §6.9 P37, P38):
 the find query joins that model's table (ExponentialModel or InversePowerModel) and matches the history's
 `model_type` and the model's `n_value`, since the two tables' serials repeat each other. Under `one_loop` the drain
-model matched is the model's own (`one_loop_drain_model` at n: `one-loop-measured-v1` for the exponential,
-`one-loop-measured-pl-v1` for the power law at n = 1 and 2), not `model_of_law`'s; a model with no one-loop law at n
-(the power law at n other than 1 and 2) is refused at parse, exit 2, naming `--n`. A shard without the model's table
+model matched is the model's own (`one_loop_drain_model` at n: `one-loop-exponential-v2` for the exponential and
+`one-loop-inverse-power-v1` for the power law, each at n = 1 and 2, since power-law-wall prompt 07c); a model with no
+one-loop law at n (either potential at n other than 1 and 2) is refused at parse, exit 2, naming `--n`. A shard without the model's table
 holds none of its histories; a shard whose ScalarHistory has no `model_type` column, or whose model table has no
 `n_value` column (the hand-written imitations of the tests; no store of format 5 or later lacks them), is read
 without that match, as before.
@@ -937,8 +937,9 @@ def _drain_model(parser, args) -> str:
     """
     The drain model the history's key names (power-law-wall prompt 05 §1.5, P38): DRAIN_MODEL_FIXED under the fixed
     law, and under one_loop the model's own one-loop drain model at --n (AbstractModel.one_loop_drain_model),
-    never model_of_law's, read from the model built at the run's M and beta (M_P and 1 where not given; the hook
-    reads neither). A model with no one-loop law at n is parser.error: exit 2, naming --n.
+    never a law-wide default (model_of_law, removed by power-law-wall prompt 07c), read from the model built at the
+    run's M and beta (M_P and 1 where not given; the hook reads neither). A model with no one-loop law at n is
+    parser.error: exit 2, naming --n.
     """
     if args.drain_law == DRAIN_LAW_FIXED:
         return DRAIN_MODEL_FIXED

@@ -362,8 +362,8 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         default=None,
         help="one or more values of A, the strength of the one-loop drain law, finite and > 0 with no upper "
         "bound: each names a history key (A, the code's current one-loop drain model of each potential of "
-        "--models, its own: one-loop-measured-v1 for exponential, one-loop-measured-pl-v1 for inverse-power at "
-        "n = 1, 2; a potential with none at an n of --n-values is refused at parse) beside the "
+        "--models, its own: one-loop-exponential-v2 for exponential, one-loop-inverse-power-v1 for inverse-power, "
+        "each at n = 1, 2; a potential with none at an n of --n-values is refused at parse) beside the "
         "--alpha-values rows, which are looked up first and are unchanged. A is a key of every stored "
         "history, as alpha is. The default is none, so a run without it is the fixed-law run; --alpha-values "
         "keeps its default, so a run given only --A-values also builds, or reads, alpha = 0, natural mode "

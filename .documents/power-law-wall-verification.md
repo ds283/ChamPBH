@@ -2163,3 +2163,190 @@ law in the new k_ex. Each is drawn from the outputs above; nothing in them is no
   depends on ln R and L and not on ℓ alone.
 - **Figure 8.3** — [`prediction.png`](../prompts/power-law-wall/source/kex/fig/prediction.png): each of the 36 new
   points' measured f against the f that (v), fitted without them, predicted in `prediction.json` before they ran (§8.4).
+
+## 9. One k_ex in production, and the exponential's law v2 (prompt 07c, 2026-11-18)
+
+Prompt 07c put R13–R17, U11–U14 and P99–P110 (README §6.12–§6.14) into production in one commit, on top of
+`c4258ef`. The probes and the tool route's outputs are in the session's scratch directory, not committed; each figure
+below names the script that made it, and the log (`prompts/power-law-wall/logs/07c-k-ex-in-production.md`) gives the
+commands. Loads are one-minute loads at the start.
+
+### 9.1 What changed
+
+- **One k_ex.** k_ex = ½E^{1/2}|V‴/V″| at φ_t (`classical_turning_point`) and at φ_ta (`one_loop_turnaround`), through
+  the new hook `_d3_logV_dphi3` (closed forms on `ExponentialModel`, `InversePowerModel` and the test stand-ins; the
+  base raises `NotImplementedError` naming the class) and `AbstractModel._pulse_rate`: V″/V = (ln V)″ + (ln V)′²,
+  V‴/V = (ln V)‴ + (ln V)′(3(ln V)″ + (ln V)′²), rate = |V‴/V″|. The tuples' fields `lambda_t`, `lambda_ta` are now
+  `pulse_rate_t`, `pulse_rate_ta`. The refusal of a wall that does not repel stays on −d ln V/dφ ≤ 0; a pulse rate that is
+  zero or not finite raises `ComputationFailureError` naming `_d3_logV_dphi3`. `ONE_LOOP_MAX_ITERATIONS` 100 → 400.
+- **The exponential's law** is `one-loop-exponential-v2` (`ExponentialModel._drain_fraction`, `one_loop_fraction`):
+  for ln R > 0, f = 1 − exp(−min(y_rise, y_fall)) with 07b2's joint-fit constants (`minform.json`, `with_new`,
+  `n12/S3/v-J`); classical R·S(L) with the S table moved unchanged from `ScalarHistory.py`; undefined at n ≠ 1, 2 (U14).
+  `ScalarHistory.py` keeps no potential's law: v1's `drain_fraction`, `drain_S_of_L` and `DRAIN_*` constants are gone,
+  `check_drain_law_model` requires `_drain_fraction` (and no longer refuses a model that also defines `_drain_L`), and
+  `drain_alpha_effective(regime, ell, log_R, A, w_gate, *, model, log_E)` always calls the model's own fraction.
+- **The drain models:** `"one-loop-exponential-v2"`, `"one-loop-inverse-power-v1"` (U11, the law unchanged);
+  `"one-loop-measured-v1"` and `"one-loop-measured-pl-v1"` known and refused by `law_of` (so by `check_drain_model`,
+  `alpha_value`, its factory, `alpha_label` and every reader), naming R13 or U11 and the successor. `model_of_law` removed
+  (nothing in production called it).
+- **The spectrum:** 07b's three tables, `X_STAR` = 0.005615853347600149, `SPECTRUM_MODELS` `R8-<wall>-v2`,
+  `G_Y_MIN` 1e-3 → 5e-4, `OMEGA_U_MAX` 9 kept (§9.4).
+- **The label** 2026.13.0; `FINGERPRINT_FORMAT` 8; no table or column added or renamed.
+
+### 9.2 One k_ex: the hooks, the chain, R16, the cap (prompt §1.2)
+
+- **The third hook against its closed form** (`test_k_ex` (a)): (ln V)‴ = −n(n+1)(n+2)u/φ³ (exponential) and
+  −s[n(n+1)(n+2) − 3n²(n+1)s + 2n³s²]/φ³ (power wall), in 60-digit decimals, at n = 1, 2, M = 4e-31 and 1e-3 M_P,
+  31 φ from 1e-90 M to 10 M_P on each model: 202 points within float range, worst 0.0026 of the tolerance
+  16 eps (n + 2)(|ln M| + |ln φ| + 4) relative (reason: u's rounding through ln u, the bracket's cancellation of at most
+  9 at n = 2, three divisions); 46 points where |(ln V)‴| exceeds the largest float raise `ComputationFailureError` naming
+  the hook (§9.8).
+- **Against the centred difference of (ln V)″** (h = 1e-5 in ln φ): 202 points, worst 5.9e-10 relative against a
+  tolerance of 1e-7 (truncation (n + 4)²h²/6 ≈ 6e-10, rounding (n + 2) eps/h ≈ 1e-10). `test_inverse_power_model` (b) adds
+  the same check on the power wall where φ > 1e-100 M_P.
+- **The pulse rate's closed forms** (`test_k_ex` (b)): (n + 2)/φ exactly on the power wall, [n²u² + 3n(n+1)u +
+  (n+1)(n+2)]/[φ(nu + n + 1)] on the exponential, at the methods' own φ_t and φ_ta: worst 1.2e-4 | 1.5e-4 of 32 eps
+  (n + 2)(…); ln k_ex = ln rate + ½ ln E − ln 2 bit for bit; on the power wall k_ex/ω_t = (n + 2)/(2√(n(n+1))) to 1e-12.
+- **The production chain against 07b's `production_v3_classical` / `production_v3_turnaround`** at the 40 candidates of
+  07b's `precision.py` (`check_chain.py`): worst relative difference 1.93e-11 (pulse rate, ln k_ex and ℓ_t at φ_t),
+  2.6e-11 (ln k_ex at φ_ta), 1.95e-11 (ℓ), 2.2e-12 (φ_ta); tolerance 1e-9 (precision.py's; the centred difference in
+  production_v3 carries about 1e-11). Iterations equal at every candidate (at most 12).
+- **R16:** φ_t, ln ω_t² and ln R at the 40 candidates bitwise equal to the base's (`candidates_ct.py` at `c4258ef` and at
+  the tip): 40/40 for each.
+- **The iteration cap (P103)** (`iter_cap.py`): production `one_loop_turnaround` at every stage-2 point of 07b and 07b2
+  whose new chain has a solution (07b's `rechain.txt` rows, exponential and power wall; 07b's `stage2_new.txt`; 07b2's
+  `stage2_points.txt`): 422 rows, 333 with a chain, all 333 converged within 400; largest count **195**, at 07b's
+  laboratory point (n = 1, L = 1.378072, ln R = 5.003334, ℓ = 0.119971); next 107 (L-M8e-18, ℓ = 0.3050), then 83, 82,
+  67. ℓ equal to the chain's within 2.4e-13; each point's ln R reproduced within 2.7e-12. So
+  `[07b-the-one-loop-fixed-point-needs-more-than-100-iterations-near-the-chain-end]` closes. `test_k_ex` (c) pins the
+  slowest point: more than 100 and at most 400 iterations, and a raise with the cap patched to 100.
+
+### 9.3 The exponential's law v2 (prompt §1.3)
+
+`v2_check.py`, against `minform.fraction` imported from the record with `python -B`, with `minform.json`'s
+`with_new` `n12/S3/v-J` parameters:
+- **the 146 fitted points** (109 one-loop, 37 gap): `one_loop_fraction` equals `minform.fraction` and the stored `f_fit`
+  bit for bit at all 146;
+- **28 synthetic inputs** (14 at each n): the rise below R₀ and at R₀, the rise just above R₀, 1 + Q ln L ≤ 0 at a
+  one-loop and at a gap candidate, the rise active at a one-loop candidate (ℓ = ℓ₀ + 0.05), the fall active (ℓ = 33.46,
+  ln R = 142.4), ℓ = ℓ₀, ℓ just below and just above ℓ₀, the gap, the gap at large R, ln R = 5e-324 and 1e-12: all bitwise.
+  `test_measured_drain_law` copies `minform.fraction` verbatim and checks the same on the 146 points and on a grid of
+  2 × 15 × 15 × 14 inputs, through `ExponentialModel._drain_fraction` too.
+- **U14:** at n = 0, 3, 4 the exponential's `one_loop_drain_model` and `_drain_fraction` raise `ValueError` naming
+  `ExponentialModel`, the hook, n and U14; `check_drain_law_model` refuses n = 3 under the one-loop law and accepts it under
+  the fixed law; `main.py`'s parser refuses `--n-values 1 2 3 --A-values 1` (exit 2, naming the potential, n = 3 and
+  U14) and accepts `--n-values 1 2 3` alone.
+
+### 9.4 The drain models and the spectrum (prompt §1.4, §1.5)
+
+- **The retired names** (`test_power_wall_law` (a)): each of `"one-loop-measured-v1"` and `"one-loop-measured-pl-v1"`
+  refused by `law_of`, `check_drain_model`, `alpha_label`, `alpha_value` and `sqla_alpha_value_factory.build` (before any
+  query), each message naming the name, "retired", its ruling (R13 | U11) and its successor.
+- **The tables:** spliced from 07b's `spectrum_tables.txt` as it writes them: 151, 163, 158 nodes; k_ex/ω_t
+  0.5163952511757223, 1.0606601717798214, 0.816496580927726; x_lo 0.0019365, 0.00094281, 0.0012247; x_hi 3.5, 3.0, 3.0
+  (the file's `WallTable` literal is 3.0 where its header prints the measured 3.0000000000000004; §9.9); x_p 0.619424,
+  0.155250, 0.253372 (07b's to its six digits); J 0.872770, 1.775255, 1.378406 and M₁/M₃ 0.903405, 4.178280, 2.435723
+  at c_a = 0 (07b's `spectrum.txt`).
+- **The grid ends, re-derived on their docstrings' criteria** (`bounds.py`, `bounds2.py`, `bounds3.py`):
+  - `G_Y_MIN`: the derivation needs y < G_Y_MIN < x_lo on every wall, and power-n1's x_lo, 9.43e-4, is below 1e-3.
+    At 5e-4 the left-out terms are y⁴ times a factor below 0.43 over M₁/2 (M₁ 0.086, 5.2e-5, 1.5e-3), below 4e-10
+    relative; measured against quadrature 4.3e-10 (power-n1), 2.7e-11 (power-n2), 6.4e-13 (exponential). At 1e-3 the
+    series still met 1e-7 (5.4e-9), but outside its derivation's premise.
+  - `OMEGA_U_MAX` = 9 kept: x_lo e^9 = 7.64 (power-n1), 15.7, 9.9; the remainder's bound there is below 7.9e-16 of M₅ and
+    5.6e-19 of M₂ on every wall (the docstring's criterion 1e-7, the test's 1e-14); at u = 8 it is up to 3.5e-4.
+  - `G_Y_MAX` = 50 unchanged: the left-out 5M₁₀/(128y⁷) is 8.5e-14 of G at most (exponential); κ_hi ≥ 4.34.
+- **The kernels against quadrature** (`kernels.py`): G and Ω at `test_quanta_spectrum`'s points, at y = each wall's new
+  x_lo, at G_Y_MIN, G_Y_MAX, OMEGA_U_MAX and u = ln(x_p/x_lo), at c_a = 1, 0, 10 on the three walls: 270 evaluations,
+  worst 4.3e-12 (G) and 2.2e-10 (Ω) relative against 1e-7 (the gate Consistent).
+- **The associated piece's share of I** at c_a = 1: 6.1e-5 (exponential), 1.57e-2 (power-n1; 1e-3 or less before),
+  1.64e-3 (power-n2). Measured, not acted on: x_* = 0.0056 lies nearer power-n1's peak, x_p = 0.155, in the new x.
+
+### 9.5 The label (prompt §1.6)
+
+`VERSION_LABEL` = "2026.13.0", with a dated comment in `config/version.py`. `FINGERPRINT_FORMAT` 8. No table or column
+added or renamed; the eight store-fingerprint goldens unchanged (`test_store_fingerprint_golden` passes).
+
+### 9.6 The breakage record (prompt §3)
+
+- **§1.2** (`breakage_kex.py`, a monkeypatch in one process): (i) the pulse rate taken as |V‴/V′| moves k_ex against
+  production_v3 by up to 2.4e+84 relative and fails `test_k_ex` (b) 8 times in its 5 tests; (ii) the factor ½ dropped
+  from k_ex moves it by 1.00 relative (a factor 2) and fails (b) twice. Restored: 1.93e-11 and 0 failures.
+- **§1.3** (`v2_check.py`): n = 1's rise used at n = 2 changes 32 of the 146 fitted points and 6 of the 28 synthetic
+  inputs (largest 0.079); ℓ₀ off by 1e-6 changes 61 and 2 (largest 2.2e-7). Both caught; restored bitwise.
+- **§1.8** (`compare_dumps.py`): history 1's sample 2000 with φ_E moved by one ulp (0.9611673622779828 →
+  0.9611673622779829) is reported as one differing sample.
+
+### 9.7 The tool route (prompt §1.1, §1.8)
+
+Five histories by `tools/history_and_bbn.py`, run through a scratch wrapper that calls its `main` unchanged and dumps the
+payload and the BBN result (every float as its repr), at the base `c4258ef` and at the tip, with the same commands, one
+at a time:
+
+| | history | parameters | why | recorded cost | base (s, load) | tip (s, load) |
+|---|---|---|---|---|---|---|
+| 1 | exponential n = 1, natural | β 2, M 1e-3 M_P | 04's tool route `exp-M1e-3-b2.0-natural`; tuned in 4 integrations | 07: 41.7 s tuning | 41 (28.4) | 41 (5.5) |
+| 2 | exponential n = 1, fixed α 0.1, reflecting | β 2, M 4e-31 M_P, `--alpha 0.1` | 07's grid; 49 reflections at laboratory M, so the margins call `peak_estimate` | 07: 8.5 s | 19 (24.6) | 19 (35.3) |
+| 3 | power wall n = 1, one-loop A = 1 | β 2, M 4e-31 M_P | 04's `ip-n1-M4e-31-b2.0-oneloop1`, 07's grid | 04: 16 s, 07: 8.0 s | 17 (22.4) | 17 (29.9) |
+| 4 | power wall n = 2, one-loop A = 1 | β 2, M 4e-31 M_P | 04's `ip-n2-M4e-31-b2.0-oneloop1`, 07's grid | 04: 16 s, 07: 9.3 s | 18 (20.7) | 17 (31.2) |
+| 5 | exponential n = 1, one-loop A = 1, laboratory M | β 2, M 4e-31 M_P | 04's tool route `exp-M4e-31-b2.0-oneloop1` (its output reproduced at the base) | 04: 17 s, 07: 8.2 s | 17 (19.5) | 17 (25.3) |
+
+(The base histories ran beside the base suites' first two ComputeTargets halves, and the tip's beside the tip suites'.)
+
+**Histories 1–4:** every sample, every tuning value, the first bounce, the fixed-T values, the dark-radiation ledger and
+values, every injection's integration fields and every BBN value equal to the base's, bit for bit. What moved:
+- history 1 (natural mode): nothing (bitwise equal, timings aside);
+- history 2 (fixed law): `generations[*].log_k_ex` (largest change 0.212), `log_m` (0.0028, the one-loop peak's m_ta),
+  `log_q` (0.212), `birth_margin` (0.215), `reflection_margin` (0.214), `tracker_margin` (0.212); each injection's
+  `classical_turning_point` `pulse_rate_t` (|lambda_t before| relative 0.071), `log_k_ex` (0.068), `ell_t` (0.068); the
+  margins' `worst_birth_margin` 21.6794 → 21.8596, `worst_reflection_margin` 21.7102 → 21.8904, `worst_tracker_margin`
+  38.1897 → 38.3678 (also in `dissipation_values`);
+- history 3 (power wall n = 1): the bounce rows' and generations' `ell`, `birth_margin` (1.103), `log_k_ex`, `log_q`
+  (1.094), `log_m` (0.013), `reflection_margin` (1.103), `tracker_margin` (1.094); the drain candidates' `ell`
+  (21.411 → 22.514 at the first); `ell_t` by ln 3 = 1.0986 at every turning point (`pulse_rate_t` × 3); the margins and
+  `drain_history_values` `ell_min`, `all_worst_*_margin` likewise; `drain.model` renamed (U11);
+- history 4 (power wall n = 2): as history 3 with largest changes 0.697 (ℓ, birth margin), 0.691 (ln k_ex, ln q),
+  0.0079 (ln m); `ell_t` by ln 2 = 0.6931 (`pulse_rate_t` × 2); `drain.model` renamed.
+
+**History 5** (the exponential's one-loop law, v1 → v2, base → tip; measured, not judged):
+
+| | base (v1, old k_ex) | tip (v2, one k_ex) |
+|---|---|---|
+| ΔN_eff at T_CMB | 0.04462402883596974 | 0.04163249276504718 |
+| ΔN_eff at 1 MeV | 0.04188799710901712 | 0.039586361244445985 |
+| Y_p | 0.2469085479175766 | 0.24719964618966397 |
+| D/H (×10⁵) | 2.4695787553182185 | 2.470389133689699 |
+| drained share, one-loop | 0.9998674227315588 | 0.9998562737519079 |
+| parking share | 0.0001325772684409616 | 0.00014372624809229034 |
+| candidates one-loop / gap / classical / unassessed | 45 / 0 / 0 / 0 | 46 / 0 / 0 / 0 |
+| ℓ_min | 19.33110844955239 | 19.964334270236222 |
+| reflections; parking N | 45; 30.1253 | 46; 29.7691 |
+
+The integration moves (by construction: the law reads ℓ), as do the samples and BBN.
+
+### 9.8 What the work found
+
+- **The third hook's float range.** (ln V)‴ ~ n(n+1)(n+2)/φ³ near the wall leaves float range below φ ≈ 1e-103 in the
+  units' field (M_P = 1 in Planck units), where (ln V)″ ~ 1/φ² reached 1e-154. The turning points then raise
+  `ComputationFailureError` naming the hook, where before 07c they returned. `test_inverse_power_model` (d)'s points at
+  n = 1, ln E = −60, M = 4e-31 and 1e-16 M_P (φ_t = 1.3e-126 and 1.3e-112 M_P) now assert the raise. Estimate for histories:
+  on the power wall at n = 1, φ_t ≈ M V₀/E with E/V₀ ≲ 1e64 from T* = 2e4 GeV, so the limit is reached for M ≲ 1e-39 M_P;
+  07's grid's least M is 1e-33 M_P (φ_t ≈ 1e-97 M_P, a margin of about 1e17 in |(ln V)‴|); at n = 2, and on the
+  exponential (φ_t = M L^{−1/n}), nowhere near. Issue `[07c-the-third-hook-leaves-float-range-below-phi-1e-103-mp]`.
+- **The 2197 history under v2** (`test_drain_law` (4)): at A = 1 eleven one-loop candidates (ℓ 32.36 down to 10.04),
+  parking at N = 33.594, where v1 had five and parked at 28.876.
+- **A tolerance taken of a cancelling difference** (`tools/tests/test_quanta_measures.py`, the stored history's phase
+  slip): with the one k_ex that history's smallest slip is the difference of two phases equal to 1 part in 473, and the
+  tool and the test's probe, which form each phase in another order, agree to 7.2e-15 of the phase but 3.4e-12 of the slip;
+  the test took 1e-12 of the slip, and now takes 1e-12 of the larger phase.
+- **Unchanged where the inventory expected a move:** `test_margins` (3) (M = 1e-16 M_P, β = 2, fixed law: three gap
+  generations at 0 < log₁₀ R ≤ 2.92, one one-loop; shares 0.5877 / 0.2812) and `test_drain_store`'s L-M8e-18 gap candidate
+  (regimes one-loop, one-loop, one-loop, gap) hold as before; the worked example's chain at M = 1e-16 M_P still has no
+  solution (ℓ falls to −0.039 at iteration 4, where it fell to −0.19), the chain now stopping at M = 10^-16.09 M_P,
+  R = 10^2.85, against 10^-16.11 and 10^2.92.
+
+### 9.9 Observations
+
+- 07b's `spectrum_tables.txt` writes the power walls' `x_hi=3.0` in their `WallTable` literals where its headers print
+  the measured 3.0000000000000004; the module takes the literal (prompt §1.5, "exactly as … writes them"). x_p then
+  differs from the header's at the 16th digit (0.15524989529273064 against …67).
+- The suites' counts and times, before and after, are in the log §3.

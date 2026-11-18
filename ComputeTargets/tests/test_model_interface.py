@@ -75,7 +75,7 @@ _units = Planck_units()
 Mp = _units.PlanckMass
 
 # the methods the integrator reads: V's, and the conformal factor's
-POTENTIAL_METHODS = ("log_V", "d_logV_dphi", "d2_logV_dphi2")
+POTENTIAL_METHODS = ("log_V", "d_logV_dphi", "d2_logV_dphi2", "d3_logV_dphi3")
 COUPLING_METHODS = ("log_Omega", "Omega", "d_logOmega_dphi", "d2_logOmega_dphi2")
 
 PHI_REFS_OVER_MP = (0.0, 0.01, 0.0349624, 0.3, 5.0)
@@ -133,6 +133,10 @@ class _MinimalModel(AbstractModel):
         return 0.0
 
     def _d2_logV_dphi2(self, normalization, phi) -> float:
+        return 0.0
+
+    def _d3_logV_dphi3(self, normalization, phi) -> float:
+        # the third hook (power-law-wall prompt 07c): constant V
         return 0.0
 
     def _log_Omega(self, phi) -> float:

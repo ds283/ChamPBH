@@ -43,8 +43,8 @@ from pathlib import Path
 from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[2]
-V1 = "one-loop-measured-v1"
-PL = "one-loop-measured-pl-v1"
+V1 = "one-loop-exponential-v2"
+PL = "one-loop-inverse-power-v1"
 
 COMMAND = [
     "--beta-values",
@@ -236,7 +236,7 @@ BASE_PRINTED = [
     "   -- populated beta sample grid with 2 values = [ 1.5, 2 ]",
     "   -- populated M sample grid with 1 value = [ 0.00097413 eV ]",
     "   -- populated alpha grid with 2 values = [ 0, 0.1 ]",
-    "   -- populated A grid with 2 values = [ 1, 0.5 ] (one-loop-measured-v1)",
+    "   -- populated A grid with 2 values = [ 1, 0.5 ] (one-loop-exponential-v2)",
     "   -- total number of models to integrate = 2",
 ]
 
@@ -271,7 +271,7 @@ class TestOnePotential(unittest.TestCase):
         )
         self.assertEqual(
             printed[6],
-            "   -- populated A grid with 2 values = [ 1, 0.5 ] (one-loop-measured-pl-v1)",
+            "   -- populated A grid with 2 values = [ 1, 0.5 ] (one-loop-inverse-power-v1)",
         )
         self.assertEqual(
             printed[:2] + printed[3:6], BASE_PRINTED[:2] + BASE_PRINTED[3:6]
