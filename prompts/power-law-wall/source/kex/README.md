@@ -72,3 +72,62 @@ The full record is `.documents/power-law-wall-verification.md` §7. In brief:
   0.1553, 0.2534; κ_hi 4.343, 6.546, 5.467; R9's error on the power wall ≤ 3.4e-7 in ln|β|²; x_* = 0.005616.
 - **The paths.** 17 377 candidates, 327 change regime (all on the exponential, gap → one-loop); the power wall's drained
   share is unchanged (1.000000) on every history.
+
+## The min(rise, fall) form (power-law-wall prompt 07b2, 2026-11-18)
+
+**Prompt:** [`07b2-measure-the-min-form.md`](../../07b2-measure-the-min-form.md) · **Log:**
+[`logs/07b2-measure-the-min-form.md`](../../logs/07b2-measure-the-min-form.md) · **Outputs:**
+[`.documents/power-law-wall/kex-07b2/`](../../../../.documents/power-law-wall/kex-07b2/) · **Record:**
+[`.documents/power-law-wall-verification.md`](../../../../.documents/power-law-wall-verification.md) §8
+
+Research, as 07b; 07b's files above are imported and never changed. The form (README §6.13): for ln R > 0,
+f = 1 − exp(−min(y_rise, y_fall)), y_rise = G(ln R − R₀)₊^P(1 + Q ln L)₊ and y_fall = A/(ℓ − ℓ₀) in the new ℓ where the
+chain has a solution and ℓ > ℓ₀, +∞ otherwise; its variants (v-L) (the fall A/(ℓ − ℓ₀ − C ln L)), (v-A) (A = 2.69),
+(v-J) (A and ℓ₀ shared by n = 1 and 2) and (vi) (a soft minimum, proposed here). Nothing here is a ruling: U13 is the
+user's.
+
+| file | what |
+|---|---|
+| `minform.py` | the library: the reference implementation `fraction(ell, L, ln_R, n, params)` (§1.8), the variants and their starts, the points (07b's `fits.points()` and this prompt's new ones), the selections S1–S3, the fit (`curve_fit` on `fraction` mapped over the points), and the other laws for the like-for-like tables |
+| `minform_reproduce.py` | §1.1: 07b's (iii) and (iv) re-fitted by its own forms against `kex-07b/fits.json`; (v) on the orchestrator's scratch selection against README §6.13 |
+| `minform_fits.py` | §1.2–§1.4 (`base`) and §1.5's refits (`new`): every variant on every selection with four starts and standard errors, the like-for-like tables, leave-one-set-out; writes `minform.json` |
+| `minform_predict.py` | §1.5: chooses the new points and writes `prediction.json` with (v)'s S3 constants and the predicted f, before any point runs; refuses to overwrite it |
+| `minform_stage2.py` | §1.5: runs the points of `prediction.json` by `stage2_kex.run_point_kex` and `stage2_kex.schedule` (`points`), and validates three of them (`validate`) |
+| `minform_prediction.py` | §1.5: the new points against the prediction, per group; the sharpness check (A ± 10%) |
+| `minform_edges.py` | §1.6: the crossing, the cap, ln R → 0⁺, the chain's 100-iteration limit |
+| `minform_paths.py` | §1.7: every exponential history of 07b's path map under each variant; the drained share beside v1 and 07b's candidates |
+| `minform_ref.py` | §1.8: `fraction` against every fitted value in `minform.json`, bit for bit |
+| `minform_figs.py` | §1.9: the three figures in `fig/` |
+
+**How to run**, in this order, each with `python -B` (no bytecode beside the copies). From this directory with
+`../../../../venv/bin/python -B`: `minform_reproduce.py > …/kex-07b2/reproduce.txt`; `minform_fits.py base >
+…/fits.txt`; `minform_predict.py > …/prediction.txt` (once: it refuses to overwrite `prediction.json`);
+`minform_stage2.py points > …/stage2_points.txt`, then `validate > …/stage2_validate.txt`; `minform_prediction.py >
+…/prediction_scored.txt`; `minform_fits.py new > …/refit.txt`; `minform_ref.py > …/reference.txt`; `minform_figs.py`.
+From the repository root with `PYTHONPATH=. ./venv/bin/python -B prompts/power-law-wall/source/kex/…` (they import
+production): `minform_edges.py > .documents/power-law-wall/kex-07b2/edges.txt` and `minform_paths.py >
+.documents/power-law-wall/kex-07b2/paths.txt`. No script uses Ray, a store or the registry; the stage-2 points run under
+07b's scheduler (at most four at once, one at a time above a one-minute load of 24, each stopped at 30 minutes).
+
+**Results (2026-11-18).** The full record is `.documents/power-law-wall-verification.md` §8. In brief:
+
+- **The reproduction.** 07b's (iii) and (iv) at n = 1 (both selections) and n = 2 re-fitted to `fits.json`'s printed
+  digits; (v) on the orchestrator's scratch selection to README §6.13's (G 0.0180, R₀ 1.610, P 1.546, Q 1.008, A 2.42,
+  ℓ₀ 1.243; 0.071 / 0.046).
+- **The fits.** On S3 (ln(V₀/M⁴) ≤ 10) with the new points, (v): n = 1 A 2.497 ± 0.074, ℓ₀ 1.194 ± 0.063; n = 2 A 2.528 ±
+  0.076, ℓ₀ 1.183 ± 0.072; max |res| 0.074 | 0.064 (the fall 0.015 | 0.015). (v-L)'s C is 0.021 ± 0.032 | 0.008 ± 0.039;
+  (v-A) costs 8% in SSE; (v-J) A 2.514, ℓ₀ 1.186; (vi)'s s runs off (the sharp minimum). On S1 the off-curve corners
+  dominate every law (0.41–0.62). The rise's constants are the same in every variant.
+- **Like for like** (n = 1 | n = 2, S3): v1 in the old chain 0.098 | 0.125, in the new 0.743 | 0.638; 07b's (i) 0.350 |
+  0.355; (iii)/(iv) 0.070–0.107 | 0.071; (v) 0.084 | 0.056 on 07b's points.
+- **The prediction** (`prediction.json`, 01:07:44, before the first point at 01:07:49): 36 new points (laboratory curve
+  n = 1 and 2, L-M1e-16, twelve held out) to max 0.071, rms 0.024; the fall points to 0.025 | 0.023. A × 1.1 doubles the
+  fall's misses with the field back out (0.010 → 0.045 at n = 1). Every point validated by energy (≤ 3.4e-9); three by
+  the classical limit (≤ 1.1e-5), the Born limit off the curve (≤ 8.4e-4) and convergence (≤ 7.0e-4). The refits move A
+  and ℓ₀ by less than one standard error.
+- **The edges.** The crossing sits at ℓ_new 1.84–1.98 everywhere, predicted peak 0.958–0.979; no (v) value exceeds 0.95
+  at a fitted point; f = 0 for 0 < ln R ≤ R₀ where R·S(L) gives up to 1.0e-2 at ln R = 0; the chain's 100-iteration limit
+  changes f by exactly 0 (the fall is infinite there).
+- **The paths.** K_X/K_v1 0.93–1.01 for (v), 1.00–1.01 for (v-A); 07b's candidates' shares recomputed equal to its
+  `paths.txt`.
+- **The reference.** `fraction` equals all 3595 fitted values in `minform.json` bit for bit.

@@ -1920,3 +1920,227 @@ the choice.
 the power wall's law is unchanged (§7.6), and the stored ℓ, k_ex and regime labels of every history move (§7.8), which is
 what U12's new label guards. Two things for 07c's design: the fixed point near the chain's end needs more than production's
 100 iterations (§3 issue), and on the exponential the classical tail's k_ex moves by up to e^{20} (§7.8).
+
+## 8. The min(rise, fall) form (prompt 07b2, 2026-11-18)
+
+**Tree:** branch `power-law-wall` at `dec7793` (the commit adding prompt 07b2). No code changed; §1–§7 above are
+unchanged. **Scripts:** [`prompts/power-law-wall/source/kex/`](../prompts/power-law-wall/source/kex/README.md),
+`minform*.py`, each with a docstring giving its command; 07b's scripts there are imported, never changed. **Outputs:**
+[`power-law-wall/kex-07b2/`](power-law-wall/kex-07b2/). Prompt 07b2's §5 rulings governed. One-minute loads 4.8–26 over
+the session, beside every stage-2 timing.
+
+**The form** (README §6.13), for ln R > 0: f = 1 − exp(−min(y_rise, y_fall)), y_rise = G(ln R − R₀)₊^P(1 + Q ln L)₊,
+y_fall = A/(ℓ − ℓ₀) where the new chain (k_ex = ½E^{1/2}|V‴/V″|) has a solution and ℓ > ℓ₀, +∞ otherwise. The
+classical region (ln R ≤ 0) stays R·S(L) and is not fitted. Variants: **(v)** six constants per n; **(v-L)** the fall
+A/(ℓ − ℓ₀ − C ln L); **(v-A)** A = 2.69; **(v-J)** A and ℓ₀ shared by n = 1 and 2; **(vi)**, proposed here, the soft
+minimum y = m(1 + (m/M)^s)^{−1/s} (m, M the smaller and larger y; (v) as s → ∞), to test whether the peak is rounded.
+**The selections**, each over the points with the field back out and ln R > 0.3: **S1** 07b's fit_law selection (chain
+points at every ℓ with `n2_ok`, gap points with `gap_ok`); **S2** S1 with `planner_ok` on every point at n = 1 (= S1 at
+n = 2); **S3** ln(V₀/M⁴) ≤ 10 at both n, every set. The fit: unweighted least squares in f by `curve_fit` (maxfev 100 000)
+of `minform.fraction` mapped over the points, from four starts; standard errors from the covariance (scaled by the
+residual variance).
+
+### 8.1 The reproduction (prompt §1.1) — [`reproduce.txt`](power-law-wall/kex-07b2/reproduce.txt)
+
+07b's (iii) and (iv), re-fitted by `minform_reproduce.py`'s own scalar forms with 07b's starts, at n = 1 under fit_law's
+selection and under note 07b §0.3's, and at n = 2: all 36 constants equal `kex-07b/fits.json` at the digits `fits.txt`
+prints (ℓ_g 2.25, 1.55, 1.55; e.g. n = 1 (iv) G 0.0180, R₀ 1.6111, P 1.5461, Q 1.0093, B₀ −0.1041, C 0.3132). (v) on the
+orchestrator's scratch selection (65 points, 44 chain, 21 gap; start (0.02, 1.6, 1.5, 1.0, 2.6, 1.1)): G 0.0180, R₀ 1.610,
+P 1.546, Q 1.008, A 2.42, ℓ₀ 1.243, max 0.071 (chain) / 0.046 (gap): README §6.13's numbers to their printed digits. The
+like-for-like tables (§8.3) also reproduce 07b's residuals of (i)–(iv) on S1 (n = 1: 0.353 / 0.350 / 0.047 for (i)).
+
+### 8.2 The form and its variants (prompt §1.2–§1.4) — [`fits.txt`](power-law-wall/kex-07b2/fits.txt)
+
+On 07b's points (185; best of four starts; ± one standard error):
+
+| fit | G | R₀ | P | Q | A | ℓ₀ | other | SSE |
+|---|---|---|---|---|---|---|---|---|
+| n=1 S1 (v) | 0.0195 ± 0.0095 | 1.695 ± 0.442 | 1.508 ± 0.170 | 1.031 ± 0.246 | 3.258 ± 0.357 | 0.268 ± 0.319 | | 0.3946 |
+| n=1 S1 (v-L) | 0.0180 ± 0.0085 | 1.611 ± 0.435 | 1.546 ± 0.167 | 1.009 ± 0.218 | 2.243 ± 0.247 | 0.381 ± 0.197 | C 0.356 ± 0.059 | 0.3124 |
+| n=1 S2 (v) | 0.0180 ± 0.0033 | 1.610 ± 0.168 | 1.546 ± 0.064 | 1.008 ± 0.086 | 2.420 ± 0.114 | 1.243 ± 0.095 | | 0.0363 |
+| n=1 S2 (v-L) | as (v) | | | | 2.396 ± 0.141 | 1.210 ± 0.151 | C 0.024 ± 0.085 | 0.0363 |
+| n=1 S3 (v) | 0.0192 ± 0.0028 | 1.721 ± 0.136 | 1.498 ± 0.054 | 1.094 ± 0.083 | 2.503 ± 0.076 | 1.190 ± 0.065 | | 0.0312 |
+| n=1 S3 (v-L) | as (v) | | | | 2.459 ± 0.097 | 1.161 ± 0.077 | C 0.027 ± 0.039 | 0.0310 |
+| n=1 S3 (v-A) | as (v) | | | | 2.69 held | 1.044 ± 0.032 | | 0.0336 |
+| n=2 S1 = S3 (v) | 0.0169 ± 0.0047 | 1.324 ± 0.247 | 1.672 ± 0.102 | 0.862 ± 0.090 | 2.538 ± 0.077 | 1.181 ± 0.073 | | 0.0196 |
+| n=2 (v-L) | as (v) | | | | 2.536 ± 0.091 | 1.179 ± 0.106 | C 0.001 ± 0.040 | 0.0196 |
+| n=2 (v-A) | as (v) | | | | 2.69 held | 1.051 ± 0.037 | | 0.0212 |
+| (v-J) S3 | n=1 and n=2 rises as (v) | | | | 2.523 ± 0.053 | 1.183 ± 0.048 | | 0.0509 |
+| (v-J) S2 | n=1 rise as S2 (v) | | | | 2.500 ± 0.066 | 1.200 ± 0.060 | | 0.0564 |
+| (v-J) S1 | | | | | 2.982 ± 0.189 | 0.608 ± 0.173 | | 0.4455 |
+
+- **The rise and the fall decouple.** On every selection the rise's four constants are the same in (v), (v-L), (v-A) and
+  (vi) to the printed digits: the points where the rise is active fix it.
+- **The L term of the fall** (v-L): C = 0.027 ± 0.039 (n = 1, S3), 0.024 ± 0.085 (S2), 0.001 ± 0.040 (n = 2); 0.36 ± 0.06
+  only on S1 at n = 1, where the off-curve corners (ln(V₀/M⁴) = 10.3–23.8) dominate.
+- **(v-A):** holding A at 2.69 raises the SSE by 8% (n = 1, S3) and 8% (n = 2) and moves ℓ₀ by −0.15 and −0.13; the
+  fall's residual rises from 0.015 to 0.028 (both n).
+- **(vi):** on S2, S3 and at n = 2, s runs off (30–129 among the starts, standard errors infinite) with every other
+  constant and the SSE equal to (v)'s: the data do not ask for rounding. On S1 at n = 1, s = 0.83 ± 0.13, driven by the
+  corners.
+- **The starts:** on S2, S3 and n = 2 all four starts reach the same optimum to the printed digits (s apart). On S1 at
+  n = 1, (v) and (v-A) have a second optimum (SSE 0.4510, 0.4514) from the third start; (vi) fails (overflow) from two
+  starts and reaches 0.30902 and 0.30924 from the other two; (v-L)'s starts agree to within one unit in C's fourth digit.
+- **The points S3 drops** (n = 1, seven, all `grid`, now one-loop): (L, ln R, ln(V₀/M⁴), ℓ_new, f) = (1.3, 15, 13.79,
+  1.266, 0.786), (1.3, 20, 18.79, 1.713, 0.816), (1.3, 25, 23.79, 2.150, 0.329), (2, 15, 10.29, 1.328, 0.808), (2, 25,
+  20.29, 2.224, 0.608), (3, 25, 16.51, 2.367, 0.820), (4, 25, 13.45, 2.539, 0.833). At n = 2, nine `n2-grid`: (2, 20, 14.17,
+  2.110, 0.815), (2, 25, 19.17, 2.751, 0.130), (2, 30, 24.17, 3.398, 0.017), (2, 40, 34.17, 4.686, 0.001), (4, 25, 13.62,
+  2.894, 0.679), (4, 30, 18.62, 3.517, 0.208), (4, 40, 28.62, 4.794, 0.003), (8, 30, 10.78, 4.163, 0.557), (8, 40, 20.78,
+  5.350, 0.186). (S1 drops none at n = 1; S2 drops seventeen: the `curve` sets and the grid rows above ln R = 15.)
+
+**Leave one set out** (S3, (v), 07b's points): n = 1, seven groups (2197, L-M1e-16 with curve-129, L-M5e-16, L-M8e-18
+with curve-119, R-865, grid, lab): spread G 0.0166–0.0222, R₀ 1.655–1.764, P 1.473–1.526, Q 0.974–1.315, A 2.460–2.611,
+ℓ₀ 1.116–1.216; held-out residuals ≤ 0.023 except `lab` (0.062), `2197` (0.048) and `grid` (0.118, at L = 1.3). n = 2:
+without `lab` G 0.0153, R₀ 1.226, A 2.538, ℓ₀ 1.181, held-out 0.044; without `n2-grid` four points remain, not fittable.
+Leave one L out of the grids: n = 1 A 2.503–2.510 and ℓ₀ 1.182–1.191 (the fall is fixed by the curves), held-out
+≤ 0.112 (L = 1.3); n = 2 A 2.510–2.561, ℓ₀ 1.164–1.201, held-out ≤ 0.059.
+
+### 8.3 Like for like (prompt §1.3) — [`fits.txt`](power-law-wall/kex-07b2/fits.txt), [`refit.txt`](power-law-wall/kex-07b2/refit.txt)
+
+Max |fit − f| / rms on the identical points; (a) the fall (variants) or ℓ ≥ 1 (v1, 07b's), (b) the rise or ℓ < 1, (c) no
+chain, (d) all. v1 in the old chain; 07b's (i)–(iv) at `fits.json`'s constants (fit_law's selection, "f"; note §0.3's,
+"p"). 07b's points:
+
+| n, selection (points) | v1 | v1 by the new chain | (i)f | (iii)f | (iv)f | (iii)p | (iv)p | (v) | (v-L) | (v-A) | (v-J) | (vi) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| n=1 S1 (82) (d) | 0.629 / 0.089 | 0.743 / 0.232 | 0.353 / 0.127 | 0.618 / 0.083 | 0.417 / 0.063 | 0.612 / 0.082 | 0.612 / 0.080 | 0.494 / 0.069 | 0.409 / 0.062 | 0.521 / 0.071 | 0.526 / 0.070 | 0.412 / 0.061 |
+| n=1 S2 (65) (d) | 0.091 / 0.027 | 0.743 / 0.250 | 0.350 / 0.125 | 0.072 / 0.026 | 0.107 / 0.034 | 0.071 / 0.024 | 0.071 / 0.024 | 0.071 / 0.024 | 0.071 / 0.024 | 0.071 / 0.025 | 0.071 / 0.024 | 0.071 / 0.024 |
+| n=1 S3 (75) (d) | 0.098 / 0.029 | 0.743 / 0.237 | 0.350 / 0.124 | 0.070 / 0.023 | 0.107 / 0.038 | 0.071 / 0.022 | 0.071 / 0.022 | 0.084 / 0.020 | 0.084 / 0.020 | 0.084 / 0.021 | 0.084 / 0.020 | 0.084 / 0.020 |
+| n=1 S3 (a) / (b) / (c) | 0.074 / 0.098 / 0.067 | 0.262 / 0.743 / 0.043 | 0.186 / 0.350 / 0.047 | 0.064 / 0.070 / 0.046 | 0.107 / 0.071 / 0.046 | 0.039 / 0.071 / 0.046 | 0.039 / 0.071 / 0.046 | 0.015 / 0.084 / 0.048 | 0.015 / 0.084 / 0.048 | 0.028 / 0.084 / 0.048 | 0.015 / 0.084 / 0.048 | 0.015 / 0.084 / 0.048 |
+| n=2 S1 = S3 (50) (d) | 0.125 / 0.051 | 0.638 / 0.156 | 0.355 / 0.091 | 0.056 / 0.020 | 0.056 / 0.020 | | | 0.056 / 0.020 | 0.056 / 0.020 | 0.056 / 0.021 | 0.056 / 0.020 | 0.056 / 0.020 |
+| n=2 (a) / (b) / (c) | 0.125 / 0.112 / 0.102 | 0.275 / 0.638 / 0.064 | 0.177 / 0.355 / 0.045 | 0.039 / 0.041 / 0.056 | 0.039 / 0.041 / 0.056 | | | 0.015 / 0.041 / 0.056 | 0.014 / 0.041 / 0.056 | 0.028 / 0.041 / 0.056 | 0.015 / 0.041 / 0.056 | 0.015 / 0.041 / 0.056 |
+
+(Every cell, with the mean and the count, and (ii), is in `fits.txt`; n = 2 has one set of 07b's constants, U15's.) On the
+points each selection drops: S3's seven at n = 1, (v) 0.597, v1 0.629, (i)f 0.353, (iii)f 0.618, (iv)p 0.612; S3's nine
+at n = 2, (v) 0.671, v1 0.999, (i) 0.529, (iii) = (iv) 0.679; S2's seventeen, (v) 0.602, v1 0.629. (v) fitted on S3 scores
+0.091 on S2's points and 0.597 on S1's.
+
+**The sharpness** (prompt §3): v1 read in the new chain misses by 0.262 (a) and 0.743 (b) where v1 in its own chain
+misses by 0.074 and 0.098 (n = 1, S3): the tables catch a law scored on the wrong chain.
+
+**With the new points** (`refit.txt`; 221 points): n = 1 S3 (86) (v) 0.015 / 0.074 / 0.047, all 0.074 / 0.021; v1 0.098 /
+0.030; (iii)f 0.070, (iv)p 0.071, (i)f 0.350 (with (i) and (ii) taking f = 1 where ℓ + B₀ − C ln L ≤ 0, as 07b's paths.py
+does, which 07b2's L-M1e-16 points reach); n = 2 S3 (60) (v) 0.015 / 0.064 / 0.057, all 0.064 / 0.021; v1 0.125 / 0.049;
+(iii) = (iv) 0.071. n = 1 S2 (76): (v) 0.065; n = 1 S1 (93): (v) 0.503, (v-L) 0.425, (vi) 0.424.
+
+### 8.4 The new points, predicted first (prompt §1.5) — [`prediction.json`](power-law-wall/kex-07b2/prediction.json), [`stage2_points.txt`](power-law-wall/kex-07b2/stage2_points.txt), [`prediction_scored.txt`](power-law-wall/kex-07b2/prediction_scored.txt)
+
+`prediction.json` was written at **2026-11-18T01:07:44** (HEAD `dec7793`), with (v)'s S3 constants (n = 1 G 0.019196,
+R₀ 1.72132, P 1.49802, Q 1.09368, A 2.50273, ℓ₀ 1.18959; n = 2 G 0.016934, R₀ 1.32346, P 1.67207, Q 0.86198, A 2.53765,
+ℓ₀ 1.18110) and 36 points. The first point started at **01:07:49**; the run ended at 01:09 (121 s). Not changed after
+(`reference.txt`: its constants equal `minform.json`'s bitwise; its 36 values re-evaluate bitwise).
+- **n = 1 laboratory curve** (ln(V₀/M⁴) 3.345), seven at ℓ_new 1.0, 1.6, 1.75, 1.95, 2.1, 2.5, 3.4 (predicted crossing 1.95);
+- **n = 1 L-M1e-16** (−129.27), eight at 1.0, 1.25, 1.6, 1.8, 1.95, 2.2, 2.6, 3.4 (crossing 1.90). Chosen over L-M8e-18
+  because its region held three measured rows, none back out;
+- **n = 2 laboratory curve** (3.345 in crossover's U15 formula), nine at 0.5, 0.9, 1.3, 1.65, 1.9, 2.1, 2.5, 3.2, 4.0;
+- **held out**, twelve inside S3 (seven at n = 1, five at n = 2; five on the rise, two of them with no chain, three at the
+  crossing, four on the fall), each at d ≥ 1.11 from every measured row and ≥ 1.97 from every other new point, d = √((Δ ln R/2.5)² +
+  (Δ ln L/0.2)²), half the grids' spacing in ln R and about half in ln L.
+
+Each by `stage2_kex.run_point_kex` (form v3) under 07b's scheduler: 2–32 s each, started at loads 8.0–13.5; none near 30
+minutes; |ΔE/E| ≤ 3.4e-9 at all 36; f_modes equals the balance to the printed digits. 21 came back out, 15 did not (all of
+those predicted at f ≥ 0.83, near the peak).
+
+**Validation** (`stage2_validate.txt`; three points: the n = 1 laboratory crossing ℓ_new 1.95, L-M1e-16's fall ℓ_new 2.6,
+n = 2's rise ℓ_new 1.3; loads 18.5–26 during it):
+- **energy**, at every point: ≤ 3.4e-9;
+- **classical limit** (loop off against walls.py's test field, tolerance 1e-4): −1.5e-7, +1.1e-5, +1.4e-6;
+- **Born limit** (tolerance 2e-3), off the curve at each point's L where ℓ_new = 6 (07b's D4: on the curve k_IR = 10 m_ta
+  lies above k_ex): +8.4e-4, +8.1e-4, +8.3e-4;
+- **convergence** (crossover's V4 variants, tolerance ±6e-3): largest 1.6e-4, 3.4e-4, 7.0e-4.
+
+**The prediction's residuals** (f − f_pred; max / rms / mean (count)):
+
+| group | all | back out | not back out |
+|---|---|---|---|
+| every new point | 0.071 / 0.024 / +0.005 (36) | 0.071 / 0.027 / −0.001 (21) | 0.029 / 0.019 / +0.014 (15) |
+| n=1 laboratory curve | 0.032 / 0.017 / +0.008 (7) | 0.032 / 0.018 / +0.003 (4) | 0.020 / 0.015 / +0.014 (3) |
+| n=1 L-M1e-16 | 0.029 / 0.019 / +0.006 (8) | 0.022 / 0.016 / −0.010 (2) | 0.029 / 0.020 / +0.012 (6) |
+| n=2 laboratory curve | 0.036 / 0.021 / −0.002 (9) | 0.036 / 0.023 / −0.007 (6) | 0.021 / 0.016 / +0.006 (3) |
+| n=1 held out | 0.064 / 0.030 / +0.022 (7) | 0.064 / 0.032 / +0.021 (5) | 0.025 (2) |
+| n=2 held out | 0.071 / 0.034 / −0.013 (5) | 0.071 / 0.036 / −0.021 (4) | 0.023 (1) |
+| n=1 predicted on the fall | 0.025 / 0.014 / +0.009 (11) | 0.010 / 0.005 / −0.001 (5) | 0.025 / 0.019 / +0.018 (6) |
+| n=1 predicted on the rise | 0.064 / 0.029 / +0.014 (10) | 0.064 / 0.036 / +0.016 (5) | 0.029 / 0.021 / +0.012 (5) |
+| n=2 predicted on the fall | 0.023 / 0.013 / +0.004 (8) | 0.014 / 0.008 / −0.005 (5) | 0.023 / 0.019 / +0.019 (3) |
+| n=2 predicted on the rise | 0.071 / 0.040 / −0.021 (5) | 0.071 / 0.044 / −0.022 (4) | 0.015 (1) |
+
+The largest are on the rise: held-out #8 (n = 2, L 3, ln R 6.5) −0.071 and #1 (n = 1, L 1.6, ln R 11) +0.064. Near the
+peak the measured f exceeds the prediction (mean +0.014 on the points not back out, up to 0.993 at L-M1e-16 ℓ_new 1.8
+against 0.964).
+
+**The sharpness** (prompt §3): with A × 1.1 the fall points with the field back out miss by 0.045 (n = 1) and 0.049
+(n = 2), rms 0.035 and 0.039, against 0.010 and 0.014; with A × 0.9 by 0.040 and 0.037. The prediction catches a 10%
+error in A.
+
+**The refits with the new points** (`refit.txt`; S3, ± one standard error): n = 1 (v) G 0.0202 ± 0.0029, R₀ 1.729 ±
+0.133, P 1.495 ± 0.053, Q 1.035 ± 0.072, A 2.497 ± 0.074, ℓ₀ 1.194 ± 0.063 (was A 2.503, ℓ₀ 1.190); (v-L) C 0.021 ± 0.032;
+(v-A) ℓ₀ 1.042 ± 0.029; n = 2 (v) G 0.0141 ± 0.0040, R₀ 1.205 ± 0.265, P 1.731 ± 0.104, Q 0.908 ± 0.091, A 2.528 ±
+0.076, ℓ₀ 1.183 ± 0.072 (was 2.538, 1.181); (v-L) C 0.008 ± 0.039; (v-J) A 2.514 ± 0.052, ℓ₀ 1.186 ± 0.047. Every A and
+ℓ₀ moved by less than one standard error. Leave one set out with the new points: A 2.458–2.586, ℓ₀ 1.130–1.219 (n = 1);
+the new groups held out miss by 0.023 (L-M1e-16), 0.027 (laboratory), 0.062 (held-out set) at n = 1 and 0.041, 0.071 at
+n = 2.
+
+### 8.5 The crossing, the cap and the edges (prompt §1.6) — [`edges.txt`](power-law-wall/kex-07b2/edges.txt)
+
+- **The crossing** (with the new points' constants; without them within 0.01 in ℓ_new): n = 1 laboratory curve
+  ℓ_new 1.945 (L 4.98, ln R 17.49), predicted peak 0.964, largest measured within 0.5 in ℓ 0.978 (ℓ 1.95, not back out),
+  0.921 back out; L-M1e-16 1.904, 0.970 against 0.993 (not back out); L-M8e-18 1.910, 0.969 against 0.982; n = 2
+  laboratory 1.890, 0.972 against 0.983. Grid columns inside S3: n = 1 L = 4, 6, 8 at ℓ_new 1.93–1.98, peaks 0.959–0.966
+  (L ≤ 3: no crossing inside S3); n = 2 L = 4–100 at ℓ_new 1.84–1.93, peaks 0.966–0.979 (L = 2: none). The crossing sits
+  at ℓ_new = 1.84–1.98 on every curve and column.
+- **The cap.** The largest f (v) predicts inside S3 (L in [0.5, 134]) is 0.9725 (n = 1) and 0.9813 (n = 2), at the
+  crossing at L = 134, and grows with L. The largest measured in S3: 0.9932 (n = 1, L-M1e-16 ℓ_new 1.8, not back out),
+  0.9900 (n = 2); with the field back out 0.9206 and 0.9233. No fitted (v) exceeds 0.95 at any point of any selection, so a
+  cap of 0.95 changes no residual of §8.3.
+- **ln R → 0⁺.** f under (v) is 0 for 0 < ln R ≤ R₀ (1.73 at n = 1, 1.20 at n = 2) on every curve; R·S(L) at ln R = 0 is
+  9.36e-3 (laboratory, n = 1, L 0.678), 1.00e-2 (laboratory, n = 2, L 0.320), 2.65e-5 (L-M1e-16), 3.21e-5 (L-M8e-18),
+  2.36e-5 (L-M5e-16). (v1's gap does the same below its R₀ = 1.56.)
+- **The chain's limit.** At 07b's issue points (laboratory ℓ_new 0.120: 195 iterations; L-M8e-18 ℓ_new 0.305: 107), and
+  on the curves near the chain's start (L-M1e-16 3 of 200 points, up to 144 iterations; L-M8e-18 3, up to 153; n = 2
+  laboratory 1, 105; the n = 1 laboratory scan none), f with the chain found and with it absent differ by exactly 0 under
+  every variant: there ℓ_new ≤ 0.31 < ℓ₀ (+ C ln L), where the fall is +∞ and f is the rise either way.
+
+### 8.6 The paths (prompt §1.7) — [`paths.txt`](power-law-wall/kex-07b2/paths.txt), [`paths_candidates.txt`](power-law-wall/kex-07b2/paths_candidates.txt)
+
+The nine exponential histories of 07b's path map (the power wall's law reads no ℓ). 07b's K_X/K_v1 for (i)–(iv) are
+recomputed equal to `kex-07b/paths.txt` at every history. This prompt's variants (S3, with the new points), K_X/K_v1:
+
+| history | (v) | (v-L) | (v-A) | (v-J) | (vi) | 07b (i)–(iv), fit_law's \| note's |
+|---|---|---|---|---|---|---|
+| cascade-L-M1e-16-A1 | 0.979 | 0.979 | 0.979 | 0.979 | 0.979 | 1.042 1.042 0.976 0.977 \| 1.042 1.031 0.977 0.977 |
+| cascade-L-M5e-16-A1 | 1.009 | 1.009 | 1.009 | 1.009 | 1.009 | 1.032 1.032 1.007 1.007 \| same |
+| cascade-L-M8e-18-A1 | 1.004 | 1.013 | 1.013 | 1.007 | 1.004 | 1.144 1.097 1.008 1.132 \| 1.237 1.097 0.967 0.967 |
+| cascade-P-2197-A0.01 | 0.986 | 0.982 | 1.007 | 0.989 | 0.986 | 0.968 1.026 1.005 0.977 \| 0.978 1.075 1.003 1.003 |
+| cascade-P-2197-A0.05 | 0.963 | 0.955 | 1.008 | 0.968 | 0.963 | 0.993 1.116 1.005 1.005 \| 1.009 1.217 1.001 1.001 |
+| cascade-R-865-A0.05 | 0.936 | 0.925 | 1.001 | 0.942 | 0.936 | 1.018 1.207 1.000 1.017 \| 1.029 1.363 0.994 0.994 |
+| wall-02 exp b2.0 | 0.936 | 0.925 | 1.001 | 0.942 | 0.936 | 1.018 1.207 1.000 1.017 \| 1.029 1.364 0.994 0.994 |
+| wall-02 exp b2.9 | 0.936 | 0.925 | 1.000 | 0.942 | 0.936 | 1.018 1.208 1.000 1.016 \| 1.029 1.364 0.994 0.994 |
+| wall-02 exp b3.05 | 0.934 | 0.922 | 0.999 | 0.940 | 0.934 | 1.016 1.210 0.998 1.015 \| 1.027 1.370 0.993 0.993 |
+
+No candidate of any history has |f(v) − f(v1)| > 0.1. The 6% lower share on the laboratory maps comes from the fall: at
+ℓ_new ≈ 2–30 (v)'s A/(ℓ − ℓ₀) with A 2.50 lies below v1's 2.69/(ℓ_old + 0.97 − 0.41 ln L) by a few per cent of f.
+
+### 8.7 The reference implementation (prompt §1.8) — [`minform.json`](power-law-wall/kex-07b2/minform.json), [`reference.txt`](power-law-wall/kex-07b2/reference.txt)
+
+`minform.fraction(ell, L, ln_R, n, params)`, `ell` None where the chain has no solution, refuses ln R ≤ 0. `minform.json`
+holds every variant on every selection, without and with the new points (46 fits), at full precision, each with its
+points and the values its own fitting model gave at the optimum. `fraction` with the constants read back from the JSON
+equals all 3595 stored values bit for bit; it equals `prediction.json`'s 36 predicted values bit for bit.
+
+### 8.8 The hand-back (for U13; nothing here is a recommendation)
+
+The evidence per option, on the same points (n = 1 | n = 2, S3 with the new points, max |res| over all, and on the fall
+where the law has one):
+- **v1 in the old chain:** 0.098 | 0.125 (fall/ℓ ≥ 1 0.074 | 0.125). It reads ℓ in the old k_ex, which R15 retires.
+- **07b (i)/(ii)** (v1's layout, plateau below ℓ = 1): 0.350 | 0.355, from the plateau.
+- **07b (iii)/(iv)**: 0.070–0.107 | 0.071; their one-loop branch has B₀ ≈ −1.2 and C ≈ 0, i.e. (v)'s fall.
+- **(v):** 0.074 | 0.064 (fall 0.015 | 0.015, rise 0.074 | 0.064, gap 0.047 | 0.057); A 2.497 ± 0.074 | 2.528 ± 0.076,
+  ℓ₀ 1.194 ± 0.063 | 1.183 ± 0.072; predicted 36 new points before they ran to 0.071 (fall points 0.025 | 0.023); the
+  drained share 0.93–1.01 of v1's on the mapped histories.
+- **(v-L):** C consistent with 0 (0.021 ± 0.032 | 0.008 ± 0.039) off the corners; same residuals as (v).
+- **(v-A):** A = 2.69 costs 8% in SSE, fall 0.028 | 0.029, ℓ₀ 1.042 | 1.044; drained share 1.00–1.01 of v1's.
+- **(v-J):** one A, ℓ₀ for both n, 2.514 ± 0.052, 1.186 ± 0.047; same max residuals on S3 as (v).
+- **(vi):** indistinguishable from (v) on S2, S3 and n = 2 (s unbounded).
+- **Which points the law must describe:** every option above misses the off-curve corners (ln(V₀/M⁴) > 10) by 0.6–0.7
+  (S3 drops them; S1 keeps them, where (v-L) and (vi) do better, 0.41–0.42).
+- **No cap** is needed by any residual (§8.5); measured f near the peak reaches 0.993 with the field not back out.

@@ -1,0 +1,42 @@
+# minform_stage2.py validate; start: 1:09  up 18 days,  3:30, 2 users, load averages: 19.86 11.03 9.13
+# prediction.json written 2026-11-18T01:07:44+00:00 (at HEAD dec779308750b8a75d0444340dcb8e42d4723d33); this run started 2026-11-18T01:09:57+00:00
+# start 07b2 lab n=1 ell_new~1.95 (running 1, load 19.86)
+# start 07b2 lab n=1 ell_new~1.95 (running 2, load 19.86)
+# start 07b2 lab n=1 ell_new~1.95 (running 3, load 19.86)
+# start 07b2 L-M1e-16 ell_new~2.6 (running 4, load 19.86)
+classical 07b2 lab n=1 ell_new~1.95: L=4.99310 loop off, grid [3e-3, 30 k_ex(v3) = 22.0276]: 8 pi^2 rho 3.186691e-03, walls.py 3.186691e-03, rel -1.5e-07 (holds 1e-4); v_out/v_in 0.998875  (18 s, load 19.86 -> 26.13)
+# start 07b2 L-M1e-16 ell_new~2.6 (running 4, load 23.67)
+born 07b2 L-M1e-16 ell_new~2.6 at ln R = 27.2751 (off-curve, ell_new = 6): ell_new 6.0000, k_IR = 10 m_ta = 0.025 k_ex: born.run 7.026412e-01, stage 2 cut 7.032138e-01, rel +8.1e-04 (holds 2e-3); |dE/E| 1.9e-10  (2 s, load 23.67 -> 23.67)
+# start 07b2 L-M1e-16 ell_new~2.6 (running 4, load 22.10)
+classical 07b2 L-M1e-16 ell_new~2.6: L=109.97862 loop off, grid [3e-3, 30 k_ex(v3) = 15.4037]: 8 pi^2 rho 2.079795e-05, walls.py 2.079773e-05, rel +1.1e-05 (holds 1e-4); v_out/v_in 1.000000  (38 s, load 19.86 -> 22.10)
+# start 07b2 lab n=2 ell_new~1.3 (running 4, load 22.10)
+born 07b2 lab n=1 ell_new~1.95 at ln R = 63.1082 (off-curve, ell_new = 6): ell_new 6.0000, k_IR = 10 m_ta = 0.025 k_ex: born.run 6.697637e-01, stage 2 cut 6.703253e-01, rel +8.4e-04 (holds 2e-3); |dE/E| 2.9e-11  (53 s, load 19.86 -> 19.61)
+# start 07b2 lab n=2 ell_new~1.3 (running 4, load 19.61)
+classical 07b2 lab n=2 ell_new~1.3: L=3.17786 loop off, grid [3e-3, 30 k_ex(v3) = 22.3073]: 8 pi^2 rho 3.384627e-03, walls.py 3.384622e-03, rel +1.4e-06 (holds 1e-4); v_out/v_in 0.999599  (16 s, load 22.10 -> 19.61)
+# start 07b2 lab n=2 ell_new~1.3 (running 4, load 19.48)
+convergence 07b2 L-M1e-16 ell_new~2.6: base frac 0.835204 (passes 1, mref 3.3816e-02, kref 4.5529e-01)
+    ppd x2   frac 0.835204 d -6.8e-08 |dE/E| 1.2e-09
+    kmax x2  frac 0.835236 d +3.2e-05 |dE/E| 1.2e-09
+    kmin /2  frac 0.834867 d -3.4e-04 |dE/E| 1.2e-09
+    h /2     frac 0.835204 d -1.8e-07 |dE/E| 1.1e-09
+    EPS /10  frac 0.835197 d -6.7e-06 |dE/E| 2.8e-10
+    F0 /100  frac 0.835186 d -1.8e-05 |dE/E| 3.6e-11
+    largest |d| 3.4e-04 (holds +-0.006)  (21 s, load 22.10 -> 19.48)
+born 07b2 lab n=2 ell_new~1.3 at ln R = 49.9302 (off-curve, ell_new = 6): ell_new 6.0000, k_IR = 10 m_ta = 0.025 k_ex: born.run 6.780878e-01, stage 2 cut 6.786508e-01, rel +8.3e-04 (holds 2e-3); |dE/E| 2.9e-11  (14 s, load 19.61 -> 18.49)
+convergence 07b2 lab n=2 ell_new~1.3: base frac 0.827413 (passes 1, mref 5.5636e-02, kref 2.0414e-01)
+    ppd x2   frac 0.827413 d -1.7e-07 |dE/E| 5.4e-11
+    kmax x2  frac 0.827414 d +1.2e-06 |dE/E| 2.9e-11
+    kmin /2  frac 0.826710 d -7.0e-04 |dE/E| 5.3e-11
+    h /2     frac 0.827413 d -1.3e-07 |dE/E| 5.8e-12
+    EPS /10  frac 0.827411 d -2.0e-06 |dE/E| 4.9e-11
+    F0 /100  frac 0.827411 d -1.8e-06 |dE/E| 5.1e-11
+    largest |d| 7.0e-04 (holds +-0.006)  (156 s, load 19.48 -> 17.70)
+convergence 07b2 lab n=1 ell_new~1.95: base frac 0.978318 (passes 1, mref 1.5012e-02, kref 1.0551e-01)
+    ppd x2   frac 0.978318 d -2.5e-08 |dE/E| 3.3e-11
+    kmax x2  frac 0.978331 d +1.3e-05 |dE/E| 1.6e-11
+    kmin /2  frac 0.978162 d -1.6e-04 |dE/E| 3.1e-11
+    h /2     frac 0.978318 d -4.6e-08 |dE/E| 3.2e-12
+    EPS /10  frac 0.978318 d -4.1e-07 |dE/E| 3.0e-11
+    F0 /100  frac 0.978316 d -2.3e-06 |dE/E| 3.5e-11
+    largest |d| 1.6e-04 (holds +-0.006)  (406 s, load 19.86 -> 7.62)
+# minform_stage2.py validate end (408 s): 1:16  up 18 days,  3:37, 2 users, load averages: 7.62 12.71 11.40

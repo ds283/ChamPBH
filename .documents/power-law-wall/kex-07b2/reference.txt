@@ -1,0 +1,52 @@
+# minform_ref.py; start: 1:15  up 18 days,  3:36, 2 users, load averages: 8.15 13.68 11.66
+  without_new  n1/S1/v        (v): 82 of 82 points bitwise
+  without_new  n1/S1/v-A      (v-A): 82 of 82 points bitwise
+  without_new  n1/S1/v-L      (v-L): 82 of 82 points bitwise
+  without_new  n1/S1/vi       (vi): 82 of 82 points bitwise
+  without_new  n1/S2/v        (v): 65 of 65 points bitwise
+  without_new  n1/S2/v-A      (v-A): 65 of 65 points bitwise
+  without_new  n1/S2/v-L      (v-L): 65 of 65 points bitwise
+  without_new  n1/S2/vi       (vi): 65 of 65 points bitwise
+  without_new  n1/S3/v        (v): 75 of 75 points bitwise
+  without_new  n1/S3/v-A      (v-A): 75 of 75 points bitwise
+  without_new  n1/S3/v-L      (v-L): 75 of 75 points bitwise
+  without_new  n1/S3/vi       (vi): 75 of 75 points bitwise
+  without_new  n12/S1/v-J     (v-J): 132 of 132 points bitwise
+  without_new  n12/S2/v-J     (v-J): 115 of 115 points bitwise
+  without_new  n12/S3/v-J     (v-J): 125 of 125 points bitwise
+  without_new  n2/S1/v        (v): 50 of 50 points bitwise
+  without_new  n2/S1/v-A      (v-A): 50 of 50 points bitwise
+  without_new  n2/S1/v-L      (v-L): 50 of 50 points bitwise
+  without_new  n2/S1/vi       (vi): 50 of 50 points bitwise
+  without_new  n2/S3/v        (v): 50 of 50 points bitwise
+  without_new  n2/S3/v-A      (v-A): 50 of 50 points bitwise
+  without_new  n2/S3/v-L      (v-L): 50 of 50 points bitwise
+  without_new  n2/S3/vi       (vi): 50 of 50 points bitwise
+  with_new     n1/S1/v        (v): 93 of 93 points bitwise
+  with_new     n1/S1/v-A      (v-A): 93 of 93 points bitwise
+  with_new     n1/S1/v-L      (v-L): 93 of 93 points bitwise
+  with_new     n1/S1/vi       (vi): 93 of 93 points bitwise
+  with_new     n1/S2/v        (v): 76 of 76 points bitwise
+  with_new     n1/S2/v-A      (v-A): 76 of 76 points bitwise
+  with_new     n1/S2/v-L      (v-L): 76 of 76 points bitwise
+  with_new     n1/S2/vi       (vi): 76 of 76 points bitwise
+  with_new     n1/S3/v        (v): 86 of 86 points bitwise
+  with_new     n1/S3/v-A      (v-A): 86 of 86 points bitwise
+  with_new     n1/S3/v-L      (v-L): 86 of 86 points bitwise
+  with_new     n1/S3/vi       (vi): 86 of 86 points bitwise
+  with_new     n12/S1/v-J     (v-J): 153 of 153 points bitwise
+  with_new     n12/S2/v-J     (v-J): 136 of 136 points bitwise
+  with_new     n12/S3/v-J     (v-J): 146 of 146 points bitwise
+  with_new     n2/S1/v        (v): 60 of 60 points bitwise
+  with_new     n2/S1/v-A      (v-A): 60 of 60 points bitwise
+  with_new     n2/S1/v-L      (v-L): 60 of 60 points bitwise
+  with_new     n2/S1/vi       (vi): 60 of 60 points bitwise
+  with_new     n2/S3/v        (v): 60 of 60 points bitwise
+  with_new     n2/S3/v-A      (v-A): 60 of 60 points bitwise
+  with_new     n2/S3/v-L      (v-L): 60 of 60 points bitwise
+  with_new     n2/S3/vi       (vi): 60 of 60 points bitwise
+# 3595 fitted values, 0 not bitwise equal to the reference
+# fraction at ln R = 0: refused (fraction: ln R <= 0 is the classical region (R S(L)), not this law's)
+# prediction.json: 36 of 36 predicted values bitwise from its constants
+# prediction.json's constants equal minform.json's (v) on S3 without the new points, bitwise: True
+# minform_ref.py end: 1:15  up 18 days,  3:36, 2 users, load averages: 8.15 13.68 11.66
