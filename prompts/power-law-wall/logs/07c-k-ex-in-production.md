@@ -5,7 +5,7 @@ classical turning point and the one-loop turnaround, the tuples' pulse-rate fiel
 exponential's one-loop law `one-loop-exponential-v2` in `ExponentialModel` (U13, U14, P99, P100); the drain-model names
 (U11; the retired names refused, `model_of_law` removed); the spectrum's tables, x_* and grid ends in the new x; the label
 2026.13.0; the tests re-pinned (R13–R17, U11–U14, P99–P110).
-**Commit:** this commit, on branch `power-law-wall`, on top of `c4258ef`
+**Commit:** `c8461ab`, on branch `power-law-wall`, on top of `c4258ef`
 **Date:** 2026-11-18, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE.** The gate Consistent holds (§4).
 - **One k_ex:** the production chain equals 07b's `production_v3_*` within 2.6e-11 at its 40 candidates; φ_t, ln ω_t²
@@ -283,7 +283,7 @@ old method and its old tuple (`test_unresolvable_turning_points.py`), the tests 
 ## 7. State handed to the next prompt
 
 **For 07d:**
-- **The commit:** this commit, on top of `c4258ef`. `VERSION_LABEL` 2026.13.0, `FINGERPRINT_FORMAT` 8 (no table or column
+- **The commit:** `c8461ab`, on top of `c4258ef`. `VERSION_LABEL` 2026.13.0, `FINGERPRINT_FORMAT` 8 (no table or column
   changed). 07's stores (2026.12.0) are not extended: 07d builds fresh stores. A 2026.12.0 store's one-loop `alpha_value`
   rows name `one-loop-measured-v1` or `one-loop-measured-pl-v1`, which this tree refuses wherever it reads a drain model;
   a comparison of 07's stores with 07d's reads 07's with `compare_stores` from its own tree or by value.
