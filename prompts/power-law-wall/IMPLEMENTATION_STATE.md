@@ -1021,3 +1021,5 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
 - 2026-11-18: prompt 07c written at the user's word ("We are ready to write 07c, so please do so"), on P99–P110 (README
   §6.14), with no orchestrator note. U14 (the exponential's one-loop law at n other than 1 and 2) is the user's before
   07c is dispatched.
+- 2026-11-18: U14 ruled by the user (README §6.14): "U14: yes, for now, refuse `n >= 3`. I am only expecting to do
+  production runs for `n=1` and `n=2`." 07c's §1.3 made exact; 07c is dispatched at the user's word.

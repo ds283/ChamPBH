@@ -926,6 +926,9 @@ P82, P85–P89 stand and are made exact here. P99–P110 stand unless the user r
 |---|---|---|
 | **U14** — the exponential at n other than 1 and 2 | **(a) no one-loop law**: `one_loop_drain_model` raises at n ∉ {1, 2}, so the parser and the drivers refuse `--A-values` there, as on the power wall (R7). v2's rise was measured at n = 1 and 2 only; U15 (b) let v1 run at every n with n = 1's constants. No run of record uses n ≥ 3 | (b) n ≥ 3 takes n = 2's rise, unmeasured |
 
+**U14 ruled by the user, 2026-11-18, in their words:** "U14: yes, for now, refuse `n >= 3`. I am only expecting to do
+production runs for `n=1` and `n=2`." So (a): the exponential has a one-loop law at n = 1 and 2 only.
+
 ## 7. What this campaign hands to the user
 
 - A tree that builds, stores, exports and plots the power-law model under both drain laws at any n, beside an
