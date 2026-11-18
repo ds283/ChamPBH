@@ -823,6 +823,33 @@ form. Read from 07b's records:
 - **P98 — the reference implementation.** One function of (ℓ or no chain, L, ln R, n) and the constants of each fitted
   variant to full precision, in a JSON file, for 07c's gate Consistent. Not production code.
 
+**07b2 landed** (`2f638e0`, reviewed `213b68c`; verification §8). After it, the orchestrator checked in scratch whether
+the rising branch can also be shared between n = 1 and 2, on 07b2's S3 points with its new ones (146): every constant
+per n, sum of squares 0.06456 (12 constants); A and ℓ₀ shared, 0.06466 (10); every constant shared, 0.09906 (6), largest
+miss 0.075 | 0.090, mean +0.009 | −0.014. Sharing the fall: F = 0.11, p = 0.9. Sharing the rise as well: F = 18,
+p ≈ 6×10⁻¹². Not committed.
+
+**U13 ruled by the user, 2026-11-18, in their words:**
+- The law: "I think it's clearly the one for which 07b2 produced those figures. They seem to show an excellent fit,
+  substantially better than we had before." So `one-loop-exponential-v2` is 07b2's form, f = 1 − exp(−min(y_rise,
+  y_fall)) for ln R > 0.
+- The constants: "I don't see an adequate justification for having separate constants per `n`. I would share them
+  between `n=1` and `n=2`, and use the values obtained from the joint fit." Then, after the check above: "Joint fit as it
+  stands now: falling branch shared, rising branch fitted per-`n`, as described above." So the constants are 07b2's
+  (v-J) on S3 with the new points (`minform.json`, `with_new`, `n12/S3/v-J`): A = 2.514 ± 0.052 and ℓ₀ = 1.186 ± 0.047
+  shared; the rise at n = 1 G 0.0202, R₀ 1.729, P 1.495, Q 1.035, at n = 2 G 0.0141, R₀ 1.204, P 1.731, Q 0.908 (full
+  precision in the file).
+- A = 2.69: "I didn't see any reason to have `A = 2.69` – why are you suggesting this? It doesn't look anywhere near the
+  fit." (v-A) is not used; A is the fitted value.
+- The fit region: "yes, do the sensible cut `ln(V₀/M⁴) ≤ 10`". S3 at both n, as U15 had it at n = 2.
+
+**What the law covers.** For ln R > 0 the one form replaces both of v1's branches: at a one-loop candidate (the chain
+has a solution, ℓ > 0) f is the smaller of the rise and the fall; at a gap candidate (no chain, or ℓ ≤ 0) the fall is
+infinite and f is the rise alone, which is v1's gap form with refitted constants per n; f = 0 where ln R ≤ R₀ or
+1 + Q ln L ≤ 0, as v1's gap. v1's plateau (0.9 below ℓ = 1) and cap (0.95) go. The classical region (ln R ≤ 0) keeps
+R·S(L) unchanged: it reads no k_ex (R16), and U15's L at n = 2 stands. The stored regime label (classical, one-loop, gap)
+is kept; under v2 it no longer selects a formula for ln R > 0, only whether the fall exists.
+
 ## 7. What this campaign hands to the user
 
 - A tree that builds, stores, exports and plots the power-law model under both drain laws at any n, beside an
