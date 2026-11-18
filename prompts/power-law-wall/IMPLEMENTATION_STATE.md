@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-18 · **Status: LIVE — 9 of 13 prompts landed (07b2 landed 2026-11-18, the gate Form holds, no issue opened: the min(rise, fall) form and its variants measured for U13, which is the user's, README §6.13, P91–P98; 07b landed 2026-11-17, the gate Remeasure holds, one issue opened); re-planned 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|, on every potential and at every use; the exponential's one-loop law refitted under `one-loop-exponential-v2`; README §6.12, P73–P90; U11–U12 ruled as proposed, U13 open), with 07b–07d inserted before 08 (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07b reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-18 · **Status: LIVE — 9 of 12 prompts landed (07b2 landed 2026-11-18, the gate Form holds, no issue opened: the min(rise, fall) form and its variants measured for U13, which is the user's, README §6.13, P91–P98; 07b landed 2026-11-17, the gate Remeasure holds, one issue opened); re-planned 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|, on every potential and at every use; the exponential's one-loop law refitted under `one-loop-exponential-v2`; README §6.12, P73–P90; U11–U12 ruled as proposed, U13 open), with 07b–07d inserted before 08 (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07b2 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -29,7 +29,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 06 | Drivers and exports | the model option, the plot scripts, the export layout (P11); the one-loop rows under the model's own drain model, the quanta tools' wall by row, the scope; every potential under `<output>/<label>/<model>/` (R12, P45–P58) | Opus | ✍️ | ✅ | `fda2df2` | [`logs/06-drivers-and-exports.md`](logs/06-drivers-and-exports.md) |
 | 07 | Rehearse | registered builds, exponential bitwise, power law resumed; U7's grid in five stores (the exponential at `a7e0978` and the tip, the power law straight and resumed, both potentials in one store), against 04, the readers on every store (P59–P72) | Opus | ✍️ | ✅ | `bbd99f4` | [`logs/07-rehearse.md`](logs/07-rehearse.md) |
 | 07b | Re-measure k_ex | research in `source/kex/`: the definition against Erickcek et al.; every stage-2 point re-chained, new points where the exponential's regime moved; the candidate laws for `one-loop-exponential-v2` at n = 1, 2; the power wall's law unchanged; the tables and x_* in the new x; the paths; the inventory (R13–R17, P73–P90); then U13 | Opus | ✍️ | ✅ | `0223d50` | [`logs/07b-remeasure-k-ex.md`](logs/07b-remeasure-k-ex.md) |
-| 07b2 | Measure the min(rise, fall) form | research in `source/kex/`: the exponential's law as min(rise in ln R, fall A/(ℓ − ℓ₀) in the new ℓ) and its variants at n = 1, 2, on three selections like for like beside v1 and 07b's (i)–(iv); errors, leave-one-set-out; new points predicted before they are fitted; the crossing, the cap, the edges; the paths; the reference implementation (P91–P98); then U13 | Opus | ✍️ | ✅ | this commit | [`logs/07b2-measure-the-min-form.md`](logs/07b2-measure-the-min-form.md) |
+| 07b2 | Measure the min(rise, fall) form | research in `source/kex/`: the exponential's law as min(rise in ln R, fall A/(ℓ − ℓ₀) in the new ℓ) and its variants at n = 1, 2, on three selections like for like beside v1 and 07b's (i)–(iv); errors, leave-one-set-out; new points predicted before they are fitted; the crossing, the cap, the edges; the paths; the reference implementation (P91–P98); then U13 | Opus | ✍️ | ✅ | `2f638e0` | [`logs/07b2-measure-the-min-form.md`](logs/07b2-measure-the-min-form.md) |
 | 07c | k_ex in production | the V‴ hook, one k_ex at every use, the law as U13 rules, the tables, the label (U11–U12) | Opus | ⬜ | ⬜ | — | — |
 | 07d | Rehearse again | 07's grid at the tip; histories whose law reads no ℓ equal to 07's but the k_ex columns; the exponential's one-loop histories measured against 07's | Opus | ⬜ | ⬜ | — | — |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
@@ -658,6 +658,38 @@ one-minute load 3.5–5.0 during the review.
   held for the stage-2 points. (c) Which points the exponential's law must describe (fit_law's selection or note §0.3's)
   moves every candidate's one-loop residual (0.35–0.62 against 0.07–0.19 at n = 1); that choice is part of U13.
 
+**Orchestrator review of prompt 07b2 (2026-11-18).** 07b2 had no orchestrator note; its prompt's §5 stood in for
+one. The checks below are those of note 07b §3, applied to 07b2. All pass. The re-runs were made by the orchestrator at
+`2f638e0`, from 01:23 local, at one-minute loads of 7–8.
+1. **Scope.** `2f638e0`'s parent is `dec7793`. Its 30 files are the prompt's §4 paths: new files in `source/kex/`
+   (`minform*.py`, `fig/`, three PNG), `kex-07b2/` (13 files), the verification document (+224 lines, additions only, §8),
+   the log, the board, and an added section of `source/kex/README.md` (no line removed). No 07b output, crossover file or
+   `source/wall/` file changed; no `__pycache__` in either. Nothing outside `prompts/power-law-wall/` and `.documents/`;
+   `CLAUDE.md` and `.documents/OPEN_ISSUES.md` unchanged. Nothing pushed.
+2. **The fits.** `minform_reproduce.py`, `minform_fits.py base`, `minform_fits.py new`, `minform_prediction.py` and
+   `minform_ref.py` re-run: each output equal to the committed file apart from its timing lines; `minform.json` byte-equal
+   after the re-run. So 07b's (iii) and (iv) constants and README §6.13's (v) are reproduced as the log states.
+3. **Two new stage-2 points** re-run serially through `minform_stage2.task` from a scratch driver: the first held-out
+   point (n = 1, f 0.6229463793528066, 18 s at load 7.16) and the fourth n = 2 laboratory-curve point (f
+   0.9274983867800551, 17 s at load 6.38). Every recorded field but the timing equal to the committed `PT` line.
+4. **The prediction came first.** `prediction.json` says written 01:07:44 at `dec7793`; `stage2_points.txt` says the run
+   started 01:07:48 and its first point 01:07:49. Its constants equal `minform.json`'s `without_new` S3 (v) at both n,
+   bitwise, so the 36 points were predicted from the fit without them.
+5. **One residual recomputed** by a scratch implementation of the form from `minform.json`'s `with_new` S3 (v) constants
+   and points: max |res| 0.0739, rms 0.0208 (86 points, n = 1); 0.0639, 0.0213 (60, n = 2), as §8.3 gives; the scratch
+   values equal the stored `f_fit` exactly at every point.
+6. **Records.** The log is in §5.1's form (sections 1–7, every deviation classed, D1–D15); verification §8 and `kex-07b2/`
+   exist; the board has row 07b2, the gate Form and the baselines. No issue opened. Corrected here: the status line's
+   "9 of 13" (12 prompts in all), and "this commit" replaced by `2f638e0`.
+
+**For the user (U13).** On S3, the histories' domain, with the new points, (v) misses by 0.074 at n = 1 and 0.064 at
+n = 2, against v1's 0.098 and 0.125 in its own chain; on its falling branch by 0.015 at both. The L term in the fall is
+zero within its error (C 0.021 ± 0.032, 0.008 ± 0.039), A and ℓ₀ agree between n = 1 and 2 within errors, and the
+36 points it predicted before they ran it met to 0.071. Every option misses the corners above ln(V₀/M⁴) = 10 by 0.6–0.7.
+The agent's observations to weigh: the measured f exceeds (v) near the peak where the field did not come back out (up to
++0.029), points the fits leave out; the rise, v1's gap form, carries the largest residuals, at small L; at n = 2 the rise
+rests on one grid.
+
 ## 2. The gates
 
 As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Remeasure (07b), Form (07b2), Consistent (07c), R2 (07d), Close (08). The last three are not yet met.
@@ -976,6 +1008,8 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   ℓ alone beyond its peak, and min(rise, fall) fitting about as v1 did. The user: "Measure the min(rise, fall) form
   properly before 07c". Prompt 07b2 inserted and written (P91–P98, the gate Form), with no orchestrator note; U13 after
   07b2.
-- 2026-11-18: prompt 07b2 dispatched at `dec7793`, and landed (this commit); the gate Form holds. No issue opened. The
+- 2026-11-18: prompt 07b2 dispatched at `dec7793`, and landed (`2f638e0`); the gate Form holds. No issue opened. The
   min(rise, fall) form and its variants, with errors, a prediction of 36 new points made before they ran, the edges and the
   paths, go to the user (U13; verification §8.8); 07c is not written.
+- 2026-11-18: prompt 07b2 reviewed by the orchestrator (this board, "Orchestrator review of prompt 07b2"); all six
+  checks pass. No issue opened by the review. 07c is written only when the user has ruled U13 and asks for it.

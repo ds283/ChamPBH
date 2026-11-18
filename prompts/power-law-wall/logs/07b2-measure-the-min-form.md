@@ -4,7 +4,7 @@
 and the fall A/(ℓ − ℓ₀) in the new ℓ, and its variants (v-L), (v-A), (v-J), (vi), at n = 1 and 2, on three selections
 like for like beside v1 and 07b's (i)–(iv); errors and leave-one-set-out; 36 new stage-2 points predicted before they
 ran; the crossing, the cap and the edges; the paths; the reference implementation (P91–P98).
-**Commit:** this commit, on branch `power-law-wall`, on top of `dec7793`
+**Commit:** `2f638e0`, on branch `power-law-wall`, on top of `dec7793`
 **Date:** 2026-11-18, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE.** The gate Form holds (§4). Nothing is ruled: U13 is the user's.
 - **The reproduction:** 07b's (iii) and (iv) at n = 1 (both selections) and n = 2 to `fits.json`'s printed digits;
