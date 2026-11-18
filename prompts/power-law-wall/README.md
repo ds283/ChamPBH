@@ -769,7 +769,8 @@ The table below is the proposal as it was put.
 
 ### 6.13 The min(rise, fall) form: asked for by the user, 2026-11-18
 
-**What was found** (the orchestrator, 2026-11-18, in scratch at `4f9b1bd`, not committed). After 07b the user asked why
+**What was found** (the orchestrator, 2026-11-18, in scratch at `4f9b1bd`; its scripts, figures and residuals were committed
+later at the user's request, in [`source/kex/probe-07b/`](source/kex/probe-07b/README.md)). After 07b the user asked why
 ℓ moved on the exponential, where −d ln V/dφ and V‴/V″ had been expected to agree, and whether 07b's fits had the wrong
 form. Read from 07b's records:
 - **Why ℓ moved.** The wall is V₀e^u with u = (M/φ)ⁿ, not V ∝ e^{λφ}. |V‴/V″| = λ[n²u² + 3n(n+1)u + (n+1)(n+2)]/[nu(nu +
