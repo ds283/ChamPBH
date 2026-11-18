@@ -128,7 +128,7 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 | 07b | `07b-remeasure-k-ex.md` | *(Inserted 2026-11-17 on R13–R17, §6.12.)* Research in `source/kex/`, no production change: the definition and its check against Erickcek et al.; every stage-2 point of crossover and of 02 re-chained, its regime re-classified; new stage-2 points where the exponential's regime moved; the candidate laws for `one-loop-exponential-v2` against them, at n = 1 and 2; the power wall's law shown unchanged; the three spectrum tables and x_* in the new x; the mapped paths re-chained; the inventory of every use of k_ex for 07c. Then U13 | Opus |
 | 07b2 | `07b2-measure-the-min-form.md` | *(Inserted 2026-11-18 at the user's word, §6.13.)* Research in `source/kex/`, no production change: the form f = 1 − exp(−min(y_rise, y_fall)), the rise in ln R and L as v1's gap, the fall A/(ℓ − ℓ₀) in the new ℓ with no L term, and its variants, at n = 1 and 2; on three stated selections, like for like beside v1 and 07b's (i)–(iv); parameter errors and leave-one-set-out; new stage-2 points on the history curves and a held-out set predicted before they are fitted; the crossing, the cap and the edges; the paths; the reference implementation. Then U13 | Opus |
 | 07c | `07c-k-ex-in-production.md` | *(Inserted 2026-11-17; as written 2026-11-18 on P99–P110, §6.14.)* As 07b's measurements and U11–U13 rule: the third-derivative hook on every model; k_ex = ½E^{1/2}\|V‴/V″\| in `classical_turning_point` and `one_loop_turnaround`; the exponential's law under `one-loop-exponential-v2`, `one-loop-measured-v1` retired; the spectrum tables and x_* re-measured; every other use of the inventory; the label; tests re-pinned with old and new values | Opus |
-| 07d | `07d-rehearse-again.md` | *(Inserted 2026-11-17.)* 07's grid rebuilt at the tip in fresh stores, registered, on the isolated cluster; every history whose law reads no ℓ equal to 07's in its integration and BBN, with only the k_ex columns moving; the exponential's one-loop histories under v2 against 07's under v1, measured; the readers on every store | Opus |
+| 07d | `07d-rehearse-again.md` | *(Inserted 2026-11-17; as written 2026-11-18 on P111–P124, §6.15.)* 07's grid rebuilt at the tip in fresh stores, registered, on the isolated cluster; every history whose law reads no ℓ equal to 07's in its integration and BBN, with only the k_ex columns moving; the exponential's one-loop histories under v2 against 07's under v1, measured; the readers on every store | Opus |
 | 08 | `08-close.md` | `.documents/power-law-wall-verification.md`, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the science run (its grid's inputs from 04), the issues and the indexes | Opus |
 
 Written one at a time, each after the previous one lands and is reviewed. 03 waits for U3–U5, and is dropped if they
@@ -928,6 +928,85 @@ P82, P85–P89 stand and are made exact here. P99–P110 stand unless the user r
 
 **U14 ruled by the user, 2026-11-18, in their words:** "U14: yes, for now, refuse `n >= 3`. I am only expecting to do
 production runs for `n=1` and `n=2`." So (a): the exponential has a one-loop law at n = 1 and 2 only.
+
+### 6.15 Proposed with prompt 07d, 2026-11-18
+
+Written by the orchestrator at the user's word ("Please write 07d (and an orchestration note, if needed) now"), after 07c
+landed (`c8461ab`, reviewed `2e3c551`), on P87–P89 and P109, 07's prompt, note and log, 07c's log §7, and a survey of
+the tip and of 07's records (orchestrator note 07d §0). P87 stands and is made exact here. P111–P124 stand unless the
+user rules otherwise. None needs a ruling before 07d is dispatched.
+
+- **P111 — the stores.** Four fresh stores at the tip, `power-law-wall-07d-exp`, `-pl`, `-pl-resumed` and `-mixed`, built
+  by 07's commands (prompt 07 §1.3) with only `--database` and `--job-name` changed. 07's `base` is not rebuilt, and
+  07's four tip stores, built at `945bf5d`, are the comparison: no line of code differs between `945bf5d` and 07c's base
+  `c4258ef`. 07's stores are read only through `sqlite3` `mode=ro`, never by the tip's drivers or tools, except the one
+  refusal of P117. They are not retired here. Reason: P87; a 2026.12.0 store is never extended at 2026.13.0 (U12).
+- **P112 — one cluster**, from this worktree, at 2026.13.0 and format 8, with 07's probe (prompt 07 §1.2) run before the
+  first build. Reason: one tree builds; the probe still shows the data files read in every process, as before.
+- **P113 — the interruption**, as P63: `pl-resumed`'s run `a`, `SIGTERM` at the banner `RUNNING PIPELINE FOR MODEL
+  QCD_Cosmology, A = 0.05 (one-loop-inverse-power-v1)`, the window read from 07d's own `pl-a`; one retry into
+  `-pl-resumed2` on a miss; a second miss is a stop.
+- **P114 — the k_ex columns**, by name. A history whose law reads no ℓ (the fixed law, natural mode, and the power
+  wall under both laws) is matched to 07's by its key, with `alpha_value.drain_model` `one-loop-measured-pl-v1` in 07's
+  store matched to `one-loop-inverse-power-v1` in 07d's (U11). Every column both stores hold is compared by `float.hex`,
+  as 07's `compare_histories.py` does, with its exclusions (serials, `version`, `label`, `timestamp`, the timings) and its
+  failure-reason mask (07's ruling (a)). These columns may move, and each that does is listed with the number of values
+  that moved and the largest change:
+  - `ScalarHistoryBounce`: `regime`, `ell`, `log_k_ex_Mp`, `log_m_Mp`, `log_q_Mp`, `birth_margin`, `reflection_margin`,
+    `reflection_margin_N`, `tracker_margin`, `tracker_margin_N`;
+  - `ScalarHistory`: `worst_<kind>_margin`, `worst_<kind>_margin_N` and `<kind>_failing_share` for birth, reflection and
+    tracker, `unassessed_share`, and of the drain record `candidates_<regime>`, `drained_share_<regime>`, `ell_min`,
+    `unresolvable_assessments`, `all_worst_<kind>_margin`, `all_worst_<kind>_margin_N` and `all_<kind>_failing_share`;
+  - `extra_data`'s `margins`, key by key.
+
+  Any other value that differs is a stop: in particular every sample, every BBN value, `alpha_eff`, `delta_K_Mp4`,
+  `share`, `parking_share`, the parking and release N and the counts of reflections and integrations. Under the power
+  wall's law `drained_share_<regime>` may move only between regimes: their sum, and each candidate's `delta_K_Mp4`, are
+  compared bitwise. A candidate that 07 assessed and 07d does not (`regime` `unassessed`), as below the third hook's range
+  (`[07c-the-third-hook-leaves-float-range-below-phi-1e-103-mp]`), changes the power wall's drain and is a stop.
+- **P115 — the exponential's one-loop histories, measured.** Matched by key with `one-loop-measured-v1` (07) to
+  `one-loop-exponential-v2` (07d): per history, its outcome, ΔN_eff today and at 1 MeV, Y_p, D/H, the drained share per
+  regime and the parking share, the candidates per regime, `ell_min`, the parking and release N, the reflections, the
+  integrations and the tuning's iterations, 07 beside 07d. A history that fails in one only is reported with its
+  reason. Measured, not judged (P87).
+- **P116 — the tip's own identities**, as 07's §2.2 and §2.4, within 07d: `pl-resumed` equal to `pl` by
+  `compare_stores.py` (`RESULT: equal`, `problems: none`), by `store fingerprint` and by its exports; `mixed` equal to
+  `exp` (exponential) and to `pl` (n = 1) in every shared column, and in its exports. Any difference is a stop.
+- **P117 — the readers**, as 07's R1–R7 on 07d's four stores, from this worktree:
+  - R1 the inventory, `problems: none`; R2 the exports without figures; R7 `histories.py`;
+  - R3 the figures **on `exp`**, not `pl`: the exponential's one-loop law is what moved, and 07 drew the power law's;
+  - R4 07's three refusals, the banner's model name updated, and a fourth: `main.py --config exponential.yaml
+    --n-values 3 --A-values 1` refused at parse (U14), before Ray, against a path that does not exist;
+  - R5 the quanta tools on every root, each row's `spectrum_model` `R8-<wall>-v2`, and `plot_quanta_grid` on `pl` (the
+    open issue `[06-plot-quanta-grid-refuses-two-n-at-one-cell]`, a measurement);
+  - R6 the BBN re-solve on `exp` (fixed α 0.1, and the one-loop law at A = 1) and on `pl` (A = 1, n = 1 and 2), at
+    4 × 10⁻³¹ M_P and β = 2, each equal to the stored values to its ten digits;
+  - **R8, U12's guard**, last of all, after every comparison: the tip's `plot_by_beta.py --no-plots` on 07's `exp` store,
+    with its build's options. It must exit without writing an export and leave the store's `shasum` unchanged. One that
+    exports 07's rows as current is a stop. What it prints is recorded.
+
+  Every reader's store `shasum` before and after; a change is a stop.
+- **P118 — the exports against 07's.** Each of 07d's export roots against 07's (`var/power-law-wall/07/`), file by file,
+  with a one-loop directory named by 07's drain model mapped to 07d's. Where the law reads no ℓ, only the columns P114
+  lets move may differ (in `histories.csv`, the failing shares and `unassessed_share`; the `drain_model` column renamed
+  under U11); anything else is a stop. The exponential's one-loop files and every quanta file (new tables and x_*) are
+  measured: which columns differ, and by how much.
+- **P119 — the margins** (P88): per history, the three failing shares, `unassessed_share` and the worst margins, 07
+  beside 07d, and the count of histories in which each failing share rose, fell or held. `MARGIN_THRESHOLD` is not
+  changed.
+- **P120 — the domain and the third hook** (P109). For every exponential one-loop candidate, ln(V₀/M⁴) from its stored row
+  (V₀ = E/(e^L − 1), with M from the history's key); the largest and how many exceed 10. For every potential and n, the
+  least φ_t over the grid's candidates, from the stored E with the model's closed form (the power wall φ_t =
+  M(V₀/E)^{1/n}), and |(ln V)‴| there against the largest float, in decades.
+- **P121 — the costs**, per store and per history, beside 07's, with the loads at launch.
+- **P122 — the scripts** in `.documents/power-law-wall/rehearse-07d/`: 07's (`rehearse-07/`) copied and adapted, each
+  adaptation shown by a diff in `out/`; `compare_histories.py` gains a mode for P114 (the drain-model map and the k_ex
+  columns reported, not failed) and `compare_v2.py` is new for P115. `rehearse-07/` is a record of 07 and is not edited.
+- **P123 — files and the label.** No code, test or config changes; the counts after are by discovery and equal those
+  before (07c's: 26, 805, 175, 312, 79). The verification document gets §10. `science-runs/README.md` is not edited (no
+  file or column is renamed).
+- **P124 — what 08 reads.** 07d's four stores, its exports and its costs, in place of 07's (P87); 07's stores are left in
+  place, and retiring them (`runregistrykit store retire`, a person's act) is the user's.
 
 ## 7. What this campaign hands to the user
 
