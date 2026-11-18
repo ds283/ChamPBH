@@ -126,6 +126,7 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 | 06 | `06-drivers-and-exports.md` | `main.py`'s model option and its config file; `plot_inputs`, `plot_by_beta`, `plot_ScalarHistory`, `extract_common`, `pipeline_selection` through the model interface; the model in `histories.csv` and in the export paths (P11); the exponential exports byte-identical. *(Added 2026-11-15, P17, P19: the one-loop drain model taken from the model, where they name `DRAIN_MODEL_ONE_LOOP`; the quanta tools' spectrum wall taken from the export's model column.)* *(As written 2026-11-16 on R12 and P45–P58: `--models`, a list, for `main.py` and the plot scripts; each potential's one-loop rows under its own drain model; every export under `<output>/<label>/<model>/` with a `model` column, for every potential; `spectrum_wall` on the model and the quanta tools by row; the registered run's scope; the gate's evidence by two trees on a harness store; Opus, P58.)* | Sonnet |
 | 07 | `07-rehearse.md` | registered builds on the isolated cluster: the exponential at base and tip, bitwise; the power law at n = 1, 2 under both laws, interrupted and resumed, by value and against 04 *(As written 2026-11-16 on P59–P72: U7's grid; five stores, the exponential at `a7e0978` and at the tip, the power law straight and resumed, and both potentials in one store; one cluster per tree; the readers and the quanta tools on every store.)* | Opus |
 | 07b | `07b-remeasure-k-ex.md` | *(Inserted 2026-11-17 on R13–R17, §6.12.)* Research in `source/kex/`, no production change: the definition and its check against Erickcek et al.; every stage-2 point of crossover and of 02 re-chained, its regime re-classified; new stage-2 points where the exponential's regime moved; the candidate laws for `one-loop-exponential-v2` against them, at n = 1 and 2; the power wall's law shown unchanged; the three spectrum tables and x_* in the new x; the mapped paths re-chained; the inventory of every use of k_ex for 07c. Then U13 | Opus |
+| 07b2 | `07b2-measure-the-min-form.md` | *(Inserted 2026-11-18 at the user's word, §6.13.)* Research in `source/kex/`, no production change: the form f = 1 − exp(−min(y_rise, y_fall)), the rise in ln R and L as v1's gap, the fall A/(ℓ − ℓ₀) in the new ℓ with no L term, and its variants, at n = 1 and 2; on three stated selections, like for like beside v1 and 07b's (i)–(iv); parameter errors and leave-one-set-out; new stage-2 points on the history curves and a held-out set predicted before they are fitted; the crossing, the cap and the edges; the paths; the reference implementation. Then U13 | Opus |
 | 07c | `07c-k-ex-in-production.md` | *(Inserted 2026-11-17.)* As 07b's measurements and U11–U13 rule: the third-derivative hook on every model; k_ex = ½E^{1/2}\|V‴/V″\| in `classical_turning_point` and `one_loop_turnaround`; the exponential's law under `one-loop-exponential-v2`, `one-loop-measured-v1` retired; the spectrum tables and x_* re-measured; every other use of the inventory; the label; tests re-pinned with old and new values | Opus |
 | 07d | `07d-rehearse-again.md` | *(Inserted 2026-11-17.)* 07's grid rebuilt at the tip in fresh stores, registered, on the isolated cluster; every history whose law reads no ℓ equal to 07's in its integration and BBN, with only the k_ex columns moving; the exponential's one-loop histories under v2 against 07's under v1, measured; the readers on every store | Opus |
 | 08 | `08-close.md` | `.documents/power-law-wall-verification.md`, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the science run (its grid's inputs from 04), the issues and the indexes | Opus |
@@ -133,7 +134,7 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 Written one at a time, each after the previous one lands and is reviewed. 03 waits for U3–U5, and is dropped if they
 rule the law and spectrum carried over unchanged with `_drain_L` alone, which then moves into 04's first commit by
 ruling. 06 needs only 05's schema; 08 needs 07's stores. *(Added 2026-11-17:)* 07c waits for 07b's measurements and the
-user's U11–U13; 08 needs 07d's stores in place of 07's.
+user's U11–U13; 08 needs 07d's stores in place of 07's. *(Added 2026-11-18:)* 07c waits also for 07b2 (§6.13).
 
 ### 2.1 The gates
 
@@ -147,6 +148,7 @@ user's U11–U13; 08 needs 07d's stores in place of 07's.
 | **Export** | the exponential exports byte-identical to the base's on the same store; the power-law exports carry the model and read back *(amended 2026-11-16 by R12, §6.10: every potential's exports are under `<output>/<label>/<model>/` with a `model` column, so the exponential's equal the base's once that directory and column are accounted for, P54)* | 06 |
 | **R** | exponential builds bitwise base to tip; power-law builds resumed by value; inventories "problems: none" *(made exact 2026-11-16 by P64–P68, §6.11: also the power-law builds against 04's tool route, both potentials in one store equal to each alone, and the readers on every store)* | 07 |
 | **Remeasure** *(added 2026-11-17)* | the definition reproduces Erickcek et al.'s Eqs. (66) and (71); the old chain reproduces every recorded ℓ; every stage-2 point re-chained and every new point validated as crossover's stage 2 was; the candidate laws' residuals stated at n = 1 and 2 beside v1's; the three tables and x_* measured in the new x; the inventory complete; nothing ruled by the agent | 07b |
+| **Form** *(added 2026-11-18)* | the min(rise, fall) form and its variants fitted at n = 1 and 2 on each stated selection, with their parameters, errors and residuals beside v1's and 07b's candidates on the identical point sets; 07b's constants reproduced by the fitting code; the new points validated as crossover's stage 2 was and predicted before being fitted; the paths re-mapped; the reference implementation equal to the fit; nothing ruled by the agent | 07b2 |
 | **Consistent** *(added 2026-11-17)* | one k_ex at every use of 07b's inventory; each model's V‴ hook equal to its closed form and to the centred difference of V″; the law as ruled equal to its reference implementation; the spectrum kernels within 10⁻⁷ of quadrature on the new tables; every history whose law reads no ℓ bitwise in its integration by the tool route; the suites at their counts or above | 07c |
 | **R2** *(added 2026-11-17)* | 07's grid rebuilt at the tip: the power law (both laws) and the exponential's fixed-law and natural-mode histories equal to 07's in every value but the k_ex columns, which are listed; the exponential's one-loop histories measured against 07's; resumed by value; inventories "problems: none"; the readers on every store | 07d |
 | **Close** | documents, issues, indexes and the handover written; the suites at their counts | 08 |
@@ -764,6 +766,62 @@ The table below is the proposal as it was put.
 | **U12** — the label | **(a) `VERSION_LABEL` 2026.13.0**, since stored values change meaning: 07's rehearsal stores were made under 2026.12.0 with the old k_ex, and the label is the guard against reusing a store whose values mean something else (`config/version.py`). `FINGERPRINT_FORMAT` stays 8 unless 07c changes a table or column | (b) keep 2026.12.0, which no store of record uses, and have the user retire 07's stores |
 | **U13** — the exponential's law | **ruled after 07b**, on P79's residuals, as U3 was after 02 | — |
 
+
+### 6.13 The min(rise, fall) form: asked for by the user, 2026-11-18
+
+**What was found** (the orchestrator, 2026-11-18, in scratch at `4f9b1bd`, not committed). After 07b the user asked why
+ℓ moved on the exponential, where −d ln V/dφ and V‴/V″ had been expected to agree, and whether 07b's fits had the wrong
+form. Read from 07b's records:
+- **Why ℓ moved.** The wall is V₀e^u with u = (M/φ)ⁿ, not V ∝ e^{λφ}. |V‴/V″| = λ[n²u² + 3n(n+1)u + (n+1)(n+2)]/[nu(nu +
+  n + 1)] = λ(1 + 2(n+1)/(nu) + …), equal to λ only as u → ∞ (Eq. (66) is that term). At the turnaround u is 1–50, so the
+  new k_ex is 1.06–3.85 times the old (07b's `definition.txt`, E66), and ℓ moves by about its logarithm.
+- **In the new ℓ, f collapses.** Beyond its peak (ℓ_new ≳ 2.3), f = 1 − exp(−A/(ℓ − ℓ₀)) fits with no L term: at n = 1,
+  A 2.60, ℓ₀ 1.08, max 0.046 (28 points; 0.010 on the planner's selection, 15); at n = 2, A 2.59, ℓ₀ 1.12, max 0.012
+  (21). In the old ℓ the same branch needs −C ln L (C ≈ 0.45): without it, max 0.096 and 0.130. The peak sits at
+  ℓ_new ≈ 2.2. Below it f rises, and is not a function of ℓ alone at n = 1 (y = aℓ^b: max 0.54).
+- **So candidates (i) and (ii) carry v1's layout,** a plateau below ℓ = 1 and the fall above it, which was built where
+  the peak sat in the old ℓ.
+- **The form min(rise, fall):** y_rise = G(ln R − R₀)^P(1 + Q ln L), v1's gap form; y_fall = A/(ℓ − ℓ₀), infinite where
+  there is no chain or ℓ ≤ ℓ₀; f = 1 − exp(−min). Fitted on 07b's one-loop and gap points (A free, no L term): n = 1 on
+  the planner's selection, G 0.0180, R₀ 1.610, P 1.546, Q 1.008, A 2.42, ℓ₀ 1.243, max 0.071 one-loop / 0.046 gap; n = 2,
+  A 2.54, ℓ₀ 1.181, max 0.041 / 0.056. On every n = 1 point, max 0.494, from two grid corners.
+- **Like for like** (the same points for every law; back out, ln R > 0.3, at n = 2 ln(V₀/M⁴) ≤ 10), largest miss:
+  n = 1 every point, v1 0.629, (i) 0.332, (iii) 0.612, (iv) 0.417; n = 1 planner's selection, v1 0.091, (i) 0.332,
+  (iii) 0.071, (iv) 0.107; n = 2, v1 0.125, (i) 0.355, (iii) 0.056. 07b's tables set v1 on its own selection (0.074)
+  beside the candidates on theirs, which hold the corners.
+- **The corners** (n = 1, `grid`, L = 1.3 and 2 at ln R = 25: f 0.33 and 0.61) have ln(V₀/M⁴) = 23.8 and 20.3. They
+  are crossover's off-curve corner (its README, U15: "It needs M below laboratory M, which no history of the sample
+  has"), the reason for the n = 2 cut ln(V₀/M⁴) ≤ 10; every history has ln(V₀/M⁴) ≤ 3.3. No cut was applied at n = 1.
+
+**The user's words, 2026-11-18:** "Measure the min(rise, fall) form properly before 07c". So 07b2 is inserted before
+07c. U13 is ruled after it; U11 and U12 stand.
+
+**P91–P98** stand unless the user rules otherwise.
+- **P91 — where.** 07b2, research in `source/kex/`, as 07b: new files only; 07b's scripts and outputs are records of
+  07b and are imported, never changed. Outputs in `.documents/power-law-wall/kex-07b2/`, the verification document §8.
+- **P92 — the form and its variants.** (v) as above, six parameters per n; (v-L), the fall A/(ℓ − ℓ₀ − C ln L), C free,
+  which says whether the L term is needed; (v-A), A held at 2.69; (v-J), A and ℓ₀ shared by n = 1 and 2, each n with its
+  own rise. One further variant may be proposed, with its reason. Classical points (ln R ≤ 0) stay R·S(L) and are not
+  fitted.
+- **P93 — the selections, like for like.** Each fit on three selections: S1, 07b's fit_law selection; S2, the planner's
+  (07b note §0.3); S3, the histories' domain, ln(V₀/M⁴) ≤ 10 at both n (U15's cut, applied at n = 1 too), with every
+  point it drops listed. Every law (v1 by the old chain, 07b's (i)–(iv) at their committed constants, each (v) variant)
+  is scored on the identical point set, by regime and by active branch.
+- **P94 — the errors.** Standard errors from the fit's covariance; leave-one-set-out refits (each set of points left out
+  in turn), with the spread of each parameter and the held-out residuals.
+- **P95 — new stage-2 points, predicted first.** (v)'s S3 fit at each n is committed to a file before any new point
+  runs; then, by 07b's stage-2 machinery and its rule for the machine: on the laboratory curve (ln(V₀/M⁴) ≈ 3.3) and one
+  low-M mapped curve at n = 1, the region from ℓ_new = 1 to the predicted crossing + 1.5, at least six points per curve;
+  on the n = 2 history curve, at least eight points from ℓ_new 0.3 to 4; and at least ten held-out points inside S3 away
+  from every measured row, chosen before they run. Each predicted from the committed fit, then the fits re-run with them.
+  At most 40 points. Validated as 07b's were.
+- **P96 — the crossing, the cap, the edges.** Where rise meets fall on each curve, the predicted peak beside the
+  measured; whether any cap is needed; f at ln R → 0⁺ beside R·S(L) at ln R = 0; the change of f at points where the
+  chain's 100-iteration limit (07b's issue) would call a one-loop point gap.
+- **P97 — the paths.** f under each (v) variant on every candidate of 07b's paths, and the first-order drained share per
+  history beside v1's and 07b's candidates.
+- **P98 — the reference implementation.** One function of (ℓ or no chain, L, ln R, n) and the constants of each fitted
+  variant to full precision, in a JSON file, for 07c's gate Consistent. Not production code.
 
 ## 7. What this campaign hands to the user
 
