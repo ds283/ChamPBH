@@ -4,7 +4,7 @@
 [(n + 1)(n + 2) + 3n(n + 1)u + n²u²]/([(n + 1) + nu]φ) on the exponential), read by `AbstractModel._pulse_rate` in place of
 07c's composition of the three log hooks, which overflowed below φ ≈ 3 × 10⁻¹⁰³ M_P; the stop of 07d reproduced; the range
 07's grid's assessments reach measured; the tool route; `VERSION_LABEL` 2026.14.0 (P125–P134, README §6.16).
-**Commit:** this commit, on branch `power-law-wall`, on top of `7a202b7`
+**Commit:** `bd8d648`, on branch `power-law-wall`, on top of `7a202b7`
 **Date:** 2026-11-19, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE.** The gate Range holds (§3).
 - **The stop reproduced at the base:** `classical_turning_point` on `pl-a`'s inputs raised with `pl-a.log`'s message
@@ -185,7 +185,7 @@ The +4 are `test_k_ex` (d). In both, the two worktree failures (ruling 4) and no
 ## 7. State handed to the next prompt
 
 **For 07d:**
-- **The commit:** this commit, on top of `7a202b7`. `VERSION_LABEL` 2026.14.0, `FINGERPRINT_FORMAT` 8 (no table or column
+- **The commit:** `bd8d648`, on top of `7a202b7`. `VERSION_LABEL` 2026.14.0, `FINGERPRINT_FORMAT` 8 (no table or column
   changed). U12's guard refuses the stopped attempt's 2026.13.0 stores; 07d builds `power-law-wall-07d-r2-*` (P133).
 - **The suites after:** 26, 809 (226 + 583), 175, 79, 312 (CosmologyModels, ComputeTargets, ObjectFactories, RunDrivers,
   tools), with the two worktree failures only.

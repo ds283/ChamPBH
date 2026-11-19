@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-19 · **Status: LIVE — 11 of 13 prompts landed (07c2 landed 2026-11-19, the gate Range holds, one issue closed and none opened: the pulse rate |V‴/V″| as each model's hook in closed form, (n + 2)/φ on the power wall; the stop's histories build; the least margin of 07's grid's assessments 45.0 decades; the label 2026.14.0; 07c2 inserted and written 2026-11-19 on the user's ruling (a) of 07d's stop, on P125–P134, README §6.16; 07d dispatched 2026-11-18 and stopped in run `pl-a`, five power-wall histories at n = 1, β = 2.9, M = 4 × 10⁻³¹ M_P that 07 built failing at the tip, the pulse rate overflowing at φ_t = 2.3 × 10⁻¹⁰³ M_P; nothing committed by it; it restarts after 07c2 in fresh stores, `power-law-wall-07d-r2-*`; 07d written 2026-11-18 with its orchestrator note, on P111–P124, README §6.15; 07c landed 2026-11-18, the gate Consistent holds, one issue closed and one opened: one k_ex, ½E^{1/2}|V‴/V″|, at every use; the exponential's law `one-loop-exponential-v2` in `ExponentialModel`; the power wall's renamed `one-loop-inverse-power-v1`; the label 2026.13.0; 07b2 landed 2026-11-18, the gate Form holds, no issue opened: the min(rise, fall) form and its variants measured; U13 ruled 2026-11-18, the joint fit (fall shared, rise per n) on ln(V₀/M⁴) ≤ 10, README §6.13, P91–P98; 07b landed 2026-11-17, the gate Remeasure holds, one issue opened); re-planned 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|, on every potential and at every use; the exponential's one-loop law refitted under `one-loop-exponential-v2`; README §6.12, P73–P90; U11–U12 ruled as proposed, U13 ruled after 07b2), with 07b–07d inserted before 08 (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07c reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-19 · **Status: LIVE — 11 of 13 prompts landed (07c2 landed 2026-11-19, the gate Range holds, one issue closed and none opened: the pulse rate |V‴/V″| as each model's hook in closed form, (n + 2)/φ on the power wall; the stop's histories build; the least margin of 07's grid's assessments 45.0 decades; the label 2026.14.0; 07c2 inserted and written 2026-11-19 on the user's ruling (a) of 07d's stop, on P125–P134, README §6.16; 07d dispatched 2026-11-18 and stopped in run `pl-a`, five power-wall histories at n = 1, β = 2.9, M = 4 × 10⁻³¹ M_P that 07 built failing at the tip, the pulse rate overflowing at φ_t = 2.3 × 10⁻¹⁰³ M_P; nothing committed by it; it restarts after 07c2 in fresh stores, `power-law-wall-07d-r2-*`; 07d written 2026-11-18 with its orchestrator note, on P111–P124, README §6.15; 07c landed 2026-11-18, the gate Consistent holds, one issue closed and one opened: one k_ex, ½E^{1/2}|V‴/V″|, at every use; the exponential's law `one-loop-exponential-v2` in `ExponentialModel`; the power wall's renamed `one-loop-inverse-power-v1`; the label 2026.13.0; 07b2 landed 2026-11-18, the gate Form holds, no issue opened: the min(rise, fall) form and its variants measured; U13 ruled 2026-11-18, the joint fit (fall shared, rise per n) on ln(V₀/M⁴) ≤ 10, README §6.13, P91–P98; 07b landed 2026-11-17, the gate Remeasure holds, one issue opened); re-planned 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|, on every potential and at every use; the exponential's one-loop law refitted under `one-loop-exponential-v2`; README §6.12, P73–P90; U11–U12 ruled as proposed, U13 ruled after 07b2), with 07b–07d inserted before 08 (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07c2 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -31,7 +31,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 07b | Re-measure k_ex | research in `source/kex/`: the definition against Erickcek et al.; every stage-2 point re-chained, new points where the exponential's regime moved; the candidate laws for `one-loop-exponential-v2` at n = 1, 2; the power wall's law unchanged; the tables and x_* in the new x; the paths; the inventory (R13–R17, P73–P90); then U13 | Opus | ✍️ | ✅ | `0223d50` | [`logs/07b-remeasure-k-ex.md`](logs/07b-remeasure-k-ex.md) |
 | 07b2 | Measure the min(rise, fall) form | research in `source/kex/`: the exponential's law as min(rise in ln R, fall A/(ℓ − ℓ₀) in the new ℓ) and its variants at n = 1, 2, on three selections like for like beside v1 and 07b's (i)–(iv); errors, leave-one-set-out; new points predicted before they are fitted; the crossing, the cap, the edges; the paths; the reference implementation (P91–P98); then U13 | Opus | ✍️ | ✅ | `2f638e0` | [`logs/07b2-measure-the-min-form.md`](logs/07b2-measure-the-min-form.md) |
 | 07c | k_ex in production | the V‴ hook, one k_ex at every use, the law as U13 rules (in `ExponentialModel`, P99), the drain-model names, the tables and x_*, the iteration cap, the label (U11–U12; P99–P110, U14) | Opus | ✍️ | ✅ | `c8461ab` | [`logs/07c-k-ex-in-production.md`](logs/07c-k-ex-in-production.md) |
-| 07c2 | The pulse rate in closed form | |V‴/V″| as a model hook in closed form on both walls, in place of 07c's composition, which overflows below φ ≈ 3 × 10⁻¹⁰³ M_P; the stop reproduced, the range measured, the label 2026.14.0 (P125–P134, README §6.16) | Opus | ✍️ | ✅ | this commit | [`logs/07c2-pulse-rate-in-closed-form.md`](logs/07c2-pulse-rate-in-closed-form.md) |
+| 07c2 | The pulse rate in closed form | |V‴/V″| as a model hook in closed form on both walls, in place of 07c's composition, which overflows below φ ≈ 3 × 10⁻¹⁰³ M_P; the stop reproduced, the range measured, the label 2026.14.0 (P125–P134, README §6.16) | Opus | ✍️ | ✅ | `bd8d648` | [`logs/07c2-pulse-rate-in-closed-form.md`](logs/07c2-pulse-rate-in-closed-form.md) |
 | 07d | Rehearse again | 07's grid at the tip; histories whose law reads no ℓ equal to 07's but the k_ex columns; the exponential's one-loop histories measured against 07's (P111–P124, README §6.15; orchestrator note 07d). *First attempt stopped 2026-11-18 in run `pl-a`, ruled (a); restarts after 07c2 in `power-law-wall-07d-r2-*` (P133)* | Opus | ✍️ | ⏸ 07c2 | — | — |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
 
@@ -749,6 +749,52 @@ phases, not of the slip, since with the one k_ex the stored history's smallest s
 power-n1 the associated piece now carries 1.6e-2 of I at c_a = 1 (1e-3 or less before), so Relativistic quanta's
 outputs on the power wall move with the tables (P89).
 
+**Orchestrator review of prompt 07c2 (2026-11-19).** 07c2 had no orchestrator note; its prompt's §5, "What the
+orchestrator will check on return", names the checks below. All pass. The re-runs were made by the orchestrator at
+`bd8d648`, from 03:45 GMT, at one-minute loads of 2.1–3.2, with scratch probes not committed.
+1. **Scope.** `bd8d648`'s parent is `7a202b7`. Its 14 files are §4's: the three model files and `config/version.py`,
+   six test files (the two ObjectFactories ones for the label alone), the verification document (+176, −0: §10 only),
+   the log, the board and `.documents/OPEN_ISSUES.md`. The production diff is the new hook on `AbstractModel` (raising,
+   no default), its closed form on `ExponentialModel` and `InversePowerModel`, `_pulse_rate` calling it with its check
+   kept, and comments. No `CLAUDE.md`, `.gitignore`, `PRyM/`, README or record change; nothing under `var/` tracked;
+   `git status` `?? venv` only; nothing pushed.
+2. **The suites by discovery:** 26, 809 (226 + 583), 175, 312, 79, as the log states; the +4 in the `test_[g-z]` half.
+3. **The hook against the composition**, at 3000 seeded random points per model of the orchestrator's own (n = 1, 2;
+   M from 1e-34 to 1e-2 M_P; the power wall's φ from 10^−101.5 to 10 M_P, the exponential's u from 1e-3 to 1e3), through
+   the models' own hooks: worst 2.00 eps (power) and 3.00 eps (exponential), within the agent's 32 eps; the power wall's
+   hook equal to (n + 2)/φ bit for bit at all 3000, and finite at the stop's φ_t, 1e-150 and 1e-300 M_P.
+4. **History 2 re-run at the tip** (the power wall, n = 2, one-loop A = 1, β 2, 4e-31 M_P), through the agent's wrapper
+   (read first: it runs `tools/history_and_bbn.py`'s `main` unchanged and dumps the payload), 17 s at load 2.1, against
+   the agent's saved base output by the orchestrator's own comparator over 77 174 leaves: equal but for the timings and
+   18 injections' `pulse_rate_t` (largest 2.75e-16 relative), as the log states; equal to the agent's tip output but for
+   the timings.
+5. **Histories 4–5 against 07's store.** History 5 (n = 1, β 2.9, 4e-31 M_P, A = 1) re-run at the tip, 19 s at load 2.8,
+   against 07's `pl` serial 28 read by `sqlite3` `mode=ro`: ΔN_eff today 0.024529199130091498 and at 1 MeV
+   0.02364613445286405, Y_p 0.24713074010549813, D/H 2.4657251493105763, normalization −276.63072859401797, one tuning
+   iteration, parking N 33.375861349060195, 62 reflections and 123 bounce rows, each equal.
+6. **The range, at three histories,** by the orchestrator's own reading of 07's `pl` samples (ln ρ_kin = 2 ln H +
+   2 ln(−π) − ln 2, E = ρ_kin + V₀u as `assess_infall` forms it, φ_t = M(V₀/E)^{1/n}): serial 23 (n = 1, β 2.9, 4e-31)
+   least φ_t 1.0748e-109 M_P at N 5.0424, 45.01 decades; serial 93 (n = 1, 1e-33) 3.5320e-104, 50.52; serial 95 (n = 2,
+   1e-33) 5.9431e-69, 85.51; each equal to the agent's table to its digits. The end of the range, √(n(n + 1)/DBL_MAX),
+   is 1.0548e-154 and 1.8269e-154 M_P, as the log states.
+7. **The `git grep`** of `_d3_logV_dphi3` outside the records and tests: the hooks, the delegate, comments and
+   `config/version.py`'s dated comment; no production caller.
+8. **The re-pin list against `git diff` of the tests:** the removed assertions are the raises naming `d3_logV_dphi3` in
+   `test_inverse_power_model` (d) and `test_k_ex`, the `NotImplementedError` of a model without the third hook, and the
+   two labels; the added ones are the returns, `pulse_rate_t == (n + 2)/φ_t`, the refusals naming `_pulse_rate_hook` and
+   2026.14.0, as the log lists them. The token grep over the commit's files finds nothing.
+
+Corrected here: "this commit" replaced by `bd8d648` in this board's row and change log and in the log's header and §7;
+the status line's "01–07c reviewed". The agent's D2 corrects the orchestrator's account of the stop: the failing
+assessment was at step 47, N = 3.984, not at the integration's start, and each history's least φ_t falls near N ≈ 5.05,
+at the peak of ρ_kin; README §6.16 and this board's §4 entry carry a dated note. `.documents/OPEN_ISSUES.md` needed no
+correction (35 open: 07c's closed, dated 2026-11-19).
+
+**For the user.** The suites 07d's restart must expect are 26, 809 (226 + 583), 175, 312, 79. By the agent's scaling
+(log §6), the margin of 45 decades at 4e-31 M_P would reach zero on the power wall at n = 1 near M ≈ 4e-76 M_P at
+β = 2.9, an extrapolation for a science grid's planning. Choices to look over: `_pulse_rate` refuses a negative rate
+rather than taking its absolute value (D5), and `RealizedModel` has no delegate for the new hook (D8).
+
 ## 2. The gates
 
 As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Remeasure (07b), Form (07b2), Consistent (07c), Range (07c2, added 2026-11-19), R2 (07d), Close (08). The last two are
@@ -971,6 +1017,9 @@ None.
     Measured margin: the least φ_t of any assessment over 07's grid's 60 power-wall histories is 1.07e-109 M_P (n = 1,
     β = 2.9, M = 4e-31 M_P, near N = 5.04, at the peak of ρ_kin, not at the first assessment), **45.0 decades** above the
     end. `_d3_logV_dphi3` still leaves float range below 2.2e-103 M_P at n = 1, but no production code reads it.
+  - *Corrected 2026-11-19 by 07c2's measurement* (log 07c2 D2, verification §10): the failing assessment was at
+    step 47, N = 3.984, not at the start of the integration; each history's least φ_t falls near N ≈ 5.05, at the peak
+    of ρ_kin.
 
 - **`[07b-the-one-loop-fixed-point-needs-more-than-100-iterations-near-the-chain-end]`** (opened by prompt 07b, 2026-11-17;
   log 07b §6, `.documents/power-law-wall-verification.md` §7.3, §7.4).
@@ -1178,7 +1227,9 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   written, on P125–P134 (README §6.16); 07d's prompt and note amended for its restart in `power-law-wall-07d-r2-*`
   (P133); the first attempt's stores and records left in place, read by nothing, for the user to retire (P134). Not
   dispatched.
-- 2026-11-19: prompt 07c2 dispatched at `7a202b7`, and landed (this commit); the gate Range holds. One issue closed
+- 2026-11-19: prompt 07c2 dispatched at `7a202b7`, and landed (`bd8d648`); the gate Range holds. One issue closed
   (`[07c-the-third-hook-leaves-float-range-below-phi-1e-103-mp]`, §4), none opened. The pulse rate is each model's hook in
   closed form; 07d's stop reproduced at the base and its histories built at the tip, equal to 07's; the least margin of
   07's grid's assessments 45.0 decades; `VERSION_LABEL` 2026.14.0. 07d restarts after 07c2's review (P133).
+- 2026-11-19: prompt 07c2 reviewed by the orchestrator (this board, "Orchestrator review of prompt 07c2"); all eight
+  checks of its §5 pass. 07d's restart is dispatched only at the user's word.

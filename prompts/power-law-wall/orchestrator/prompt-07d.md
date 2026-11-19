@@ -10,7 +10,8 @@ the prompt's dated block governs the Gate, the names and the section, and this n
 the restart as they bound the first attempt, with `power-law-wall-07d-r2-*`, `var/runs/power-law-wall-07d-r2-*` and
 `$L = var/power-law-wall/07d-r2` in place of the first attempt's names wherever they appear, and the counts of 07c2's
 review in §3 check 2. The planner's §0 stays as it was written; its third-hook paragraph is superseded by §6.16. The
-Gate below is the first attempt's; the restart's is re-measured by the orchestrator at dispatch.
+Gate below is the first attempt's; the restart's is re-measured by the orchestrator at dispatch. 07c2 landed `bd8d648`,
+reviewed 2026-11-19: the restart's suites are 26, 809 (226 + 583), 175, 312, 79.
 
 Read [`../README.md`](../README.md) first: §2.1 (the gate R2), §5, §6.12 (P87–P89), §6.14 (P109) and §6.15 (P111–P124).
 Then read the prompt. This note binds 07d only, and governs where it differs from the prompt. The conventions of earlier

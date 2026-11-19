@@ -1047,6 +1047,10 @@ today 0.04163249276504718, the value of 07c's tool route. Its `domain.py`, run o
 exponential one-loop candidates with ln(V₀/M⁴) > 10 (the largest 27.31, at 10⁻³³ M_P and A = 1), outside v2's fitted
 domain and above the bound of 3.3 that P109 assumed; that is P120's to measure on 07d's own stores.
 
+*Corrected 2026-11-19 by 07c2's measurement* (log 07c2 D2, verification §10): the failing assessment was at step 47,
+N = 3.984, not at the first step; each history's least φ_t falls near N ≈ 5.05, at the peak of ρ_kin (E/V₀ ≈ e¹⁸¹ at
+β = 2.9), 45.0 decades above where V″ leaves float range at the least.
+
 **What the stopped attempt left.** In the main checkout's `var/`: `power-law-wall-07d-exp` (complete, 20 histories, its
 sidecar and fingerprint written), `power-law-wall-07d-pl` (runs a and b, 36 histories, no sidecar) and five run records
 (`power-law-wall-07d-{exp-a,exp-b,exp-c,pl-a,pl-b}-*`, all `done`). In this worktree, ignored: the outputs under
