@@ -1,0 +1,24 @@
+## base worktree 2026-11-16 19:03:23 +0000
+a7e0978 Plan the 2026.11.0 science run, the rebuild of 2026.10.0
+19:# Stores made under an earlier VERSION_LABEL are invalid and must not be reused: on 2026-09-29
+100:VERSION_LABEL = "2026.11.0"
+105:# VERSION_LABEL from there: datastorekit.contract.VERSION_LABEL is "label", the name of the version
+95:FINGERPRINT_FORMAT = 7
+models key in exponential.yaml: 0
+ClientRoot(root='/Users/ds283/Documents/Code/ChamPBH', found='/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-KjcVfY/0af07638-982c-4487-88a9-a3ce8d8b3bce/scratchpad/agent-07/base-a7e0978', config_file='/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-KjcVfY/0af07638-982c-4487-88a9-a3ce8d8b3bce/scratchpad/agent-07/base-a7e0978/runregistrykit.toml', runs_root='/Users/ds283/Documents/Code/ChamPBH/var/runs', stores_root='/Users/ds283/Documents/Code/ChamPBH/var/datastores', distributions=('datastorekit', 'raypoolkit', 'ray', 'SQLAlchemy', 'numpy', 'scipy'), stores={'fingerprinter': 'config.fingerprint:fingerprinter'})
+git status before the first base run:
+?? venv
+main.py sha256 at a7e0978: 7b93fae446c425d7ebe014b3efe0a5252e3540844806f9d14b4f09f560758a7d  -
+main.py sha256 at the tip: 2705636433a750115d1c2628e040dcee25c576ed94fec006c273b648a8d6fb87  -
+git diff a7e0978 945bf5d over the data files:
+(end)
+/Users/ds283/Documents/Code/ChamPBH                                                                                                      9df9e13 [main]
+/private/tmp/claude-35086/-Users-ds283--claude-spares-spare-KjcVfY/0af07638-982c-4487-88a9-a3ce8d8b3bce/scratchpad/agent-07/base-a7e0978 a7e0978 (detached HEAD)
+/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall                                                                     945bf5d [power-law-wall]
+git status after the last base run:
+?? venv
+## removal 2026-11-16 20:40:01 +0000
+?? venv
+removed (no --force)
+/Users/ds283/Documents/Code/ChamPBH                                  9df9e13 [main]
+/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall 945bf5d [power-law-wall]

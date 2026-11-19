@@ -1,0 +1,18 @@
+| Run id | Slug | Store | pid | State | Exit | Launched → ended (UTC) | Wall | Load at launch | git_head | git_dirty | script_sha256 | Fingerprint at finish (format, digest, taken) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `power-law-wall-07-base-a-20261116T190412` | `base-a` | base | 83029 | `done` | 0 | 19:04:10 → 19:06:57 | 2 min 48 s | 4.65 | `a7e0978` | true | `7b93fae4…8a7d` | 7, `d0bc61db…18e0`, 19:06:33 |
+| `power-law-wall-07-base-b-20261116T190723` | `base-b` | base | 83771 | `done` | 0 | 19:07:22 → 19:08:54 | 1 min 33 s | 3.79 | `a7e0978` | true | `7b93fae4…8a7d` | 7, `f8f4a0c1…44b7`, 19:08:30 |
+| `power-law-wall-07-base-c-20261116T190908` | `base-c` | base | 84170 | `done` | 0 | 19:09:07 → 19:10:07 | 1 min 1 s | 3.38 | `a7e0978` | true | `7b93fae4…8a7d` | 7, `2b80c50c…8277`, 19:09:43 |
+| `power-law-wall-07-exp-a-20261116T191457` | `exp-a` | exp | 86035 | `done` | 0 | 19:14:56 → 19:17:44 | 2 min 48 s | 5.26 | `945bf5d` | true | `27056364…fb87` | 8, `225e83c4…0f9f`, 19:17:20 |
+| `power-law-wall-07-exp-b-20261116T191802` | `exp-b` | exp | 86387 | `done` | 0 | 19:18:01 → 19:19:37 | 1 min 36 s | 5.85 | `945bf5d` | true | `27056364…fb87` | 8, `f4b75bff…5591`, 19:19:13 |
+| `power-law-wall-07-exp-c-20261116T191947` | `exp-c` | exp | 86789 | `done` | 0 | 19:19:45 → 19:20:46 | 1 min 1 s | 10.14 | `945bf5d` | true | `27056364…fb87` | 8, `2092b200…6086`, 19:20:21 |
+| `power-law-wall-07-pl-a-20261116T192157` | `pl-a` | pl | 87377 | `done` | 0 | 19:21:55 → 19:25:23 | 3 min 29 s | 10.36 | `945bf5d` | true | `27056364…fb87` | 8, `2d02fb5d…6889`, 19:24:57 |
+| `power-law-wall-07-pl-b-20261116T192616` | `pl-b` | pl | 88045 | `done` | 0 | 19:26:14 → 19:28:42 | 2 min 28 s | 8.14 | `945bf5d` | true | `27056364…fb87` | 8, `7983bdf4…8d5d`, 19:28:17 |
+| `power-law-wall-07-pl-c-20261116T192903` | `pl-c` | pl | 90202 | `done` | 0 | 19:29:01 → 19:30:15 | 1 min 15 s | 7.13 | `945bf5d` | true | `27056364…fb87` | 8, `9d4fcf02…ff7a`, 19:29:50 |
+| `power-law-wall-07-pl-resumed-a-20261116T193200` | `pl-resumed-a` | pl-resumed | 91275 | `killed` | 143 | 19:31:58 → 19:34:10 | 2 min 12 s | 4.97 | `945bf5d` | true | `27056364…fb87` | 8, `cc815048…3e54`, 19:33:45 |
+| `power-law-wall-07-pl-resumed-a2-20261116T193454` | `pl-resumed-a2` | pl-resumed | 91941 | `done` | 0 | 19:34:52 → 19:36:54 | 2 min 2 s | 11.74 | `945bf5d` | true | `27056364…fb87` | 8, `2d02fb5d…6889`, 19:36:29 |
+| `power-law-wall-07-pl-resumed-b-20261116T193722` | `pl-resumed-b` | pl-resumed | 92310 | `done` | 0 | 19:37:21 → 19:39:48 | 2 min 27 s | 9.23 | `945bf5d` | true | `27056364…fb87` | 8, `7983bdf4…8d5d`, 19:39:23 |
+| `power-law-wall-07-pl-resumed-c-20261116T193957` | `pl-resumed-c` | pl-resumed | 93222 | `done` | 0 | 19:39:55 → 19:41:15 | 1 min 20 s | 13.87 | `945bf5d` | true | `27056364…fb87` | 8, `9d4fcf02…ff7a`, 19:40:49 |
+| `power-law-wall-07-mixed-a-20261116T201642` | `mixed-a` | mixed | 98248 | `done` | 0 | 20:16:40 → 20:21:31 | 4 min 51 s | 1.95 | `945bf5d` | true | `27056364…fb87` | 8, `7caa9a3c…b088`, 20:21:07 |
+| `power-law-wall-07-mixed-b-20261116T202152` | `mixed-b` | mixed | 98763 | `done` | 0 | 20:21:50 → 20:23:35 | 1 min 45 s | 3.78 | `945bf5d` | true | `27056364…fb87` | 8, `72b35099…9d12`, 20:23:10 |
+| `power-law-wall-07-mixed-c-20261116T202347` | `mixed-c` | mixed | 99069 | `done` | 0 | 20:23:45 → 20:25:05 | 1 min 20 s | 5.25 | `945bf5d` | true | `27056364…fb87` | 8, `7d7a1a4c…57c7`, 20:24:40 |

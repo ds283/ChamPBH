@@ -1,0 +1,5 @@
+plot_quanta_grid: histories.csv rows: fixed 48, marker 26, failed 0, drawn 22
+REFUSED one-loop-measured-pl-v1 A=0.05: two rows in one cell: one-loop-measured-pl-v1 A=0.05 M_Mp=4e-31 n=1 beta=1.2 and one-loop-measured-pl-v1 A=0.05 M_Mp=4e-31 n=2 beta=1.2
+REFUSED one-loop-measured-pl-v1 A=1: two rows in one cell: one-loop-measured-pl-v1 A=1.0 M_Mp=1e-33 n=1 beta=2.0 and one-loop-measured-pl-v1 A=1.0 M_Mp=1e-33 n=2 beta=2.0
+REFUSED one-loop-measured-pl-v1 A=10: two rows in one cell: one-loop-measured-pl-v1 A=10.0 M_Mp=4e-31 n=1 beta=1.2 and one-loop-measured-pl-v1 A=10.0 M_Mp=4e-31 n=2 beta=1.2
+plot_quanta_grid (R8-power-n1-v1, R8-power-n2-v1, assoc scale 1): figures written 0, refused 3, A with no drawn or failed row 0; skipped as fixed-law 48, marker rows 26; wall 0.0 s

@@ -1,3 +1,4 @@
+models: [exponential]
 shards: 16
 abs-tol: 1e-8
 rel-tol: 1e-8

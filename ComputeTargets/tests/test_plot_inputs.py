@@ -795,7 +795,7 @@ class TestTheScripts(unittest.TestCase):
                 for name in (
                     "parameters",
                     "stored_grid",
-                    "exponential_models",
+                    "potential_models",
                     "models",
                 ):
                     self.assertIn(f"plot_inputs.{name}", called)

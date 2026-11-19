@@ -1,0 +1,31 @@
+# minform_paths.py; start: 1:16  up 18 days,  3:37, 2 users, load averages: 10.03 13.02 11.54
+# the variants' S3 constants (minform.json with_new), n = 1: (v) A 2.4967, G 0.0202, P 1.4946, Q 1.0354, R0 1.7293, ell0 1.1935; (v-L) A 2.4596, C 0.0210, G 0.0202, P 1.4946, Q 1.0354, R0 1.7293, ell0 1.1712; (v-A) A 2.6900, G 0.0202, P 1.4946, Q 1.0354, R0 1.7293, ell0 1.0420; (v-J) A 2.5143, G 0.0202, P 1.4946, Q 1.0354, R0 1.7293, ell0 1.1859; (vi) A 2.4967, G 0.0202, P 1.4946, Q 1.0354, R0 1.7293, ell0 1.1935, s 44.6703
+# per history: candidates (non-classical); K_X/K_v1 for 07b's (i)-(iv) under fit_law's | note §0.3's selection (recomputed here; paths.txt's beside) and for this prompt's variants on S3 with the new points; then the candidates where (v)'s f differs from v1's by more than 0.1, counted
+cascade-L-M1e-16-A1                  A=1.0 n=1: 64 candidates (10 non-classical)
+    07b (i)-(iv): 1.042 1.042 0.976 0.977 | 1.042 1.031 0.977 0.977   [paths.txt: 1.042 1.042 0.976 0.977 | 1.042 1.031 0.977 0.977]
+    this prompt: (v) 0.979  (v-L) 0.979  (v-A) 0.979  (v-J) 0.979  (vi) 0.979; candidates with |f(v) - f(v1)| > 0.1: 0
+cascade-L-M5e-16-A1                  A=1.0 n=1: 28 candidates (1 non-classical)
+    07b (i)-(iv): 1.032 1.032 1.007 1.007 | 1.032 1.032 1.007 1.007   [paths.txt: 1.032 1.032 1.007 1.007 | 1.032 1.032 1.007 1.007]
+    this prompt: (v) 1.009  (v-L) 1.009  (v-A) 1.009  (v-J) 1.009  (vi) 1.009; candidates with |f(v) - f(v1)| > 0.1: 0
+cascade-L-M8e-18-A1                  A=1.0 n=1: 228 candidates (161 non-classical)
+    07b (i)-(iv): 1.144 1.097 1.008 1.132 | 1.237 1.097 0.967 0.967   [paths.txt: 1.144 1.097 1.008 1.132 | 1.237 1.097 0.967 0.967]
+    this prompt: (v) 1.004  (v-L) 1.013  (v-A) 1.013  (v-J) 1.007  (vi) 1.004; candidates with |f(v) - f(v1)| > 0.1: 0
+cascade-P-2197-A0.01                 A=0.01 n=1: 13951 candidates (690 non-classical)
+    07b (i)-(iv): 0.968 1.026 1.005 0.977 | 0.978 1.075 1.003 1.003   [paths.txt: 0.968 1.026 1.005 0.977 | 0.978 1.075 1.003 1.003]
+    this prompt: (v) 0.986  (v-L) 0.982  (v-A) 1.007  (v-J) 0.989  (vi) 0.986; candidates with |f(v) - f(v1)| > 0.1: 0
+cascade-P-2197-A0.05                 A=0.05 n=1: 134 candidates (134 non-classical)
+    07b (i)-(iv): 0.993 1.116 1.005 1.005 | 1.009 1.217 1.001 1.001   [paths.txt: 0.993 1.116 1.005 1.005 | 1.009 1.217 1.001 1.001]
+    this prompt: (v) 0.963  (v-L) 0.955  (v-A) 1.008  (v-J) 0.968  (vi) 0.963; candidates with |f(v) - f(v1)| > 0.1: 0
+cascade-R-865-A0.05                  A=0.05 n=1: 40 candidates (40 non-classical)
+    07b (i)-(iv): 1.018 1.207 1.000 1.017 | 1.029 1.363 0.994 0.994   [paths.txt: 1.018 1.207 1.000 1.017 | 1.029 1.363 0.994 0.994]
+    this prompt: (v) 0.936  (v-L) 0.925  (v-A) 1.001  (v-J) 0.942  (vi) 0.936; candidates with |f(v) - f(v1)| > 0.1: 0
+wall-02/exp-n1-M4e-31-b2.0-a0.1      A=1.0 n=1: 49 candidates (49 non-classical)
+    07b (i)-(iv): 1.018 1.207 1.000 1.017 | 1.029 1.364 0.994 0.994   [paths.txt: 1.018 1.207 1.000 1.017 | 1.029 1.364 0.994 0.994]
+    this prompt: (v) 0.936  (v-L) 0.925  (v-A) 1.001  (v-J) 0.942  (vi) 0.936; candidates with |f(v) - f(v1)| > 0.1: 0
+wall-02/exp-n1-M4e-31-b2.9-a0.1      A=1.0 n=1: 42 candidates (42 non-classical)
+    07b (i)-(iv): 1.018 1.208 1.000 1.016 | 1.029 1.364 0.994 0.994   [paths.txt: 1.018 1.208 1.000 1.016 | 1.029 1.364 0.994 0.994]
+    this prompt: (v) 0.936  (v-L) 0.925  (v-A) 1.000  (v-J) 0.942  (vi) 0.936; candidates with |f(v) - f(v1)| > 0.1: 0
+wall-02/exp-n1-M4e-31-b3.05-a0.1     A=1.0 n=1: 61 candidates (61 non-classical)
+    07b (i)-(iv): 1.016 1.210 0.998 1.015 | 1.027 1.370 0.993 0.993   [paths.txt: 1.016 1.210 0.998 1.015 | 1.027 1.370 0.993 0.993]
+    this prompt: (v) 0.934  (v-L) 0.922  (v-A) 0.999  (v-J) 0.940  (vi) 0.934; candidates with |f(v) - f(v1)| > 0.1: 0
+# minform_paths.py end: 1:16  up 18 days,  3:37, 2 users, load averages: 10.03 13.02 11.54

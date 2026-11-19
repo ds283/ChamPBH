@@ -1,0 +1,22 @@
+check on 27 classical-regime bounces: max |ln k_t(rebuilt) - ln k_ex(stored)| = 3.27e-13
+
+by (wall, n, M/eV), all A and beta:
+  ('exp', 1, 2.4353e-06)  N=  47  ln(k_t/k_ta): min    2.6  median    3.4  max    3.6
+  ('exp', 1, 0.00097413)  N= 430  ln(k_t/k_ta): min    2.0  median    2.3  max    2.7
+  ('ipl', 1, 2.4353e-06)  N=  31  ln(k_t/k_ta): min   48.9  median   58.4  max   92.8
+  ('ipl', 1, 0.00097413)  N= 510  ln(k_t/k_ta): min    9.6  median   50.6  max   91.3
+  ('ipl', 1, 2435300000000.0)  N=  38  ln(k_t/k_ta): min   26.1  median   30.6  max   65.1
+  ('ipl', 2, 2.4353e-06)  N=  48  ln(k_t/k_ta): min   24.5  median   26.9  max   43.4
+  ('ipl', 2, 0.00097413)  N= 492  ln(k_t/k_ta): min    4.9  median   23.4  max   41.5
+  ('ipl', 2, 2435300000000.0)  N=  23  ln(k_t/k_ta): min    5.9  median    8.8  max   22.6
+
+by (wall, n, beta) at M = 9.7413e-4 eV, all A:
+  ('exp', 1, 1.2)  N= 172  ln(k_t/k_ta): min    2.0  median    2.7  max    2.7
+  ('exp', 1, 2.0)  N=  93  ln(k_t/k_ta): min    2.0  median    2.2  max    2.5
+  ('exp', 1, 2.9)  N= 165  ln(k_t/k_ta): min    2.0  median    2.2  max    2.3
+  ('ipl', 1, 1.2)  N= 200  ln(k_t/k_ta): min    9.6  median   13.5  max   85.6
+  ('ipl', 1, 2.0)  N=  85  ln(k_t/k_ta): min   32.5  median   55.0  max   88.8
+  ('ipl', 1, 2.9)  N= 225  ln(k_t/k_ta): min   46.5  median   53.5  max   91.3
+  ('ipl', 2, 1.2)  N= 175  ln(k_t/k_ta): min    4.9  median    6.6  max   38.9
+  ('ipl', 2, 2.0)  N=  95  ln(k_t/k_ta): min   20.1  median   24.9  max   40.4
+  ('ipl', 2, 2.9)  N= 222  ln(k_t/k_ta): min   21.4  median   24.5  max   41.5

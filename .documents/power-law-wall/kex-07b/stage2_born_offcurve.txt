@@ -1,0 +1,9 @@
+# stage2_kex.py born-offcurve; start: 11:50  up 17 days, 14:11, 1 user, load averages: 12.36 18.47 15.41
+# the Born limit at the validation points' L, off the curve at the ln R where ell_new = 6: at the points themselves (ell_new <= 1.5) k_IR = 10 m_ta lies above k_ex, outside the Born reduction (stage2_validate.txt)
+# start lab n=1 ell_new~1.48 (running 1, load 12.36)
+# start lab n=1 ell_new~1.23 (running 2, load 12.36)
+# start lab n=2 ell_new~1.45 (running 3, load 12.36)
+born lab n=2 ell_new~1.45 at ln R = 49.7429 (off-curve, ell_new = 6): ell_new 6.0000, k_IR = 10 m_ta = 0.025 k_ex: born.run 6.780871e-01, stage 2 cut 6.786500e-01, rel +8.3e-04 (holds 2e-3); |dE/E| 2.9e-11  (14 s, load 12.36 -> 10.73)
+born lab n=1 ell_new~1.48 at ln R = 65.7749 (off-curve, ell_new = 6): ell_new 6.0000, k_IR = 10 m_ta = 0.025 k_ex: born.run 6.697637e-01, stage 2 cut 6.703253e-01, rel +8.4e-04 (holds 2e-3); |dE/E| 2.9e-11  (49 s, load 12.36 -> 8.63)
+born lab n=1 ell_new~1.23 at ln R = 66.9937 (off-curve, ell_new = 6): ell_new 6.0000, k_IR = 10 m_ta = 0.025 k_ex: born.run 6.697637e-01, stage 2 cut 6.703253e-01, rel +8.4e-04 (holds 2e-3); |dE/E| 2.9e-11  (51 s, load 12.36 -> 8.63)
+# stage2_kex.py born-offcurve end (52 s): 11:51  up 17 days, 14:11, 1 user, load averages: 8.34 16.29 14.79

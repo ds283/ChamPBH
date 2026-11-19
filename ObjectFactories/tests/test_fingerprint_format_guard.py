@@ -20,11 +20,12 @@ and §6.2, P8 and P9; RunRegistryKit's docs/adoption/README.md §6, "The Q5 guar
 records changes. Nothing makes the bump happen, and the golden fingerprint says only that the data
 changed, not that the format was forgotten. This module pins, for each format that has a pin
 (`config.fingerprint.SPEC_DIGESTS`), the SHA-256 of the canonical JSON of every
-`inventory_spec()` in the registry, in registry order, as `[class, digest]` pairs: 16 of them, one
-per registered class with a spec (12 `inventory_spec` definitions serve 16 classes, as
-`test_inventory_specs.test_twelve_definitions_serve_sixteen_classes` says; 21 and 17 before
-jordan-normalization prompt 01, 17 and 13 before prompt 07, and 15 and 12 before
-inelastic-reflection prompt 09). A change to any
+`inventory_spec()` in the registry, in registry order, as `[class, digest]` pairs: 17 of them, one
+per registered class with a spec (14 `inventory_spec` definitions serve 17 classes, as
+`test_inventory_specs.test_fourteen_definitions_serve_seventeen_classes` says; 21 and 17 before
+jordan-normalization prompt 01, 17 and 13 before prompt 07, 15 and 12 before
+inelastic-reflection prompt 09, 16 and 12 before one-loop-drain prompt 03, and 16 and 13 before
+power-law-wall prompt 05). A change to any
 spec then fails `TestFormatGuard` naming the class, and says to bump the format.
 
 The functions are the recipe of RunRegistryKit's `docs/adoption/README.md` §6 (nothing of the guard
@@ -116,9 +117,10 @@ class TestFormatGuard(unittest.TestCase):
     def test_the_pin_has_one_pair_per_class_with_a_spec(self):
         self.assertIn(FINGERPRINT_FORMAT, SPEC_DIGESTS)
         pinned = SPEC_DIGESTS[FINGERPRINT_FORMAT]
-        # 17 at formats 2-4; 15 at format 5 (jordan-normalization prompt 07); 16 since
-        # inelastic-reflection prompt 09 (format 6), which adds alpha_value
-        self.assertEqual(len(pinned), 16)
+        # 17 at formats 2-4; 15 at format 5 (jordan-normalization prompt 07); 16 at formats 6-7, since
+        # inelastic-reflection prompt 09 added alpha_value; 17 since power-law-wall prompt 05 (format 8),
+        # which adds InversePowerModel
+        self.assertEqual(len(pinned), 17)
         self.assertEqual([n for n, _ in pinned], list(inventory_specs(factories)))
 
     def test_a_key_keeps_its_type(self):

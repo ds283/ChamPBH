@@ -44,14 +44,20 @@ import numpy as np
 import extract_common as ec
 from ComputeTargets import quanta_spectrum as qs
 from ComputeTargets.dark_radiation import DarkRadiationLedger
-from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED, DRAIN_MODEL_ONE_LOOP
+from CosmologyConcepts.drain_model import (
+    DRAIN_MODEL_FIXED,
+    DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
+)
 from Units import Planck_units
 from tools import quanta_figures as qf
 from tools import quanta_measures as qm
 from tools.tests import quanta_exports as qe
 
-ONE_LOOP = DRAIN_MODEL_ONE_LOOP
+ONE_LOOP = DRAIN_MODEL_ONE_LOOP_EXPONENTIAL
 UNITS = Planck_units()
+# the spectrum model these exponential exports' rows expect (power-law-wall prompt 06: each row's wall is its
+# potential's; quanta_figures.SPECTRUM_WALL is gone)
+EXPONENTIAL_SPECTRUM = qs.spectrum_model(qs.WALL_EXPONENTIAL)
 K_INITIAL = 1.0e-4
 
 # (N_turn, N, dK, ln q, ln k_ex, ln m, ln E, ln H, regime): five generations, one of them (the unassessed drain) not one,
@@ -272,7 +278,9 @@ class TestTheRowsToDraw(ExportMixin, unittest.TestCase):
     def test_key_cells_are_strings(self):
         self.build()
         rows = qf.read_histories(self.root)
-        q = qf.read_checked(self.root / "quanta_histories.csv", 1.0)
+        q = qf.read_checked(
+            self.root / "quanta_histories.csv", 1.0, EXPONENTIAL_SPECTRUM
+        )
         keys = {qf.key_of(r) for r in rows}
         for r in q:
             self.assertIn(qf.key_of(r), keys)
@@ -287,15 +295,20 @@ class TestTheModelCheck(ExportMixin, unittest.TestCase):
             (0.0, "quanta_histories-assoc0.csv"),
             (10.0, "quanta_histories-assoc10.csv"),
         ):
-            rows = qf.read_checked(self.root / name, c)
+            rows = qf.read_checked(self.root / name, c, EXPONENTIAL_SPECTRUM)
             self.assertTrue(rows)
-            self.assertEqual({r["spectrum_model"] for r in rows}, {qs.SPECTRUM_MODEL})
+            self.assertEqual(
+                {r["spectrum_model"] for r in rows},
+                {EXPONENTIAL_SPECTRUM},
+            )
             self.assertEqual({float(r["assoc_scale"]) for r in rows}, {c})
 
     def test_a_file_of_another_scale_is_refused(self):
         self.build()
         with self.assertRaises(qf.FigureRefused) as cm:
-            qf.read_checked(self.root / "quanta_histories-assoc0.csv", 1.0)
+            qf.read_checked(
+                self.root / "quanta_histories-assoc0.csv", 1.0, EXPONENTIAL_SPECTRUM
+            )
         self.assertIn("assoc_scale", str(cm.exception))
 
     def test_another_model_and_two_models_are_refused(self):
@@ -308,33 +321,33 @@ class TestTheModelCheck(ExportMixin, unittest.TestCase):
 
         self.rewrite(p, other)
         with self.assertRaises(qf.FigureRefused) as cm:
-            qf.read_checked(p, 1.0)
+            qf.read_checked(p, 1.0, EXPONENTIAL_SPECTRUM)
         self.assertIn("U4-v0", str(cm.exception))
         self.build_again_for_two_models(p)
 
     def build_again_for_two_models(self, p):
         def one_other(rows):
             for r in rows:
-                r["spectrum_model"] = qs.SPECTRUM_MODEL
+                r["spectrum_model"] = EXPONENTIAL_SPECTRUM
             rows[-1]["spectrum_model"] = "U4-v0"
 
         self.rewrite(p, one_other)
         with self.assertRaises(qf.FigureRefused):
-            qf.read_checked(p, 1.0)
+            qf.read_checked(p, 1.0, EXPONENTIAL_SPECTRUM)
 
     def test_an_unreadable_file_is_refused(self):
         with self.assertRaises(qf.FigureRefused):
-            qf.read_checked(self._dir / "absent.csv", 1.0)
+            qf.read_checked(self._dir / "absent.csv", 1.0, EXPONENTIAL_SPECTRUM)
 
 
 class TestWhereThingsGo(ExportMixin, unittest.TestCase):
     def test_to_output_replaces_the_root(self):
         root = Path("/x/out/QCD")
-        p = root / "one-loop-measured-v1/A=1/plots/quanta_grid"
+        p = root / "one-loop-exponential-v2/A=1/plots/quanta_grid"
         self.assertEqual(qf.to_output(root, p, None), p)
         self.assertEqual(
             qf.to_output(root, p, Path("/y/QCD")),
-            Path("/y/QCD/one-loop-measured-v1/A=1/plots/quanta_grid"),
+            Path("/y/QCD/one-loop-exponential-v2/A=1/plots/quanta_grid"),
         )
 
     def test_plots_dir_replaces_csv_and_nothing_else(self):
@@ -342,7 +355,8 @@ class TestWhereThingsGo(ExportMixin, unittest.TestCase):
         d = self.dirs[(1.0, 2.0, 1e-20)]
         p = qf.plots_dir(self.root, d)
         self.assertEqual(
-            p.relative_to(self.root).parts[:3], ("one-loop-measured-v1", "A=1", "plots")
+            p.relative_to(self.root).parts[:3],
+            ("one-loop-exponential-v2", "A=1", "plots"),
         )
         self.assertEqual(
             p.relative_to(self.root).parts[3:], d.relative_to(self.root).parts[3:]

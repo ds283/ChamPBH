@@ -1,0 +1,19 @@
+tree /private/tmp/claude-35086/-Users-ds283--claude-spares-spare-bMvV0I/c016fbfa-17fb-44f4-8236-31e2ebfce536/scratchpad/agent06/base; potentials ['exponential']; tip False
+exponential fixed 0.1 M=4e-31 n=1: 1 histories, failures [(1.185, 'stand-in failure for the export')]
+exponential one-loop-measured-v1 1 M=4e-31 n=1: 1 histories, failures [(1.185, 'no ScalarHistory row in the store')]
+-- printed by the extracted functions --
+@@ plot_ScalarHistory: adiabatic Q history for Model=ExponentialModel(M=0.00097413eV,n=1,beta=2) is not available, and will not be plotted
+@@ plot_ScalarHistory: BBN data for Model=ExponentialModel(M=0.00097413eV,n=1,beta=2) is not available, and will not be plotted
+!! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 1 of 1 model(s) used elastic reflections
+     -- beta=2, M=0.00097413 eV, n=1: 49 reflection(s)
+@@ plot_ScalarHistory: adiabatic Q history for Model=ExponentialModel(M=0.00097413eV,n=1,beta=2) is not available, and will not be plotted
+@@ plot_ScalarHistory: BBN data for Model=ExponentialModel(M=0.00097413eV,n=1,beta=2) is not available, and will not be plotted
+!! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 1 of 1 model(s) used elastic reflections
+     -- beta=2, M=0.00097413 eV, n=1: 45 reflection(s)
+-- files --
+QCD_Cosmology/alpha=0.1/csv/M=0.00097413eV_n=1/data.csv
+QCD_Cosmology/alpha=0.1/csv/beta=2/M=0.00097413eV_n=1/fields.csv
+QCD_Cosmology/histories.csv
+QCD_Cosmology/one-loop-measured-v1/A=1/csv/M=0.00097413eV_n=1/data.csv
+QCD_Cosmology/one-loop-measured-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/bounces.csv
+QCD_Cosmology/one-loop-measured-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/fields.csv

@@ -1,0 +1,48 @@
+# stage2_kex.py new; start: 11:41  up 17 days, 14:02, 1 user, load averages: 8.65 10.23 11.19
+# the new points (run_point_kex, form v3), at target ell_new on each curve:
+#   lab n=1 ell_new~0.12               L=1.378072 ln R=5.003334  lambda: gap ell none k_ex 2.76187e-01; v3: one_loop ell 0.1200 k_ex 7.75541e-01
+#   lab n=1 ell_new~0.25               L=1.479893 ln R=5.560149  lambda: gap ell none k_ex 2.86554e-01; v3: one_loop ell 0.2500 k_ex 6.39614e-01
+#   lab n=1 ell_new~0.37               L=1.637814 ln R=6.373029  lambda: gap ell none k_ex 3.01121e-01; v3: one_loop ell 0.3700 k_ex 5.33594e-01
+#   lab n=1 ell_new~0.55               L=1.929097 ln R=7.741309  lambda: gap ell none k_ex 3.23901e-01; v3: one_loop ell 0.5500 k_ex 4.10946e-01
+#   lab n=1 ell_new~0.65               L=2.109977 ln R=8.522218  lambda: gap ell none k_ex 3.35834e-01; v3: one_loop ell 0.6500 k_ex 3.58336e-01
+#   lab n=1 ell_new~0.9                L=2.603482 ln R=10.451202  lambda: gap ell none k_ex 3.61831e-01; v3: one_loop ell 0.9000 k_ex 2.61875e-01
+#   lab n=1 ell_new~1.23               L=3.315858 ln R=12.862621  lambda: gap ell none k_ex 3.87660e-01; v3: one_loop ell 1.2300 k_ex 1.84365e-01
+#   lab n=1 ell_new~1.48               L=3.884452 ln R=14.567842  lambda: gap ell none k_ex 4.02042e-01; v3: one_loop ell 1.4800 k_ex 1.47578e-01
+#   L-M8e-18 n=1 ell_new~0.305         L=93.765819 ln R=6.605531  lambda: gap ell none k_ex 4.94751e-01; v3: one_loop ell 0.3050 k_ex 4.95123e-01
+#   L-M8e-18 n=1 ell_new~0.33          L=93.789299 ln R=6.631005  lambda: gap ell none k_ex 4.94753e-01; v3: one_loop ell 0.3300 k_ex 4.94597e-01
+#   L-M8e-18 n=1 ell_new~0.39          L=93.865944 ln R=6.714150  lambda: gap ell none k_ex 4.94757e-01; v3: one_loop ell 0.3900 k_ex 4.93338e-01
+#   lab n=2 ell_new~0.3                L=1.291412 ln R=6.437562  lambda: gap ell none k_ex 2.89597e-01; v3: one_loop ell 0.3000 k_ex 5.15910e-01
+#   lab n=2 ell_new~0.7                L=1.914900 ln R=8.877958  lambda: gap ell none k_ex 3.45731e-01; v3: one_loop ell 0.7000 k_ex 3.38325e-01
+#   lab n=2 ell_new~1.1                L=2.730186 ln R=11.448275  lambda: gap ell none k_ex 3.88369e-01; v3: one_loop ell 1.1000 k_ex 2.37088e-01
+#   lab n=2 ell_new~1.45               L=3.525072 ln R=13.572134  lambda: gap ell none k_ex 4.12565e-01; v3: one_loop ell 1.4500 k_ex 1.84639e-01
+# start lab n=1 ell_new~0.12 (running 1, load 8.65)
+# start lab n=1 ell_new~0.25 (running 2, load 8.65)
+# start lab n=1 ell_new~0.37 (running 3, load 8.65)
+# start lab n=1 ell_new~0.55 (running 4, load 8.65)
+lab n=1 ell_new~0.12               n=1 L=  1.37807 lnR=   5.0033 | frac 0.15719 balance 0.15719 vout/vin 0.9175 back True  eps_turn 9.0e+01 |dE/E| 1.4e-10 passes 1 modes 246 | lambda: gap ell none k_ex 2.76187e-01; v3: one_loop ell 0.1200 k_ex 7.75541e-01 | 15 s, load 8.65 -> 8.88
+lab n=1 ell_new~0.25               n=1 L=  1.47989 lnR=   5.5601 | frac 0.17461 balance 0.17461 vout/vin 0.9081 back True  eps_turn 1.1e+02 |dE/E| 1.9e-10 passes 1 modes 250 | lambda: gap ell none k_ex 2.86554e-01; v3: one_loop ell 0.2500 k_ex 6.39614e-01 | 15 s, load 8.65 -> 8.88
+lab n=1 ell_new~0.37               n=1 L=  1.63781 lnR=   6.3730 | frac 0.22336 balance 0.22336 vout/vin 0.8804 back True  eps_turn 1.4e+02 |dE/E| 2.0e-10 passes 1 modes 254 | lambda: gap ell none k_ex 3.01121e-01; v3: one_loop ell 0.3700 k_ex 5.33594e-01 | 14 s, load 8.65 -> 8.88
+lab n=1 ell_new~0.55               n=1 L=  1.92910 lnR=   7.7413 | frac 0.33566 balance 0.33566 vout/vin 0.8143 back True  eps_turn 1.7e+02 |dE/E| 1.9e-10 passes 1 modes 261 | lambda: gap ell none k_ex 3.23901e-01; v3: one_loop ell 0.5500 k_ex 4.10946e-01 | 15 s, load 8.65 -> 8.88
+# start lab n=1 ell_new~0.65 (running 1, load 8.88)
+# start lab n=1 ell_new~0.9 (running 2, load 8.88)
+# start lab n=1 ell_new~1.23 (running 3, load 8.88)
+# start lab n=1 ell_new~1.48 (running 4, load 8.88)
+lab n=1 ell_new~0.65               n=1 L=  2.10998 lnR=   8.5222 | frac 0.41473 balance 0.41473 vout/vin 0.7643 back True  eps_turn 3.8e+01 |dE/E| 1.6e-10 passes 1 modes 264 | lambda: gap ell none k_ex 3.35834e-01; v3: one_loop ell 0.6500 k_ex 3.58336e-01 | 17 s, load 8.57 -> 8.09
+# start L-M8e-18 n=1 ell_new~0.305 (running 4, load 8.09)
+L-M8e-18 n=1 ell_new~0.305         n=1 L= 93.76582 lnR=   6.6055 | frac 0.71787 balance 0.71787 vout/vin 0.5312 back True  eps_turn 2.4e+01 |dE/E| 6.2e-10 passes 1 modes 252 | lambda: gap ell none k_ex 4.94751e-01; v3: one_loop ell 0.3050 k_ex 4.95123e-01 | 2 s, load 8.09 -> 8.09
+# start L-M8e-18 n=1 ell_new~0.33 (running 4, load 8.09)
+lab n=1 ell_new~0.9                n=1 L=  2.60348 lnR=  10.4512 | frac 0.65299 balance 0.65299 vout/vin 0.5883 back True  eps_turn 5.1e+01 |dE/E| 1.0e-10 passes 1 modes 273 | lambda: gap ell none k_ex 3.61831e-01; v3: one_loop ell 0.9000 k_ex 2.61875e-01 | 20 s, load 8.57 -> 8.00
+L-M8e-18 n=1 ell_new~0.33          n=1 L= 93.78930 lnR=   6.6310 | frac 0.72109 balance 0.72109 vout/vin 0.5281 back True  eps_turn 2.5e+01 |dE/E| 6.3e-10 passes 1 modes 253 | lambda: gap ell none k_ex 4.94753e-01; v3: one_loop ell 0.3300 k_ex 4.94597e-01 | 2 s, load 8.00 -> 8.00
+# start L-M8e-18 n=1 ell_new~0.39 (running 3, load 8.00)
+# start lab n=2 ell_new~0.3 (running 4, load 8.00)
+L-M8e-18 n=1 ell_new~0.39          n=1 L= 93.86594 lnR=   6.7141 | frac 0.73119 balance 0.73119 vout/vin 0.5185 back True  eps_turn 2.5e+01 |dE/E| 5.8e-10 passes 1 modes 255 | lambda: gap ell none k_ex 4.94757e-01; v3: one_loop ell 0.3900 k_ex 4.93338e-01 | 2 s, load 8.00 -> 8.00
+# start lab n=2 ell_new~0.7 (running 4, load 8.00)
+lab n=1 ell_new~1.23               n=1 L=  3.31586 lnR=  12.8626 | frac 0.79931 balance 0.79931 vout/vin 0.4474 back True  eps_turn 8.0e+01 |dE/E| 4.3e-11 passes 1 modes 284 | lambda: gap ell none k_ex 3.87660e-01; v3: one_loop ell 1.2300 k_ex 1.84365e-01 | 24 s, load 8.57 -> 8.00
+# start lab n=2 ell_new~1.1 (running 4, load 7.84)
+lab n=1 ell_new~1.48               n=1 L=  3.88445 lnR=  14.5678 | frac 0.85877 balance 0.85877 vout/vin 0.3753 back True  eps_turn 1.1e+02 |dE/E| 3.4e-11 passes 1 modes 293 | lambda: gap ell none k_ex 4.02042e-01; v3: one_loop ell 1.4800 k_ex 1.47578e-01 | 26 s, load 8.57 -> 7.84
+# start lab n=2 ell_new~1.45 (running 4, load 7.84)
+lab n=2 ell_new~0.3                n=2 L=  1.29141 lnR=   6.4376 | frac 0.26243 balance 0.26243 vout/vin 0.8586 back True  eps_turn 1.2e+02 |dE/E| 2.7e-10 passes 1 modes 252 | lambda: gap ell none k_ex 2.89597e-01; v3: one_loop ell 0.3000 k_ex 5.15910e-01 | 8 s, load 8.00 -> 7.77
+lab n=2 ell_new~0.7                n=2 L=  1.91490 lnR=   8.8780 | frac 0.53896 balance 0.53896 vout/vin 0.6789 back True  eps_turn 4.0e+01 |dE/E| 1.7e-10 passes 1 modes 266 | lambda: gap ell none k_ex 3.45731e-01; v3: one_loop ell 0.7000 k_ex 3.38325e-01 | 11 s, load 8.00 -> 7.77
+lab n=2 ell_new~1.1                n=2 L=  2.73019 lnR=  11.4483 | frac 0.79316 balance 0.79316 vout/vin 0.4547 back True  eps_turn 6.6e+01 |dE/E| 7.6e-11 passes 1 modes 280 | lambda: gap ell none k_ex 3.88369e-01; v3: one_loop ell 1.1000 k_ex 2.37088e-01 | 13 s, load 7.84 -> 11.55
+lab n=2 ell_new~1.45               n=2 L=  3.52507 lnR=  13.5721 | frac 0.86411 balance 0.86411 vout/vin 0.3686 back True  eps_turn 1.1e+02 |dE/E| 4.6e-11 passes 1 modes 292 | lambda: gap ell none k_ex 4.12565e-01; v3: one_loop ell 1.4500 k_ex 1.84639e-01 | 17 s, load 7.84 -> 12.17
+# stage2_kex.py new end (62 s): 11:42  up 17 days, 14:03, 1 user, load averages: 12.17 10.71 11.28

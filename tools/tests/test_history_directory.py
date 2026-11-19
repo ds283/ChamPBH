@@ -56,7 +56,7 @@ class TestHistoryDirectory(unittest.TestCase):
                 plots, csv = old_strings(beta, M, eV, n)
                 self.assertEqual(f"plots/{history_directory(beta, M / eV, n)}", plots)
                 self.assertEqual(f"csv/{history_directory(beta, M / eV, n)}", csv)
-                base = Path("/out/QCD_Cosmology/one-loop-measured-v1/A=1")
+                base = Path("/out/QCD_Cosmology/one-loop-exponential-v2/A=1")
                 self.assertEqual(
                     base / f"csv/{history_directory(beta, M / eV, n)}", base / csv
                 )

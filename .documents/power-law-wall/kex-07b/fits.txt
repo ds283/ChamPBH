@@ -1,0 +1,439 @@
+# fits.py; start: 12:11  up 17 days, 14:32, 1 user, load averages: 5.54 8.14 8.86
+## the reproduction: this module's fit on crossover's rows as the copied fit_law.scan_rows reads them
+  old form, b only: [0.0505] (fit_law.txt: [0.0505]); one-loop b0, c: [0.9691, 0.41] (fit_law.txt: [0.9691, 0.41]), max 0.074 rms 0.021 (27 points; 0.074, 0.021, 27); gap a, c, p, b: [0.0198, 1.5601, 1.5472, 0.841] (fit_law.txt: [0.0198, 1.5601, 1.5472, 0.841]), max 0.062 rms 0.024 (34 points; 0.062, 0.024, 34)
+  reproduced to the printed digits: True
+
+# 185 exponential points: 170 of crossover's, 15 new (07b)
+
+## n = 1: 43 one-loop points (ell >= 1, back out), 18 plateau points (ell < 1), 21 gap points
+  measured: the cap, largest f 0.9858 over all 100 points (0.9206 where the field came back out); the plateau (ell < 1, back out): mean 0.5067, min 0.1572, max 0.8021
+  (i)   A 2.69 held, B0 0.3042, C 0.4106; plateau 0.5067 (measured mean); gap G 0.0230, R0 1.7972, P 1.3795, Q 1.0496
+    (i)                                          one-loop  max |res| 0.353  rms 0.098  mean +0.004  (43 points)
+    (i)                                          plateau   max |res| 0.350  rms 0.225  mean -0.000  (18 points)
+    (i)                                          gap       max |res| 0.047  rms 0.014  mean -0.002  (21 points)
+  (ii)  A 3.2946, B0 0.6320, C 0.3278; plateau and gap as (i)
+    (ii)                                         one-loop  max |res| 0.376  rms 0.096  mean +0.007  (43 points)
+    (ii)                                         plateau   max |res| 0.350  rms 0.225  mean -0.000  (18 points)
+    (ii)                                         gap       max |res| 0.047  rms 0.014  mean -0.002  (21 points)
+  (iii) ell_g 2.25 (scan 0-2.5 by 0.05, least total SS 0.0453); one-loop above it A 2.69, B0 -1.0140, C 0.0001; gap form below it and in the gap: G 0.0188, R0 1.6383, P 1.5300, Q 0.9959
+    (iii) [plateau: the chain points with ell < 1] one-loop  max |res| 0.618  rms 0.113  mean +0.028  (43 points)
+    (iii) [plateau: the chain points with ell < 1] plateau   max |res| 0.070  rms 0.033  mean -0.000  (18 points)
+    (iii) [plateau: the chain points with ell < 1] gap       max |res| 0.046  rms 0.015  mean -0.001  (21 points)
+  (iv)  y = min(G (ln R - R0)^P (1 + Q ln L), 2.69/(ell + B0 - C ln L)): G 0.0180, R0 1.6111, P 1.5461, Q 1.0093, B0 -0.1041, C 0.3132
+    (iv) [plateau: the chain points with ell < 1] one-loop  max |res| 0.417  rms 0.083  mean +0.005  (43 points)
+    (iv) [plateau: the chain points with ell < 1] plateau   max |res| 0.071  rms 0.032  mean -0.000  (18 points)
+    (iv) [plateau: the chain points with ell < 1] gap       max |res| 0.046  rms 0.015  mean -0.002  (21 points)
+  v1 (its constants, with the cap and the plateau), beside:
+    v1 on crossover's rows, old form             one-loop  max |res| 0.074  rms 0.021  mean +0.002  (27 points)
+    v1 on crossover's rows, old form             plateau   max |res| 0.098  rms 0.063  mean +0.046  (6 points)
+    v1 on crossover's rows, old form             gap       max |res| 0.061  rms 0.024  mean -0.000  (34 points)
+    v1 on the new points, old form               gap       max |res| 0.067  rms 0.038  mean +0.015  (11 points)
+    v1 on crossover's rows, new form             one-loop  max |res| 0.262  rms 0.132  mean -0.078  (41 points)
+    v1 on crossover's rows, new form             plateau   max |res| 0.741  rms 0.401  mean +0.345  (9 points)
+    v1 on crossover's rows, new form             gap       max |res| 0.043  rms 0.016  mean -0.001  (21 points)
+    v1 on every point, new form                  one-loop  max |res| 0.262  rms 0.130  mean -0.077  (43 points)
+    v1 on every point, new form                  plateau   max |res| 0.743  rms 0.453  mean +0.393  (18 points)
+    v1 on every point, new form                  gap       max |res| 0.043  rms 0.016  mean -0.001  (21 points)
+  per point (back out unless marked): set, L, ln R, ell old -> new, regime old -> new, f, v1(old), (i), (ii), (iii), (iv)
+    2197 A0.05               26.740   52.151   9.535 -> 10.030  one_loop -> one_loop f 0.2490  | 0.255 0.259 0.291 0.258 0.261
+    2197 A0.05               20.950   44.440   7.399 -> 8.021   one_loop -> one_loop f 0.3060  | 0.315 0.316 0.350 0.319 0.320
+    2197 A0.05               14.660   35.379   4.914 -> 5.737   one_loop -> one_loop f 0.4165  | 0.430 0.420 0.451 0.434 0.430
+    2197 A0.05               11.730   30.716   3.683 -> 4.628   one_loop -> one_loop f 0.5068  | 0.522 0.496 0.523 0.525 0.512
+    2197 A0.05               10.170   28.069   3.008 -> 4.027   one_loop -> one_loop f 0.5746  | 0.589 0.549 0.571 0.591 0.569
+    2197 A0.05                9.000   25.956   2.489 -> 3.568   one_loop -> one_loop f 0.6397  | 0.651 0.596 0.612 0.651 0.621
+    2197 A0.05                7.885   23.833   1.987 -> 3.126   one_loop -> one_loop f 0.7171  | 0.721 0.647 0.657 0.720 0.678
+    2197 A0.05                6.793   21.613   1.486 -> 2.688   one_loop -> one_loop f 0.8113  | 0.800 0.705 0.706 0.800 0.742
+    2197 A0.05                5.716   19.242   0.980 -> 2.249   one_loop -> one_loop f 0.9206  | 0.900 0.769 0.760 0.984 0.814
+    2197 A0.05                4.776   16.968   0.522 -> 1.859   one_loop -> one_loop f 0.9726 (not out) | 0.900 0.829 0.811 0.957 0.881
+    2197 A0.01               10.130   27.992   2.989 -> 4.010   one_loop -> one_loop f 0.5767  | 0.591 0.551 0.572 0.593 0.571
+    2197 A0.01                7.921   23.904   2.003 -> 3.140   one_loop -> one_loop f 0.7143  | 0.718 0.645 0.655 0.718 0.676
+    2197 A0.01                6.835   21.702   1.505 -> 2.705   one_loop -> one_loop f 0.8073  | 0.797 0.702 0.704 0.796 0.740
+    2197 A0.01                5.762   19.346   1.002 -> 2.268   one_loop -> one_loop f 0.9160  | 0.883 0.766 0.757 0.883 0.811
+    2197 A0.01                4.703   16.782   0.485 -> 1.829   one_loop -> one_loop f 0.9661 (not out) | 0.900 0.834 0.815 0.953 0.886
+    2197 A0.01                4.287   15.686   0.267 -> 1.653   one_loop -> one_loop f 0.9182 (not out) | 0.900 0.862 0.838 0.928 0.915
+    2197 A0.01                4.014   14.936   0.082 -> 1.536   one_loop -> one_loop f 0.8780  | 0.900 0.880 0.854 0.905 0.907
+    2197 A0.01                3.619   13.791    none -> 1.364        gap -> one_loop f 0.8264  | 0.863 0.905 0.877 0.859 0.861
+    2197 A0.01                3.049   12.001    none -> 1.109        gap -> one_loop f 0.7734  | 0.764 0.940 0.909 0.759 0.761
+    2197 A0.01                2.317    9.362    none -> 0.758        gap -> one_loop f 0.5223  | 0.556 0.507 0.507 0.546 0.546
+    2197 A0.01                1.794    7.124    none -> 0.470        gap -> one_loop f 0.2819  | 0.343 0.507 0.507 0.332 0.331
+    2197 A0.01                1.354    4.865    none -> none         gap -> gap      f 0.1594  | 0.146 0.133 0.133 0.137 0.136
+    2197 A0.01                0.974    2.442    none -> none         gap -> gap      f 0.0591  | 0.016 0.012 0.012 0.013 0.013
+    R-865 A0.05             106.000  142.368  33.360 -> 33.460  one_loop -> one_loop f 0.0802  | 0.080 0.081 0.096 0.080 0.081
+    R-865 A0.05              64.050   96.369  21.443 -> 21.626  one_loop -> one_loop f 0.1217  | 0.122 0.125 0.146 0.122 0.125
+    R-865 A0.05              51.770   82.399  17.750 -> 17.986  one_loop -> one_loop f 0.1447  | 0.146 0.149 0.173 0.147 0.149
+    grid                      1.300    5.000    none -> 0.143        gap -> one_loop f 0.1588  | 0.151 0.507 0.507 0.141 0.140
+    grid                      1.300   10.000    none -> 0.789        gap -> one_loop f 0.5279  | 0.481 0.507 0.507 0.458 0.457
+    grid                      1.300   15.000    none -> 1.266        gap -> one_loop f 0.7864  | 0.740 0.841 0.838 0.715 0.716
+    grid                      1.300   20.000    none -> 1.713        gap -> one_loop f 0.8164  | 0.889 0.756 0.767 0.870 0.828
+    grid                      1.300   25.000    none -> 2.150        gap -> one_loop f 0.3292  | 0.959 0.682 0.705 0.948 0.746
+    grid                      2.000    5.000    none -> none         gap -> gap      f 0.1761  | 0.191 0.180 0.180 0.184 0.183
+    grid                      2.000   10.000    none -> 0.819        gap -> one_loop f 0.5661  | 0.573 0.507 0.507 0.560 0.560
+    grid                      2.000   15.000    none -> 1.328        gap -> one_loop f 0.8075  | 0.825 0.864 0.851 0.814 0.816
+    grid                      2.000   20.000    none -> 1.785        gap -> one_loop f 0.9617 (not out) | 0.942 0.775 0.778 0.935 0.841
+    grid                      2.000   25.000    none -> 2.224        gap -> one_loop f 0.6079  | 0.984 0.698 0.714 0.981 0.757
+    grid                      3.000    5.000    none -> none         gap -> gap      f 0.2034  | 0.227 0.219 0.219 0.223 0.222
+    grid                      3.000   10.000    none -> 0.864        gap -> one_loop f 0.6438  | 0.644 0.507 0.507 0.638 0.639
+    grid                      3.000   15.000    none -> 1.432        gap -> one_loop f 0.8386  | 0.880 0.877 0.855 0.875 0.877
+    grid                      3.000   20.000    none -> 1.918        gap -> one_loop f 0.9749 (not out) | 0.969 0.781 0.778 0.966 0.840
+    grid                      3.000   25.000    none -> 2.367        gap -> one_loop f 0.8199  | 0.993 0.702 0.713 0.863 0.754
+    grid                      4.000    5.000    none -> none         gap -> gap      f 0.2299  | 0.252 0.245 0.245 0.249 0.248
+    grid                      4.000   10.000    none -> 0.907        gap -> one_loop f 0.7092  | 0.687 0.507 0.507 0.685 0.686
+    grid                      4.000   15.000   0.080 -> 1.542   one_loop -> one_loop f 0.8798  | 0.900 0.878 0.853 0.906 0.908
+    grid                      4.000   20.000   0.269 -> 2.070   one_loop -> one_loop f 0.9593 (not out) | 0.900 0.775 0.769 0.979 0.827
+    grid                      4.000   25.000   0.222 -> 2.539   one_loop -> one_loop f 0.8331  | 0.900 0.694 0.703 0.829 0.739
+    grid                      6.000    5.000    none -> none         gap -> gap      f 0.2684  | 0.285 0.281 0.281 0.285 0.284
+    grid                      6.000   10.000    none -> 0.987        gap -> one_loop f 0.7803  | 0.740 0.507 0.507 0.741 0.743
+    grid                      6.000   15.000   0.756 -> 1.745   one_loop -> one_loop f 0.9539 (not out) | 0.900 0.871 0.841 0.937 0.917
+    grid                      6.000   20.000   1.120 -> 2.378   one_loop -> one_loop f 0.8878  | 0.863 0.749 0.743 0.861 0.792
+    grid                      6.000   25.000   1.273 -> 2.919   one_loop -> one_loop f 0.7582  | 0.832 0.661 0.671 0.756 0.697
+    grid                      8.000    5.000    none -> none         gap -> gap      f 0.3035  | 0.308 0.305 0.305 0.309 0.308
+    grid                      8.000   10.000   0.374 -> 1.056   one_loop -> one_loop f 0.8090  | 0.900 0.995 0.962 0.775 0.776
+    grid                      8.000   15.000   1.174 -> 1.914   one_loop -> one_loop f 0.9858 (not out) | 0.876 0.861 0.829 0.953 0.902
+    grid                      8.000   20.000   1.727 -> 2.649   one_loop -> one_loop f 0.8209  | 0.768 0.722 0.718 0.807 0.758
+    grid                      8.000   25.000   2.094 -> 3.284   one_loop -> one_loop f 0.6872  | 0.704 0.626 0.639 0.694 0.655
+    L-M8e-18                106.000   19.861   4.079 -> 4.121   one_loop -> one_loop f 0.5787  | 0.576 0.657 0.640 0.579 0.651
+    L-M8e-18                101.800   15.273   2.888 -> 2.932   one_loop -> one_loop f 0.7639 (not out) | 0.746 0.866 0.800 0.754 0.858
+    L-M8e-18                 98.480   11.710   1.932 -> 1.980   one_loop -> one_loop f 0.9821 (not out) | 0.929 0.999 0.949 0.973 0.973
+    L-M8e-18                 93.820    6.667    none -> 0.358        gap -> one_loop f 0.7259 (not out) | 0.696 0.507 0.507 0.708 0.709
+    L-M8e-18                 92.820    5.579    none -> none         gap -> gap      f 0.5669  | 0.559 0.564 0.564 0.571 0.571
+    L-M8e-18                 92.030    4.722    none -> none         gap -> gap      f 0.4469  | 0.431 0.441 0.441 0.440 0.440
+    L-M8e-18                 91.360    3.990    none -> none         gap -> gap      f 0.3387  | 0.313 0.323 0.323 0.318 0.318
+    L-M8e-18                 90.650    3.220    none -> none         gap -> gap      f 0.1880  | 0.188 0.193 0.193 0.188 0.188
+    L-M8e-18                 89.890    2.396    none -> none         gap -> gap      f 0.0590  | 0.069 0.063 0.063 0.065 0.066
+    L-M8e-18                 88.900    1.315    none -> none         gap -> gap      f 0.0052  | 0.000 0.000 0.000 0.000 0.000
+    L-M8e-18                 87.720    0.027    none -> none         gap -> gap      f 0.0001  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                106.000    9.758   1.393 -> 1.439   one_loop -> one_loop f 0.9274 (not out) | 0.950 -6195243.817 0.998 0.927 0.928
+    L-M1e-16                100.700    3.974    none -> none         gap -> gap      f 0.3369  | 0.315 0.325 0.325 0.320 0.320
+    L-M1e-16                100.000    3.264    none -> none         gap -> gap      f 0.1971  | 0.198 0.203 0.203 0.199 0.199
+    L-M1e-16                 99.440    2.644    none -> none         gap -> gap      f 0.0895  | 0.103 0.101 0.101 0.101 0.101
+    L-M1e-16                 98.930    2.095    none -> none         gap -> gap      f 0.0332  | 0.036 0.025 0.025 0.031 0.033
+    L-M1e-16                 98.070    1.160    none -> none         gap -> gap      f 0.0035  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                 97.690    0.755    none -> none         gap -> gap      f 0.0011  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                 97.350    0.382    none -> none         gap -> gap      f 0.0003  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                 97.030    0.042    none -> none         gap -> gap      f 0.0001  | 0.000 0.000 0.000 0.000 0.000
+    L-M5e-16                106.000    3.320    none -> none         gap -> gap      f 0.2086  | 0.208 0.215 0.215 0.210 0.210
+    curve-119                96.000    9.027   1.166 -> 1.218   one_loop -> one_loop f 0.8774 (not out) | 0.950 -2101.241 1.000 0.892 0.893
+    curve-119               100.000   13.352   2.378 -> 2.424   one_loop -> one_loop f 0.8767 (not out) | 0.842 0.960 0.881 0.852 0.953
+    curve-119               104.000   17.664   3.512 -> 3.556   one_loop -> one_loop f 0.6550  | 0.648 0.748 0.710 0.653 0.740
+    curve-119               108.000   21.965   4.617 -> 4.660   one_loop -> one_loop f 0.5205  | 0.520 0.587 0.584 0.522 0.581
+    curve-119               116.000   30.534   6.787 -> 6.828   one_loop -> one_loop f 0.3699  | 0.371 0.405 0.428 0.370 0.402
+    curve-119               124.000   39.065   8.928 -> 8.967   one_loop -> one_loop f 0.2876  | 0.288 0.309 0.337 0.287 0.306
+    curve-129               104.000    7.554   0.693 -> 0.751   one_loop -> one_loop f 0.8021  | 0.900 0.507 0.507 0.800 0.801
+    curve-129               108.000   11.855   1.984 -> 2.027   one_loop -> one_loop f 0.9724 (not out) | 0.926 0.999 0.947 0.976 0.977
+    curve-129               112.000   16.144   3.131 -> 3.172   one_loop -> one_loop f 0.7186 (not out) | 0.711 0.826 0.768 0.713 0.816
+    curve-129               116.000   20.424   4.241 -> 4.280   one_loop -> one_loop f 0.5604  | 0.562 0.640 0.626 0.561 0.633
+    curve-129               124.000   28.955   6.412 -> 6.449   one_loop -> one_loop f 0.3898  | 0.392 0.431 0.451 0.390 0.427
+    curve-129               132.000   37.454   8.551 -> 8.586   one_loop -> one_loop f 0.2995  | 0.301 0.323 0.351 0.299 0.321
+    lab                       1.378    5.003    none -> 0.120        gap -> one_loop f 0.1572  | 0.157 0.507 0.507 0.147 0.146
+    lab                       1.480    5.560    none -> 0.250        gap -> one_loop f 0.1746  | 0.201 0.507 0.507 0.191 0.190
+    lab                       1.638    6.373    none -> 0.370        gap -> one_loop f 0.2234  | 0.273 0.507 0.507 0.262 0.260
+    lab                       1.929    7.741    none -> 0.550        gap -> one_loop f 0.3357  | 0.402 0.507 0.507 0.391 0.390
+    lab                       2.110    8.522    none -> 0.650        gap -> one_loop f 0.4147  | 0.477 0.507 0.507 0.467 0.466
+    L-M8e-18                 93.766    6.606    none -> 0.305        gap -> one_loop f 0.7179  | 0.689 0.507 0.507 0.701 0.702
+    lab                       2.603   10.451    none -> 0.900        gap -> one_loop f 0.6530  | 0.650 0.507 0.507 0.642 0.643
+    L-M8e-18                 93.789    6.631    none -> 0.330        gap -> one_loop f 0.7211  | 0.692 0.507 0.507 0.704 0.705
+    L-M8e-18                 93.866    6.714    none -> 0.390        gap -> one_loop f 0.7312  | 0.701 0.507 0.507 0.713 0.714
+    lab                       3.316   12.863    none -> 1.230        gap -> one_loop f 0.7993  | 0.816 0.924 0.894 0.812 0.814
+    lab                       3.884   14.568    none -> 1.480        gap -> one_loop f 0.8588  | 0.894 0.888 0.861 0.892 0.894
+
+## n = 2: 28 one-loop points (ell >= 1, back out), 8 plateau points (ell < 1), 14 gap points
+  measured: the cap, largest f 0.9900 over all 67 points (0.9233 where the field came back out); the plateau (ell < 1, back out): mean 0.6178, min 0.2624, max 0.8208
+  (i)   A 2.69 held, B0 0.2668, C 0.3632; plateau 0.6178 (measured mean); gap G 0.1285, R0 2.8156, P 0.5166, Q 0.5802
+    (i)                                          one-loop  max |res| 0.177  rms 0.066  mean +0.001  (28 points)
+    (i)                                          plateau   max |res| 0.355  rms 0.189  mean -0.000  (8 points)
+    (i)                                          gap       max |res| 0.045  rms 0.022  mean -0.002  (14 points)
+  (ii)  A 3.0730, B0 0.3802, C 0.2876; plateau and gap as (i)
+    (ii)                                         one-loop  max |res| 0.166  rms 0.064  mean +0.006  (28 points)
+    (ii)                                         plateau   max |res| 0.355  rms 0.189  mean -0.000  (8 points)
+    (ii)                                         gap       max |res| 0.045  rms 0.022  mean -0.002  (14 points)
+  (iii) ell_g 1.55 (scan 0-2.5 by 0.05, least total SS 0.0207); one-loop above it A 2.69, B0 -1.1529, C -0.0354; gap form below it and in the gap: G 0.0169, R0 1.3235, P 1.6721, Q 0.8620
+    (iii) [plateau: the chain points with ell < 1] one-loop  max |res| 0.039  rms 0.015  mean +0.002  (28 points)
+    (iii) [plateau: the chain points with ell < 1] plateau   max |res| 0.041  rms 0.027  mean -0.001  (8 points)
+    (iii) [plateau: the chain points with ell < 1] gap       max |res| 0.056  rms 0.025  mean -0.004  (14 points)
+  (iv)  y = min(G (ln R - R0)^P (1 + Q ln L), 2.69/(ell + B0 - C ln L)): G 0.0169, R0 1.3235, P 1.6721, Q 0.8620, B0 -1.1529, C -0.0354
+    (iv) [plateau: the chain points with ell < 1] one-loop  max |res| 0.039  rms 0.015  mean +0.002  (28 points)
+    (iv) [plateau: the chain points with ell < 1] plateau   max |res| 0.041  rms 0.027  mean -0.001  (8 points)
+    (iv) [plateau: the chain points with ell < 1] gap       max |res| 0.056  rms 0.025  mean -0.004  (14 points)
+  v1 (its constants, with the cap and the plateau), beside:
+    v1 on crossover's rows, old form             one-loop  max |res| 0.125  rms 0.048  mean -0.029  (22 points)
+    v1 on crossover's rows, old form             plateau   max |res| 0.112  rms 0.074  mean +0.052  (5 points)
+    v1 on crossover's rows, old form             gap       max |res| 0.102  rms 0.046  mean -0.037  (19 points)
+    v1 on the new points, old form               gap       max |res| 0.075  rms 0.047  mean -0.040  (4 points)
+    v1 on crossover's rows, new form             one-loop  max |res| 0.275  rms 0.100  mean -0.067  (26 points)
+    v1 on crossover's rows, new form             plateau   max |res| 0.463  rms 0.253  mean +0.210  (6 points)
+    v1 on crossover's rows, new form             gap       max |res| 0.064  rms 0.037  mean -0.031  (14 points)
+    v1 on every point, new form                  one-loop  max |res| 0.275  rms 0.098  mean -0.066  (28 points)
+    v1 on every point, new form                  plateau   max |res| 0.638  rms 0.339  mean +0.282  (8 points)
+    v1 on every point, new form                  gap       max |res| 0.064  rms 0.037  mean -0.031  (14 points)
+  per point (back out unless marked): set, L, ln R, ell old -> new, regime old -> new, f, v1(old), (i), (ii), (iii), (iv)
+    n2-grid                   2.000    3.000    none -> none         gap -> gap      f 0.1179  | 0.054 0.072 0.072 0.062 0.062
+    n2-grid                   2.000    5.000    none -> none         gap -> gap      f 0.2132  | 0.191 0.236 0.236 0.212 0.212
+    n2-grid                   2.000    8.000    none -> 0.575        gap -> one_loop f 0.4374  | 0.428 0.618 0.618 0.476 0.476
+    n2-grid                   2.000   12.000    none -> 1.116        gap -> one_loop f 0.7950  | 0.693 0.907 0.907 0.758 0.758
+    n2-grid                   2.000   16.000    none -> 1.610        gap -> one_loop f 0.9311 (not out) | 0.858 0.809 0.820 0.996 0.911
+    n2-grid                   2.000   20.000    none -> 2.110        gap -> one_loop f 0.8153  | 0.942 0.718 0.738 0.935 0.935
+    n2-grid                   2.000   25.000    none -> 2.751        gap -> one_loop f 0.1300  | 0.984 0.622 0.649 0.809 0.809
+    n2-grid                   2.000   30.000    none -> 3.398        gap -> one_loop f 0.0168  | 0.996 0.545 0.576 0.694 0.694
+    n2-grid                   2.000   40.000    none -> 4.686        gap -> one_loop f 0.0008  | 1.000 0.436 0.468 0.531 0.531
+    n2-grid                   4.000    3.000    none -> none         gap -> gap      f 0.1241  | 0.073 0.092 0.092 0.084 0.084
+    n2-grid                   4.000    5.000    none -> none         gap -> gap      f 0.2694  | 0.252 0.293 0.293 0.280 0.280
+    n2-grid                   4.000    8.000    none -> 0.623        gap -> one_loop f 0.5678  | 0.535 0.618 0.618 0.589 0.589
+    n2-grid                   4.000   12.000    none -> 1.277        gap -> one_loop f 0.8271  | 0.801 0.925 0.913 0.858 0.858
+    n2-grid                   4.000   16.000   0.351 -> 1.813   one_loop -> one_loop f 0.9696 (not out) | 0.900 0.818 0.820 0.977 0.964
+    n2-grid                   4.000   20.000   0.349 -> 2.297   one_loop -> one_loop f 0.9064  | 0.900 0.729 0.740 0.895 0.895
+    n2-grid                   4.000   25.000    none -> 2.894        gap -> one_loop f 0.6793  | 0.996 0.637 0.657 0.777 0.777
+    n2-grid                   4.000   30.000    none -> 3.517        gap -> one_loop f 0.2078  | 1.000 0.560 0.585 0.672 0.672
+    n2-grid                   4.000   40.000    none -> 4.794        gap -> one_loop f 0.0028  | 1.000 0.446 0.475 0.518 0.518
+    n2-grid                   8.000    3.000    none -> none         gap -> gap      f 0.1306  | 0.091 0.112 0.112 0.106 0.106
+    n2-grid                   8.000    5.000    none -> none         gap -> gap      f 0.3473  | 0.308 0.346 0.346 0.341 0.341
+    n2-grid                   8.000    8.000    none -> 0.690        gap -> one_loop f 0.7180  | 0.621 0.618 0.618 0.677 0.677
+    n2-grid                   8.000   12.000   0.965 -> 1.529   one_loop -> one_loop f 0.9140  | 0.900 0.925 0.904 0.916 0.916
+    n2-grid                   8.000   16.000   1.561 -> 2.240   one_loop -> one_loop f 0.9233  | 0.799 0.785 0.781 0.901 0.901
+    n2-grid                   8.000   20.000   2.007 -> 2.871   one_loop -> one_loop f 0.7707  | 0.718 0.677 0.686 0.777 0.777
+    n2-grid                   8.000   25.000   2.331 -> 3.559   one_loop -> one_loop f 0.6414  | 0.667 0.584 0.601 0.662 0.662
+    n2-grid                   8.000   30.000   2.357 -> 4.163   one_loop -> one_loop f 0.5568  | 0.663 0.519 0.541 0.582 0.582
+    n2-grid                   8.000   40.000   1.643 -> 5.350   one_loop -> one_loop f 0.1863  | 0.783 0.425 0.451 0.467 0.467
+    n2-grid                  16.000    3.000    none -> none         gap -> gap      f 0.1372  | 0.109 0.131 0.131 0.127 0.127
+    n2-grid                  16.000    5.000    none -> none         gap -> gap      f 0.4155  | 0.360 0.395 0.395 0.397 0.397
+    n2-grid                  16.000    8.000   0.484 -> 0.777   one_loop -> one_loop f 0.7878  | 0.900 0.618 0.618 0.747 0.747
+    n2-grid                  16.000   12.000   1.518 -> 1.775   one_loop -> one_loop f 0.9819 (not out) | 0.863 0.926 0.896 0.976 0.951
+    n2-grid                  16.000   16.000   2.383 -> 2.664   one_loop -> one_loop f 0.8195  | 0.703 0.753 0.745 0.812 0.812
+    n2-grid                  16.000   20.000   3.180 -> 3.500   one_loop -> one_loop f 0.6580  | 0.591 0.623 0.631 0.667 0.667
+    n2-grid                  16.000   25.000   4.097 -> 4.487   one_loop -> one_loop f 0.5291  | 0.496 0.512 0.530 0.543 0.543
+    n2-grid                  16.000   30.000   4.912 -> 5.405   one_loop -> one_loop f 0.4454  | 0.433 0.438 0.460 0.461 0.461
+    n2-grid                  16.000   40.000   6.100 -> 6.997   one_loop -> one_loop f 0.3459  | 0.365 0.349 0.373 0.364 0.364
+    n2-grid                  30.000    3.000    none -> none         gap -> gap      f 0.1422  | 0.126 0.147 0.147 0.146 0.146
+    n2-grid                  30.000    5.000    none -> none         gap -> gap      f 0.4566  | 0.404 0.436 0.436 0.444 0.444
+    n2-grid                  30.000    8.000   0.697 -> 0.843   one_loop -> one_loop f 0.8093  | 0.900 0.618 0.618 0.797 0.797
+    n2-grid                  30.000   12.000   1.807 -> 1.934   one_loop -> one_loop f 0.9900 (not out) | 0.857 0.938 0.900 0.949 0.949
+    n2-grid                  30.000   16.000   2.792 -> 2.922   one_loop -> one_loop f 0.7648  | 0.679 0.748 0.733 0.759 0.759
+    n2-grid                  30.000   20.000   3.736 -> 3.874   one_loop -> one_loop f 0.6073  | 0.556 0.604 0.609 0.612 0.612
+    n2-grid                  30.000   25.000   4.879 -> 5.031   one_loop -> one_loop f 0.4832  | 0.453 0.484 0.500 0.490 0.490
+    n2-grid                  30.000   30.000   5.991 -> 6.159   one_loop -> one_loop f 0.4021  | 0.383 0.404 0.425 0.408 0.408
+    n2-grid                  30.000   40.000   8.118 -> 8.335   one_loop -> one_loop f 0.3028  | 0.295 0.306 0.328 0.308 0.308
+    n2-grid                  60.000    3.000    none -> none         gap -> gap      f 0.1459  | 0.143 0.166 0.166 0.166 0.166
+    n2-grid                  60.000    5.000    none -> none         gap -> gap      f 0.4827  | 0.448 0.478 0.478 0.492 0.492
+    n2-grid                  60.000    8.000   0.820 -> 0.891   one_loop -> one_loop f 0.8208  | 0.900 0.618 0.618 0.840 0.840
+    n2-grid                  60.000   12.000   1.978 -> 2.038   one_loop -> one_loop f 0.9702 (not out) | 0.880 0.963 0.916 0.927 0.927
+    n2-grid                  60.000   16.000   3.025 -> 3.085   one_loop -> one_loop f 0.7341 (not out) | 0.687 0.764 0.739 0.726 0.726
+    n2-grid                  60.000   20.000   4.039 -> 4.099   one_loop -> one_loop f 0.5808  | 0.554 0.607 0.606 0.581 0.581
+    n2-grid                  60.000   25.000   5.280 -> 5.343   one_loop -> one_loop f 0.4607  | 0.445 0.479 0.491 0.462 0.462
+    n2-grid                  60.000   30.000   6.504 -> 6.569   one_loop -> one_loop f 0.3823  | 0.371 0.395 0.413 0.384 0.384
+    n2-grid                  60.000   40.000   8.914 -> 8.987   one_loop -> one_loop f 0.2860  | 0.280 0.293 0.313 0.286 0.286
+    n2-grid                 100.000    3.000    none -> none         gap -> gap      f 0.1476  | 0.156 0.179 0.179 0.181 0.181
+    n2-grid                 100.000    5.000    none -> none         gap -> gap      f 0.4936  | 0.479 0.507 0.507 0.524 0.524
+    n2-grid                 100.000    8.000   0.870 -> 0.912   one_loop -> one_loop f 0.8258 (not out) | 0.900 0.618 0.618 0.866 0.866
+    n2-grid                 100.000   12.000   2.047 -> 2.082   one_loop -> one_loop f 0.9600 (not out) | 0.908 0.981 0.933 0.915 0.915
+    n2-grid                 100.000   16.000   3.118 -> 3.152   one_loop -> one_loop f 0.7222  | 0.706 0.786 0.751 0.712 0.712
+    n2-grid                 100.000   20.000   4.156 -> 4.190   one_loop -> one_loop f 0.5708  | 0.564 0.619 0.612 0.569 0.569
+    n2-grid                 100.000   25.000   5.430 -> 5.465   one_loop -> one_loop f 0.4525  | 0.449 0.485 0.493 0.452 0.452
+    n2-grid                 100.000   30.000   6.688 -> 6.724   one_loop -> one_loop f 0.3753  | 0.373 0.397 0.412 0.374 0.374
+    n2-grid                 100.000   40.000   9.177 -> 9.214   one_loop -> one_loop f 0.2804  | 0.278 0.291 0.310 0.279 0.279
+    lab                       1.291    6.438    none -> 0.300        gap -> one_loop f 0.2624  | 0.244 0.618 0.618 0.271 0.271
+    lab                       1.915    8.878    none -> 0.700        gap -> one_loop f 0.5390  | 0.486 0.618 0.618 0.540 0.540
+    lab                       2.730   11.448    none -> 1.100        gap -> one_loop f 0.7932  | 0.718 0.932 0.924 0.780 0.780
+    lab                       3.525   13.572    none -> 1.450        gap -> one_loop f 0.8641  | 0.852 0.882 0.877 0.903 0.903
+
+## n = 1 (note 07b §0.3's selection: no curve sets, no grid row above ln R = 15): 27 one-loop points (ell >= 1, back out), 17 plateau points (ell < 1), 21 gap points
+  measured: the cap, largest f 0.9858 over all 76 points (0.9206 where the field came back out); the plateau (ell < 1, back out): mean 0.4894, min 0.1572, max 0.7803
+  (i)   A 2.69 held, B0 0.5000, C 0.5302; plateau 0.4894 (measured mean); gap G 0.0230, R0 1.7972, P 1.3795, Q 1.0496
+    (i)                                          one-loop  max |res| 0.188  rms 0.080  mean +0.004  (27 points)
+    (i)                                          plateau   max |res| 0.332  rms 0.219  mean -0.000  (17 points)
+    (i)                                          gap       max |res| 0.047  rms 0.014  mean -0.002  (21 points)
+  (ii)  A 3.8016, B0 0.9126, C 0.2940; plateau and gap as (i)
+    (ii)                                         one-loop  max |res| 0.159  rms 0.073  mean +0.009  (27 points)
+    (ii)                                         plateau   max |res| 0.332  rms 0.219  mean -0.000  (17 points)
+    (ii)                                         gap       max |res| 0.047  rms 0.014  mean -0.002  (21 points)
+  (iii) ell_g 1.55 (scan 0-2.5 by 0.05, least total SS 0.0385); one-loop above it A 2.69, B0 -1.2248, C -0.0878; gap form below it and in the gap: G 0.0180, R0 1.6100, P 1.5462, Q 1.0081
+    (iii) [plateau: the chain points with ell < 1] one-loop  max |res| 0.070  rms 0.024  mean +0.004  (27 points)
+    (iii) [plateau: the chain points with ell < 1] plateau   max |res| 0.071  rms 0.033  mean -0.000  (17 points)
+    (iii) [plateau: the chain points with ell < 1] gap       max |res| 0.046  rms 0.015  mean -0.002  (21 points)
+  (iv)  y = min(G (ln R - R0)^P (1 + Q ln L), 2.69/(ell + B0 - C ln L)): G 0.0180, R0 1.6100, P 1.5462, Q 1.0081, B0 -1.2248, C -0.0878
+    (iv) [plateau: the chain points with ell < 1] one-loop  max |res| 0.070  rms 0.024  mean +0.004  (27 points)
+    (iv) [plateau: the chain points with ell < 1] plateau   max |res| 0.071  rms 0.033  mean -0.000  (17 points)
+    (iv) [plateau: the chain points with ell < 1] gap       max |res| 0.046  rms 0.015  mean -0.002  (21 points)
+  v1 (its constants, with the cap and the plateau), beside:
+    v1 on crossover's rows, old form             one-loop  max |res| 0.033  rms 0.012  mean +0.002  (16 points)
+    v1 on crossover's rows, old form             plateau   max |res| 0.091  rms 0.049  mean +0.028  (4 points)
+    v1 on crossover's rows, old form             gap       max |res| 0.061  rms 0.024  mean -0.000  (34 points)
+    v1 on the new points, old form               gap       max |res| 0.067  rms 0.038  mean +0.015  (11 points)
+    v1 on crossover's rows, new form             one-loop  max |res| 0.262  rms 0.120  mean -0.083  (25 points)
+    v1 on crossover's rows, new form             plateau   max |res| 0.741  rms 0.424  mean +0.376  (8 points)
+    v1 on crossover's rows, new form             gap       max |res| 0.043  rms 0.016  mean -0.001  (21 points)
+    v1 on every point, new form                  one-loop  max |res| 0.262  rms 0.118  mean -0.081  (27 points)
+    v1 on every point, new form                  plateau   max |res| 0.743  rms 0.466  mean +0.411  (17 points)
+    v1 on every point, new form                  gap       max |res| 0.043  rms 0.016  mean -0.001  (21 points)
+  per point (back out unless marked): set, L, ln R, ell old -> new, regime old -> new, f, v1(old), (i), (ii), (iii), (iv)
+    2197 A0.05               26.740   52.151   9.535 -> 10.030  one_loop -> one_loop f 0.2490  | 0.255 0.264 0.317 0.256 0.256
+    2197 A0.05               20.950   44.440   7.399 -> 8.021   one_loop -> one_loop f 0.3060  | 0.315 0.323 0.377 0.317 0.317
+    2197 A0.05               14.660   35.379   4.914 -> 5.737   one_loop -> one_loop f 0.4165  | 0.430 0.428 0.477 0.433 0.433
+    2197 A0.05               11.730   30.716   3.683 -> 4.628   one_loop -> one_loop f 0.5068  | 0.522 0.505 0.546 0.524 0.524
+    2197 A0.05               10.170   28.069   3.008 -> 4.027   one_loop -> one_loop f 0.5746  | 0.589 0.558 0.591 0.591 0.591
+    2197 A0.05                9.000   25.956   2.489 -> 3.568   one_loop -> one_loop f 0.6397  | 0.651 0.604 0.629 0.654 0.654
+    2197 A0.05                7.885   23.833   1.987 -> 3.126   one_loop -> one_loop f 0.7171  | 0.721 0.655 0.670 0.725 0.725
+    2197 A0.05                6.793   21.613   1.486 -> 2.688   one_loop -> one_loop f 0.8113  | 0.800 0.710 0.714 0.808 0.808
+    2197 A0.05                5.716   19.242   0.980 -> 2.249   one_loop -> one_loop f 0.9206  | 0.900 0.771 0.762 0.898 0.898
+    2197 A0.05                4.776   16.968   0.522 -> 1.859   one_loop -> one_loop f 0.9726 (not out) | 0.900 0.828 0.807 0.969 0.958
+    2197 A0.01               10.130   27.992   2.989 -> 4.010   one_loop -> one_loop f 0.5767  | 0.591 0.559 0.592 0.593 0.593
+    2197 A0.01                7.921   23.904   2.003 -> 3.140   one_loop -> one_loop f 0.7143  | 0.718 0.653 0.668 0.723 0.723
+    2197 A0.01                6.835   21.702   1.505 -> 2.705   one_loop -> one_loop f 0.8073  | 0.797 0.708 0.712 0.804 0.804
+    2197 A0.01                5.762   19.346   1.002 -> 2.268   one_loop -> one_loop f 0.9160  | 0.883 0.768 0.760 0.894 0.894
+    2197 A0.01                4.703   16.782   0.485 -> 1.829   one_loop -> one_loop f 0.9661 (not out) | 0.900 0.832 0.810 0.974 0.955
+    2197 A0.01                4.287   15.686   0.267 -> 1.653   one_loop -> one_loop f 0.9182 (not out) | 0.900 0.857 0.831 0.992 0.930
+    2197 A0.01                4.014   14.936   0.082 -> 1.536   one_loop -> one_loop f 0.8780  | 0.900 0.874 0.845 0.907 0.907
+    2197 A0.01                3.619   13.791    none -> 1.364        gap -> one_loop f 0.8264  | 0.863 0.897 0.865 0.861 0.861
+    2197 A0.01                3.049   12.001    none -> 1.109        gap -> one_loop f 0.7734  | 0.764 0.929 0.894 0.760 0.760
+    2197 A0.01                2.317    9.362    none -> 0.758        gap -> one_loop f 0.5223  | 0.556 0.489 0.489 0.546 0.546
+    2197 A0.01                1.794    7.124    none -> 0.470        gap -> one_loop f 0.2819  | 0.343 0.489 0.489 0.331 0.331
+    2197 A0.01                1.354    4.865    none -> none         gap -> gap      f 0.1594  | 0.146 0.133 0.133 0.136 0.136
+    2197 A0.01                0.974    2.442    none -> none         gap -> gap      f 0.0591  | 0.016 0.012 0.012 0.013 0.013
+    R-865 A0.05             106.000  142.368  33.360 -> 33.460  one_loop -> one_loop f 0.0802  | 0.080 0.082 0.109 0.079 0.079
+    R-865 A0.05              64.050   96.369  21.443 -> 21.626  one_loop -> one_loop f 0.1217  | 0.122 0.126 0.163 0.121 0.121
+    R-865 A0.05              51.770   82.399  17.750 -> 17.986  one_loop -> one_loop f 0.1447  | 0.146 0.151 0.193 0.145 0.145
+    grid                      1.300    5.000    none -> 0.143        gap -> one_loop f 0.1588  | 0.151 0.489 0.489 0.140 0.140
+    grid                      1.300   10.000    none -> 0.789        gap -> one_loop f 0.5279  | 0.481 0.489 0.489 0.457 0.457
+    grid                      1.300   15.000    none -> 1.266        gap -> one_loop f 0.7864  | 0.740 0.809 0.836 0.716 0.716
+    grid                      2.000    5.000    none -> none         gap -> gap      f 0.1761  | 0.191 0.180 0.180 0.183 0.183
+    grid                      2.000   10.000    none -> 0.819        gap -> one_loop f 0.5661  | 0.573 0.489 0.489 0.560 0.560
+    grid                      2.000   15.000    none -> 1.328        gap -> one_loop f 0.8075  | 0.825 0.842 0.845 0.816 0.816
+    grid                      3.000    5.000    none -> none         gap -> gap      f 0.2034  | 0.227 0.219 0.219 0.222 0.222
+    grid                      3.000   10.000    none -> 0.864        gap -> one_loop f 0.6438  | 0.644 0.489 0.489 0.639 0.639
+    grid                      3.000   15.000    none -> 1.432        gap -> one_loop f 0.8386  | 0.880 0.864 0.847 0.877 0.877
+    grid                      4.000    5.000    none -> none         gap -> gap      f 0.2299  | 0.252 0.245 0.245 0.248 0.248
+    grid                      4.000   10.000    none -> 0.907        gap -> one_loop f 0.7092  | 0.687 0.489 0.489 0.686 0.686
+    grid                      4.000   15.000   0.080 -> 1.542   one_loop -> one_loop f 0.8798  | 0.900 0.872 0.844 0.908 0.908
+    grid                      6.000    5.000    none -> none         gap -> gap      f 0.2684  | 0.285 0.281 0.281 0.284 0.284
+    grid                      6.000   10.000    none -> 0.987        gap -> one_loop f 0.7803  | 0.740 0.489 0.489 0.742 0.742
+    grid                      6.000   15.000   0.756 -> 1.745   one_loop -> one_loop f 0.9539 (not out) | 0.900 0.875 0.832 0.981 0.939
+    grid                      8.000    5.000    none -> none         gap -> gap      f 0.3035  | 0.308 0.305 0.305 0.308 0.308
+    grid                      8.000   10.000   0.374 -> 1.056   one_loop -> one_loop f 0.8090  | 0.900 0.997 0.939 0.776 0.776
+    grid                      8.000   15.000   1.174 -> 1.914   one_loop -> one_loop f 0.9858 (not out) | 0.876 0.871 0.820 0.954 0.954
+    L-M8e-18                106.000   19.861   4.079 -> 4.121   one_loop -> one_loop f 0.5787  | 0.576 0.714 0.646 0.557 0.557
+    L-M8e-18                101.800   15.273   2.888 -> 2.932   one_loop -> one_loop f 0.7639 (not out) | 0.746 0.936 0.783 0.720 0.720
+    L-M8e-18                 98.480   11.710   1.932 -> 1.980   one_loop -> one_loop f 0.9821 (not out) | 0.929 1.000 0.915 0.902 0.902
+    L-M8e-18                 93.820    6.667    none -> 0.358        gap -> one_loop f 0.7259 (not out) | 0.696 0.489 0.489 0.708 0.708
+    L-M8e-18                 92.820    5.579    none -> none         gap -> gap      f 0.5669  | 0.559 0.564 0.564 0.571 0.571
+    L-M8e-18                 92.030    4.722    none -> none         gap -> gap      f 0.4469  | 0.431 0.441 0.441 0.440 0.440
+    L-M8e-18                 91.360    3.990    none -> none         gap -> gap      f 0.3387  | 0.313 0.323 0.323 0.318 0.318
+    L-M8e-18                 90.650    3.220    none -> none         gap -> gap      f 0.1880  | 0.188 0.193 0.193 0.188 0.188
+    L-M8e-18                 89.890    2.396    none -> none         gap -> gap      f 0.0590  | 0.069 0.063 0.063 0.066 0.066
+    L-M8e-18                 88.900    1.315    none -> none         gap -> gap      f 0.0052  | 0.000 0.000 0.000 0.000 0.000
+    L-M8e-18                 87.720    0.027    none -> none         gap -> gap      f 0.0001  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                106.000    9.758   1.393 -> 1.439   one_loop -> one_loop f 0.9274 (not out) | 0.950 -153.221 0.979 0.928 0.928
+    L-M1e-16                100.700    3.974    none -> none         gap -> gap      f 0.3369  | 0.315 0.325 0.325 0.320 0.320
+    L-M1e-16                100.000    3.264    none -> none         gap -> gap      f 0.1971  | 0.198 0.203 0.203 0.199 0.199
+    L-M1e-16                 99.440    2.644    none -> none         gap -> gap      f 0.0895  | 0.103 0.101 0.101 0.101 0.101
+    L-M1e-16                 98.930    2.095    none -> none         gap -> gap      f 0.0332  | 0.036 0.025 0.025 0.033 0.033
+    L-M1e-16                 98.070    1.160    none -> none         gap -> gap      f 0.0035  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                 97.690    0.755    none -> none         gap -> gap      f 0.0011  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                 97.350    0.382    none -> none         gap -> gap      f 0.0003  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                 97.030    0.042    none -> none         gap -> gap      f 0.0001  | 0.000 0.000 0.000 0.000 0.000
+    L-M5e-16                106.000    3.320    none -> none         gap -> gap      f 0.2086  | 0.208 0.215 0.215 0.210 0.210
+    lab                       1.378    5.003    none -> 0.120        gap -> one_loop f 0.1572  | 0.157 0.489 0.489 0.146 0.146
+    lab                       1.480    5.560    none -> 0.250        gap -> one_loop f 0.1746  | 0.201 0.489 0.489 0.190 0.190
+    lab                       1.638    6.373    none -> 0.370        gap -> one_loop f 0.2234  | 0.273 0.489 0.489 0.260 0.260
+    lab                       1.929    7.741    none -> 0.550        gap -> one_loop f 0.3357  | 0.402 0.489 0.489 0.390 0.390
+    lab                       2.110    8.522    none -> 0.650        gap -> one_loop f 0.4147  | 0.477 0.489 0.489 0.466 0.466
+    L-M8e-18                 93.766    6.606    none -> 0.305        gap -> one_loop f 0.7179  | 0.689 0.489 0.489 0.702 0.702
+    lab                       2.603   10.451    none -> 0.900        gap -> one_loop f 0.6530  | 0.650 0.489 0.489 0.643 0.643
+    L-M8e-18                 93.789    6.631    none -> 0.330        gap -> one_loop f 0.7211  | 0.692 0.489 0.489 0.704 0.704
+    L-M8e-18                 93.866    6.714    none -> 0.390        gap -> one_loop f 0.7312  | 0.701 0.489 0.489 0.714 0.714
+    lab                       3.316   12.863    none -> 1.230        gap -> one_loop f 0.7993  | 0.816 0.914 0.880 0.814 0.814
+    lab                       3.884   14.568    none -> 1.480        gap -> one_loop f 0.8588  | 0.894 0.882 0.851 0.894 0.894
+
+## n = 1 (the same selection on crossover's rows alone, as note 07b §0.3 fitted them): 25 one-loop points (ell >= 1, back out), 8 plateau points (ell < 1), 21 gap points
+  measured: the cap, largest f 0.9858 over all 65 points (0.9206 where the field came back out); the plateau (ell < 1, back out): mean 0.5238, min 0.1588, max 0.7803
+  (i)   A 2.69 held, B0 0.3977, C 0.5070; plateau 0.5238 (measured mean); gap G 0.0230, R0 1.7972, P 1.3795, Q 1.0496
+    (i)                                          one-loop  max |res| 0.190  rms 0.079  mean +0.007  (25 points)
+    (i)                                          plateau   max |res| 0.365  rms 0.196  mean +0.000  (8 points)
+    (i)                                          gap       max |res| 0.047  rms 0.014  mean -0.002  (21 points)
+  (ii)  A 3.7073, B0 0.8036, C 0.2930; plateau and gap as (i)
+    (ii)                                         one-loop  max |res| 0.153  rms 0.074  mean +0.009  (25 points)
+    (ii)                                         plateau   max |res| 0.365  rms 0.196  mean +0.000  (8 points)
+    (ii)                                         gap       max |res| 0.047  rms 0.014  mean -0.002  (21 points)
+  (iii) ell_g 1.55 (scan 0-2.5 by 0.05, least total SS 0.0264); one-loop above it A 2.69, B0 -1.2248, C -0.0878; gap form below it and in the gap: G 0.0214, R0 1.6289, P 1.5162, Q 0.8422
+    (iii) [plateau: the chain points with ell < 1] one-loop  max |res| 0.050  rms 0.021  mean +0.004  (25 points)
+    (iii) [plateau: the chain points with ell < 1] plateau   max |res| 0.063  rms 0.035  mean -0.001  (8 points)
+    (iii) [plateau: the chain points with ell < 1] gap       max |res| 0.044  rms 0.016  mean -0.001  (21 points)
+  (iv)  y = min(G (ln R - R0)^P (1 + Q ln L), 2.69/(ell + B0 - C ln L)): G 0.0214, R0 1.6289, P 1.5162, Q 0.8422, B0 -1.2248, C -0.0878
+    (iv) [plateau: the chain points with ell < 1] one-loop  max |res| 0.050  rms 0.021  mean +0.004  (25 points)
+    (iv) [plateau: the chain points with ell < 1] plateau   max |res| 0.063  rms 0.035  mean -0.001  (8 points)
+    (iv) [plateau: the chain points with ell < 1] gap       max |res| 0.044  rms 0.016  mean -0.001  (21 points)
+  v1 (its constants, with the cap and the plateau), beside:
+    v1 on crossover's rows, old form             one-loop  max |res| 0.033  rms 0.012  mean +0.002  (16 points)
+    v1 on crossover's rows, old form             plateau   max |res| 0.091  rms 0.049  mean +0.028  (4 points)
+    v1 on crossover's rows, old form             gap       max |res| 0.061  rms 0.024  mean -0.000  (34 points)
+    v1 on crossover's rows, new form             one-loop  max |res| 0.262  rms 0.120  mean -0.083  (25 points)
+    v1 on crossover's rows, new form             plateau   max |res| 0.741  rms 0.424  mean +0.376  (8 points)
+    v1 on crossover's rows, new form             gap       max |res| 0.043  rms 0.016  mean -0.001  (21 points)
+    v1 on every point, new form                  one-loop  max |res| 0.262  rms 0.120  mean -0.083  (25 points)
+    v1 on every point, new form                  plateau   max |res| 0.741  rms 0.424  mean +0.376  (8 points)
+    v1 on every point, new form                  gap       max |res| 0.043  rms 0.016  mean -0.001  (21 points)
+  per point (back out unless marked): set, L, ln R, ell old -> new, regime old -> new, f, v1(old), (i), (ii), (iii), (iv)
+    2197 A0.05               26.740   52.151   9.535 -> 10.030  one_loop -> one_loop f 0.2490  | 0.255 0.264 0.313 0.256 0.256
+    2197 A0.05               20.950   44.440   7.399 -> 8.021   one_loop -> one_loop f 0.3060  | 0.315 0.324 0.373 0.317 0.317
+    2197 A0.05               14.660   35.379   4.914 -> 5.737   one_loop -> one_loop f 0.4165  | 0.430 0.431 0.475 0.433 0.433
+    2197 A0.05               11.730   30.716   3.683 -> 4.628   one_loop -> one_loop f 0.5068  | 0.522 0.509 0.545 0.524 0.524
+    2197 A0.05               10.170   28.069   3.008 -> 4.027   one_loop -> one_loop f 0.5746  | 0.589 0.563 0.591 0.591 0.591
+    2197 A0.05                9.000   25.956   2.489 -> 3.568   one_loop -> one_loop f 0.6397  | 0.651 0.611 0.630 0.654 0.654
+    2197 A0.05                7.885   23.833   1.987 -> 3.126   one_loop -> one_loop f 0.7171  | 0.721 0.662 0.672 0.725 0.725
+    2197 A0.05                6.793   21.613   1.486 -> 2.688   one_loop -> one_loop f 0.8113  | 0.800 0.720 0.718 0.808 0.808
+    2197 A0.05                5.716   19.242   0.980 -> 2.249   one_loop -> one_loop f 0.9206  | 0.900 0.783 0.767 0.898 0.898
+    2197 A0.05                4.776   16.968   0.522 -> 1.859   one_loop -> one_loop f 0.9726 (not out) | 0.900 0.841 0.814 0.969 0.956
+    2197 A0.01               10.130   27.992   2.989 -> 4.010   one_loop -> one_loop f 0.5767  | 0.591 0.565 0.592 0.593 0.593
+    2197 A0.01                7.921   23.904   2.003 -> 3.140   one_loop -> one_loop f 0.7143  | 0.718 0.661 0.671 0.723 0.723
+    2197 A0.01                6.835   21.702   1.505 -> 2.705   one_loop -> one_loop f 0.8073  | 0.797 0.718 0.716 0.804 0.804
+    2197 A0.01                5.762   19.346   1.002 -> 2.268   one_loop -> one_loop f 0.9160  | 0.883 0.780 0.765 0.894 0.894
+    2197 A0.01                4.703   16.782   0.485 -> 1.829   one_loop -> one_loop f 0.9661 (not out) | 0.900 0.845 0.818 0.974 0.952
+    2197 A0.01                4.287   15.686   0.267 -> 1.653   one_loop -> one_loop f 0.9182 (not out) | 0.900 0.871 0.839 0.992 0.928
+    2197 A0.01                4.014   14.936   0.082 -> 1.536   one_loop -> one_loop f 0.8780  | 0.900 0.888 0.853 0.905 0.905
+    2197 A0.01                3.619   13.791    none -> 1.364        gap -> one_loop f 0.8264  | 0.863 0.911 0.874 0.861 0.861
+    2197 A0.01                3.049   12.001    none -> 1.109        gap -> one_loop f 0.7734  | 0.764 0.943 0.903 0.763 0.763
+    2197 A0.01                2.317    9.362    none -> 0.758        gap -> one_loop f 0.5223  | 0.556 0.524 0.524 0.557 0.557
+    2197 A0.01                1.794    7.124    none -> 0.470        gap -> one_loop f 0.2819  | 0.343 0.524 0.524 0.345 0.345
+    2197 A0.01                1.354    4.865    none -> none         gap -> gap      f 0.1594  | 0.146 0.133 0.133 0.148 0.148
+    2197 A0.01                0.974    2.442    none -> none         gap -> gap      f 0.0591  | 0.016 0.012 0.012 0.015 0.015
+    R-865 A0.05             106.000  142.368  33.360 -> 33.460  one_loop -> one_loop f 0.0802  | 0.080 0.082 0.107 0.079 0.079
+    R-865 A0.05              64.050   96.369  21.443 -> 21.626  one_loop -> one_loop f 0.1217  | 0.122 0.126 0.160 0.121 0.121
+    R-865 A0.05              51.770   82.399  17.750 -> 17.986  one_loop -> one_loop f 0.1447  | 0.146 0.151 0.190 0.145 0.145
+    grid                      1.300    5.000    none -> 0.143        gap -> one_loop f 0.1588  | 0.151 0.524 0.524 0.152 0.152
+    grid                      1.300   10.000    none -> 0.789        gap -> one_loop f 0.5279  | 0.481 0.524 0.524 0.481 0.481
+    grid                      1.300   15.000    none -> 1.266        gap -> one_loop f 0.7864  | 0.740 0.827 0.844 0.737 0.737
+    grid                      2.000    5.000    none -> none         gap -> gap      f 0.1761  | 0.191 0.180 0.180 0.193 0.193
+    grid                      2.000   10.000    none -> 0.819        gap -> one_loop f 0.5661  | 0.573 0.524 0.524 0.573 0.573
+    grid                      2.000   15.000    none -> 1.328        gap -> one_loop f 0.8075  | 0.825 0.859 0.854 0.823 0.823
+    grid                      3.000    5.000    none -> none         gap -> gap      f 0.2034  | 0.227 0.219 0.219 0.229 0.229
+    grid                      3.000   10.000    none -> 0.864        gap -> one_loop f 0.6438  | 0.644 0.524 0.524 0.645 0.645
+    grid                      3.000   15.000    none -> 1.432        gap -> one_loop f 0.8386  | 0.880 0.879 0.856 0.878 0.878
+    grid                      4.000    5.000    none -> none         gap -> gap      f 0.2299  | 0.252 0.245 0.245 0.254 0.254
+    grid                      4.000   10.000    none -> 0.907        gap -> one_loop f 0.7092  | 0.687 0.524 0.524 0.688 0.688
+    grid                      4.000   15.000   0.080 -> 1.542   one_loop -> one_loop f 0.8798  | 0.900 0.886 0.852 0.906 0.906
+    grid                      6.000    5.000    none -> none         gap -> gap      f 0.2684  | 0.285 0.281 0.281 0.288 0.288
+    grid                      6.000   10.000    none -> 0.987        gap -> one_loop f 0.7803  | 0.740 0.524 0.524 0.740 0.740
+    grid                      6.000   15.000   0.756 -> 1.745   one_loop -> one_loop f 0.9539 (not out) | 0.900 0.887 0.840 0.981 0.936
+    grid                      8.000    5.000    none -> none         gap -> gap      f 0.3035  | 0.308 0.305 0.305 0.311 0.311
+    grid                      8.000   10.000   0.374 -> 1.056   one_loop -> one_loop f 0.8090  | 0.900 0.999 0.948 0.772 0.772
+    grid                      8.000   15.000   1.174 -> 1.914   one_loop -> one_loop f 0.9858 (not out) | 0.876 0.882 0.828 0.954 0.951
+    L-M8e-18                106.000   19.861   4.079 -> 4.121   one_loop -> one_loop f 0.5787  | 0.576 0.713 0.647 0.557 0.557
+    L-M8e-18                101.800   15.273   2.888 -> 2.932   one_loop -> one_loop f 0.7639 (not out) | 0.746 0.935 0.789 0.720 0.720
+    L-M8e-18                 98.480   11.710   1.932 -> 1.980   one_loop -> one_loop f 0.9821 (not out) | 0.929 1.000 0.924 0.902 0.902
+    L-M8e-18                 93.820    6.667    none -> 0.358        gap -> one_loop f 0.7259 (not out) | 0.696 0.524 0.524 0.699 0.699
+    L-M8e-18                 92.820    5.579    none -> none         gap -> gap      f 0.5669  | 0.559 0.564 0.564 0.563 0.563
+    L-M8e-18                 92.030    4.722    none -> none         gap -> gap      f 0.4469  | 0.431 0.441 0.441 0.435 0.435
+    L-M8e-18                 91.360    3.990    none -> none         gap -> gap      f 0.3387  | 0.313 0.323 0.323 0.315 0.315
+    L-M8e-18                 90.650    3.220    none -> none         gap -> gap      f 0.1880  | 0.188 0.193 0.193 0.188 0.188
+    L-M8e-18                 89.890    2.396    none -> none         gap -> gap      f 0.0590  | 0.069 0.063 0.063 0.066 0.066
+    L-M8e-18                 88.900    1.315    none -> none         gap -> gap      f 0.0052  | 0.000 0.000 0.000 0.000 0.000
+    L-M8e-18                 87.720    0.027    none -> none         gap -> gap      f 0.0001  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                106.000    9.758   1.393 -> 1.439   one_loop -> one_loop f 0.9274 (not out) | 0.950 -162.366 0.985 0.921 0.921
+    L-M1e-16                100.700    3.974    none -> none         gap -> gap      f 0.3369  | 0.315 0.325 0.325 0.317 0.317
+    L-M1e-16                100.000    3.264    none -> none         gap -> gap      f 0.1971  | 0.198 0.203 0.203 0.198 0.198
+    L-M1e-16                 99.440    2.644    none -> none         gap -> gap      f 0.0895  | 0.103 0.101 0.101 0.101 0.101
+    L-M1e-16                 98.930    2.095    none -> none         gap -> gap      f 0.0332  | 0.036 0.025 0.025 0.032 0.032
+    L-M1e-16                 98.070    1.160    none -> none         gap -> gap      f 0.0035  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                 97.690    0.755    none -> none         gap -> gap      f 0.0011  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                 97.350    0.382    none -> none         gap -> gap      f 0.0003  | 0.000 0.000 0.000 0.000 0.000
+    L-M1e-16                 97.030    0.042    none -> none         gap -> gap      f 0.0001  | 0.000 0.000 0.000 0.000 0.000
+    L-M5e-16                106.000    3.320    none -> none         gap -> gap      f 0.2086  | 0.208 0.215 0.215 0.209 0.209
+
+# fits.py end: 12:11  up 17 days, 14:32, 1 user, load averages: 5.54 8.14 8.86

@@ -232,12 +232,13 @@ class TestTheDriver(unittest.TestCase):
                     for n in ast.walk(_tree(name))
                     if isinstance(n, ast.Call)
                     and ast.unparse(n.func)
-                    in ("plot_inputs.exponential_models", "plot_inputs.parameters")
+                    in ("plot_inputs.potential_models", "plot_inputs.parameters")
                 ]
                 text = {ast.unparse(n.func): ast.unparse(n) for n in calls}
+                # each potential's models (power-law-wall prompt 06, P49)
                 self.assertIn(
                     "M_table, beta_table, args.n_values, units",
-                    text["plot_inputs.exponential_models"],
+                    text["plot_inputs.potential_models"],
                 )
                 self.assertIn(
                     "tuning_tol=args.tuning_tolerance", text["plot_inputs.parameters"]

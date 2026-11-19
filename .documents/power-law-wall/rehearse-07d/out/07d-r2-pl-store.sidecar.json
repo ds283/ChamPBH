@@ -1,0 +1,219 @@
+{
+  "created": "2026-11-19T09:44:37+00:00",
+  "datastore": "power-law-wall-07d-r2-pl.db",
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 37,
+        "digest": "ad597796ec151a278dcd0c415bbd7cf9c62b417e2669647f3ee9be996e821286",
+        "tag_sets": [
+          {
+            "count": 37,
+            "digest": "ad597796ec151a278dcd0c415bbd7cf9c62b417e2669647f3ee9be996e821286",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "BBNData": {
+        "count": 37,
+        "digest": "784a53a5a986c9d9a20fce25dcb6d40693af2557a1cc2226c53384c7bff58c71",
+        "tag_sets": [
+          {
+            "count": 37,
+            "digest": "784a53a5a986c9d9a20fce25dcb6d40693af2557a1cc2226c53384c7bff58c71",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "ExponentialModel": {
+        "count": 0,
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tag_sets": []
+      },
+      "IntegrationSolver": {
+        "count": 7,
+        "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+        "tag_sets": [
+          {
+            "count": 7,
+            "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+            "tags": []
+          }
+        ]
+      },
+      "InversePowerModel": {
+        "count": 16,
+        "digest": "7be234a99750c2fd8350fe5aca08813e86e5c9e506f1354b4089e18793820037",
+        "tag_sets": [
+          {
+            "count": 16,
+            "digest": "7be234a99750c2fd8350fe5aca08813e86e5c9e506f1354b4089e18793820037",
+            "tags": []
+          }
+        ]
+      },
+      "M_value": {
+        "count": 4,
+        "digest": "29553150f0f6b2e1035a25d5a40ec41c4ac4ffc43058b43f7c81dd000c3711a6",
+        "tag_sets": [
+          {
+            "count": 4,
+            "digest": "29553150f0f6b2e1035a25d5a40ec41c4ac4ffc43058b43f7c81dd000c3711a6",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ScalarHistory": {
+        "count": 40,
+        "digest": "3f517b3d260b7ffc7786b90fd7d7dd775de93803bdd87c6f9097a10e2475a7bb",
+        "tag_sets": [
+          {
+            "count": 40,
+            "digest": "3f517b3d260b7ffc7786b90fd7d7dd775de93803bdd87c6f9097a10e2475a7bb",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "alpha_value": {
+        "count": 6,
+        "digest": "8f78d131155b1c2b0962e3a1d05d990cc25065fd244d99d54e4fb306c3b0216d",
+        "tag_sets": [
+          {
+            "count": 6,
+            "digest": "8f78d131155b1c2b0962e3a1d05d990cc25065fd244d99d54e4fb306c3b0216d",
+            "tags": []
+          }
+        ]
+      },
+      "beta_value": {
+        "count": 3,
+        "digest": "638163f012ebbc4d909231cadbeb3abaa6d85992df7eb33a70fce0d08aa56751",
+        "tag_sets": [
+          {
+            "count": 3,
+            "digest": "638163f012ebbc4d909231cadbeb3abaa6d85992df7eb33a70fce0d08aa56751",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 1,
+        "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 75001,
+        "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+        "tag_sets": [
+          {
+            "count": 75001,
+            "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 1,
+        "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 2,
+        "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "8f50f27e6fc9bce34ccc9f1c75408165c7a87fba0c4a52a4d8b59716be0a078e",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "8f50f27e6fc9bce34ccc9f1c75408165c7a87fba0c4a52a4d8b59716be0a078e",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "152f04f7ee904efd7fb7c61d23a23aba45d23035d28313ec14092eb37fce50be",
+    "encoding_format": 1,
+    "fingerprint_format": 8,
+    "problems": {},
+    "taken": {
+      "git_dirty": true,
+      "git_head": "00fb7188e54d6175537e2158b17827a3eed81788",
+      "run_id": null,
+      "when": "2026-11-19T09:44:41+00:00"
+    }
+  },
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "00fb7188e54d6175537e2158b17827a3eed81788",
+      "operation": "create",
+      "to": "var/datastores/power-law-wall-07d-r2-pl.db",
+      "when": "2026-11-19T09:44:37+00:00"
+    }
+  ],
+  "name": "power-law-wall-07d-r2-pl",
+  "purpose": "power-law-wall 07d R2 (restart): the power law at n 1 2 at the tip, one k_ex, 07's pl grid (runs a, b, c; 40 histories)",
+  "sidecar_format": 1,
+  "store_id": "460a62f94a7f442d9bb4061d3c0f590a"
+}

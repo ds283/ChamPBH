@@ -1,0 +1,5 @@
+--beta-values 1.5 2 --M-values-Mp 4e-31
+--beta-values 1.5 2 --M-values-Mp 4e-31 --alpha-values 0 0.1 --A-values 1 0.5
+--beta-values 1.2 2 2.9 --M-values-Mp 4e-31 1e-15 --n-values 1 2 --no-alpha-values --A-values 0.05 1 10
+--M-values-eV 1e25 3e25 --beta-low 1 --beta-high 2 --samples-per-beta 2 --alpha-values 0.01 0.1 0.01
+--config exponential.yaml --A-values 1

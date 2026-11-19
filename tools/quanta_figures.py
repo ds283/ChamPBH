@@ -20,13 +20,18 @@ the tools read 04's exports and 05's outputs (`tools/quanta_measures.py`) and dr
 
 - **The regimes' colours** (`REGIMES`, `REGIME_COLOURS`): one fixed categorical order, one-loop, gap, classical,
   unassessed. A candidate row whose regime is none of the four is refused (`FigureRefused`).
-- **Finding the files.** The root is a cosmology directory `<output>/<label>/`. A history's csv directory is
+- **Finding the files.** The root is one potential's directory `<output>/<label>/<model>/` (power-law-wall prompt 06;
+  README §6.10 R12, P50). Its histories.csv must have the `model` column (P51): `read_histories` refuses a file
+  without it as unreadable, naming the column. A history's csv directory is
   `quanta_measures.history_dir`; its plots directory is the same path with the `csv` component replaced by `plots`
   (`plots_dir`), as the plot scripts write it; a row's directory is `extract_common.alpha_path`. `to_output` maps a
   path below the root to the same path below `--output`. No path is formatted inline.
 - **The model check** (`check_model_rows`, `read_checked`): every row of every quanta file names the expected
-  `spectrum_model` (`ComputeTargets.quanta_spectrum.SPECTRUM_MODEL`) and the `assoc_scale` asked for, compared as
-  `float(cell) == scale` (ruling 3). A file that fails is refused with the reason.
+  `spectrum_model`, the one of its row's wall (`ComputeTargets.quanta_spectrum.SPECTRUM_MODELS` of
+  `quanta_measures.wall_of` of the histories.csv row, from its `model` and `n`; power-law-wall prompt 06, P53), and the
+  `assoc_scale` asked for, compared as `float(cell) == scale` (ruling 3). A per-history file expects its history's
+  model; quanta_histories.csv expects, row by row, the model of the histories.csv row of the same key
+  (`expected_models`). A file that fails is refused with the reason.
 - **The rows to draw** (`classify`, `walk`): a histories.csv row is counted in the first of these that it meets, and only
   there (ruling 1): `fixed` (`drain_model` is `fixed`, marker or not); `marker` (`failure_reasons` is exactly
   `MARKER_REASON` and `normalization` is blank); `failed` (any other row with a blank `normalization`); `drawn`.
@@ -36,7 +41,7 @@ the tools read 04's exports and 05's outputs (`tools/quanta_measures.py`) and dr
 import csv
 import math
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
 
@@ -103,8 +108,49 @@ def walk(rows: Sequence[dict]) -> Dict[str, List[dict]]:
 
 
 def read_histories(root: Path) -> List[dict]:
-    """histories.csv of the root; raises OSError, csv.Error or UnicodeDecodeError, which the tools map to exit 2."""
-    return qm.read_csv(Path(root) / "histories.csv")[1]
+    """histories.csv of the root; raises OSError, csv.Error or UnicodeDecodeError, which the tools map to exit 2, and
+    csv.Error for a file without the `model` column (power-law-wall prompt 06, P51), naming it.
+    """
+    columns, rows = qm.read_csv(Path(root) / "histories.csv")
+    if qm.MODEL_COLUMN not in columns:
+        raise csv.Error(
+            f"it has no {qm.MODEL_COLUMN!r} column, which names the potential whose spectrum each row takes "
+            f"(power-law-wall prompt 06)"
+        )
+    return rows
+
+
+def spectrum_model_of(row: dict) -> str:
+    """The spectrum model of a histories.csv row's wall (quanta_measures.wall_of); FigureRefused with the reason
+    if the row has none (power-law-wall prompt 06, P53)."""
+    try:
+        return qs.spectrum_model(qm.wall_of(row))
+    except qm.Refused as e:
+        raise FigureRefused(str(e))
+
+
+def expected_models(histories: Sequence[dict]) -> Callable[[dict], str]:
+    """
+    The expected spectrum model of each row of a quanta_histories file, by its key (`key_of`): the model of the
+    histories.csv row of the same key (power-law-wall prompt 06, P53). A row whose key no histories.csv row has, or
+    whose histories.csv row has no wall, is FigureRefused.
+    """
+    by_key = {key_of(h): h for h in histories}
+
+    def expected(row: dict) -> str:
+        h = by_key.get(key_of(row))
+        if h is None:
+            raise FigureRefused(f"the key {key_of(row)} is no row of histories.csv")
+        return spectrum_model_of(h)
+
+    return expected
+
+
+def models_text(rows: Iterable[dict]) -> str:
+    """The spectrum models of the walls of the rows of histories.csv, distinct and in the order met, for a printed
+    line (quanta_measures.root_models_text: every row, whatever its law; 'no spectrum' if none has a wall).
+    """
+    return qm.root_models_text(list(rows))
 
 
 def key_of(row: dict) -> Tuple[str, ...]:
@@ -125,13 +171,23 @@ def is_close(value: float, cell: str) -> bool:
 # ---------------------------------------------------------------------------------------------------------------------
 
 
-def check_model_rows(rows: Sequence[dict], scale: float, what: str) -> None:
-    """Every row names SPECTRUM_MODEL and `scale`, or FigureRefused says which row and why."""
+def check_model_rows(
+    rows: Sequence[dict],
+    scale: float,
+    what: str,
+    expected: Union[str, Callable[[dict], str]],
+) -> None:
+    """
+    Every row names its expected spectrum model and `scale`, or FigureRefused says which row and why. `expected` is the
+    model of every row (a per-history file's, its history's wall's), or a function giving each row's
+    (`expected_models`, for quanta_histories); no wall is assumed (power-law-wall prompt 06, P53).
+    """
     for k, r in enumerate(rows):
         model = r.get("spectrum_model")
-        if model != qs.SPECTRUM_MODEL:
+        want = expected if isinstance(expected, str) else expected(r)
+        if model != want:
             raise FigureRefused(
-                f"{what}: row {k + 2} names spectrum_model {model!r}, not {qs.SPECTRUM_MODEL!r}"
+                f"{what}: row {k + 2} names spectrum_model {model!r}, not {want!r}"
             )
         cell = r.get("assoc_scale")
         try:
@@ -144,13 +200,16 @@ def check_model_rows(rows: Sequence[dict], scale: float, what: str) -> None:
             )
 
 
-def read_checked(path: Path, scale: float) -> List[dict]:
-    """The rows of a quanta file, after the model check; FigureRefused if it cannot be read or fails the check."""
+def read_checked(
+    path: Path, scale: float, expected: Union[str, Callable[[dict], str]]
+) -> List[dict]:
+    """The rows of a quanta file, after the model check (`check_model_rows`, against `expected`); FigureRefused if it
+    cannot be read or fails the check."""
     try:
         _, rows = qm.read_csv(path)
     except (OSError, csv.Error, UnicodeDecodeError) as e:
         raise FigureRefused(f"cannot read {path}: {e}")
-    check_model_rows(rows, scale, path.name)
+    check_model_rows(rows, scale, path.name, expected)
     return rows
 
 

@@ -43,7 +43,7 @@ from CosmologyConcepts import (
     pi_value,
 )
 from CosmologyConcepts.Models import AbstractModel
-from CosmologyConcepts.Models.model_ids import EXPONENTIAL_MODEL
+from CosmologyConcepts.Models.model_ids import EXPONENTIAL_MODEL, INVERSE_POWER_MODEL
 from CosmologyModels import BaseCosmology
 from CosmologyModels.model_ids import XAV_IMPROVED_EOS_IDENTIFIER
 from datastorekit.SQL.factory_base import SQLAFactoryBase
@@ -523,8 +523,11 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
         # (jordan-normalization prompt 07, S2). failure is matched only
         # when the payload gives it, and is a leaf so that the inventory shows it (campaign README
         # P15); the stored label, a job name and a time, is not. The polymorphic maps are those of
-        # the two model_ids modules: only XAV_IMPROVED_EOS_IDENTIFIER names a stored cosmology.
-        # The model is on this row's shard, since both take their shard key from beta
+        # the two model_ids modules: only XAV_IMPROVED_EOS_IDENTIFIER names a stored cosmology, and
+        # each model type its own table, EXPONENTIAL_MODEL ExponentialModel and, since power-law-wall
+        # prompt 05 (README §6.9 P35), INVERSE_POWER_MODEL InversePowerModel; the two tables' serials
+        # are their own, so a model is named by the pair (model_type, model_serial) and never by the
+        # serial alone. The model is on this row's shard, since both take their shard key from beta
         # (dk-and-rpk-migration prompt 09; jordan-normalization prompt 07)
         return InventorySpec(
             leaves=("cosmology_type", "model_type", "failure"),
@@ -538,7 +541,10 @@ class sqla_ScalarHistoryFactory(SQLAFactoryBase):
                 "model": Parent(
                     "model_serial",
                     type_column="model_type",
-                    types={EXPONENTIAL_MODEL: "ExponentialModel"},
+                    types={
+                        EXPONENTIAL_MODEL: "ExponentialModel",
+                        INVERSE_POWER_MODEL: "InversePowerModel",
+                    },
                 ),
                 "T_init": Parent("T_Jordan_init_serial", "temperature"),
                 "phi_init": Parent("phi_Einstein_init_serial", "phi_value"),

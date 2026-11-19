@@ -1,0 +1,54 @@
+## before CosmologyModels: 2026-11-16 18:42:00 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .
+uptime: 18:42  up 16 days, 21:02, 1 user, load averages: 2.73 14.22 17.82
+wall: 66 s
+uptime after: 18:43  up 16 days, 21:03, 1 user, load averages: 4.37 12.76 17.03
+Ran 26 tests in 64.338s
+verdict: OK
+exit: 0
+
+## before CT-af: 2026-11-16 18:43:12 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'
+uptime: 18:43  up 16 days, 21:03, 1 user, load averages: 4.40 12.49 16.88
+wall: 149 s
+uptime after: 18:45  up 16 days, 21:06, 1 user, load averages: 6.23 9.62 14.96
+Ran 226 tests in 146.248s
+verdict: OK
+exit: 0
+
+## before CT-gz: 2026-11-16 18:45:41 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'
+uptime: 18:45  up 16 days, 21:06, 1 user, load averages: 6.23 9.62 14.96
+wall: 546 s
+uptime after: 18:54  up 16 days, 21:15, 1 user, load averages: 4.12 4.41 9.50
+Ran 557 tests in 542.283s
+verdict: OK
+exit: 0
+
+## before ObjectFactories: 2026-11-16 18:54:47 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .
+uptime: 18:54  up 16 days, 21:15, 1 user, load averages: 4.12 4.41 9.50
+wall: 154 s
+uptime after: 18:57  up 16 days, 21:18, 1 user, load averages: 2.07 3.39 8.23
+Ran 175 tests in 151.990s
+verdict: OK
+exit: 0
+
+## before tools: 2026-11-16 18:57:21 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .
+uptime: 18:57  up 16 days, 21:18, 1 user, load averages: 2.07 3.39 8.23
+wall: 315 s
+uptime after: 19:02  up 16 days, 21:23, 1 user, load averages: 2.98 3.27 6.66
+Ran 312 tests in 312.882s
+verdict: FAILED (failures=1)
+exit: 1
+
+## before RunDrivers: 2026-11-16 19:02:36 +0000
+$ PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .
+uptime: 19:02  up 16 days, 21:23, 1 user, load averages: 2.98 3.27 6.66
+wall: 26 s
+uptime after: 19:03  up 16 days, 21:23, 1 user, load averages: 3.60 3.38 6.60
+Ran 79 tests in 24.216s
+verdict: FAILED (failures=1)
+exit: 1
+

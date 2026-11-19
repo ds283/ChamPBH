@@ -1,0 +1,20 @@
+# command: PYTHONPATH=. ./venv/bin/python tools/surfing_scan.py --out .documents/power-law-wall/sample-04/surfing/f_new_check.csv --M 1e-3 --phi-init-Mp 5 --beta-values 2.975 2.976 3.003
+# start: 2026-11-15 20:07:17 20:07  up 15 days, 22:28, 1 user, load averages: 8.85 7.23 7.48
+-- surfing_scan: 3 beta to run, 0 already in .documents/power-law-wall/sample-04/surfing/f_new_check.csv; phi*=5 M_P, M=0.001 M_P, tuned to T_CMB with tolerance 1e-05 (at most 30 integrations), window to T_J=0.001 GeV
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune surfing_scan-beta2.975-M0.001 it=0 kind=seed H/H0-1=-8.952e-03 phi_ref/phi_min-1=-1.433e-03 norm=-276.977381616 phi_ref=2.3434050589e-02 wall=10.5
+-- tune surfing_scan-beta2.975-M0.001 it=1 kind=plain H/H0-1=+5.984e-04 phi_ref/phi_min-1=-1.254e-02 norm=-276.948592821 phi_ref=2.3467679844e-02 wall=10.3
+-- tune surfing_scan-beta2.975-M0.001 it=2 kind=secant H/H0-1=+2.728e-04 phi_ref/phi_min-1=-1.208e-03 norm=-276.950420069 phi_ref=2.3753119496e-02 wall=10.5
+-- tune surfing_scan-beta2.975-M0.001 it=3 kind=secant H/H0-1=-1.575e-06 phi_ref/phi_min-1=+9.127e-06 norm=-276.951310252 phi_ref=2.3775682183e-02 wall=10.4
+beta=2.975 status=ok capture=1.6107 max=1.6143 second_dip=- deliver=1.61429 GeV crossings=2 iterations=4 phi_ref=2.3775682183e-02 M_P V_ref=1.932267e-11 eV^4 wall=42.0 s
+-- tune surfing_scan-beta2.976-M0.001 it=0 kind=seed H/H0-1=-8.953e-03 phi_ref/phi_min-1=-1.433e-03 norm=-276.977434134 phi_ref=2.3429592955e-02 wall=10.4
+-- tune surfing_scan-beta2.976-M0.001 it=1 kind=plain H/H0-1=+5.997e-04 phi_ref/phi_min-1=-1.254e-02 norm=-276.948643108 phi_ref=2.3463206112e-02 wall=10.4
+-- tune surfing_scan-beta2.976-M0.001 it=2 kind=secant H/H0-1=+2.725e-04 phi_ref/phi_min-1=-1.208e-03 norm=-276.950473991 phi_ref=2.3748569622e-02 wall=10.5
+-- tune surfing_scan-beta2.976-M0.001 it=3 kind=secant H/H0-1=-1.750e-06 phi_ref/phi_min-1=+9.012e-06 norm=-276.951363123 phi_ref=2.3771137850e-02 wall=10.2
+beta=2.976 status=ok capture=- max=- second_dip=- deliver=1.6121 GeV crossings=0 iterations=4 phi_ref=2.3771137850e-02 M_P V_ref=1.932181e-11 eV^4 wall=42.0 s [not captured]
+-- tune surfing_scan-beta3.003-M0.001 it=0 kind=seed H/H0-1=-8.953e-03 phi_ref/phi_min-1=-1.417e-03 norm=-276.978848279 phi_ref=2.3310091422e-02 wall=10.5
+-- tune surfing_scan-beta3.003-M0.001 it=1 kind=plain H/H0-1=+6.031e-04 phi_ref/phi_min-1=-1.254e-02 norm=-276.950043855 phi_ref=2.3343164801e-02 wall=11.6
+-- tune surfing_scan-beta3.003-M0.001 it=2 kind=secant H/H0-1=+2.732e-04 phi_ref/phi_min-1=-1.216e-03 norm=-276.951885016 phi_ref=2.3626818355e-02 wall=10.7
+-- tune surfing_scan-beta3.003-M0.001 it=3 kind=secant H/H0-1=-1.506e-06 phi_ref/phi_min-1=+9.947e-06 norm=-276.952777217 phi_ref=2.3649480550e-02 wall=10.6
+beta=3.003 status=ok capture=50.91 max=50.9749 second_dip=- deliver=50.9749 GeV crossings=2 iterations=4 phi_ref=2.3649480550e-02 M_P V_ref=1.929868e-11 eV^4 wall=43.9 s
+# end: 2026-11-15 20:09:28 exit=0 wall=131 s 20:09  up 15 days, 22:30, 1 user, load averages: 9.50 7.75 7.64

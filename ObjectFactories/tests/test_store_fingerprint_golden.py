@@ -33,8 +33,8 @@ names. The model is SecondaryGWKit's `test_store_fingerprint_golden.py`.
 `test_version_keyed_lookups._TempStoreCase`: a real one-shard pool writes the version row and is
 closed, then the package's undecorated actor inserts rows with no explicit serial, stamped with
 fixed times) and importing nothing from `tools.tests`, so that a golden store's rows cannot move
-when another module's helpers do. It holds one row of each of the 16 classes with a spec, except
-that there are two `ExponentialModel` rows (n = 1 and n = 2) and two `ScalarHistory` rows, one on
+when another module's helpers do. It holds one row of each of the 16 classes with a spec but
+`InversePowerModel`, which has none (format 8), except that there are two `ExponentialModel` rows (n = 1 and n = 2) and two `ScalarHistory` rows, one on
 each, so that the polymorphic key of the spec is resolved; the first is tagged and the second is
 not, so that two tag sets are read. Every literal is fixed. (Until format 5 the store held 17
 classes, with two `ExponentialPotential` rows where it holds two `ExponentialModel` rows; at format 5
@@ -80,6 +80,14 @@ model); nothing else changes: the new columns of `ScalarHistory` and `ScalarHist
 NULL, and no spec names them, and no bounce row is written. `GOLDEN` names
 `store_fingerprint_one-loop-drain-03.json`. `LABEL` and `T0` are unchanged.
 
+**Format 8** (power-law-wall prompt 05): the registry gains `InversePowerModel` immediately after `ExponentialModel`,
+with the exponential's spec, and `ScalarHistory`'s spec maps type id 2 to it in its `model` parent. `build_store` is
+unchanged (README §6.9 P40), so the store holds the exponential rows it held at format 7 and no `InversePowerModel`
+row: the new file differs from `store_fingerprint_one-loop-drain-03.json` only in `fingerprint_format`, the class
+`InversePowerModel` (count 0, the empty digest, no tag sets) and the top-level `digest`. The power-law rows are
+exercised by `test_inverse_power_store`'s round trips, not here. `GOLDEN` names
+`store_fingerprint_power-law-wall-05.json`. `LABEL` and `T0` are unchanged.
+
 **The golden file** is under `data/`, written once and never overwritten (P8). It was written from
 `config.fingerprint.fingerprinter.take(primary, None)` as `json.dumps(fp, indent=2, sort_keys=True)
 + "\\n"`, so its `taken` is `null`; the tests take with `taken={}` and compare with `taken`
@@ -122,7 +130,7 @@ from ObjectFactories.tests.test_version_keyed_lookups import _TempStoreCase
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA = Path(__file__).resolve().parent / "data"
-GOLDEN = DATA / "store_fingerprint_one-loop-drain-03.json"
+GOLDEN = DATA / "store_fingerprint_power-law-wall-05.json"
 
 LABEL = "rrk-adoption-02-golden"
 T0 = datetime(2026, 10, 19, 12, 0, 0)
@@ -358,9 +366,13 @@ class TestGolden(_GoldenStoreCase):
         primary = self.build_store()
         inventory = read_inventory(primary, config.datastore.factories)
         self.assertEqual(inventory.problems, ())
-        self.assertEqual(len(inventory.classes), 16)
+        # 17 classes since power-law-wall prompt 05 (format 8), of which InversePowerModel alone holds no row
+        self.assertEqual(len(inventory.classes), 17)
         for name, entry in inventory.classes.items():
-            self.assertGreaterEqual(entry.count, 1, name)
+            if name == "InversePowerModel":
+                self.assertEqual(entry.count, 0, name)
+            else:
+                self.assertGreaterEqual(entry.count, 1, name)
         # every polymorphic key of ScalarHistory's spec is resolved: one history per model row
         self.assertEqual(inventory["ScalarHistory"].count, len(MODEL_N_VALUES))
         self.assertEqual(inventory[MODEL_CLASS].count, len(MODEL_N_VALUES))
@@ -448,7 +460,7 @@ class TestCommandLine(_GoldenStoreCase):
         squeezed = [" ".join(line.split()) for line in lines]
         self.assertIn(f"digest: {golden['digest']}", squeezed)
         self.assertIn(f"format: {golden['fingerprint_format']}", squeezed)
-        self.assertEqual(golden["fingerprint_format"], 7)
+        self.assertEqual(golden["fingerprint_format"], 8)
         self.assertEqual(
             lines[-1].strip(), "recorded: none recorded (the sidecar is absent)"
         )

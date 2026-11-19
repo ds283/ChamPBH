@@ -1,0 +1,17 @@
+# minform_reproduce.py; start: 1:15  up 18 days,  3:36, 2 users, load averages: 8.34 13.81 11.69
+# 07b's points: 185 (fits.points()); 07b's constants from kex-07b/fits.json
+## 1. 07b's (iii) and (iv) re-fitted by this module's own forms (mine / fits.json, at fits.txt's digits)
+  n = 1, fit_law's selection: (iii)  reproduced: ell_g 2.25/2.25, B0 -1.0140/-1.0140, C 0.0001/0.0001, G 0.0188/0.0188, R0 1.6383/1.6383, P 1.5300/1.5300, Q 0.9959/0.9959
+  n = 1, fit_law's selection: (iv)   reproduced: G 0.0180/0.0180, R0 1.6111/1.6111, P 1.5461/1.5461, Q 1.0093/1.0093, B0 -0.1041/-0.1041, C 0.3132/0.3132
+  n = 1, note 07b §0.3's selection: (iii) reproduced: ell_g 1.55/1.55, B0 -1.2248/-1.2248, C -0.0878/-0.0878, G 0.0180/0.0180, R0 1.6100/1.6100, P 1.5462/1.5462, Q 1.0081/1.0081
+  n = 1, note 07b §0.3's selection: (iv) reproduced: G 0.0180/0.0180, R0 1.6100/1.6100, P 1.5462/1.5462, Q 1.0081/1.0081, B0 -1.2248/-1.2248, C -0.0878/-0.0878
+  n = 2, crossover's U15 selection: (iii) reproduced: ell_g 1.55/1.55, B0 -1.1529/-1.1529, C -0.0354/-0.0354, G 0.0169/0.0169, R0 1.3235/1.3235, P 1.6721/1.6721, Q 0.8620/0.8620
+  n = 2, crossover's U15 selection: (iv) reproduced: G 0.0169/0.0169, R0 1.3235/1.3235, P 1.6721/1.6721, Q 0.8620/0.8620, B0 -1.1529/-1.1529, C -0.0354/-0.0354
+  07b's constants reproduced: True
+
+## 2. (v) on the orchestrator's scratch selection (n = 1, back out, ln R > 0.3, planner_ok, chain or gap)
+  65 points (44 chain, 21 gap); start (0.02, 1.6, 1.5, 1.0, 2.6, 1.1); SSE 0.036303
+  G 0.0180 (§6.13 0.0180), R0 1.610 (§6.13 1.610), P 1.546 (§6.13 1.546), Q 1.008 (§6.13 1.008), A 2.42 (§6.13 2.42), ell0 1.243 (§6.13 1.243)
+  max |res| chain points 0.071 (§6.13 0.071), gap points 0.046 (§6.13 0.046); full precision: G 0.01802855610783604, R0 1.6100444031498404, P 1.5462063895069038, Q 1.0081170763733518, A 2.4199835668070557, ell0 1.2433547980169046
+  README §6.13's numbers reproduced: True
+# minform_reproduce.py end: 1:15  up 18 days,  3:36, 2 users, load averages: 8.34 13.81 11.69

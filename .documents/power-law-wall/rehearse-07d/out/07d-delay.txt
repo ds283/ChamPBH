@@ -1,0 +1,16 @@
+07d-r2: the interruption's delay, read from r2-pl-a (prompt 07d §1.3; note ruling 5; 07's D5: the opening from the
+store's ScalarHistory.timestamp, the beats holding no line per stored history).
+
+banner (r2-pl-a.log, confirmed): ">> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-inverse-power-v1)"
+banner seen by the recorder (r2-pl-a.beats line 60): 2026-11-19T09:38:35.133+00:00
+A = 0.05 rows of power-law-wall-07d-r2-pl, ScalarHistory.timestamp (UTC):
+  n=2 beta=1.2  09:38:50.126981  +14.994 s   <- the opening (first A = 0.05 history stored)
+  n=1 beta=2.0  09:38:50.537124  +15.404 s
+  n=2 beta=2.0  09:38:51.174452  +16.041 s
+  n=1 beta=1.2  09:38:52.087240  +16.954 s
+  n=1 beta=2.9  09:38:56.592084  +21.459 s
+  n=2 beta=2.9  09:38:57.305005  +22.172 s
+the close (r2-pl-a.beats line 64): 2026-11-19T09:38:59.315+00:00 "-- ALL WORK ITEMS COMPLETE in time 24.2s"  +24.182 s
+window [+14.994, +24.182] s = 9.188 s, shorter than 10 s: the delay is the opening + 2 s = 16.994 s, rounded down to a
+whole second as the midpoint rule rounds: --after 16
+load at r2-pl-a's launch: 3.52 (09:37:10)

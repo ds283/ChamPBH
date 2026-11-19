@@ -39,6 +39,7 @@ from pathlib import Path
 import numpy as np
 from matplotlib.colors import LogNorm, Normalize, TwoSlopeNorm
 
+from ComputeTargets import quanta_spectrum as qs
 from tools import plot_quanta_grid as pg
 from tools import quanta_figures as qf
 from tools.tests.test_quanta_figures import ExportMixin, capturing
@@ -233,9 +234,9 @@ class TestThePanels(ExportMixin, unittest.TestCase):
             "failed 1",
             "no quanta_histories row 1",
             "A = 1",
-            "U4-U17-v1",
+            "R8-exponential-v2",  # the exponential's spectrum model (power-law-wall prompt 03)
             "c_a = 1",
-            "one-loop-measured-v1",
+            "one-loop-exponential-v2",
         ):
             self.assertIn(needle, texts)
         self.assertIn("drawn 4, failed 1, no quanta row 1", self.text)
@@ -247,7 +248,7 @@ class TestThePanels(ExportMixin, unittest.TestCase):
         self.assertEqual(self.stem.name, "quanta_grid")
         self.assertEqual(
             self.stem.relative_to(self.root).parts[:3],
-            ("one-loop-measured-v1", "A=1", "plots"),
+            ("one-loop-exponential-v2", "A=1", "plots"),
         )
 
 
@@ -285,7 +286,7 @@ class TestTheRun(ExportMixin, unittest.TestCase):
     def test_both_files_are_written_and_nothing_else(self):
         rc = pg.run(self.root, A_values=[2.0], out=io.StringIO())
         self.assertEqual(rc, 0)
-        plots = self.root / "one-loop-measured-v1/A=2/plots"
+        plots = self.root / "one-loop-exponential-v2/A=2/plots"
         self.assertEqual(
             sorted(p.name for p in plots.iterdir()),
             ["quanta_grid.pdf", "quanta_grid.png"],
@@ -295,7 +296,7 @@ class TestTheRun(ExportMixin, unittest.TestCase):
         for c, tag in ((0.0, "-assoc0"), (10.0, "-assoc10")):
             rc = pg.run(self.root, A_values=[2.0], assoc_scale=c, out=io.StringIO())
             self.assertEqual(rc, 0)
-            plots = self.root / "one-loop-measured-v1/A=2/plots"
+            plots = self.root / "one-loop-exponential-v2/A=2/plots"
             self.assertTrue((plots / f"quanta_grid{tag}.png").is_file())
             self.assertTrue((plots / f"quanta_grid{tag}.pdf").is_file())
         self.assertFalse((plots / "quanta_grid.png").exists())
@@ -328,10 +329,10 @@ class TestTheRun(ExportMixin, unittest.TestCase):
         self.assertEqual(
             written,
             [
-                "one-loop-measured-v1/A=1/plots/quanta_grid.pdf",
-                "one-loop-measured-v1/A=1/plots/quanta_grid.png",
-                "one-loop-measured-v1/A=2/plots/quanta_grid.pdf",
-                "one-loop-measured-v1/A=2/plots/quanta_grid.png",
+                "one-loop-exponential-v2/A=1/plots/quanta_grid.pdf",
+                "one-loop-exponential-v2/A=1/plots/quanta_grid.png",
+                "one-loop-exponential-v2/A=2/plots/quanta_grid.pdf",
+                "one-loop-exponential-v2/A=2/plots/quanta_grid.png",
             ],
         )
 
@@ -351,7 +352,7 @@ class TestTheRun(ExportMixin, unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(pg.main([str(self.root), "--A-values", "2"]), 0)
         self.assertTrue(
-            (self.root / "one-loop-measured-v1/A=2/plots/quanta_grid.png").is_file()
+            (self.root / "one-loop-exponential-v2/A=2/plots/quanta_grid.png").is_file()
         )
 
 
@@ -365,7 +366,7 @@ class TestSpecialRanges(ExportMixin, unittest.TestCase):
             row = dict(
                 beta=str(1 + k),
                 M_Mp="1e-20",
-                drain_model="one-loop-measured-v1",
+                drain_model="one-loop-exponential-v2",
                 alpha="1.0",
                 n="1",
             )
@@ -391,7 +392,12 @@ class TestSpecialRanges(ExportMixin, unittest.TestCase):
 
     def fig(self, values):
         return pg.build_figure(
-            self.cells(values), Path("/r"), "one-loop-measured-v1", 1.0, 1.0
+            self.cells(values),
+            Path("/r"),
+            "one-loop-exponential-v2",
+            1.0,
+            1.0,
+            model=qs.spectrum_model(qs.WALL_EXPONENTIAL),
         )
 
     def test_no_positive_value_has_no_ticks_and_says_so(self):
@@ -428,7 +434,14 @@ class TestSpecialRanges(ExportMixin, unittest.TestCase):
         cells = self.cells([1e-3, 2e-3])
         cells[1].row["beta"] = cells[0].row["beta"]
         with self.assertRaises(qf.FigureRefused) as cm:
-            pg.build_figure(cells, Path("/r"), "one-loop-measured-v1", 1.0, 1.0)
+            pg.build_figure(
+                cells,
+                Path("/r"),
+                "one-loop-exponential-v2",
+                1.0,
+                1.0,
+                model=qs.spectrum_model(qs.WALL_EXPONENTIAL),
+            )
         self.assertIn("two rows in one cell", str(cm.exception))
 
 

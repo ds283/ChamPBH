@@ -1,0 +1,19 @@
+>> create: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-mixed.manifest.json
+{
+  "created": "2026-11-16T20:25:17+00:00",
+  "datastore": "power-law-wall-07-mixed.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "945bf5dfcc7b949a84754a641e65ed11ee828420",
+      "operation": "create",
+      "to": "var/datastores/power-law-wall-07-mixed.db",
+      "when": "2026-11-16T20:25:17+00:00"
+    }
+  ],
+  "name": "power-law-wall-07-mixed",
+  "purpose": "power-law-wall 07 R: the mixed store at the tip (runs a, b, c with --models exponential inverse-power: 40 histories, 20 per potential at n 1), kept for the user",
+  "sidecar_format": 1,
+  "store_id": "e48589b6f2d0437b86b2f4782c8dcc29"
+}

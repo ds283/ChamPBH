@@ -40,9 +40,14 @@ from CosmologyConcepts import (
     phi_value,
     pi_value,
 )
-from CosmologyConcepts.drain_model import DRAIN_MODEL_ONE_LOOP, alpha_label
+from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED, alpha_label
 from CosmologyConcepts.redshift import log_one_plus_z_grid
 from CosmologyConcepts.Models import AbstractModel
+from CosmologyConcepts.Models.model_options import (
+    MODEL_POTENTIALS,
+    model_table,
+    one_loop_drain_model_over,
+)
 from ObjectFactories import tolerance
 from datastorekit.SQL.ProfileAgent import ProfileAgent
 from datastorekit.SQL.ShardedPool import ShardedPool
@@ -945,6 +950,10 @@ def execute(pool, units: UnitsLike):
     ]
     n_values: List[int] = args.n_values
 
+    # the potentials, in the order of --models (power-law-wall prompt 06, P45, P48): each has its own (M, n, beta) rows in
+    # its own table and its own pipelines; a run of one potential does everything in the order it did before
+    models: List[str] = distinct_values(args.models)
+
     T_init_GeV: float = args.T_init_GeV
 
     T_init = ray.get(
@@ -981,13 +990,14 @@ def execute(pool, units: UnitsLike):
             payload_data=[{"value": M, "units": units} for M in M_sample_set],
         )
 
-    def convert_to_model(M_n_beta_set):
-        # one ExponentialModel per (M, n, beta), M outer, n, and beta inner (jordan-normalization
-        # prompt 07, S1; prompt 08 gives n its option). The model's table is sharded by beta and
-        # needs a "shard_key" field
+    def convert_to_model(table, M_n_beta_set):
+        # one model of the potential's table per (M, n, beta), M outer, n, and beta inner (jordan-normalization
+        # prompt 07, S1; prompt 08 gives n its option; power-law-wall prompt 06 the table, ExponentialModel or
+        # InversePowerModel, with the same payload). The model's table is sharded by beta and needs a "shard_key"
+        # field
         # TODO: find a better way to implement/handle
         return pool.object_get(
-            "ExponentialModel",
+            table,
             payload_data=[
                 {"shard_key": beta, "M": M, "n": n, "beta": beta, "units": units}
                 for M, n, beta in M_n_beta_set
@@ -1000,11 +1010,21 @@ def execute(pool, units: UnitsLike):
     # keys every history (jordan-normalization prompt 07; --tuning-tolerance is prompt 08's); and the
     # drained fraction alpha, which keys every history too: one row per distinct value of
     # --alpha-values, in the order given (inelastic-reflection prompt 09, P30; prompt 10, P32, P33). The rows
-    # follow the fixed rows with one row per distinct value of --A-values, in the order given, each under the
-    # code's current one-loop drain model (one-loop-drain prompt 04, P33, P34); without --A-values the lookups
-    # are those of before
+    # follow the fixed rows with one row per distinct value of --A-values, in the order given (one-loop-drain prompt
+    # 04, P33, P34), each under every potential's own one-loop drain model in the order of --models
+    # (AbstractModel.one_loop_drain_model; power-law-wall prompt 06, P47): one row per A for a run of one potential,
+    # as before. The fixed rows are every potential's. Without --A-values the lookups are those of before
     alpha_values = distinct_values(args.alpha_values)
     A_values = distinct_values(args.A_values or [])
+    A_drain_models = (
+        {
+            potential: one_loop_drain_model_over(potential, n_values)
+            for potential in models
+        }
+        if A_values
+        else {}
+    )
+    A_lookup_models = distinct_values(list(A_drain_models.values()))
     atol, rtol, tuning_tol, *alpha_rows = ray.get(
         [
             pool.object_get("tolerance", tol=args.abs_tol),
@@ -1012,10 +1032,9 @@ def execute(pool, units: UnitsLike):
             pool.object_get("tolerance", tol=args.tuning_tolerance),
             *[pool.object_get("alpha_value", value=a) for a in alpha_values],
             *[
-                pool.object_get(
-                    "alpha_value", value=A, drain_model=DRAIN_MODEL_ONE_LOOP
-                )
+                pool.object_get("alpha_value", value=A, drain_model=drain_model)
                 for A in A_values
+                for drain_model in A_lookup_models
             ],
         ]
     )
@@ -1072,10 +1091,12 @@ def execute(pool, units: UnitsLike):
     ## TO BUILD A GRID OF MODELS, ONE PER (M, n, beta)
 
     print("\n** BUILDING GRID OF MODELS TO SAMPLE")
-    print(
-        f"   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with "
-        f'n = [ {", ".join(str(n) for n in n_values)} ]'
-    )
+    # the grid's line, once per potential (power-law-wall prompt 06, P48)
+    for potential in models:
+        print(
+            f"   -- using model {model_table(potential)}, {MODEL_POTENTIALS[potential]}, with "
+            f'n = [ {", ".join(str(n) for n in n_values)} ]'
+        )
 
     if len(beta_values) == 0:
         num_beta_sample = int(round(samples_per_beta * (beta_high - beta_low) + 0.5, 0))
@@ -1155,49 +1176,75 @@ def execute(pool, units: UnitsLike):
         print("   -- no alpha grid (--no-alpha-values): no fixed-law row is built")
 
     if A_values:
+        # the potential's own drain model; with several potentials, each named with its potential
+        A_models_text = (
+            "; ".join(f"{A_drain_models[p]} for {p}" for p in models)
+            if len(models) > 1
+            else A_drain_models[models[0]]
+        )
         print(
-            f'   -- populated A grid with {len(A_values)} value{"" if len(A_values)==1 else "s"} = [ {", ".join(f"{A:.5g}" for A in A_values)} ] ({DRAIN_MODEL_ONE_LOOP})'
+            f'   -- populated A grid with {len(A_values)} value{"" if len(A_values)==1 else "s"} = [ {", ".join(f"{A:.5g}" for A in A_values)} ] ({A_models_text})'
         )
 
-    # M outer, n, beta inner: beta stays innermost, which balances the shards' load
-    M_n_beta_grid = itertools.product(M_grid, n_values, beta_grid)
-    Model_array = ray.get(convert_to_model(M_n_beta_grid))
+    # M outer, n, beta inner: beta stays innermost, which balances the shards' load. One array per potential, each in
+    # its own table, in the order of --models (power-law-wall prompt 06, P48)
+    M_n_beta_grid = list(itertools.product(M_grid, n_values, beta_grid))
+    Model_arrays = {
+        potential: ray.get(convert_to_model(model_table(potential), M_n_beta_grid))
+        for potential in models
+    }
 
-    print(f"   -- total number of models to integrate = {len(Model_array)}")
+    total_models = sum(len(array) for array in Model_arrays.values())
+    if len(models) > 1:
+        print(
+            f"   -- total number of models to integrate = {total_models} "
+            f'({", ".join(f"{p} {len(Model_arrays[p])}" for p in models)})'
+        )
+    else:
+        print(f"   -- total number of models to integrate = {total_models}")
 
     model_list = build_model_list(pool, units)
     # every history ends at its cosmology's T_CMB (README §6.0 R8), so there is no final
     # temperature to look up (jordan-normalization prompt 07)
     for model_data in model_list:
-        # warn about a super-Planckian start, Omega(phi*) T* > M_P, with Omega at the seed's
-        # phi_ref, which needs the cosmology; warning only, the array is unchanged
-        # (science-readiness prompt 04, P6; jordan-normalization prompt 08, P11)
-        Model_array = warn_super_planckian(
-            Model_array, phi_init, T_init, units, model_data["cosmology"]
-        )
-
-        # one pipeline per alpha row: the fixed rows in the order of --alpha-values, then the one-loop rows in the
-        # order of --A-values (prompt 10, P33; one-loop-drain prompt 04, P34)
-        for alpha in alpha_rows:
-            run_pipeline(
-                pool,
-                model_data,
-                Model_array,
-                T_init,
-                phi_init,
-                pi_init,
-                z_grid,
-                atol,
-                rtol,
-                tuning_tol,
-                alpha,
-                solvers,
-                {
-                    "samples_per_log10_z": samples_per_log10_z,
-                    "samples_per_beta": samples_per_beta,
-                    "samples_per_log10_M_eV": samples_per_log10_M_eV,
-                },
+        # each potential in the order of --models, with its own models and rows (power-law-wall prompt 06, P48)
+        for potential in models:
+            # warn about a super-Planckian start, Omega(phi*) T* > M_P, with Omega at the seed's
+            # phi_ref, which needs the cosmology; warning only, the array is unchanged
+            # (science-readiness prompt 04, P6; jordan-normalization prompt 08, P11)
+            Model_array = Model_arrays[potential]
+            Model_array = warn_super_planckian(
+                Model_array, phi_init, T_init, units, model_data["cosmology"]
             )
+
+            # one pipeline per alpha row of the potential: the fixed rows in the order of --alpha-values, then its
+            # one-loop rows in the order of --A-values (prompt 10, P33; one-loop-drain prompt 04, P34); another
+            # potential's one-loop rows are not its own (power-law-wall prompt 06, P47)
+            for alpha in alpha_rows:
+                if alpha.drain_model not in (
+                    DRAIN_MODEL_FIXED,
+                    A_drain_models.get(potential),
+                ):
+                    continue
+                run_pipeline(
+                    pool,
+                    model_data,
+                    Model_array,
+                    T_init,
+                    phi_init,
+                    pi_init,
+                    z_grid,
+                    atol,
+                    rtol,
+                    tuning_tol,
+                    alpha,
+                    solvers,
+                    {
+                        "samples_per_log10_z": samples_per_log10_z,
+                        "samples_per_beta": samples_per_beta,
+                        "samples_per_log10_M_eV": samples_per_log10_M_eV,
+                    },
+                )
 
 
 # construct a ShardedPool to orchestrate database access

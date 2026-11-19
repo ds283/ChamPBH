@@ -1,0 +1,48 @@
+store /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp: 20 ScalarHistory rows; outputs: 3
+formats (read from the source): bounce N .9f (history_and_bbn.py main: bounce.N:.9f); bounce T_J .6f MeV (exp(bounce.log_T_Jordan) / units.MeV); bounce phi .6e (bounce.phi_Einstein / units.PlanckMass); dissipation .6g (dissipation_line), None as None; drain .6g (drain_line), None as None; fixed_T phi, ratio .9e (_fmt); bbn .10g; cand N .6f (sample_run.py); cand log_x, log_R .8g (sample_run.py g(..., '.8g')); cand ell, alpha_eff, w_gate .6g (sample_run.py g())
+cand fields compared, with their BOUNCE_COLUMNS kinds (to_column in Planck_units): N->N kind None, kind->kind kind None, log_R->log_R kind None, ell->ell kind None, regime->regime kind None, alpha_eff->alpha_eff kind None, w_gate->w_gate kind None, resolved->resolved kind None
+cand fields not held: log_x: ln(E/V0): the store holds log_E_Mp4 and the normalization, not ln x (reported below as a derived check, not compared); phi_t_Mp: the classical turning point is not stored; f: the law's fraction is not stored (alpha_eff and A are); dK_over_K: delta_K over K(N_final): K(N_final) is not a column; rho_kin_over_rho_rad: rho_R,E at the candidate is not stored
+not held, by line: history `wall`, `drain_law`/`A`/`model` (keys, matched); tuning none; bounce none; dissipation none; drain `candidates` (compared as the sum of candidates_<regime> and as the count of candidate bounce rows); fixed_T `crossings`, `stand_in_phi`, `stand_in_ratio`; bbn `PRyM_time`, `wall`
+
+THE MAP
+  exp-M1e-15-b2.0-oneloop1.txt: exponential n=1 M=1e-15 beta=2 one-loop-measured-v1 alpha=1; options ['--alpha', '--drain-law']; store rows 1 (shard0000.db #88)
+      # command: PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py 2.0 1e-15 --drain-law one_loop --alpha 1
+  exp-M1e-3-b2.0-natural.txt: exponential n=1 M=0.001 beta=2 fixed alpha=0; options []; store rows 1 (shard0000.db #66)
+      # command: PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py 2.0 1e-3
+  exp-M4e-31-b2.0-oneloop1.txt: exponential n=1 M=4e-31 beta=2 one-loop-measured-v1 alpha=1; options ['--alpha', '--drain-law']; store rows 1 (shard0000.db #24)
+      # command: PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py 2.0 4e-31 --drain-law one_loop --alpha 1
+  outputs matched: 3 of 3; store rows matched once: 3
+
+=== exp-M1e-15-b2.0-oneloop1.txt
+    cand rows: 0 printed, 28 stored candidate rows, 27 other bounce rows ({'candidate': 28, 'plateau': 27}); derived ln x = log_E_Mp4 - normalization equal at .8g: 0 of 0 (a measurement)
+    values compared: 74
+
+=== exp-M1e-3-b2.0-natural.txt
+    no dissipation line (alpha = 0); the store's injections, Delta_N_eff_today, log_R_first_impact: [0, 0.0, None]
+    fixed law: no drain line; 0 cand rows not held; the store's bounce rows 0, drain record all NULL
+    values compared: 37
+
+=== exp-M4e-31-b2.0-oneloop1.txt
+    cand rows: 0 printed, 45 stored candidate rows, 44 other bounce rows ({'candidate': 45, 'plateau': 44}); derived ln x = log_E_Mp4 - normalization equal at .8g: 0 of 0 (a measurement)
+    values compared: 74
+
+Values compared, per history:
+  exp-M1e-15-b2.0-oneloop1.txt: 74
+  exp-M1e-3-b2.0-natural.txt: 37
+  exp-M4e-31-b2.0-oneloop1.txt: 74
+Values compared, per line kind:
+  bbn: 21
+  bounce: 12
+  cand: 1
+  dissipation: 48
+  drain: 28
+  fixed_T: 12
+  history: 15
+  outcome: 3
+  tuning: 45
+  total: 185
+
+bbn values not equal at ten digits (reported): none
+
+DIFFERENCES: none
+RESULT: every output matched once; every bit-for-bit and printed-digit item equal; Yp and D/H within 5e-10

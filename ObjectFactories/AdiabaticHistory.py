@@ -126,7 +126,8 @@ class sqla_AdiabaticHistoryFactory(SQLAFactoryBase):
         # build() matches scalar_history_serial and the version; the history is on this row's
         # shard, since both take their shard key from the model's beta (dk-and-rpk-migration
         # prompt 09). The parent is "history", the ScalarHistory, since "model" names a
-        # ScalarHistory's ExponentialModel (jordan-normalization prompt 07)
+        # ScalarHistory's model, an ExponentialModel or an InversePowerModel (jordan-normalization
+        # prompt 07; power-law-wall prompt 05)
         return InventorySpec(
             parents={
                 "version": Parent("version", "version"),

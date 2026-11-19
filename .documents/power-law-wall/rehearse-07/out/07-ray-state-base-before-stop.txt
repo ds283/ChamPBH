@@ -1,0 +1,11 @@
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+  job 01000000 SUCCEEDED driver pid 82970: 83/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/.documents/power-law-wall/rehearse-07/code_probe.py
+  job 02000000 SUCCEEDED driver pid 83029: -law-wall-07-base-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+  job 03000000 SUCCEEDED driver pid 83771: 7.0.0.1:6380 --job-name power-law-wall-07-base-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+  job 04000000 SUCCEEDED driver pid 84170: --job-name power-law-wall-07-base-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+  job 05000000 SUCCEEDED driver pid 84982: s/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07/export-base --ray-address 127.0.0.1:6380
+  job 06000000 SUCCEEDED driver pid 85132: s/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07/export-base --ray-address 127.0.0.1:6380
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+  workers: 116 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+  actors: 84 recorded, 0 ALIVE; by (job, class, state): {('03000000', 'Datastore', 'DEAD'): 16, ('06000000', 'Datastore', 'DEAD'): 16, ('05000000', 'Datastore', 'DEAD'): 16, ('02000000', 'Datastore', 'DEAD'): 16, ('04000000', 'Datastore', 'DEAD'): 16, ('04000000', 'SerialPoolBroker', 'DEAD'): 1, ('03000000', 'SerialPoolBroker', 'DEAD'): 1, ('02000000', 'SerialPoolBroker', 'DEAD'): 1, ('01000000', 'ProbeActor', 'DEAD'): 1}

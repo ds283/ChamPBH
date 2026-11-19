@@ -1,0 +1,21 @@
+Part 1: classical turning point, closed forms (M = V_0 = 1)
+n=1 ln(E/V0)=  10  phi_t exp=1.000e-01 ipl=4.540e-05  c exp=  13.83 ipl=3  ln(k_ipl/k_exp)=   6.17  [phi part    7.70, c part  -1.53]  k/omega exp=0.6314 ipl=1.0607
+n=1 ln(E/V0)=  50  phi_t exp=2.000e-02 ipl=1.929e-22  c exp=  53.96 ipl=3  ln(k_ipl/k_exp)=  43.20  [phi part   46.09, c part  -2.89]  k/omega exp=0.5291 ipl=1.0607
+n=1 ln(E/V0)=  90  phi_t exp=1.111e-02 ipl=8.194e-40  c exp=  93.98 ipl=3  ln(k_ipl/k_exp)=  82.06  [phi part   85.50, c part  -3.44]  k/omega exp=0.5164 ipl=1.0607
+n=2 ln(E/V0)=  10  phi_t exp=3.162e-01 ipl=6.738e-03  c exp=  25.74 ipl=4  ln(k_ipl/k_exp)=   1.99  [phi part    3.85, c part  -1.86]  k/omega exp=0.6000 ipl=0.8165
+n=2 ln(E/V0)=  50  phi_t exp=1.414e-01 ipl=1.389e-11  c exp= 105.94 ipl=4  ln(k_ipl/k_exp)=  19.77  [phi part   23.04, c part  -3.28]  k/omega exp=0.5219 ipl=0.8165
+n=2 ln(E/V0)=  90  phi_t exp=1.054e-01 ipl=2.863e-20  c exp= 185.97 ipl=4  ln(k_ipl/k_exp)=  38.91  [phi part   42.75, c part  -3.84]  k/omega exp=0.5123 ipl=0.8165
+
+Part 2: production models, classical vs one-loop (normalization -279.87, field 0.1 M_P; M in M_P, E in M_P^4)
+n=1 M=1e-30 lnE=-180 ln(E/V0)=99.9: exp: ln(M/phi_t)=   4.6 lnk_t=  -12.4 | ln(M/phi_ta)=   3.6 lnk_ta=  -14.2 ell= 30.2 c_ta=  42.2  ipl: ln(M/phi_t)=  99.9 lnk_t=   79.4 | ln(M/phi_ta)=  17.3 lnk_ta=   -3.2 ell= 41.3 c_ta=   3.0  
+n=1 M=1e-30 lnE=-120 ln(E/V0)=159.9: exp: ln(M/phi_t)=   5.1 lnk_t=   18.6 | ln(M/phi_ta)=   4.2 lnk_ta=   16.8 ell= 46.3 c_ta=  69.9  ipl: ln(M/phi_t)= 159.9 lnk_t=  169.4 | ln(M/phi_ta)=  27.3 lnk_ta=   36.8 ell= 66.4 c_ta=   3.0  
+n=1 M=1e-20 lnE=-180 ln(E/V0)=99.9: exp: ln(M/phi_t)=   4.6 lnk_t=  -35.4 | ln(M/phi_ta)=   4.4 lnk_ta=  -35.8 ell=  8.3 c_ta=  85.9  ipl: ln(M/phi_t)=  99.9 lnk_t=   56.3 | ln(M/phi_ta)=  32.7 lnk_ta=  -10.8 ell= 33.6 c_ta=   3.0  
+n=1 M=1e-20 lnE=-120 ln(E/V0)=159.9: exp: ln(M/phi_t)=   5.1 lnk_t=   -4.5 | ln(M/phi_ta)=   4.7 lnk_ta=   -5.2 ell= 24.2 c_ta= 114.2  ipl: ln(M/phi_t)= 159.9 lnk_t=  146.3 | ln(M/phi_ta)=  42.6 lnk_ta=   29.1 ell= 58.7 c_ta=   3.0  
+n=1 M=1e-10 lnE=-180 ln(E/V0)=99.9: exp: none  ipl: ln(M/phi_t)=  99.9 lnk_t=   33.3 | ln(M/phi_ta)=  48.1 lnk_ta=  -18.4 ell= 25.9 c_ta=   3.0  
+n=1 M=1e-10 lnE=-120 ln(E/V0)=159.9: exp: ln(M/phi_t)=   5.1 lnk_t=  -27.5 | ln(M/phi_ta)=   5.1 lnk_ta=  -27.5 ell=  1.0 c_ta= 160.4  ipl: ln(M/phi_t)= 159.9 lnk_t=  123.3 | ln(M/phi_ta)=  58.0 lnk_ta=   21.4 ell= 51.0 c_ta=   3.0  
+n=2 M=1e-30 lnE=-180 ln(E/V0)=99.9: exp: ln(M/phi_t)=   2.3 lnk_t=  -14.0 | ln(M/phi_ta)=   1.8 lnk_ta=  -15.3 ell= 29.1 c_ta=  86.7  ipl: ln(M/phi_t)=  49.9 lnk_t=   29.7 | ln(M/phi_ta)=  12.7 lnk_ta=   -7.5 ell= 37.0 c_ta=   4.0  
+n=2 M=1e-30 lnE=-120 ln(E/V0)=159.9: exp: ln(M/phi_t)=   2.5 lnk_t=   16.7 | ln(M/phi_ta)=   2.1 lnk_ta=   15.5 ell= 45.0 c_ta= 143.2  ipl: ln(M/phi_t)=  79.9 lnk_t=   89.7 | ln(M/phi_ta)=  20.2 lnk_ta=   30.0 ell= 59.5 c_ta=   4.0  
+n=2 M=1e-20 lnE=-180 ln(E/V0)=99.9: exp: ln(M/phi_t)=   2.3 lnk_t=  -37.0 | ln(M/phi_ta)=   2.2 lnk_ta=  -37.3 ell=  6.8 c_ta= 175.9  ipl: ln(M/phi_t)=  49.9 lnk_t=    6.7 | ln(M/phi_ta)=  24.3 lnk_ta=  -18.9 ell= 25.4 c_ta=   4.0  
+n=2 M=1e-20 lnE=-120 ln(E/V0)=159.9: exp: ln(M/phi_t)=   2.5 lnk_t=   -6.3 | ln(M/phi_ta)=   2.4 lnk_ta=   -6.8 ell= 22.5 c_ta= 233.0  ipl: ln(M/phi_t)=  79.9 lnk_t=   66.7 | ln(M/phi_ta)=  31.7 lnk_ta=   18.5 ell= 48.0 c_ta=   4.0  
+n=2 M=1e-10 lnE=-180 ln(E/V0)=99.9: exp: none  ipl: ln(M/phi_t)=  49.9 lnk_t=  -16.3 | ln(M/phi_ta)=  35.9 lnk_ta=  -30.4 ell= 13.8 c_ta=   4.0  
+n=2 M=1e-10 lnE=-120 ln(E/V0)=159.9: exp: none  ipl: ln(M/phi_t)=  79.9 lnk_t=   43.7 | ln(M/phi_ta)=  43.3 lnk_ta=    7.0 ell= 36.5 c_ta=   4.0  

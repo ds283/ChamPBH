@@ -1,0 +1,22 @@
+$ PYTHONPATH=. ./venv/bin/python tools/compare_stores.py --help
+# exit 0
+usage: compare_stores.py [-h] [--json OUT] [--max-rows N] [--snapshot PRIMARY]
+                         [--out F] [--schema PRIMARY] [--against F]
+                         [PRIMARY ...]
+
+Compare two ChamPBH sharded stores by value, read-only through sqlite3; or
+write or compare a store's schema snapshot. Exit 0: equal; 1: they differ; 2:
+a store cannot be read.
+
+positional arguments:
+  PRIMARY             A.db B.db
+
+options:
+  -h, --help          show this help message and exit
+  --json OUT          also write the full result here
+  --max-rows N        rows listed per table and list in the human output
+                      (default 20; --json has all)
+  --snapshot PRIMARY  write this store's schema snapshot
+  --out F             with --snapshot: the file (default: stdout)
+  --schema PRIMARY    compare this store's schema with --against
+  --against F         with --schema: a snapshot file

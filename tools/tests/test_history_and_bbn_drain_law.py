@@ -28,7 +28,7 @@ does, so that no PRyMordial solve runs.
   the parking leftover's, ell_min and the unresolvable assessments;
 - one untuned integration under one_loop at M = 0.5, beta = 2 (test_history_and_bbn_alpha's point, 4-5 s
   unloaded, about 10 s at a load of 8): the history line names `drain_law=one_loop A=1
-  model=one-loop-measured-v1`, and a
+  model=one-loop-exponential-v2`, and a
   `drain` line follows the dissipation line and parses back to drain_values of the payload.
 
 Under the fixed law every line is as before: test_history_and_bbn and test_history_and_bbn_alpha pin
@@ -151,7 +151,7 @@ class TestTheDrainValues(unittest.TestCase):
         )
         data = {
             "drain": SM.DrainRecord(
-                "one_loop", 1.0, "one-loop-measured-v1", 3, candidates, 2
+                "one_loop", 1.0, "one-loop-exponential-v2", 3, candidates, 2
             ),
             "injections": [_injection(k) for k in (2.0, 5.0, 0.0, 0.0, 0.0)],
             "parking": SimpleNamespace(delta_K=1.0),
@@ -183,7 +183,7 @@ class TestTheDrainValues(unittest.TestCase):
         )
         data = {
             "drain": SM.DrainRecord(
-                "one_loop", 1.0, "one-loop-measured-v1", 0, candidates, 0
+                "one_loop", 1.0, "one-loop-exponential-v2", 0, candidates, 0
             ),
             "injections": [_injection(0.0)],
             "parking": None,
@@ -215,12 +215,12 @@ class TestAOneLoopRun(unittest.TestCase):
         self.assertEqual(kwargs["alpha"], 1.0)
         self.assertEqual(kwargs["drain_law"], "one_loop")
         self.assertEqual(data["drain"].law, "one_loop")
-        self.assertEqual(data["drain"].model, "one-loop-measured-v1")
+        self.assertEqual(data["drain"].model, "one-loop-exponential-v2")
 
         history = _line(stdout, "history beta=2 M=0.5: ")
         self.assertRegex(
             history,
-            r"integrations=1 drain_law=one_loop A=1 model=one-loop-measured-v1 "
+            r"integrations=1 drain_law=one_loop A=1 model=one-loop-exponential-v2 "
             r"wall=[0-9.]+ s$",
         )
         self.assertNotIn("alpha=", history)

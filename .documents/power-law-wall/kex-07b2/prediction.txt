@@ -1,0 +1,40 @@
+# minform_predict.py; start: 1:07  up 18 days,  3:28, 2 users, load averages: 9.40 8.11 8.07
+# (v)'s S3 constants (minform.json without_new): n = 1 A 2.502731805773583, G 0.019195872083696445, P 1.498018944691912, Q 1.093682590495004, R0 1.721317280608511, ell0 1.189590644325586; n = 2 A 2.5376530464447, G 0.01693386858882716, P 1.6720668262546452, Q 0.8619761611024769, R0 1.323456504115465, ell0 1.1811049136784422
+# id, label, n, L, ln R, ln(V0/M^4), ell_new, y_rise, y_fall, branch, predicted f, d to the nearest measured row
+   1 07b2 lab n=1 ell_new~1                   n=1 L    2.81345 ln R   11.2007 ln(V0/M^4)     3.34 ell_new  1.0000 y_rise   1.1888 y_fall      inf rise  f_pred 0.6954 d 0.49
+   2 07b2 lab n=1 ell_new~1.6                 n=1 L    4.16342 ln R   15.3505 ln(V0/M^4)     3.35 ell_new  1.6000 y_rise   2.4598 y_fall   6.0981 rise  f_pred 0.9145 d 0.20
+   3 07b2 lab n=1 ell_new~1.75                n=1 L    4.51642 ln R   16.2985 ln(V0/M^4)     3.35 ell_new  1.7500 y_rise   2.8151 y_fall   4.4659 rise  f_pred 0.9401 d 0.28
+   4 07b2 lab n=1 ell_new~1.95                n=1 L    4.99310 ln R   17.5142 ln(V0/M^4)     3.35 ell_new  1.9500 y_rise   3.3055 y_fall   3.2913 fall  f_pred 0.9628 d 0.31
+   5 07b2 lab n=1 ell_new~2.1                 n=1 L    5.35435 ln R   18.3932 ln(V0/M^4)     3.35 ell_new  2.1000 y_rise   3.6841 y_fall   2.7490 fall  f_pred 0.9360 d 0.47
+   6 07b2 lab n=1 ell_new~2.5                 n=1 L    6.33009 ln R   20.6196 ln(V0/M^4)     3.35 ell_new  2.5000 y_rise   4.7322 y_fall   1.9099 fall  f_pred 0.8519 d 0.36
+   7 07b2 lab n=1 ell_new~3.4                 n=1 L    8.57554 ln R   25.1624 ln(V0/M^4)     3.34 ell_new  3.4000 y_rise   7.2533 y_fall   1.1322 fall  f_pred 0.6777 d 0.35
+   8 07b2 L-M1e-16 ell_new~1                  n=1 L  104.69388 ln R    8.3011 ln(V0/M^4)  -129.27 ell_new  1.0000 y_rise   1.9647 y_fall      inf rise  f_pred 0.8598 d 0.30
+   9 07b2 L-M1e-16 ell_new~1.25               n=1 L  105.45087 ln R    9.1155 ln(V0/M^4)  -129.27 ell_new  1.2500 y_rise   2.3430 y_fall  41.4295 rise  f_pred 0.9040 d 0.26
+  10 07b2 L-M1e-16 ell_new~1.6                n=1 L  106.57159 ln R   10.3204 ln(V0/M^4)  -129.27 ell_new  1.6000 y_rise   2.9431 y_fall   6.0981 rise  f_pred 0.9473 d 0.23
+  11 07b2 L-M1e-16 ell_new~1.8                n=1 L  107.23368 ln R   11.0318 ln(V0/M^4)  -129.27 ell_new  1.8000 y_rise   3.3190 y_fall   4.1001 rise  f_pred 0.9638 d 0.33
+  12 07b2 L-M1e-16 ell_new~1.95               n=1 L  107.73799 ln R   11.5735 ln(V0/M^4)  -129.27 ell_new  1.9500 y_rise   3.6154 y_fall   3.2913 fall  f_pred 0.9628 d 0.11
+  13 07b2 L-M1e-16 ell_new~2.2                n=1 L  108.59043 ln R   12.4887 ln(V0/M^4)  -129.27 ell_new  2.2000 y_rise   4.1358 y_fall   2.4769 fall  f_pred 0.9160 d 0.25
+  14 07b2 L-M1e-16 ell_new~2.6                n=1 L  109.97862 ln R   13.9781 ln(V0/M^4)  -129.27 ell_new  2.6000 y_rise   5.0330 y_fall   1.7745 fall  f_pred 0.8304 d 0.54
+  15 07b2 L-M1e-16 ell_new~3.4                n=1 L  112.81696 ln R   17.0193 ln(V0/M^4)  -129.27 ell_new  3.4000 y_rise   7.0468 y_fall   1.1322 fall  f_pred 0.6777 d 0.35
+  16 07b2 lab n=2 ell_new~0.5                 n=2 L    1.56944 ln R    7.5974 ln(V0/M^4)     3.35 ell_new  0.5000 y_rise   0.5068 y_fall      inf rise  f_pred 0.3976 d 1.08
+  17 07b2 lab n=2 ell_new~0.9                 n=2 L    2.30613 ln R   10.1753 ln(V0/M^4)     3.35 ell_new  0.9000 y_rise   1.1165 y_fall      inf rise  f_pred 0.6726 d 0.99
+  18 07b2 lab n=2 ell_new~1.3                 n=2 L    3.17786 ln R   12.6796 ln(V0/M^4)     3.35 ell_new  1.3000 y_rise   1.9655 y_fall  21.3436 rise  f_pred 0.8599 d 0.63
+  19 07b2 lab n=2 ell_new~1.65                n=2 L    3.99943 ln R   14.7205 ln(V0/M^4)     3.35 ell_new  1.6500 y_rise   2.8483 y_fall   5.4120 rise  f_pred 0.9421 d 0.51
+  20 07b2 lab n=2 ell_new~1.9                 n=2 L    4.60610 ln R   16.0929 ln(V0/M^4)     3.34 ell_new  1.9000 y_rise   3.5388 y_fall   3.5299 fall  f_pred 0.9707 d 0.71
+  21 07b2 lab n=2 ell_new~2.1                 n=2 L    5.09972 ln R   17.1453 ln(V0/M^4)     3.35 ell_new  2.1000 y_rise   4.1209 y_fall   2.7616 fall  f_pred 0.9368 d 1.30
+  22 07b2 lab n=2 ell_new~2.5                 n=2 L    6.10356 ln R   19.1472 ln(V0/M^4)     3.35 ell_new  2.5000 y_rise   5.3532 y_fall   1.9241 fall  f_pred 0.8540 d 1.40
+  23 07b2 lab n=2 ell_new~3.2                 n=2 L    7.90088 ln R   22.3994 ln(V0/M^4)     3.34 ell_new  3.2000 y_rise   7.7006 y_fall   1.2570 fall  f_pred 0.7155 d 0.96
+  24 07b2 lab n=2 ell_new~4                   n=2 L   10.00768 ln R   25.8559 ln(V0/M^4)     3.34 ell_new  4.0000 y_rise  10.6537 y_fall   0.9002 fall  f_pred 0.5935 d 1.17
+  25 07b2 held-out #1 n=1 (rise)              n=1 L    1.60000 ln R   11.0000 ln(V0/M^4)     8.16 ell_new  0.9049 y_rise   0.8178 y_fall      inf rise  f_pred 0.5586 d 1.11
+  26 07b2 held-out #2 n=1 (rise)              n=1 L   12.00000 ln R    7.0000 ln(V0/M^4)   -20.82 ell_new  0.4145 y_rise   0.8627 y_fall      inf rise  f_pred 0.5780 d 2.18
+  27 07b2 held-out #3 n=1 (rise)              n=1 L   40.00000 ln R    6.0000 ln(V0/M^4)   -59.24 ell_new    none y_rise   0.8529 y_fall      inf gap   f_pred 0.5738 d 4.20
+  28 07b2 held-out #4 n=1 (crossing)          n=1 L   16.00000 ln R   13.4600 ln(V0/M^4)   -20.59 ell_new  1.9977 y_rise   3.0979 y_fall   3.0971 fall  f_pred 0.9548 d 3.52
+  29 07b2 held-out #5 n=1 (crossing)          n=1 L   45.00000 ln R   12.0000 ln(V0/M^4)   -59.17 ell_new  1.9574 y_rise   3.2511 y_fall   3.2596 rise  f_pred 0.9613 d 3.92
+  30 07b2 held-out #6 n=1 (fall)              n=1 L   20.00000 ln R   22.0000 ln(V0/M^4)   -17.79 ell_new  3.8957 y_rise   7.4517 y_fall   0.9248 fall  f_pred 0.6034 d 4.16
+  31 07b2 held-out #7 n=1 (fall)              n=1 L   40.00000 ln R   20.0000 ln(V0/M^4)   -45.24 ell_new  3.8862 y_rise   7.5089 y_fall   0.9281 fall  f_pred 0.6047 d 4.87
+  32 07b2 held-out #8 n=2 (rise)              n=2 L    3.00000 ln R    6.5000 ln(V0/M^4)    -2.36 ell_new  0.2956 y_rise   0.5153 y_fall      inf rise  f_pred 0.4027 d 1.56
+  33 07b2 held-out #9 n=2 (rise)              n=2 L   11.00000 ln R    6.0000 ln(V0/M^4)   -18.05 ell_new    none y_rise   0.6849 y_fall      inf gap   f_pred 0.4959 d 1.64
+  34 07b2 held-out #10 n=2 (crossing)         n=2 L   11.00000 ln R   13.4100 ln(V0/M^4)   -10.64 ell_new  1.9395 y_rise   3.3507 y_fall   3.3463 fall  f_pred 0.9648 d 1.69
+  35 07b2 held-out #11 n=2 (fall)             n=2 L   22.00000 ln R   24.0000 ln(V0/M^4)   -15.08 ell_new  4.5878 y_rise  11.4650 y_fall   0.7449 fall  f_pred 0.5252 d 1.60
+  36 07b2 held-out #12 n=2 (fall)             n=2 L   45.00000 ln R   20.0000 ln(V0/M^4)   -46.31 ell_new  4.0237 y_rise   9.6832 y_fall   0.8927 fall  f_pred 0.5905 d 1.44
+# 36 points; prediction.json written 2026-11-18T01:07:44+00:00 at HEAD dec779308750b8a75d0444340dcb8e42d4723d33

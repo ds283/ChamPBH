@@ -1,0 +1,56 @@
+checks.txt — power-law-wall prompt 04 §3: the runner against the plain tool, the overlaps, the tool route against the export.
+Each comparison by prompts/power-law-wall/source/sample/tables.py; 'identical' means every tool line equal once wall=, PRyM_time= and the #, sample and cand lines are masked (note 04, ruling 3).
+
+## 1. The runner against a plain run of tools/history_and_bbn.py (prompt §1.1, P24), one history per law, run in scratch 2026-11-15 19:29-19:31
+identical (12 tool lines, timings masked): runner-check/plain-fixed.txt | runner-check/runner-fixed.txt
+identical (13 tool lines, timings masked): runner-check/plain-oneloop.txt | runner-check/runner-oneloop.txt
+identical (15 tool lines, timings masked): runner-check/plain-natural.txt | runner-check/runner-natural.txt
+# command: tools/history_and_bbn.py 1.2 4e-31 --alpha 0.01 --model inverse-power --n 1
+# start: 2026-11-15 19:29:13 19:29  up 15 days, 21:49, 1 user, load averages: 3.04 3.80 4.47
+# end: exit=0 wall=12 s 19:29  up 15 days, 21:50, 1 user, load averages: 3.28 3.82 4.47
+# command: prompts/power-law-wall/source/sample/sample_run.py 1.2 4e-31 --alpha 0.01 --model inverse-power --n 1
+# start: 2026-11-15 19:29:25 19:29  up 15 days, 21:50, 1 user, load averages: 3.28 3.82 4.47
+# end: exit=0 wall=11 s 19:29  up 15 days, 21:50, 1 user, load averages: 3.01 3.74 4.43
+# command: tools/history_and_bbn.py 2.9 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 2
+# start: 2026-11-15 19:29:36 19:29  up 15 days, 21:50, 1 user, load averages: 3.01 3.74 4.43
+# end: exit=0 wall=12 s 19:29  up 15 days, 21:50, 1 user, load averages: 3.09 3.72 4.41
+# command: prompts/power-law-wall/source/sample/sample_run.py 2.9 4e-31 --drain-law one_loop --alpha 10 --model inverse-power --n 2
+# start: 2026-11-15 19:29:48 19:29  up 15 days, 21:50, 1 user, load averages: 3.09 3.72 4.41
+# end: exit=0 wall=12 s 19:30  up 15 days, 21:50, 1 user, load averages: 3.15 3.72 4.40
+# command: tools/history_and_bbn.py 1.2 1e-3 --model inverse-power --n 2
+# start: 2026-11-15 19:30:00 19:30  up 15 days, 21:50, 1 user, load averages: 3.15 3.72 4.40
+# end: exit=0 wall=48 s 19:30  up 15 days, 21:51, 1 user, load averages: 2.80 3.55 4.30
+# command: prompts/power-law-wall/source/sample/sample_run.py 1.2 1e-3 --model inverse-power --n 2
+# start: 2026-11-15 19:30:48 19:30  up 15 days, 21:51, 1 user, load averages: 2.80 3.55 4.30
+# end: exit=0 wall=47 s 19:31  up 15 days, 21:52, 1 user, load averages: 5.87 4.27 4.53
+
+## 2. The overlaps (P26): the fourteen of the forty that 01 and 03 ran before
+identical (12 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n1-M4e-31-beta1.2-fixed0.1.txt | .documents/power-law-wall/sample-04/runs/ip-n1-M4e-31-b1.2-fixed0.1.txt
+identical (7 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n1-M1e-3-beta1.2-natural.txt | .documents/power-law-wall/sample-04/runs/ip-n1-M1e-3-b1.2-natural.txt
+identical (12 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n1-M4e-31-beta2.0-fixed0.1.txt | .documents/power-law-wall/sample-04/runs/ip-n1-M4e-31-b2.0-fixed0.1.txt
+identical (8 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n1-M1e-3-beta2.0-natural.txt | .documents/power-law-wall/sample-04/runs/ip-n1-M1e-3-b2.0-natural.txt
+identical (12 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n1-M4e-31-beta2.9-fixed0.1.txt | .documents/power-law-wall/sample-04/runs/ip-n1-M4e-31-b2.9-fixed0.1.txt
+identical (7 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n1-M1e-3-beta2.9-natural.txt | .documents/power-law-wall/sample-04/runs/ip-n1-M1e-3-b2.9-natural.txt
+identical (13 tool lines, timings masked): .documents/power-law-wall/law-03/tool_route_ip_n1.txt | .documents/power-law-wall/sample-04/runs/ip-n1-M4e-31-b2.0-oneloop1.txt
+identical (12 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n2-M4e-31-beta1.2-fixed0.1.txt | .documents/power-law-wall/sample-04/runs/ip-n2-M4e-31-b1.2-fixed0.1.txt
+identical (15 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n2-M1e-3-beta1.2-natural.txt | .documents/power-law-wall/sample-04/runs/ip-n2-M1e-3-b1.2-natural.txt
+identical (12 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n2-M4e-31-beta2.0-fixed0.1.txt | .documents/power-law-wall/sample-04/runs/ip-n2-M4e-31-b2.0-fixed0.1.txt
+identical (19 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n2-M1e-3-beta2.0-natural.txt | .documents/power-law-wall/sample-04/runs/ip-n2-M1e-3-b2.0-natural.txt
+identical (12 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n2-M4e-31-beta2.9-fixed0.1.txt | .documents/power-law-wall/sample-04/runs/ip-n2-M4e-31-b2.9-fixed0.1.txt
+identical (15 tool lines, timings masked): .documents/power-law-wall/model-01/out/ip-n2-M1e-3-beta2.9-natural.txt | .documents/power-law-wall/sample-04/runs/ip-n2-M1e-3-b2.9-natural.txt
+identical (13 tool lines, timings masked): .documents/power-law-wall/law-03/tool_route_ip_n2.txt | .documents/power-law-wall/sample-04/runs/ip-n2-M4e-31-b2.0-oneloop1.txt
+overlaps: 14 compared, all identical
+
+## 3. The tool route against the 2026.11.0 export (prompt §1.2, P25): tool-route/export_check.txt, summarised
+## exp-M4e-31-b2.0-oneloop1.txt against the export row (M_Mp, beta, drain_model, alpha) = ('4e-31', '2.0', 'one-loop-measured-v1', '1.0')
+## exp-M1e-15-b2.0-oneloop1.txt against the export row (M_Mp, beta, drain_model, alpha) = ('1e-15', '2.0', 'one-loop-measured-v1', '1.0')
+## exp-M1e-3-b2.0-natural.txt against the export row (M_Mp, beta, drain_model, alpha) = ('0.001', '2.0', 'fixed', '0.0')
+export-check: all equal
+
+## 4. 03's exponential tool route re-run (laboratory M, beta 2, A 1)
+identical (13 tool lines, timings masked): .documents/power-law-wall/sample-04/tool-route/exp-M4e-31-b2.0-oneloop1.txt | .documents/power-law-wall/law-03/tool_route_exponential.txt
+
+## 5. The exponential's surfing reference re-run (prompt §1.5): three rows of electroweak-eos 02's f_new.csv on this tree (surfing/f_new_check.csv, 2026-11-15 20:07-20:09, load 8.85 at its start)
+beta 2.975: equal to f_new.csv in every column but wall_s (wall_s 42.037 here, 42.744 there)
+beta 2.976: equal to f_new.csv in every column but wall_s (wall_s 42.005 here, 40.561 there)
+beta 3.003: equal to f_new.csv in every column but wall_s (wall_s 43.901 here, 40.855 there)

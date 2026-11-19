@@ -1,0 +1,4 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+store beta=2 M=4e-31 phi=5 alpha=0.1: shard=0000 serial=22 RHS=73767 window_samples=1479 lowT rtol=default atol=default, small network
+  stored: failure=0 Yp=0.24709132974834228 DoH=2.472581603838663 PRyM_version=bf24c3d+ri02+sr01+bt02 reason=
+  prod   Yp=0.2470913297 DoH=2.472581604 He3oH=1.044008623 Li7oH=5.453671679 wall=8.8 s

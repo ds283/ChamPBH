@@ -1,6 +1,6 @@
 # Open issues — project-wide index
 
-**Last updated:** 2026-11-13 · **32 open**: 4 on the `review-remediation` board (closed
+**Last updated:** 2026-11-19 · **36 open**: 4 on the `review-remediation` board (closed
 2026-09-30), none now assigned; 2 on the `production-readiness` board
 (closed 2026-09-30); 2 on the `run-integrity` board (closed 2026-09-30; one stale entry closed 2026-10-22, its fix having landed in `5740690`; `jordan-normalization` prompt 07 closed one, 2026-10-26); 6 on the
 `integrator-remediation` board (closed 2026-10-01), none now assigned to `science-readiness`
@@ -62,7 +62,12 @@ the measured law closed, 2026-11-05; prompt 03 closed two, 2026-11-06; prompt 08
 closed 2026-11-07, 11 of 11 prompts landed, with these three open; §1.23); 3 on the `electroweak-eos` board
 (planned 2026-11-12, with none opened or assigned; one opened from prompt 01's stop the same day and assigned to its
 prompt 01a, §1.24, which closed it and opened one the same day; prompt 02 opened one, 2026-11-13; prompt 03 opened one, 2026-11-13, from the user's open point (U12 (a), P26), and the
-campaign closed the same day, 4 of 4 prompts landed, with these three open; §1.25).
+campaign closed the same day, 4 of 4 prompts landed, with these three open; §1.25); 4 on the `power-law-wall` board
+(planned 2026-11-13, with none opened or assigned; prompts 01–05 opened none; prompt 06 opened one, 2026-11-16; prompt 07
+opened one, 2026-11-16, from its stop at the gate R, ruled (a) by the user, and its review one; prompt 07b opened one,
+2026-11-17; prompt 07c closed 07b's and opened one, 2026-11-18, which 07d's stop narrowed, 2026-11-19, and prompt 07c2
+closed, 2026-11-19; prompt 07d's review opened one, 2026-11-19; prompt 08 opened and closed none, and the campaign closed
+2026-11-19, 13 of 13 prompts landed, with these four open; §1.26).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -88,7 +93,8 @@ the two disagree, the board is right.
 [`tuning-followups`](../prompts/tuning-followups/IMPLEMENTATION_STATE.md) ·
 [`inelastic-reflection`](../prompts/inelastic-reflection/IMPLEMENTATION_STATE.md) ·
 [`one-loop-drain`](../prompts/one-loop-drain/IMPLEMENTATION_STATE.md) ·
-[`electroweak-eos`](../prompts/electroweak-eos/IMPLEMENTATION_STATE.md)
+[`electroweak-eos`](../prompts/electroweak-eos/IMPLEMENTATION_STATE.md) ·
+[`power-law-wall`](../prompts/power-law-wall/IMPLEMENTATION_STATE.md)
 
 ## 1. Open, by owning board
 
@@ -416,3 +422,22 @@ prompt 02, one by prompt 03; none assigned.
 - `[03-plot-quanta-grid-beta-axis-is-categorical]` — `tools/plot_quanta_grid.py`'s β axis is categorical (one equally
   spaced column per β in the export), so its heat maps cannot be read where the dense and sparse β grids share it; the user's
   ruling on the plan's Q4 is "retire for figures; keep as a diagnostic". *(`electroweak-eos`; prompt 03)*
+
+### 1.26 `power-law-wall` — [board §3](../prompts/power-law-wall/IMPLEMENTATION_STATE.md)
+
+Planned 2026-11-13; closed 2026-11-19 by prompt 08, 13 of 13 prompts landed. One opened by prompt 06, two by prompt 07
+(one by its review), one by prompt 07b (closed by prompt 07c), one by prompt 07c (closed by prompt 07c2), one by prompt
+07d's review; none by prompt 08; none assigned.
+
+- `[06-plot-quanta-grid-refuses-two-n-at-one-cell]` — `tools/plot_quanta_grid.py` groups a root's rows by (drain model,
+  A) and refuses two rows in one (β, M) cell, so a power-law root with n = 1 and 2 at one (β, M) has every grid figure
+  refused; a root per n draws them (measured by prompt 08). *(`power-law-wall`; prompt 06)*
+- `[07-failure-reason-carries-the-run-label]` — a stored `ScalarHistory.failure_reason` embeds main.py's history label
+  (job name and time), which `compare_stores.py` does not mask, and production's 256-character cut makes how much of the
+  reason survives depend on the job name's length. *(`power-law-wall`; prompt 07)*
+- `[07-a-refused-plot-leaves-ray-errors-unretrieved]` — a plot refused for several missing values names the first and
+  exits 2, but Ray prints an "Unhandled error" traceback for each other miss, never retrieved. *(`power-law-wall`;
+  prompt 07's review)*
+- `[07d-a-reader-refuses-an-older-label-by-a-traceback]` — a tip plot script on a store of an older `VERSION_LABEL`
+  writes nothing but exits 1 on an uncaught `ReadOnlyMiss` traceback, not 2 with a `!! plot:` line. *(`power-law-wall`;
+  prompt 07d's review)*

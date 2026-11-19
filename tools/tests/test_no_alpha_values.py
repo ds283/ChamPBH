@@ -52,7 +52,10 @@ import ray
 import plot_inputs
 from ComputeTargets.tests import test_plot_inputs as tpi
 from ComputeTargets.tests.test_a_values_plot_inputs import _build_store
-from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED, DRAIN_MODEL_ONE_LOOP
+from CosmologyConcepts.drain_model import (
+    DRAIN_MODEL_FIXED,
+    DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
+)
 from config.argument_parser import (
     NO_ALPHA_WITH_ALPHA,
     NO_ALPHA_WITHOUT_A,
@@ -245,6 +248,8 @@ class TestThePlotInputs(tpi._ReadOnlyCase):
                     tuning_tol=args.tuning_tolerance,
                     alpha_values=distinct_values(args.alpha_values),
                     A_values=distinct_values(args.A_values or []),
+                    # the exponential's own one-loop drain model (power-law-wall prompt 06, P47)
+                    A_drain_models=["one-loop-exponential-v2"],
                 )
 
     def test_under_the_flag_only_the_A_rows_are_read(self):
@@ -253,7 +258,10 @@ class TestThePlotInputs(tpi._ReadOnlyCase):
         rows = self.rows(primary, ["--no-alpha-values", "--A-values", "1", "0.5"])
         self.assertEqual(
             [(a.value, a.drain_model) for a in rows.alphas],
-            [(1.0, DRAIN_MODEL_ONE_LOOP), (0.5, DRAIN_MODEL_ONE_LOOP)],
+            [
+                (1.0, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
+                (0.5, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
+            ],
         )
         self.assertEqual(_digests(primary), before)
 
@@ -262,7 +270,7 @@ class TestThePlotInputs(tpi._ReadOnlyCase):
         rows = self.rows(primary, ["--A-values", "1"])
         self.assertEqual(
             [(a.value, a.drain_model) for a in rows.alphas],
-            [(0.0, DRAIN_MODEL_FIXED), (1.0, DRAIN_MODEL_ONE_LOOP)],
+            [(0.0, DRAIN_MODEL_FIXED), (1.0, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL)],
         )
 
     def test_an_A_not_stored_is_still_refused_under_the_flag(self):

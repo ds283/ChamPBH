@@ -1,0 +1,529 @@
+A store: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-mixed
+B store: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed
+selection: potential any, n any
+matched by (potential, M, n, beta, phi*, alpha, drain model); floats by float.hex
+left out, by name: serial and every *_serial column; version; label; timestamp; compute_time; mean_RHS_time; max_RHS_time; min_RHS_time; NP_compute_time; BBN_compute_time
+key tables: every column both hold but serial, timestamp, version
+--across-k-ex: the exponential's one-loop histories left out of the selection: A 11, B 11
+--across-k-ex: A's drain models read through the map one-loop-measured-pl-v1 -> one-loop-inverse-power-v1
+--across-k-ex: the k_ex columns (P114), reported, not failed: ScalarHistoryBounce regime, ell, log_k_ex_Mp, log_m_Mp, log_q_Mp, birth_margin, reflection_margin, reflection_margin_N, tracker_margin, tracker_margin_N; ScalarHistory worst_birth_margin, worst_reflection_margin, worst_tracker_margin, worst_birth_margin_N, worst_reflection_margin_N, worst_tracker_margin_N, birth_failing_share, reflection_failing_share, tracker_failing_share, unassessed_share, candidates_one_loop, candidates_gap, candidates_classical, candidates_unassessed, drained_share_one_loop, drained_share_gap, drained_share_classical, drained_share_unassessed, ell_min, unresolvable_assessments, all_worst_birth_margin, all_worst_reflection_margin, all_worst_tracker_margin, all_worst_birth_margin_N, all_worst_reflection_margin_N, all_worst_tracker_margin_N, all_birth_failing_share, all_reflection_failing_share, all_tracker_failing_share; extra_data's margins, sub-key by sub-key
+A: 16 shard files, 29 selected histories; B: 16 shard files, 29 selected histories
+
+=== exponential n=1 fixed alpha=0 M=2.43532e+24eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #65; B shard0015.db #65
+    key QCD_Cosmology (via cosmology_serial): compared name, omega_m, omega_cc, h, f_baryon, T_CMB_Kelvin, Neff; A only []; B only []
+    key ExponentialModel (via model_serial): compared n_value; A only []; B only []
+    key tolerance (via atol_serial): compared log10_tol; A only []; B only []
+    key alpha_value (via alpha_serial): compared value, drain_model; A only []; B only []
+    key phi_value (via phi_Einstein_init_serial): compared value_PlanckMass; A only []; B only []
+    key pi_value (via pi_Einstein_init_serial): compared value_PlanckMass; A only []; B only []
+    key temperature (via T_Jordan_init_serial): compared value_GeV; A only []; B only []
+    key IntegrationSolver (via solver_serial): compared stepping, label; A only []; B only []
+    key M_value (via M_serial): compared value_eV; A only []; B only []
+    key beta_value (via beta_serial): compared value; A only []; B only []
+    ScalarHistory: compared (77 + extra_data): cosmology_type, model_type, failure, z_samples, compute_steps, RHS_evaluations, first_bounce_N, first_bounce_log_T_Jordan, first_bounce_phi_Einstein, first_bounce_reflected, phi_Einstein_1MeV, density_NP_ratio_1MeV, phi_Einstein_70keV, density_NP_ratio_70keV, normalization, V_ref, phi_ref, phi_0, pi_0, tracking, residual_H, residual_phi, tuning_iterations, plain_steps, secant_steps, guard_steps, seed_kind, seed_normalization, seed_phi_ref, injections, resolved_candidates, unresolved_candidates, injected_fraction, rho_chi_ratio_1MeV, rho_chi_ratio_70keV, rho_chi_ratio_today, Delta_N_eff_1MeV, Delta_N_eff_today, log_R_first_impact, parking_N, parking_log_T_Jordan, release_N, release_log_T_Jordan, worst_birth_margin, worst_birth_margin_N, birth_failing_share, worst_reflection_margin, worst_reflection_margin_N, reflection_failing_share, worst_tracker_margin, worst_tracker_margin_N, tracker_failing_share, unassessed_share, drained_share_one_loop, drained_share_gap, drained_share_classical, drained_share_unassessed, parking_share, candidates_one_loop, candidates_gap, candidates_classical, candidates_unassessed, ell_min, log_R_min_drain, unresolvable_assessments, unresolved_declined, all_worst_birth_margin, all_worst_birth_margin_N, all_birth_failing_share, all_worst_reflection_margin, all_worst_reflection_margin_N, all_reflection_failing_share, all_worst_tracker_margin, all_worst_tracker_margin_N, all_tracker_failing_share, bounce_rows, validated
+    ScalarHistory: left out, held by both: serial, version, timestamp, label, cosmology_serial, model_serial, atol_serial, rtol_serial, tuning_tol_serial, alpha_serial, phi_Einstein_init_serial, pi_Einstein_init_serial, T_Jordan_init_serial, solver_serial, compute_time, mean_RHS_time, max_RHS_time, min_RHS_time
+    ScalarHistory: A-only columns: none
+    ScalarHistory: B-only columns: none
+    extra_data: 5 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 4998, B 4998, matched 4998; duplicates A 0 B 0
+    ScalarHistoryValue: compared: raw_N, phi_Einstein_Mp, pi_Einstein_Mp, log_rhorad_Einstein_Mp4, log_rhorad_Jordan_Mp4, log_fm, log_T_Jordan_GeV, H_Einstein_Mp, H_Jordan_Mp, gstar_rho, gstar_s, dgstar_rho_dlogT, dgstar_s_dlogT, Sigma, friction_term_Mp, reflecting_term_Mp, kicking_term_Mp, log_one_plus_z_Jordan, rho_chi_over_rho_rad, log_m_eff_Mp, log_m_tracker_Mp
+    ScalarHistoryValue: left out: serial, history_serial, z_serial
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistory: compared: max_abs_Q_kp_over_H_1E1, max_abs_Q_kp_over_H_1E2, max_abs_Q_kp_over_H_1E3, max_abs_Q_kp_over_H_1E4, z_samples, validated; left out: serial, version, timestamp, scalar_history_serial, compute_time, label
+    AdiabaticHistoryValue: A 4998, B 4998, matched 4998; duplicates A 0 B 0
+    AdiabaticHistoryValue: compared: raw_N, abs_Q_kp_over_H_1E1, abs_Q_kp_over_H_1E2, abs_Q_kp_over_H_1E3, abs_Q_kp_over_H_1E4; left out: serial, history_serial, z_serial
+    BBNData: A 1 row(s), B 1
+    BBNData: compared: failure, failure_reason, Yp_BBN, DOverH, He3OverH, Li7OverH, small_network, PRyM_version, z_samples, validated; left out: serial, version, timestamp, scalar_history_serial, label, NP_compute_time, BBN_compute_time
+    BBNDataValue: A 1509, B 1509, matched 1509; duplicates A 0 B 0
+    BBNDataValue: compared: raw_N, log_T_Jordan_MeV, density_NP_MeV4, density_NP_ratio; left out: serial, bbn_serial, z_serial
+
+=== exponential n=1 fixed alpha=0 M=2.43532e+24eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #85; B shard0000.db #85
+    extra_data: 5 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5431, B 5431, matched 5431; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5431, B 5431, matched 5431; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1487, B 1487, matched 1487; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0 M=2.43532e+24eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #105; B shard0001.db #105
+    extra_data: 5 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5919, B 5919, matched 5919; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5919, B 5919, matched 5919; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1480, B 1480, matched 1480; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.01 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #1; B shard0015.db #1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1510, B 1510, matched 1510; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.01 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #21; B shard0000.db #21
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1487, B 1487, matched 1487; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.01 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #41; B shard0001.db #41
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1481, B 1481, matched 1481; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.1 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #2; B shard0015.db #2
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1506, B 1506, matched 1506; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.1 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #22; B shard0000.db #22
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1479, B 1479, matched 1479; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.1 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #42; B shard0001.db #42
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1479, B 1479, matched 1479; duplicates A 0 B 0
+
+=== inverse-power n=1 fixed alpha=0 M=2.43532e+24eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #66; B shard0015.db #66
+    failure A True B True; reasons DIFFER
+    key InversePowerModel (via model_serial): compared n_value; A only []; B only []
+    failure_reason: equal once the label is masked, to the shorter cut (158 of 162 and 158 masked characters)
+    extra_data: 0 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 0, B 0, matched 0; duplicates A 0 B 0
+    AdiabaticHistory: A 0 row(s), B 0
+    BBNData: A 0 row(s), B 0
+
+=== inverse-power n=1 fixed alpha=0 M=2.43532e+24eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #86; B shard0000.db #86
+    failure A True B True; reasons DIFFER
+    failure_reason: equal once the label is masked, to the shorter cut (160 of 164 and 160 masked characters)
+    extra_data: 0 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 0, B 0, matched 0; duplicates A 0 B 0
+    AdiabaticHistory: A 0 row(s), B 0
+    BBNData: A 0 row(s), B 0
+
+=== inverse-power n=1 fixed alpha=0 M=2.43532e+24eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #106; B shard0001.db #106
+    failure A True B True; reasons DIFFER
+    failure_reason: equal once the label is masked, to the shorter cut (158 of 162 and 158 masked characters)
+    extra_data: 0 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 0, B 0, matched 0; duplicates A 0 B 0
+    AdiabaticHistory: A 0 row(s), B 0
+    BBNData: A 0 row(s), B 0
+
+=== inverse-power n=1 fixed alpha=0.01 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #6; B shard0015.db #6
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1510, B 1510, matched 1510; duplicates A 0 B 0
+
+=== inverse-power n=1 fixed alpha=0.01 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #26; B shard0000.db #26
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1487, B 1487, matched 1487; duplicates A 0 B 0
+
+=== inverse-power n=1 fixed alpha=0.01 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #46; B shard0001.db #46
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1481, B 1481, matched 1481; duplicates A 0 B 0
+
+=== inverse-power n=1 fixed alpha=0.1 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #7; B shard0015.db #7
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1506, B 1506, matched 1506; duplicates A 0 B 0
+
+=== inverse-power n=1 fixed alpha=0.1 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #27; B shard0000.db #27
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1479, B 1479, matched 1479; duplicates A 0 B 0
+
+=== inverse-power n=1 fixed alpha=0.1 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #47; B shard0001.db #47
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1479, B 1479, matched 1479; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #8; B shard0015.db #8
+    sum of drained_share_<regime>: A 0x1.fe40551c89b6ap-1 B 0x1.fe40551c89b6ap-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 339 rows, B 339 rows
+    ScalarHistoryBounce: compared: ordinal, source, candidate_index, N, N_turn, kind, resolved, log_T_Jordan_GeV, delta_K_Mp4, log_rho_kin_Mp4, nonadiabaticity, alpha_eff, w_gate, K_before_Mp4, regime, ell, L, log_R, log_E_Mp4, log_H_Mp, log_k_ex_Mp, log_m_Mp, log_q_Mp, share, weighted, birth_margin, reflection_margin, reflection_margin_N, tracker_margin, tracker_margin_N; left out: serial, history_serial
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1509, B 1509, matched 1509; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #35; B shard0000.db #35
+    sum of drained_share_<regime>: A 0x1.fe8c974ba1210p-1 B 0x1.fe8c974ba1210p-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 69 rows, B 69 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1487, B 1487, matched 1487; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #62; B shard0001.db #62
+    sum of drained_share_<regime>: A 0x1.fd64cf47f4c98p-1 B 0x1.fd64cf47f4c98p-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 299 rows, B 299 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1481, B 1481, matched 1481; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=1 M=2.43532e-06eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #109; B shard0000.db #109
+    sum of drained_share_<regime>: A 0x1.ffe52a79b8548p-1 B 0x1.ffe52a79b8548p-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 61 rows, B 61 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1484, B 1484, matched 1484; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=1 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #9; B shard0015.db #9
+    sum of drained_share_<regime>: A 0x1.fff1b59f80af4p-1 B 0x1.fff1b59f80af4p-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 45 rows, B 45 rows
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1506, B 1506, matched 1506; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=1 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #36; B shard0000.db #36
+    sum of drained_share_<regime>: A 0x1.ffee778856b01p-1 B 0x1.ffee778856b01p-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 73 rows, B 73 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1484, B 1484, matched 1484; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=1 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #63; B shard0001.db #63
+    sum of drained_share_<regime>: A 0x1.ffe1d8a4f4748p-1 B 0x1.ffe1d8a4f4748p-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 123 rows, B 123 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1480, B 1480, matched 1480; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=1 M=2.43532e+12eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #110; B shard0000.db #110
+    sum of drained_share_<regime>: A 0x1.fff0d771bdce7p-1 B 0x1.fff0d771bdce7p-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 75 rows, B 75 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1482, B 1482, matched 1482; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=10 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #10; B shard0015.db #10
+    sum of drained_share_<regime>: A 0x1.ffff92c581e24p-1 B 0x1.ffff92c581e24p-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 13 rows, B 13 rows
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1481, B 1481, matched 1481; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=10 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #37; B shard0000.db #37
+    sum of drained_share_<regime>: A 0x1.fffed2731b1d5p-1 B 0x1.fffed2731b1d5p-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 25 rows, B 25 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1478, B 1478, matched 1478; duplicates A 0 B 0
+
+=== inverse-power n=1 one-loop-inverse-power-v1 alpha=10 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #64; B shard0001.db #64
+    sum of drained_share_<regime>: A 0x1.fffe1ae4896e6p-1 B 0x1.fffe1ae4896e6p-1
+    extra_data: 6 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 25 rows, B 25 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1478, B 1478, matched 1478; duplicates A 0 B 0
+
+A histories matched exactly once in B: 29 of 29
+B histories matched exactly once by A: 29 of 29
+histories failing in both: 3
+
+failure_reason values equal only once the label is masked and cut to the shorter length: 3
+
+Values compared, per table:
+  AdiabaticHistory: 156
+  AdiabaticHistoryValue: 708920
+  BBNData: 260
+  BBNDataValue: 154840
+  ScalarHistory: 2262
+  ScalarHistory.extra_data: 153
+  ScalarHistory.extra_data.margins: 299
+  ScalarHistoryBounce: 34410
+  ScalarHistoryValue: 2977464
+  key:ExponentialModel: 9
+  key:IntegrationSolver: 55
+  key:InversePowerModel: 20
+  key:M_value: 29
+  key:QCD_Cosmology: 203
+  key:alpha_value: 58
+  key:beta_value: 29
+  key:phi_value: 29
+  key:pi_value: 29
+  key:temperature: 29
+  key:tolerance: 87
+  power wall: candidates assessed in A: 579
+  power wall: sum of drained_share_<regime>: 11
+  total: 3879931
+
+k_ex columns (P114), per column and group (potential, n, B's drain model):
+  ScalarHistory.all_birth_failing_share [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_birth_failing_share [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_birth_failing_share [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.all_reflection_failing_share [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_reflection_failing_share [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_reflection_failing_share [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.all_tracker_failing_share [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_tracker_failing_share [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_tracker_failing_share [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.all_worst_birth_margin [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_birth_margin [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_birth_margin [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 11; largest rise +1.26737 (3.614972272236429 -> 4.882345662379748 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistory.all_worst_birth_margin_N [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_birth_margin_N [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_birth_margin_N [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.all_worst_reflection_margin [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_reflection_margin [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_reflection_margin [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 11; largest rise +1.26691 (3.63552071257854 -> 4.902426137970593 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistory.all_worst_reflection_margin_N [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_reflection_margin_N [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_reflection_margin_N [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.all_worst_tracker_margin [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_tracker_margin [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_tracker_margin [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 11; largest rise +1.19224 (40.118552921509675 -> 41.31079091477362 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistory.all_worst_tracker_margin_N [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_tracker_margin_N [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.all_worst_tracker_margin_N [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.birth_failing_share [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.birth_failing_share [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.birth_failing_share [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.candidates_classical [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.candidates_classical [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.candidates_classical [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.candidates_gap [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.candidates_gap [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.candidates_gap [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.candidates_one_loop [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.candidates_one_loop [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.candidates_one_loop [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.candidates_unassessed [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.candidates_unassessed [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.candidates_unassessed [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.drained_share_classical [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.drained_share_classical [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.drained_share_classical [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.drained_share_gap [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.drained_share_gap [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.drained_share_gap [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.drained_share_one_loop [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.drained_share_one_loop [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.drained_share_one_loop [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.drained_share_unassessed [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.drained_share_unassessed [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.drained_share_unassessed [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.ell_min [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.ell_min [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.ell_min [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 11; largest rise +1.26737 (3.614972272236429 -> 4.882345662379748 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistory.reflection_failing_share [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.reflection_failing_share [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.reflection_failing_share [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.tracker_failing_share [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.tracker_failing_share [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.tracker_failing_share [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.unassessed_share [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.unassessed_share [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.unassessed_share [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.unresolvable_assessments [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.unresolvable_assessments [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.unresolvable_assessments [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.worst_birth_margin [exponential n=1 fixed]: compared 9, differ 6; largest rise +0.189763 (20.871588828080284 -> 21.061351713436128 at exponential n=1 fixed alpha=0.01 M=0.000974129eV beta=2.9 phi*=5)
+  ScalarHistory.worst_birth_margin [inverse-power n=1 fixed]: compared 9, differ 6; largest rise +1.10225 (25.02715309846859 -> 26.129403007311684 at inverse-power n=1 fixed alpha=0.01 M=0.000974129eV beta=2.9 phi*=5)
+  ScalarHistory.worst_birth_margin [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 11; largest rise +1.13227 (8.848923884483511 -> 9.981193086237326 at inverse-power n=1 one-loop-inverse-power-v1 alpha=1 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistory.worst_birth_margin_N [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.worst_birth_margin_N [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.worst_birth_margin_N [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistory.worst_reflection_margin [exponential n=1 fixed]: compared 9, differ 6; largest rise +0.189785 (20.889643221629704 -> 21.079428445599905 at exponential n=1 fixed alpha=0.01 M=0.000974129eV beta=2.9 phi*=5)
+  ScalarHistory.worst_reflection_margin [inverse-power n=1 fixed]: compared 9, differ 6; largest rise +1.10375 (36.670574223468996 -> 37.77432047037075 at inverse-power n=1 fixed alpha=0.01 M=0.000974129eV beta=2 phi*=5)
+  ScalarHistory.worst_reflection_margin [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 11; largest rise +1.13318 (8.909383070448705 -> 10.042560209788796 at inverse-power n=1 one-loop-inverse-power-v1 alpha=1 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistory.worst_reflection_margin_N [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.worst_reflection_margin_N [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.worst_reflection_margin_N [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 1; largest fall -0.122184 (35.66278199329338 -> 35.54059762559682 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistory.worst_tracker_margin [exponential n=1 fixed]: compared 9, differ 6; largest rise +0.1875 (48.43845598384349 -> 48.62595615904456 at exponential n=1 fixed alpha=0.01 M=0.000974129eV beta=2.9 phi*=5)
+  ScalarHistory.worst_tracker_margin [inverse-power n=1 fixed]: compared 9, differ 6; largest rise +1.09354 (53.98053482113292 -> 55.074072922923804 at inverse-power n=1 fixed alpha=0.01 M=0.000974129eV beta=2 phi*=5)
+  ScalarHistory.worst_tracker_margin [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 11; largest rise +1.10217 (43.67769005425001 -> 44.779857562442814 at inverse-power n=1 one-loop-inverse-power-v1 alpha=1 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistory.worst_tracker_margin_N [exponential n=1 fixed]: compared 9, differ 0
+  ScalarHistory.worst_tracker_margin_N [inverse-power n=1 fixed]: compared 9, differ 0
+  ScalarHistory.worst_tracker_margin_N [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  ScalarHistoryBounce.birth_margin [inverse-power n=1 one-loop-inverse-power-v1]: compared 1147, differ 579; largest rise +1.26737 (3.614972272236429 -> 4.882345662379748 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistoryBounce.ell [inverse-power n=1 one-loop-inverse-power-v1]: compared 1147, differ 579; largest rise +1.26737 (3.614972272236429 -> 4.882345662379748 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistoryBounce.log_k_ex_Mp [inverse-power n=1 one-loop-inverse-power-v1]: compared 1147, differ 579; largest rise +1.19224 (-61.559178014873055 -> -60.36694002160911 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistoryBounce.log_m_Mp [inverse-power n=1 one-loop-inverse-power-v1]: compared 1147, differ 579; largest fall -0.0751354 (-65.17415028710948 -> -65.24928568398886 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistoryBounce.log_q_Mp [inverse-power n=1 one-loop-inverse-power-v1]: compared 1147, differ 579; largest rise +1.19224 (-24.040021139985242 -> -22.847783146721298 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistoryBounce.reflection_margin [inverse-power n=1 one-loop-inverse-power-v1]: compared 1147, differ 568; largest rise +1.26691 (3.63552071257854 -> 4.902426137970593 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistoryBounce.reflection_margin_N [inverse-power n=1 one-loop-inverse-power-v1]: compared 1147, differ 16; largest fall -0.122184 (35.66278199329338 -> 35.54059762559682 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistoryBounce.regime [inverse-power n=1 one-loop-inverse-power-v1]: compared 1147, differ 0
+  ScalarHistoryBounce.tracker_margin [inverse-power n=1 one-loop-inverse-power-v1]: compared 1147, differ 579; largest rise +1.19224 (40.118552921509675 -> 41.31079091477362 at inverse-power n=1 one-loop-inverse-power-v1 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5)
+  ScalarHistoryBounce.tracker_margin_N [inverse-power n=1 one-loop-inverse-power-v1]: compared 1147, differ 0
+  extra_data.margins.below_weight_share [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.below_weight_share [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.below_weight_share [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.classical_gap_generations [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.classical_gap_generations [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.classical_gap_generations [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.classical_generations [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.classical_generations [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.classical_generations [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.first_birth_failure [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.first_birth_failure [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.first_birth_failure [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.first_reflection_failure [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.first_reflection_failure [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.first_reflection_failure [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.first_tracker_failure [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.first_tracker_failure [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.first_tracker_failure [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.one_loop_generations [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.one_loop_generations [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.one_loop_generations [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.unassessed_candidates [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.unassessed_candidates [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.unassessed_candidates [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.weighted_generations [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.weighted_generations [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.weighted_generations [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.weighted_share [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.weighted_share [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.weighted_share [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.worst_birth_margin_index [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.worst_birth_margin_index [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.worst_birth_margin_index [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.worst_reflection_margin_index [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.worst_reflection_margin_index [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.worst_reflection_margin_index [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+  extra_data.margins.worst_tracker_margin_index [exponential n=1 fixed]: compared 6, differ 0
+  extra_data.margins.worst_tracker_margin_index [inverse-power n=1 fixed]: compared 6, differ 0
+  extra_data.margins.worst_tracker_margin_index [inverse-power n=1 one-loop-inverse-power-v1]: compared 11, differ 0
+
+k_ex columns that moved: 22 (column, group)
+  MOVED ScalarHistory.all_worst_birth_margin [inverse-power n=1 one-loop-inverse-power-v1]: 11 of 11, largest |change| 1.26737
+  MOVED ScalarHistory.all_worst_reflection_margin [inverse-power n=1 one-loop-inverse-power-v1]: 11 of 11, largest |change| 1.26691
+  MOVED ScalarHistory.all_worst_tracker_margin [inverse-power n=1 one-loop-inverse-power-v1]: 11 of 11, largest |change| 1.19224
+  MOVED ScalarHistory.ell_min [inverse-power n=1 one-loop-inverse-power-v1]: 11 of 11, largest |change| 1.26737
+  MOVED ScalarHistory.worst_birth_margin [exponential n=1 fixed]: 6 of 9, largest |change| 0.189763
+  MOVED ScalarHistory.worst_birth_margin [inverse-power n=1 fixed]: 6 of 9, largest |change| 1.10225
+  MOVED ScalarHistory.worst_birth_margin [inverse-power n=1 one-loop-inverse-power-v1]: 11 of 11, largest |change| 1.13227
+  MOVED ScalarHistory.worst_reflection_margin [exponential n=1 fixed]: 6 of 9, largest |change| 0.189785
+  MOVED ScalarHistory.worst_reflection_margin [inverse-power n=1 fixed]: 6 of 9, largest |change| 1.10375
+  MOVED ScalarHistory.worst_reflection_margin [inverse-power n=1 one-loop-inverse-power-v1]: 11 of 11, largest |change| 1.13318
+  MOVED ScalarHistory.worst_reflection_margin_N [inverse-power n=1 one-loop-inverse-power-v1]: 1 of 11, largest |change| 0.122184
+  MOVED ScalarHistory.worst_tracker_margin [exponential n=1 fixed]: 6 of 9, largest |change| 0.1875
+  MOVED ScalarHistory.worst_tracker_margin [inverse-power n=1 fixed]: 6 of 9, largest |change| 1.09354
+  MOVED ScalarHistory.worst_tracker_margin [inverse-power n=1 one-loop-inverse-power-v1]: 11 of 11, largest |change| 1.10217
+  MOVED ScalarHistoryBounce.birth_margin [inverse-power n=1 one-loop-inverse-power-v1]: 579 of 1147, largest |change| 1.26737
+  MOVED ScalarHistoryBounce.ell [inverse-power n=1 one-loop-inverse-power-v1]: 579 of 1147, largest |change| 1.26737
+  MOVED ScalarHistoryBounce.log_k_ex_Mp [inverse-power n=1 one-loop-inverse-power-v1]: 579 of 1147, largest |change| 1.19224
+  MOVED ScalarHistoryBounce.log_m_Mp [inverse-power n=1 one-loop-inverse-power-v1]: 579 of 1147, largest |change| 0.0751354
+  MOVED ScalarHistoryBounce.log_q_Mp [inverse-power n=1 one-loop-inverse-power-v1]: 579 of 1147, largest |change| 1.19224
+  MOVED ScalarHistoryBounce.reflection_margin [inverse-power n=1 one-loop-inverse-power-v1]: 568 of 1147, largest |change| 1.26691
+  MOVED ScalarHistoryBounce.reflection_margin_N [inverse-power n=1 one-loop-inverse-power-v1]: 16 of 1147, largest |change| 0.122184
+  MOVED ScalarHistoryBounce.tracker_margin [inverse-power n=1 one-loop-inverse-power-v1]: 579 of 1147, largest |change| 1.19224
+
+DIFFERENCES: none
+RESULT: every history matched once each way, every compared value bitwise equal but the k_ex columns of P114, reported above

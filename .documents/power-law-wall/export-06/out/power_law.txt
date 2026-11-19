@@ -1,0 +1,7 @@
+root: QCD_Cosmology/inverse-power
+histories.csv: 6 rows; header is CSV_COLUMNS: True; model at column 3, after n: True; model cells ['inverse-power']
+the manifest's 5 power-law histories: each one row; 218 cells and facts compared against the store
+   another row: beta=1.185 n=1 fixed 0.1: failure_reasons 'no ScalarHistory row in the store', normalization ''
+failures: 0
+
+STOP CONDITION HIT: False

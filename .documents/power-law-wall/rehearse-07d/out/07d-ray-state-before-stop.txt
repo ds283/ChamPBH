@@ -1,0 +1,32 @@
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+  job 01000000 SUCCEEDED driver pid 48771: hon.app/Contents/MacOS/Python -u .documents/power-law-wall/rehearse-07d/code_probe.py --address 127.0.0.1:6380
+  job 02000000 SUCCEEDED driver pid 48835: w-wall-07d-r2-exp-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+  job 03000000 SUCCEEDED driver pid 49263: .0.1:6380 --job-name power-law-wall-07d-r2-exp-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+  job 04000000 SUCCEEDED driver pid 49473: ob-name power-law-wall-07d-r2-exp-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+  job 05000000 SUCCEEDED driver pid 49906: aw-wall-07d-r2-pl-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+  job 06000000 SUCCEEDED driver pid 50508: 0.0.1:6380 --job-name power-law-wall-07d-r2-pl-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+  job 07000000 SUCCEEDED driver pid 50924: job-name power-law-wall-07d-r2-pl-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+  job 08000000 SUCCEEDED driver pid 51274: 07d-r2-pl-resumed-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+  job 09000000 SUCCEEDED driver pid 51683: --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10 --prune-unvalidated
+  job 0a000000 SUCCEEDED driver pid 52005: 80 --job-name power-law-wall-07d-r2-pl-resumed-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+  job 0b000000 SUCCEEDED driver pid 52220:  power-law-wall-07d-r2-pl-resumed-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+  job 0c000000 SUCCEEDED driver pid 52857: wall-07d-r2-mixed-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+  job 0d000000 SUCCEEDED driver pid 53684: .1:6380 --job-name power-law-wall-07d-r2-mixed-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+  job 0e000000 SUCCEEDED driver pid 53969: -name power-law-wall-07d-r2-mixed-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+  job 0f000000 SUCCEEDED driver pid 54598: tput /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/export-exp
+  job 10000000 SUCCEEDED driver pid 54702: utput /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/export-pl
+  job 11000000 SUCCEEDED driver pid 54824: sers/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/export-pl-resumed
+  job 12000000 SUCCEEDED driver pid 54941: ut /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/export-mixed
+  job 13000000 SUCCEEDED driver pid 55070: tput /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/export-exp
+  job 14000000 SUCCEEDED driver pid 55214: utput /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/export-pl
+  job 15000000 SUCCEEDED driver pid 55576: sers/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/export-pl-resumed
+  job 16000000 SUCCEEDED driver pid 69355: ut /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/export-mixed
+  job 17000000 SUCCEEDED driver pid 90554: output /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/plot-exp
+  job 18000000 SUCCEEDED driver pid 90817: output /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/plot-exp
+  job 19000000 SUCCEEDED driver pid 91083: sers/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/refuse-models-exp
+  job 1a000000 SUCCEEDED driver pid 91184: s283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/refuse-models-exp-fixed
+  job 1b000000 SUCCEEDED driver pid 91292: put /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/refuse-A-pl
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+  workers: 605 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+  actors: 430 recorded, 0 ALIVE; by (job, class, state): {('16000000', 'Datastore', 'DEAD'): 16, ('15000000', 'Datastore', 'DEAD'): 16, ('14000000', 'Datastore', 'DEAD'): 16, ('02000000', 'Datastore', 'DEAD'): 16, ('1a000000', 'Datastore', 'DEAD'): 16, ('0e000000', 'SerialPoolBroker', 'DEAD'): 1, ('07000000', 'Datastore', 'DEAD'): 16, ('10000000', 'Datastore', 'DEAD'): 16, ('04000000', 'SerialPoolBroker', 'DEAD'): 1, ('12000000', 'Datastore', 'DEAD'): 16, ('1b000000', 'Datastore', 'DEAD'): 16, ('19000000', 'Datastore', 'DEAD'): 16, ('0e000000', 'Datastore', 'DEAD'): 16, ('0f000000', 'Datastore', 'DEAD'): 16, ('06000000', 'Datastore', 'DEAD'): 16, ('08000000', 'Datastore', 'DEAD'): 16, ('05000000', 'Datastore', 'DEAD'): 16, ('03000000', 'Datastore', 'DEAD'): 16, ('0d000000', 'Datastore', 'DEAD'): 16, ('0b000000', 'Datastore', 'DEAD'): 16, ('17000000', 'Datastore', 'DEAD'): 16, ('18000000', 'Datastore', 'DEAD'): 16, ('0c000000', 'Datastore', 'DEAD'): 16, ('04000000', 'Datastore', 'DEAD'): 16, ('13000000', 'Datastore', 'DEAD'): 16, ('0a000000', 'Datastore', 'DEAD'): 16, ('09000000', 'Datastore', 'DEAD'): 16, ('11000000', 'Datastore', 'DEAD'): 16, ('06000000', 'SerialPoolBroker', 'DEAD'): 1, ('03000000', 'SerialPoolBroker', 'DEAD'): 1, ('07000000', 'SerialPoolBroker', 'DEAD'): 1, ('08000000', 'SerialPoolBroker', 'DEAD'): 1, ('0d000000', 'SerialPoolBroker', 'DEAD'): 1, ('0a000000', 'SerialPoolBroker', 'DEAD'): 1, ('05000000', 'SerialPoolBroker', 'DEAD'): 1, ('0c000000', 'SerialPoolBroker', 'DEAD'): 1, ('02000000', 'SerialPoolBroker', 'DEAD'): 1, ('09000000', 'SerialPoolBroker', 'DEAD'): 1, ('01000000', 'ProbeActor', 'DEAD'): 1, ('0b000000', 'SerialPoolBroker', 'DEAD'): 1}

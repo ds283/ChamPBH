@@ -31,7 +31,7 @@ with V0 in units of M_P^4, as a stored history holds it; PHI_REF_MP is phi_ref i
 
 The setup is main.py's, and the tuned golden history's (ComputeTargets/tests/
 golden_tuned_history.py): QCD_Cosmology on Planck2018 in Planck_units; ExponentialModel with
-n = 1 and the given M and beta; phi* = 5 M_P (--phi-init-Mp), pi* = 0, T* = 2e4 GeV; atol =
+n = 1 and the given M and beta (by default; --model and --n below); phi* = 5 M_P (--phi-init-Mp), pi* = 0, T* = 2e4 GeV; atol =
 rtol = 1e-8 (integrate_history's defaults, main.py's); and main.py's sampling axis, 250 samples
 per decade of 1 + z from log10(1 + z) = 0 to DEFAULT_LOG10_ONE_PLUS_Z_HIGH (300) of
 config/argument_parser.py. Tuned at beta = 3, M = 0.01 it prints the tuning record of
@@ -46,7 +46,7 @@ reads its tables from the working directory, one invocation at a time:
     ./venv/bin/python tools/history_and_bbn.py BETA M [--phi-init-Mp X] \\
         [--tuning-tolerance TOL] [--tuning-max-integrations K] \\
         [--fixed-normalization NORM PHI_REF_MP [--T-stop-GeV T]] [--alpha A] \\
-        [--drain-law {fixed,one_loop}] \\
+        [--drain-law {fixed,one_loop}] [--model {exponential,inverse-power}] [--n N] \\
         [--no-small-network] [--wall-clock-limit SECS]
 
 M is in units of the (reduced) Planck mass. Output lines:
@@ -92,7 +92,8 @@ to the tuning or the integration. Under fixed, --alpha is as above and every lin
 one_loop, --alpha is the law's strength A, which must be given, finite and > 0, with no upper bound (the
 law's cap clamps); it is refused at parse otherwise, exit 2. The history line then names
 `drain_law=one_loop A=<A> model=<the drain model>` where alpha=A stood (one-loop-drain prompt 02c: the
-model is the record's DrainRecord.model, `one-loop-measured-v1`), the dissipation line follows as at
+model is the record's DrainRecord.model, the model's own: `one-loop-exponential-v2` for the exponential and
+`one-loop-inverse-power-v1` for the power wall since power-law-wall prompt 07c), the dissipation line follows as at
 alpha > 0, and a `drain` line follows it: the candidates, their counts by regime (one_loop, gap,
 classical, unassessed), the shares of K(N_final) drained in each regime and the parking leftover's
 (`K_share_<regime>`, `K_share_parking`; None where K(N_final) is 0), the least ell of a one-loop
@@ -100,6 +101,15 @@ candidate (`ell_min`, None if there is none), `unresolvable_assessments` and `un
 unresolved reflections declined because G2 would refuse them), each value `:.6g`.
 --gap-prescription was removed by one-loop-drain prompt 02c, with the "zero" and "edge" gap prescriptions it
 set (README §8.10, decision 2); it is now an unknown argument.
+
+--model {exponential,inverse-power} (default exponential) and --n N (an integer >= 1, default 1)
+(power-law-wall prompt 01 §1.4, README §6.3 P5) choose the model: ExponentialModel, V_0 e^{(M/phi)^n}, or
+InversePowerModel, V_0 [1 + (M/phi)^n], each with the given M, n and beta and the same coupling. With
+neither given, or with both at their defaults, every line is as before. Otherwise every line's label
+gains `model=<model> n=<n>` after M, so that no two models' lines can be mistaken for each other:
+`history beta=2 M=4e-31 model=inverse-power n=2: ...`. Under --drain-law one_loop a model that does not
+define the one-loop law's wall variable L (InversePowerModel, until power-law-wall prompt 03) is refused
+before any integration, exit 2, with check_drain_law_model's message on stderr.
 
 Costs, measured by jordan-normalization prompt 08 at a load of about 10: tuned at beta = 3,
 M = 0.01, five integrations, 22 s (up to about 28 s under more load); one integration
@@ -131,6 +141,7 @@ from ComputeTargets.BBNData import (  # noqa: E402
     compute_BBN_data,
 )
 from ComputeTargets.ScalarHistory import (  # noqa: E402
+    check_drain_law_model,
     DEFAULT_TUNING_MAX_INTEGRATIONS,
     DEFAULT_TUNING_TOLERANCE,
     DRAIN_LAW_FIXED,
@@ -157,6 +168,7 @@ from CosmologyConcepts import (  # noqa: E402
 from CosmologyConcepts.redshift import log_one_plus_z_grid  # noqa: E402
 from CosmologyConcepts.FieldValues import phi_value, pi_value  # noqa: E402
 from CosmologyConcepts.Models.ExponentialModel import ExponentialModel  # noqa: E402
+from CosmologyConcepts.Models.InversePowerModel import InversePowerModel  # noqa: E402
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology  # noqa: E402
 from CosmologyModels.LambdaCDM import Planck2018  # noqa: E402
 from Units import Planck_units  # noqa: E402
@@ -178,6 +190,41 @@ SAMPLES_PER_LOG10_Z = 250
 
 # the windows of the ratio lines, in keV
 RATIO_WINDOWS_KEV = ((0.3, 1.0), (1.0, 3.0), (3.0, 10.0), (10.0, 100.0))
+
+# --model and --n (power-law-wall prompt 01 §1.4, README §6.3 P5): the model's class by its option name,
+# and the defaults, at which every line is as before
+MODEL_EXPONENTIAL = "exponential"
+MODEL_INVERSE_POWER = "inverse-power"
+MODEL_CLASSES = {
+    MODEL_EXPONENTIAL: ExponentialModel,
+    MODEL_INVERSE_POWER: InversePowerModel,
+}
+MODEL_DEFAULT = MODEL_EXPONENTIAL
+N_DEFAULT = 1
+
+
+def build_model(model: str, M_Mp: float, n: int, beta: float, units):
+    """The model named by --model, with M = M_Mp M_P, the index n and the coupling beta."""
+    return MODEL_CLASSES[model](
+        0, M_value(0, M_Mp * units.PlanckMass), n, beta_value(0, beta), units
+    )
+
+
+def model_label(model: str, n: int) -> str:
+    """
+    What a label gains for the model: "" at the defaults (exponential, n = 1), so that every line is as
+    before; otherwise " model=<model> n=<n>".
+    """
+    if model == MODEL_DEFAULT and n == N_DEFAULT:
+        return ""
+    return f" model={model} n={n}"
+
+
+def model_task_suffix(model: str, n: int) -> str:
+    """What a task label gains for the model: "" at the defaults, otherwise "-<model>-n<n>"."""
+    if model == MODEL_DEFAULT and n == N_DEFAULT:
+        return ""
+    return f"-{model}-n{n}"
 
 
 class _StandInModel:
@@ -434,6 +481,20 @@ def main(argv=None) -> int:
         "alpha_eff by each candidate's regime, with --alpha as A (one-loop-drain prompt 01)",
     )
     parser.add_argument(
+        "--model",
+        choices=tuple(MODEL_CLASSES),
+        default=MODEL_DEFAULT,
+        help="the model (default %(default)s): exponential, V_0 exp((M/phi)^n); inverse-power, "
+        "V_0 [1 + (M/phi)^n] (power-law-wall prompt 01). Away from the defaults every label names "
+        "the model and n",
+    )
+    parser.add_argument(
+        "--n",
+        type=positive_int,
+        default=N_DEFAULT,
+        help="the model's index n, an integer >= 1 (default %(default)s)",
+    )
+    parser.add_argument(
         "--tuning-tolerance",
         type=positive_float,
         default=DEFAULT_TUNING_TOLERANCE,
@@ -500,17 +561,23 @@ def main(argv=None) -> int:
         return 2
 
     beta, M = args.beta, args.M
-    label = f"beta={beta:g} M={M:g}"
+    label = f"beta={beta:g} M={M:g}" + model_label(args.model, args.n)
     wall_clock_limit = None if args.wall_clock_limit == 0 else args.wall_clock_limit
     tuned = args.fixed_normalization is None
 
     units = Planck_units()
+
+    model = build_model(args.model, M, args.n, beta, units)
+    # a model without the one-loop law's L is refused here, before any integration (power-law-wall
+    # prompt 01 §1.4), with the message the tuning and the integration would raise
+    try:
+        check_drain_law_model(args.drain_law, model, "history_and_bbn")
+    except ValueError as e:
+        print(f"!! history_and_bbn: {e}", file=sys.stderr)
+        return 2
+
     params = Planck2018()
     cosmology = QCD_Cosmology(0, units, params)
-
-    model = ExponentialModel(
-        0, M_value(0, M * units.PlanckMass), 1, beta_value(0, beta), units
-    )
 
     T_init = temperature(0, T_INIT_GEV * units.GeV)
     # T_CMB as tune_history takes it (cosmology.T_CMB_Kelvin * units.Kelvin)
@@ -520,7 +587,9 @@ def main(argv=None) -> int:
         T_stop = temperature(1, args.T_stop_GeV * units.GeV)
     phi_init = phi_value(0, args.phi_init_Mp * units.PlanckMass)
     pi_init = pi_value(0, PI_INIT)
-    task_label = f"history_and_bbn-beta{beta:g}-M{M:g}"
+    task_label = f"history_and_bbn-beta{beta:g}-M{M:g}" + model_task_suffix(
+        args.model, args.n
+    )
 
     # stage 1: the history. The final IntegrationResult is kept, by wrapping
     # integrate_scalar_history for the duration of the call, so that the fixed_T line can count
@@ -635,7 +704,7 @@ def main(argv=None) -> int:
     start = time.perf_counter()
     res = compute_BBN_data._function(
         _Proxy(stand_in),
-        task_label=f"history_and_bbn-beta{beta:g}-M{M:g}",
+        task_label=task_label,
         small_network=args.small_network,
         wall_clock_limit=wall_clock_limit,
     )

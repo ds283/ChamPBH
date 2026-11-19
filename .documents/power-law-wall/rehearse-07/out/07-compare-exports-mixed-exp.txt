@@ -1,0 +1,46 @@
+A: var/power-law-wall/07/export-mixed/QCD_Cosmology/exponential
+B: var/power-law-wall/07/export-exp/QCD_Cosmology/exponential
+mode: file by file
+files: A 63, B 63, in both 63, only A 0, only B 0
+  alpha=0.01/csv/M=0.00097413eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.1080381250940263' vs '1.1067951249424368'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '9.17419270798564' vs '8.911850250093266'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0018961250316351652' vs '0.0015221668872982264'
+  alpha=0.1/csv/M=0.00097413eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.5323859578929842' vs '1.6705157908145338'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '7.958207208896056' vs '8.223724040901288'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0016241248231381178' vs '0.0018904588650912046'
+  alpha=0/csv/M=2.4353e+24eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '5.859373334096745' vs '6.705637000035495'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.698488875059411' vs '8.998928833985701'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0018161251209676266' vs '0.0015545841306447983'
+  one-loop-measured-v1/A=0.05/csv/M=0.00097413eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '12.280485084047541' vs '12.387978249927983'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '7.872154582990333' vs '8.152913292171434'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.001517707947641611' vs '0.0020418339408934116'
+  one-loop-measured-v1/A=1/csv/M=0.00097413eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '2.6150500839576125' vs '2.6236509170848876'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.083533165976405' vs '8.101907416945323'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0018547920044511557' vs '0.0016972911544144154'
+  one-loop-measured-v1/A=1/csv/M=2.4353e+12eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 1 row(s); first '3.839706667000428' vs '3.7880855828989297'
+     timing: column 'BBN_compute_time' differs in 1 row(s); first '9.44917762489058' vs '9.318350333953276'
+     timing: column 'NP_compute_time' differs in 1 row(s); first '0.0014907079748809338' vs '0.0016226251609623432'
+  one-loop-measured-v1/A=1/csv/M=2.4353e-06eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 1 row(s); first '4.287464916938916' vs '4.352782582864165'
+     timing: column 'BBN_compute_time' differs in 1 row(s); first '8.78103370894678' vs '8.802365917013958'
+     timing: column 'NP_compute_time' differs in 1 row(s); first '0.0016350829973816872' vs '0.0016995840705931187'
+  one-loop-measured-v1/A=10/csv/M=0.00097413eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.1696650828234851' vs '1.2324224170297384'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '7.770070167025551' vs '7.978976542130113'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.001731958007439971' vs '0.0017507909797132015'
+per file name (identical / timing only / different):
+  bounces.csv: 11 / 0 / 0
+  data.csv: 0 / 8 / 0
+  fields.csv: 20 / 0 / 0
+  histories.csv: 1 / 0 / 0
+  quanta_bounces.csv: 11 / 0 / 0
+  quanta_histories.csv: 1 / 0 / 0
+  quanta_samples.csv: 11 / 0 / 0
+pairs compared: 63; byte-identical 55; differ only in timing columns 8; differ 0
+RESULT: every pair byte-identical or differing only in timing columns, no file in one only

@@ -32,7 +32,12 @@ no model interprets phi_ref, and a model that forgets it cannot break it.
 
 A model implements hooks that take no phi_ref:
   - `_log_V(normalization, phi)`, `_d_logV_dphi(normalization, phi)`,
-    `_d2_logV_dphi2(normalization, phi)`;
+    `_d2_logV_dphi2(normalization, phi)`, and `_d3_logV_dphi3(normalization, phi)` (power-law-wall
+    prompt 07c, README §6.14 P102), which no production code reads since prompt 07c2 (the tests compare
+    the pulse rate with it); the base raises for it, naming the class, with no generic default;
+  - `_pulse_rate_hook(normalization, phi)` (power-law-wall prompt 07c2, README §6.16 P126), |V'''/V''| in
+    closed form, which the turning points' k_ex reads; the base raises for it, naming the class, with no
+    generic default;
   - `_log_Omega(phi)`, `_d_logOmega_dphi(phi)`, `_d2_logOmega_dphi2(phi)`;
   - optionally `_log_V_floor(normalization)` and the property `reflects_at_origin`, which the
     integrator's elastic reflection reads (defaults: None and False, as on the potentials).
@@ -66,23 +71,25 @@ SEED_KINDS = ("tracking", "static", "plain")
 # the classical turning point of a field falling into a reflecting wall with kinetic energy E
 # (inelastic-reflection prompt 04 §1.2; wall_backreaction.tex §"Where the field is stopped" and
 # §"The chain of estimates"): phi_t, where V(phi_t) - V_floor = E; ln omega_t^2 = ln V''(phi_t);
-# ln R, the test-field ratio omega_t^4/8 pi^2 E; lambda_t = -d ln V/dphi at phi_t; ln k_ex, the
-# classical peak lambda_t E^{1/2}/2; and ell_t = ln(k_ex/omega_t)
+# ln R, the test-field ratio omega_t^4/8 pi^2 E; pulse_rate_t = |V'''/V''| at phi_t, the inverse duration of the
+# mass pulse V''(phi(t)) per unit field velocity; ln k_ex, the classical peak k_ex = pulse_rate_t E^{1/2}/2 (power-law-wall
+# prompt 07c; README §6.12 R13-R15, §6.14 P102: Erickcek et al., arXiv:1310.5149, Eq. (64), with the dressing
+# V_D ~ (V'')^2; until 07c the field was lambda_t = -d ln V/dphi and k_ex = lambda_t E^{1/2}/2); and ell_t = ln(k_ex/omega_t)
 ClassicalTurningPoint = namedtuple(
     "ClassicalTurningPoint",
-    ["phi_t", "log_omega_t_squared", "log_R", "lambda_t", "log_k_ex", "ell_t"],
+    ["phi_t", "log_omega_t_squared", "log_R", "pulse_rate_t", "log_k_ex", "ell_t"],
 )
 
 # the one-loop turnaround (prompt 04 §1.3; eq:chain-turn): phi_ta, where V''(phi_ta) = m_ta^2 with
-# m_ta^4 ell = 32 pi^2 E; ln m_ta; lambda_ta = -d ln V/dphi at phi_ta; ln k_ex = ln(lambda_ta E^{1/2}/2);
-# ell = ln(k_ex/m_ta) = ln k_ex - ln m_ta; the number of iterations of the fixed point; and
-# outside_classical, phi_ta > phi_t
+# m_ta^4 ell = 32 pi^2 E; ln m_ta; pulse_rate_ta = |V'''/V''| at phi_ta; ln k_ex = ln(pulse_rate_ta E^{1/2}/2)
+# (power-law-wall prompt 07c, P102; lambda_ta = -d ln V/dphi until then); ell = ln(k_ex/m_ta) = ln k_ex - ln m_ta; the
+# number of iterations of the fixed point; and outside_classical, phi_ta > phi_t
 OneLoopTurnaround = namedtuple(
     "OneLoopTurnaround",
     [
         "phi_ta",
         "log_m_ta",
-        "lambda_ta",
+        "pulse_rate_ta",
         "log_k_ex",
         "ell",
         "iterations",
@@ -110,10 +117,14 @@ WALL_SEARCH_HALVINGS = 4
 # is rounded within rho quanta and has |d ln(ln V - ln V_floor)/d ln phi| >= s. The exponential
 # (s = n = 1, rho = 1/2) needs K > 15.005; K = 16 is the next integer, with no margin beyond its 6 %
 WALL_ROUNDING_QUANTA = 16
-# the one-loop fixed point: from ell_0 = 32 (eq:chain-turn) until |delta ell| <= 1e-12 ell
+# the one-loop fixed point: from ell_0 = 32 (eq:chain-turn) until |delta ell| <= 1e-12 ell, at most
+# ONE_LOOP_MAX_ITERATIONS iterates. 400 since power-law-wall prompt 07c (README §6.14 P103), 100 before: with k_ex from
+# |V'''/V''| the fixed point near the chain's end converges slowly, and 07b's stage-2 points needed up to 195
+# (issue [07b-the-one-loop-fixed-point-needs-more-than-100-iterations-near-the-chain-end]); the cap decides the regime
+# label and ell there, not the exponential law's fraction (07b2 §8.5: where it binds, ell < ell_0)
 ONE_LOOP_ELL_START = 32.0
 ONE_LOOP_ELL_RTOL = 1.0e-12
-ONE_LOOP_MAX_ITERATIONS = 100
+ONE_LOOP_MAX_ITERATIONS = 400
 
 _LOG_2 = log(2.0)
 _LOG_8_PI_SQUARED = log(8.0 * pi * pi)
@@ -402,6 +413,9 @@ class RealizedModel:
     def d2_logV_dphi2(self, phi) -> float:
         return self._model._d2_logV_dphi2(self._normalization, phi)
 
+    def d3_logV_dphi3(self, phi) -> float:
+        return self._model._d3_logV_dphi3(self._normalization, phi)
+
     def log_Omega(self, phi) -> float:
         return self._model._log_Omega(phi) - self._log_Omega_ref
 
@@ -424,6 +438,29 @@ class RealizedModel:
     @property
     def drain_L_implemented(self) -> bool:
         return self._model.drain_L_implemented
+
+    def drain_fraction(
+        self,
+        regime: str,
+        ell: Optional[float],
+        log_E: Optional[float],
+        log_R: Optional[float],
+    ) -> float:
+        return self._model._drain_fraction(
+            self._normalization, regime, ell, log_E, log_R
+        )
+
+    @property
+    def drain_fraction_implemented(self) -> bool:
+        return self._model.drain_fraction_implemented
+
+    @property
+    def one_loop_drain_model(self) -> str:
+        return self._model.one_loop_drain_model
+
+    @property
+    def spectrum_wall(self) -> str:
+        return self._model.spectrum_wall
 
     @property
     def reflects_at_origin(self) -> bool:
@@ -487,6 +524,43 @@ class AbstractModel(DatastoreObject, ABC):
     def _d2_logV_dphi2(self, normalization, phi) -> float:
         raise NotImplementedError
 
+    def _d3_logV_dphi3(self, normalization, phi) -> float:
+        """
+        (ln V)''' at phi (power-law-wall prompt 07c; README §6.12 P75, §6.14 P102). RealizedModel.d3_logV_dphi3. From
+        prompt 07c to 07c2 classical_turning_point and one_loop_turnaround formed k_ex = E^{1/2}|V'''/V''|/2 from it, with
+        V'''/V = (ln V)''' + 3 (ln V)'(ln V)'' + (ln V)'^3; since prompt 07c2 (README §6.16 P126) they read
+        _pulse_rate_hook, and no production code reads this hook: the tests compare _pulse_rate_hook with that
+        composition.
+
+        No generic default, by the user's ruling of 2026-11-05 ("when a new potential is implemented, breakage is
+        loud"): this base raises NotImplementedError, naming the class. It is not an abstractmethod, so that a test
+        stand-in without it still constructs; every model and every stand-in that implements the other hooks implements
+        it in closed form.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement _d3_logV_dphi3(normalization, phi), the third derivative of "
+            f"ln V that k_ex = E^{{1/2}}|V'''/V''|/2 needs"
+        )
+
+    def _pulse_rate_hook(self, normalization, phi) -> float:
+        """
+        |V'''/V''| at phi, the pulse rate of k_ex = E^{1/2}|V'''/V''|/2 (power-law-wall prompt 07c2; README §6.16 P126),
+        which classical_turning_point and one_loop_turnaround read through _pulse_rate. A model gives it in closed form,
+        with no third derivative and no product of large hooks, so that it is within float range wherever V'' is: on the
+        power wall V = V_0 [1 + (M/phi)^n] it is (n + 2)/phi exactly. Until prompt 07c2 _pulse_rate formed it from the
+        three log hooks, V'''/V = (ln V)''' + (ln V)'(3 (ln V)'' + (ln V)'^2) over V''/V = (ln V)'' + (ln V)'^2, whose
+        products overflow on the power wall at n = 1 below phi ~ 3e-103 M_P, which 07's grid reaches (README §6.16).
+
+        No generic default, by the user's ruling of 2026-11-05 ("when a new potential is implemented, breakage is
+        loud"): this base raises NotImplementedError, naming the class. It is not an abstractmethod, so that a test
+        stand-in without it still constructs; every model and every stand-in that implements _d3_logV_dphi3 implements
+        it.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement _pulse_rate_hook(normalization, phi), the pulse rate "
+            f"|V'''/V''| that k_ex = E^{{1/2}}|V'''/V''|/2 needs"
+        )
+
     @abstractmethod
     def _log_Omega(self, phi) -> float:
         raise NotImplementedError
@@ -523,8 +597,9 @@ class AbstractModel(DatastoreObject, ABC):
         No default, by the user's ruling of 2026-11-05: "I suggest we move `L` into the model class, with no
         default. Then when a new potential is implemented, breakage is loud, and the implementer has to think about
         what they are changing." This base raises, naming the class. It is not abstract, so that a model without
-        it is still built and runs under the fixed law; under the one-loop law integrate_scalar_history,
-        integrate_history and tune_history refuse such a model at entry (drain_L_implemented).
+        it is still built and runs. Since power-law-wall prompt 07c (README §6.14 P99) it is optional under the
+        one-loop law too: the law is the model's _drain_fraction, which ExponentialModel's reads L through; where a
+        model defines L it is recorded per candidate (drain_law_inputs, DrainCandidate.L, the bounce column L).
         """
         raise NotImplementedError(
             f"{type(self).__name__} does not implement _drain_L(normalization, log_E), the wall variable L "
@@ -535,6 +610,68 @@ class AbstractModel(DatastoreObject, ABC):
     def drain_L_implemented(self) -> bool:
         """True iff this model's class overrides _drain_L (RealizedModel.drain_L_implemented)."""
         return type(self)._drain_L is not AbstractModel._drain_L
+
+    def _drain_fraction(
+        self,
+        normalization,
+        regime: str,
+        ell: Optional[float],
+        log_E: Optional[float],
+        log_R: Optional[float],
+    ) -> float:
+        """
+        f, the model's own one-loop drain fraction at one candidate (power-law-wall prompt 03 §1.2; README §6.6 P15,
+        P16; since prompt 07c every potential's, README §6.14 P99, ComputeTargets/ScalarHistory.py keeping none):
+        RealizedModel.drain_fraction. Its inputs are the candidate's regime
+        (CosmologyConcepts.drain_model.REGIME_*, as drain_regime classifies it), ell (the turnaround's, regime
+        one_loop only, else None), ln E of the assessment and ln R of its classical turning point (None if
+        unassessed). The loop drains alpha_eff = min(DRAIN_ALPHA_CAP, A f) w_gate with it, as with the L law.
+
+        Under the one-loop law a model must define this (check_drain_law_model refuses one that does not); _drain_L
+        is optional (P99). No default, as _drain_L has none (the user's ruling of 2026-11-05, "when a new potential is
+        implemented, breakage is loud"): this base raises, naming the class.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement _drain_fraction(normalization, regime, ell, log_E, log_R), "
+            f"the model's own one-loop drain fraction"
+        )
+
+    @property
+    def drain_fraction_implemented(self) -> bool:
+        """True iff this model's class overrides _drain_fraction (RealizedModel.drain_fraction_implemented)."""
+        return type(self)._drain_fraction is not AbstractModel._drain_fraction
+
+    @property
+    def one_loop_drain_model(self) -> str:
+        """
+        The drain model the model's one-loop law is stored under (power-law-wall prompt 03 §1.2; README §6.6 P16,
+        P17): a value of CosmologyConcepts.drain_model.DRAIN_MODELS whose law is the one-loop law, named in the
+        payload's "drain" record and so in alpha_value's drain_model. RealizedModel.one_loop_drain_model.
+
+        No default (P16): this base raises NotImplementedError, naming the class. A model whose one-loop law is
+        undefined at its parameters raises ValueError naming its class, the hook and why. check_drain_law_model
+        reads it at entry under the one-loop law and refuses either.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement one_loop_drain_model, the drain model its one-loop law is "
+            f"stored under"
+        )
+
+    @property
+    def spectrum_wall(self) -> str:
+        """
+        The wall of the model's quanta spectrum (power-law-wall prompt 06 §1.7; README §6.10 P52): a wall of
+        ComputeTargets.quanta_spectrum (WALLS), whose spectrum the post-processing (tools/quanta_measures.py and the
+        figure tools) uses for this model's one-loop histories, taken from the export's `model` and `n`.
+        RealizedModel.spectrum_wall. No value of the integration reads it.
+
+        No default: this base raises NotImplementedError, naming the class, and it is not an abstractmethod, so that a
+        test stand-in without it still constructs. A model with no spectrum at its parameters raises ValueError naming
+        its class, the hook and why.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement spectrum_wall, the wall of its quanta spectrum"
+        )
 
     # ---- the interface ----
 
@@ -649,6 +786,24 @@ class AbstractModel(DatastoreObject, ABC):
             raise _failure(f"{context}: log_V_floor = {log_V_floor!r} is not finite")
         return log_V_floor
 
+    def _pulse_rate(self, context: str, normalization, p: float, where: str) -> float:
+        """
+        |V'''/V''| at phi = p, the pulse rate of k_ex = E^{1/2}|V'''/V''|/2 (power-law-wall prompt 07c; README §6.12
+        P75, §6.14 P102): the model's _pulse_rate_hook, in closed form (prompt 07c2; README §6.16 P126). From prompt 07c
+        to 07c2 it was formed here from the three log hooks, V'''/V = (ln V)''' + (ln V)'(3 (ln V)'' + (ln V)'^2) over
+        V''/V = (ln V)'' + (ln V)'^2, whose products overflow on the power wall at n = 1 below phi ~ 3e-103 M_P. A rate
+        that is zero, negative or not finite raises ComputationFailureError naming _pulse_rate_hook (the hook returns
+        the absolute value, so a negative one is the hook's error); where is the point's name in the message (phi_t,
+        phi_ta). A ComputationFailureError of the hook (an overflow) propagates.
+        """
+        rate = self._pulse_rate_hook(normalization, p)
+        if not (rate > 0.0 and isfinite(rate)):
+            raise _failure(
+                f"{context}: the pulse rate |V'''/V''| = {rate!r} at {where} = {p!r} is zero, negative or not finite "
+                f"(from _pulse_rate_hook)"
+            )
+        return rate
+
     def classical_turning_point(
         self, normalization, phi: float, log_E: float
     ) -> Optional[ClassicalTurningPoint]:
@@ -662,9 +817,14 @@ class AbstractModel(DatastoreObject, ABC):
           reflecting wall is convex at its turning point;
         - ln R = 2 ln omega_t^2 - ln 8 pi^2 - ln E, the test-field ratio omega_t^4/8 pi^2 E; R > 1 says
           the field cannot reach the classical wall (README §8.1 R7, R8);
-        - lambda_t = -d ln V/dphi at phi_t, the notes' wall steepness;
-        - ln k_ex, k_ex = lambda_t |phi_dot_in|/2 sqrt 2 = lambda_t E^{1/2}/2 (eq:kex-over-wt with y = L);
-        - ell_t = ln(k_ex/omega_t), about ln 1/2 for the exponential wall.
+        - pulse_rate_t = |V'''/V''| at phi_t (_pulse_rate), the inverse duration of the mass pulse per unit field
+          velocity (power-law-wall prompt 07c; README §6.12 R13-R16, §6.14 P102);
+        - ln k_ex, k_ex = pulse_rate_t |phi_dot_in|/2 sqrt 2 = pulse_rate_t E^{1/2}/2 (Erickcek et al.,
+          arXiv:1310.5149, Eq. (64), with the dressing V_D ~ (V'')^2; until prompt 07c the rate was -d ln V/dphi,
+          eq:kex-over-wt of wall_backreaction.tex);
+        - ell_t = ln(k_ex/omega_t): about ln 0.516 on the exponential wall at L = 90, larger at small L, and
+          ln((n + 2)/(2 sqrt(n(n + 1)))) on the power wall at every E/V_0.
+        phi_t, omega_t and ln R read no k_ex (R16).
 
         Returns None if V(phi) - V_floor >= E already: the field is at or inside its classical turning
         point, which is behind it. That is not a failure. It also returns None, after that test and
@@ -676,7 +836,8 @@ class AbstractModel(DatastoreObject, ABC):
         Raises ComputationFailureError, naming the model, the inputs and the reason, for a model that
         does not reflect at the origin or has no log_V_floor; phi not finite and positive; ln E not
         finite (E <= 0); a bracket not found; a search that leaves float range; a quantity that is not
-        monotone along the search; V'' <= 0 or lambda_t <= 0 at phi_t.
+        monotone along the search; V'' <= 0 or -d ln V/dphi <= 0 (the wall does not repel) at phi_t; a pulse rate
+        that is zero or not finite.
         """
         context = self._wall_context(
             "classical_turning_point", normalization, phi=phi, log_E=log_E
@@ -707,19 +868,19 @@ class AbstractModel(DatastoreObject, ABC):
                 f"{context}: V'' <= 0 at the classical turning point phi_t = {phi_t!r} "
                 f"((ln V)'' + (ln V)'^2 = {q!r}); a reflecting wall is convex there"
             )
-        lambda_t = -d1
-        if not lambda_t > 0.0:
+        if not -d1 > 0.0:
             raise _failure(
-                f"{context}: -d ln V/dphi = {lambda_t!r} <= 0 at phi_t = {phi_t!r}; "
+                f"{context}: -d ln V/dphi = {-d1!r} <= 0 at phi_t = {phi_t!r}; "
                 f"the wall is not repulsive there"
             )
         log_omega_t_squared = self._log_V(normalization, phi_t) + log(q)
-        log_k_ex = log(lambda_t) + 0.5 * log_E - _LOG_2
+        pulse_rate_t = self._pulse_rate(context, normalization, phi_t, "phi_t")
+        log_k_ex = log(pulse_rate_t) + 0.5 * log_E - _LOG_2
         result = ClassicalTurningPoint(
             phi_t=phi_t,
             log_omega_t_squared=log_omega_t_squared,
             log_R=2.0 * log_omega_t_squared - _LOG_8_PI_SQUARED - log_E,
-            lambda_t=lambda_t,
+            pulse_rate_t=pulse_rate_t,
             log_k_ex=log_k_ex,
             ell_t=log_k_ex - 0.5 * log_omega_t_squared,
         )
@@ -737,7 +898,10 @@ class AbstractModel(DatastoreObject, ABC):
         the capture"). The field stops where the dressing m^4 ln(k_ex/m)/32 pi^2, m^2 = V'', reaches E:
 
             m_ta^4 = 32 pi^2 E/ell,   ell = ln(k_ex/m_ta),   V''(phi_ta) = m_ta^2,
-            k_ex = lambda_ta E^{1/2}/2,   lambda_ta = -d ln V/dphi at phi_ta.
+            k_ex = E^{1/2} |V'''/V''|/2 at phi_ta
+
+        (power-law-wall prompt 07c; README §6.12 R13-R15, §6.14 P102: Erickcek et al., arXiv:1310.5149, Eq. (64), with
+        the dressing V_D ~ (V'')^2; until 07c k_ex = lambda_ta E^{1/2}/2 with lambda_ta = -d ln V/dphi, eq:kex-over-wt).
 
         There is no renormalization scale (README §8.1 R7). ell enters m_ta, which fixes phi_ta, which
         fixes k_ex and so ell: the fixed point is iterated from ell_0 = 32 until |delta ell| <= 1e-12
@@ -745,7 +909,7 @@ class AbstractModel(DatastoreObject, ABC):
         ln V'' = 2 ln m_ta, searched inwards from phi in ln phi; on the approach V'' rises
         monotonically (wall_backreaction.tex before eq:peak-is-ta), and the search checks it.
 
-        Returns OneLoopTurnaround(phi_ta, log_m_ta, lambda_ta, log_k_ex, ell, iterations,
+        Returns OneLoopTurnaround(phi_ta, log_m_ta, pulse_rate_ta, log_k_ex, ell, iterations,
         outside_classical), with ell = log_k_ex - log_m_ta of the returned values. outside_classical
         is phi_ta > phi_t, decided as V(phi_ta) - V_floor < E, so that no classical root is found;
         where the classical point is behind the field it is False (then phi_t >= phi >= phi_ta). It
@@ -754,8 +918,9 @@ class AbstractModel(DatastoreObject, ABC):
         Returns None if V'' at phi is already at or above m_ta^2 at an iterate: the field is inside
         its one-loop turnaround to the accuracy of the iteration (orchestrator note 04, ruling 4).
 
-        Raises ComputationFailureError as classical_turning_point does, and where the chain has no
-        solution: an iterate with ell <= 0, or no convergence, with ell's last values in the message.
+        Raises ComputationFailureError as classical_turning_point does (a wall that does not repel at phi_ta, a pulse
+        rate that is zero or not finite), and where the chain has no solution: an iterate with ell <= 0, or no
+        convergence in ONE_LOOP_MAX_ITERATIONS (400 since prompt 07c, P103), with ell's last values in the message.
         """
         context = self._wall_context(
             "one_loop_turnaround", normalization, phi=phi, log_E=log_E
@@ -785,13 +950,14 @@ class AbstractModel(DatastoreObject, ABC):
                 return log_V2(p) - target
 
             phi_ta = exp(_search_log_field(residual, x_0, r_0, -1.0, context))
-            lambda_ta = -self._d_logV_dphi(normalization, phi_ta)
-            if not lambda_ta > 0.0:
+            minus_d1 = -self._d_logV_dphi(normalization, phi_ta)
+            if not minus_d1 > 0.0:
                 raise _failure(
-                    f"{context}: -d ln V/dphi = {lambda_ta!r} <= 0 at phi_ta = {phi_ta!r}; "
+                    f"{context}: -d ln V/dphi = {minus_d1!r} <= 0 at phi_ta = {phi_ta!r}; "
                     f"the wall is not repulsive there"
                 )
-            log_k_ex = log(lambda_ta) + 0.5 * log_E - _LOG_2
+            pulse_rate_ta = self._pulse_rate(context, normalization, phi_ta, "phi_ta")
+            log_k_ex = log(pulse_rate_ta) + 0.5 * log_E - _LOG_2
             ell_new = log_k_ex - log_m_ta
             ells.append(ell_new)
             if not ell_new > 0.0:
@@ -807,7 +973,7 @@ class AbstractModel(DatastoreObject, ABC):
                 return OneLoopTurnaround(
                     phi_ta=phi_ta,
                     log_m_ta=log_m_ta,
-                    lambda_ta=lambda_ta,
+                    pulse_rate_ta=pulse_rate_ta,
                     log_k_ex=log_k_ex,
                     ell=ell_new,
                     iterations=iteration,

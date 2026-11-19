@@ -48,7 +48,7 @@ from unittest import mock
 from ComputeTargets.tests import dissipation_histories as dh
 from CosmologyConcepts.drain_model import (
     DRAIN_MODEL_FIXED,
-    DRAIN_MODEL_ONE_LOOP,
+    DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
 )
 from ObjectFactories.tests.test_drain_store import (
     ONE_LOOP,
@@ -120,7 +120,7 @@ class TestBbnFromStoreFindsEachLaw(_TwoModelStore):
 
     def test_each_law_finds_its_own_history(self):
         fixed = self.find(self.stem, drain_model=DRAIN_MODEL_FIXED)
-        one_loop = self.find(self.stem, drain_model=DRAIN_MODEL_ONE_LOOP)
+        one_loop = self.find(self.stem, drain_model=DRAIN_MODEL_ONE_LOOP_EXPONENTIAL)
         self.assertEqual(fixed.serial, self.fixed_serial)
         self.assertEqual(one_loop.serial, self.one_loop_serial)
         self.assertNotEqual(fixed.serial, one_loop.serial)
@@ -131,7 +131,7 @@ class TestBbnFromStoreFindsEachLaw(_TwoModelStore):
         for kwargs, text in (
             (dict(alpha=0.25, drain_model=DRAIN_MODEL_FIXED), " alpha=0.25"),
             (
-                dict(alpha=0.25, drain_model=DRAIN_MODEL_ONE_LOOP),
+                dict(alpha=0.25, drain_model=DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
                 f" A=0.25 ({ONE_LOOP})",
             ),
         ):
@@ -148,7 +148,7 @@ class TestBbnFromStoreFindsEachLaw(_TwoModelStore):
                 5.0,
                 self.units,
                 alpha=0.0,
-                drain_model=DRAIN_MODEL_ONE_LOOP,
+                drain_model=DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
             )
 
     def test_a_format_6_imitation_finds_the_fixed_history_and_under_one_loop_nothing(
@@ -159,7 +159,7 @@ class TestBbnFromStoreFindsEachLaw(_TwoModelStore):
         self.assertEqual(fixed.serial, self.fixed_serial)
         self.assertEqual(self.find(stem).serial, self.fixed_serial)
         with self.assertRaises(LookupError) as ctx:
-            self.find(stem, drain_model=DRAIN_MODEL_ONE_LOOP)
+            self.find(stem, drain_model=DRAIN_MODEL_ONE_LOOP_EXPONENTIAL)
         self.assertIn(f"A=0.1 ({ONE_LOOP})", str(ctx.exception))
 
     def test_a_shard_with_no_alpha_table_holds_alpha_zero_under_the_fixed_model_only(
@@ -170,24 +170,27 @@ class TestBbnFromStoreFindsEachLaw(_TwoModelStore):
         self.assertIs(sql, bfs._FIND_QUERY_WITHOUT_ALPHA)
         self.assertEqual(parameters, (BETA, 5.0))
         self.assertIsNone(bfs._find_query(con, BETA, 5.0, 0.1, DRAIN_MODEL_FIXED))
-        self.assertIsNone(bfs._find_query(con, BETA, 5.0, 1.0, DRAIN_MODEL_ONE_LOOP))
+        self.assertIsNone(
+            bfs._find_query(con, BETA, 5.0, 1.0, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL)
+        )
         # the model is bound, never formatted into the SQL
         with contextlib.closing(sqlite3.connect(self.shard)) as shard:
             sql, parameters = bfs._find_query(
-                shard, BETA, 5.0, 0.1, DRAIN_MODEL_ONE_LOOP
+                shard, BETA, 5.0, 0.1, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL
             )
         self.assertNotIn(ONE_LOOP, sql)
-        self.assertEqual(parameters[-1], DRAIN_MODEL_ONE_LOOP)
+        self.assertEqual(parameters[-1], DRAIN_MODEL_ONE_LOOP_EXPONENTIAL)
 
     def test_the_header_text_names_A_and_the_model_only_under_the_one_loop_model(self):
         self.assertEqual(bfs._alpha_text(0.0), "")
         self.assertEqual(bfs._alpha_text(0.1), " alpha=0.1")
         self.assertEqual(bfs._alpha_text(0.1, DRAIN_MODEL_FIXED), " alpha=0.1")
         self.assertEqual(
-            bfs._alpha_text(1.0, DRAIN_MODEL_ONE_LOOP), f" A=1 ({ONE_LOOP})"
+            bfs._alpha_text(1.0, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL), f" A=1 ({ONE_LOOP})"
         )
         self.assertEqual(
-            bfs._alpha_text(10.0, DRAIN_MODEL_ONE_LOOP), f" A=10 ({ONE_LOOP})"
+            bfs._alpha_text(10.0, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL),
+            f" A=10 ({ONE_LOOP})",
         )
 
 
@@ -215,7 +218,9 @@ class TestBbnFromStoreOptions(unittest.TestCase):
         code, err, find = self.run_main("--drain-law", "one_loop", "--alpha", "10")
         self.assertEqual(code, "reached find_model", err)
         self.assertEqual(find.call_args.kwargs["alpha"], 10.0)
-        self.assertEqual(find.call_args.kwargs["drain_model"], DRAIN_MODEL_ONE_LOOP)
+        self.assertEqual(
+            find.call_args.kwargs["drain_model"], DRAIN_MODEL_ONE_LOOP_EXPONENTIAL
+        )
         for extra in (("--alpha", "10"), ("--drain-law", "fixed", "--alpha", "10")):
             with self.subTest(extra=extra):
                 code, err, find = self.run_main(*extra)

@@ -1,0 +1,525 @@
+edges.txt — power-law-wall prompt 04 §1.5 (P29): the surfing edges at M = 1e-3 M_P, phi* = 5 M_P, tuned
+Built by prompts/power-law-wall/source/sample/edges.py from the CSVs; measurements, not bounds.
+
+## The grids as read from the coarse scans
+### C-n1
+- 79 rows, 5 succeeded, 74 failed (beta 1.15 - 5.0)
+- Q would be 1.100-1.300, 201 beta, wider than 101, across failures ['1.15', '1.2', '1.25']: not run
+- no EW capture on C: the EW edge is not bracketed
+- uncaptured window beta 1.1 - 1.1, grid edge below, QCD above, failures inside ['1.15', '1.2', '1.25']
+- Q: none
+- E: none
+
+### C-n2
+- 49 rows, 49 succeeded, 0 failed
+- uncaptured window beta 1.1 - 1.1, grid edge below, QCD above
+- uncaptured window beta 3.0 - 3.0, QCD below, EW above
+- Q: 1.100–1.150 (51 β)
+- E: 2.950–3.050 (101 β)
+
+## The scans
+### c_n1 (.documents/power-law-wall/sample-04/surfing/c_n1.csv): 79 rows, 5 succeeded; wall_s summed 3267.8 s;
+load (1, 5, 15 min) at the start: 4.21 / 6.20 / 6.99
+
+| β | status | captured | kick | n_crossings | T_capture | T_max | T_deliver (first bounce) | N_deliver | reflections | accepted_steps | wall_s |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1.1 | ok | false | — | 0 | — | — | 0.14337 | 17.8406 | 12 | 41157 | 47.774 |
+| 1.15 | failure | — | — | — | — | — | — | — | — | — | 1.894 |
+| 1.2 | failure | — | — | — | — | — | — | — | — | — | 1.465 |
+| 1.25 | failure | — | — | — | — | — | — | — | — | — | 1.803 |
+| 1.3 | ok | true | QCD | 1 | 0.23701 | — | 0.266072 | 17.9968 | 20 | 56900 | 62.978 |
+| 1.35 | ok | true | QCD | 1 | 0.254682 | — | 0.285137 | 18.1652 | 18 | 48999 | 54.932 |
+| 1.4 | failure | — | — | — | — | — | — | — | — | — | 14.993 |
+| 1.45 | ok | true | QCD | 1 | 0.29703 | — | 0.333696 | 18.4841 | 28 | 90038 | 104.288 |
+| 1.5 | failure | — | — | — | — | — | — | — | — | — | 3.350 |
+| 1.55 | failure | — | — | — | — | — | — | — | — | — | 1.883 |
+| 1.6 | failure | — | — | — | — | — | — | — | — | — | 4.605 |
+| 1.65 | failure | — | — | — | — | — | — | — | — | — | 2.579 |
+| 1.7 | failure | — | — | — | — | — | — | — | — | — | 33.297 |
+| 1.75 | failure | — | — | — | — | — | — | — | — | — | 33.514 |
+| 1.8 | ok | true | QCD | 2 | 0.499736 | 0.563198 | 0.562051 | 19.6576 | 40 | 99427 | 119.562 |
+| 1.85 | failure | — | — | — | — | — | — | — | — | — | 3.221 |
+| 1.9 | failure | — | — | — | — | — | — | — | — | — | 4.638 |
+| 1.95 | failure | — | — | — | — | — | — | — | — | — | 2.774 |
+| 2.0 | failure | — | — | — | — | — | — | — | — | — | 4.778 |
+| 2.05 | failure | — | — | — | — | — | — | — | — | — | 4.287 |
+| 2.1 | failure | — | — | — | — | — | — | — | — | — | 3.657 |
+| 2.15 | failure | — | — | — | — | — | — | — | — | — | 4.009 |
+| 2.2 | failure | — | — | — | — | — | — | — | — | — | 4.042 |
+| 2.25 | failure | — | — | — | — | — | — | — | — | — | 4.154 |
+| 2.3 | failure | — | — | — | — | — | — | — | — | — | 4.739 |
+| 2.35 | failure | — | — | — | — | — | — | — | — | — | 4.911 |
+| 2.4 | failure | — | — | — | — | — | — | — | — | — | 5.706 |
+| 2.45 | failure | — | — | — | — | — | — | — | — | — | 4.380 |
+| 2.5 | failure | — | — | — | — | — | — | — | — | — | 6.571 |
+| 2.55 | failure | — | — | — | — | — | — | — | — | — | 6.413 |
+| 2.6 | failure | — | — | — | — | — | — | — | — | — | 12.894 |
+| 2.65 | failure | — | — | — | — | — | — | — | — | — | 5.177 |
+| 2.7 | failure | — | — | — | — | — | — | — | — | — | 9.283 |
+| 2.75 | failure | — | — | — | — | — | — | — | — | — | 7.749 |
+| 2.8 | failure | — | — | — | — | — | — | — | — | — | 7.811 |
+| 2.85 | failure | — | — | — | — | — | — | — | — | — | 52.475 |
+| 2.9 | failure | — | — | — | — | — | — | — | — | — | 10.111 |
+| 2.95 | failure | — | — | — | — | — | — | — | — | — | 11.159 |
+| 3.0 | failure | — | — | — | — | — | — | — | — | — | 18.273 |
+| 3.05 | failure | — | — | — | — | — | — | — | — | — | 30.401 |
+| 3.1 | failure | — | — | — | — | — | — | — | — | — | 24.321 |
+| 3.15 | failure | — | — | — | — | — | — | — | — | — | 22.663 |
+| 3.2 | failure | — | — | — | — | — | — | — | — | — | 759.030 |
+| 3.25 | failure | — | — | — | — | — | — | — | — | — | 16.704 |
+| 3.3 | failure | — | — | — | — | — | — | — | — | — | 21.332 |
+| 3.35 | failure | — | — | — | — | — | — | — | — | — | 13.213 |
+| 3.4 | failure | — | — | — | — | — | — | — | — | — | 19.232 |
+| 3.45 | failure | — | — | — | — | — | — | — | — | — | 24.943 |
+| 3.5 | failure | — | — | — | — | — | — | — | — | — | 22.298 |
+| 3.55 | failure | — | — | — | — | — | — | — | — | — | 28.927 |
+| 3.6 | failure | — | — | — | — | — | — | — | — | — | 28.514 |
+| 3.65 | failure | — | — | — | — | — | — | — | — | — | 36.125 |
+| 3.7 | failure | — | — | — | — | — | — | — | — | — | 241.137 |
+| 3.75 | failure | — | — | — | — | — | — | — | — | — | 34.004 |
+| 3.8 | failure | — | — | — | — | — | — | — | — | — | 56.497 |
+| 3.85 | failure | — | — | — | — | — | — | — | — | — | 90.576 |
+| 3.9 | failure | — | — | — | — | — | — | — | — | — | 59.520 |
+| 3.95 | failure | — | — | — | — | — | — | — | — | — | 21.161 |
+| 4.0 | failure | — | — | — | — | — | — | — | — | — | 31.011 |
+| 4.05 | failure | — | — | — | — | — | — | — | — | — | 35.312 |
+| 4.1 | failure | — | — | — | — | — | — | — | — | — | 27.139 |
+| 4.15 | failure | — | — | — | — | — | — | — | — | — | 37.370 |
+| 4.2 | failure | — | — | — | — | — | — | — | — | — | 38.014 |
+| 4.25 | failure | — | — | — | — | — | — | — | — | — | 45.269 |
+| 4.3 | failure | — | — | — | — | — | — | — | — | — | 43.190 |
+| 4.35 | failure | — | — | — | — | — | — | — | — | — | 47.075 |
+| 4.4 | failure | — | — | — | — | — | — | — | — | — | 40.519 |
+| 4.45 | failure | — | — | — | — | — | — | — | — | — | 36.283 |
+| 4.5 | failure | — | — | — | — | — | — | — | — | — | 44.423 |
+| 4.55 | failure | — | — | — | — | — | — | — | — | — | 86.286 |
+| 4.6 | failure | — | — | — | — | — | — | — | — | — | 135.027 |
+| 4.65 | failure | — | — | — | — | — | — | — | — | — | 42.874 |
+| 4.7 | failure | — | — | — | — | — | — | — | — | — | 43.301 |
+| 4.75 | failure | — | — | — | — | — | — | — | — | — | 44.124 |
+| 4.8 | failure | — | — | — | — | — | — | — | — | — | 43.073 |
+| 4.85 | failure | — | — | — | — | — | — | — | — | — | 47.204 |
+| 4.9 | failure | — | — | — | — | — | — | — | — | — | 52.340 |
+| 4.95 | failure | — | — | — | — | — | — | — | — | — | 53.100 |
+| 5.0 | failure | — | — | — | — | — | — | — | — | — | 52.115 |
+
+Failed rows (the payload's reason):
+- β 1.15: integrate_scalar_history (surfing_scan-beta1.15-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0254 at N=34.93016843, phi_E=3.5158e-13, pi_E=-0.0036608 (W = 6.871e-06, pi^2/2 = 6.7006e-06) (tuning integration 0)
+- β 1.2: integrate_scalar_history (surfing_scan-beta1.2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-05, pi^2/2 = 3.998e-05) (tuning integration 0)
+- β 1.25: integrate_scalar_history (surfing_scan-beta1.25-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0457 at N=36.13202371, phi_E=8.9073e-13, pi_E=-0.008994 (W = 4.2293e-05, pi^2/2 = 4.0446e-05) (tuning integration 0)
+- β 1.4: integrate_scalar_history (surfing_scan-beta1.4-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0618 at N=37.79406757, phi_E=2.8668e-12, pi_E=-0.029071 (W = 0.00044868, pi^2/2 = 0.00042255) (tuning integration 1)
+- β 1.5: integrate_scalar_history (surfing_scan-beta1.5-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.2489 at N=36.24761006, phi_E=1.876e-13, pi_E=-0.0019266 (W = 2.3177e-06, pi^2/2 = 1.8559e-06) (tuning integration 0)
+- β 1.55: integrate_scalar_history (surfing_scan-beta1.55-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.678 at N=38.09724041, phi_E=1.3807e-12, pi_E=-0.013964 (W = 0.0001636, pi^2/2 = 9.7496e-05) (tuning integration 0)
+- β 1.6: integrate_scalar_history (surfing_scan-beta1.6-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.4528 at N=36.25559525, phi_E=1.0231e-13, pi_E=-0.0010354 (W = 7.7872e-07, pi^2/2 = 5.3602e-07) (tuning integration 0)
+- β 1.65: integrate_scalar_history (surfing_scan-beta1.65-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0386 at N=37.53255864, phi_E=4.0615e-13, pi_E=-0.0041235 (W = 8.8302e-06, pi^2/2 = 8.5017e-06) (tuning integration 0)
+- β 1.7: integrate_scalar_history (surfing_scan-beta1.7-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.2342 at N=37.95077633, phi_E=4.7503e-13, pi_E=-0.0049338 (W = 1.5021e-05, pi^2/2 = 1.2171e-05) (tuning integration 1)
+- β 1.75: integrate_scalar_history (surfing_scan-beta1.75-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.2624 at N=38.19433356, phi_E=4.7579e-13, pi_E=-0.0048387 (W = 1.4778e-05, pi^2/2 = 1.1707e-05) (tuning integration 1)
+- β 1.85: integrate_scalar_history (surfing_scan-beta1.85-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.5852 at N=38.13644073, phi_E=2.0965e-13, pi_E=-0.0021235 (W = 3.5741e-06, pi^2/2 = 2.2547e-06) (tuning integration 0)
+- β 1.9: integrate_scalar_history (surfing_scan-beta1.9-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0248 at N=37.63161776, phi_E=8.802e-14, pi_E=-0.00091136 (W = 4.256e-07, pi^2/2 = 4.1529e-07) (tuning integration 0)
+- β 1.95: integrate_scalar_history (surfing_scan-beta1.95-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0478 at N=39.57035785, phi_E=8.0401e-13, pi_E=-0.0083438 (W = 3.6472e-05, pi^2/2 = 3.4809e-05) (tuning integration 0)
+- β 2.0: integrate_scalar_history (surfing_scan-beta2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.5358 at N=37.75808722, phi_E=4.7358e-14, pi_E=-0.00048214 (W = 1.785e-07, pi^2/2 = 1.1623e-07) (tuning integration 0)
+- β 2.05: integrate_scalar_history (surfing_scan-beta2.05-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1276 at N=37.94299593, phi_E=4.7526e-14, pi_E=-0.00049319 (W = 1.3713e-07, pi^2/2 = 1.2162e-07) (tuning integration 0)
+- β 2.1: integrate_scalar_history (surfing_scan-beta2.1-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1218 at N=39.55815613, phi_E=3.1929e-13, pi_E=-0.0033205 (W = 6.1847e-06, pi^2/2 = 5.513e-06) (tuning integration 0)
+- β 2.15: integrate_scalar_history (surfing_scan-beta2.15-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.9715 at N=39.78423014, phi_E=2.3647e-13, pi_E=-0.002396 (W = 5.6589e-06, pi^2/2 = 2.8704e-06) (tuning integration 0)
+- β 2.2: integrate_scalar_history (surfing_scan-beta2.2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.4876 at N=40.21735201, phi_E=3.2838e-13, pi_E=-0.0033574 (W = 8.3841e-06, pi^2/2 = 5.6361e-06) (tuning integration 0)
+- β 2.25: integrate_scalar_history (surfing_scan-beta2.25-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1318 at N=40.19978714, phi_E=2.4971e-13, pi_E=-0.0026028 (W = 3.8338e-06, pi^2/2 = 3.3874e-06) (tuning integration 0)
+- β 2.3: integrate_scalar_history (surfing_scan-beta2.3-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1217 at N=40.17105944, phi_E=1.7733e-13, pi_E=-0.0017866 (W = 1.7901e-06, pi^2/2 = 1.5959e-06) (tuning integration 0)
+- β 2.35: integrate_scalar_history (surfing_scan-beta2.35-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0862 at N=40.3738284, phi_E=1.6556e-13, pi_E=-0.0017105 (W = 1.589e-06, pi^2/2 = 1.4629e-06) (tuning integration 0)
+- β 2.4: integrate_scalar_history (surfing_scan-beta2.4-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1602 at N=40.74025486, phi_E=1.9179e-13, pi_E=-0.0019361 (W = 2.1744e-06, pi^2/2 = 1.8743e-06) (tuning integration 0)
+- β 2.45: integrate_scalar_history (surfing_scan-beta2.45-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0833 at N=41.44219017, phi_E=3.5055e-13, pi_E=-0.003618 (W = 7.0898e-06, pi^2/2 = 6.5448e-06) (tuning integration 0)
+- β 2.5: integrate_scalar_history (surfing_scan-beta2.5-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1301 at N=39.87734161, phi_E=3.4786e-14, pi_E=-0.00035914 (W = 7.2881e-08, pi^2/2 = 6.4492e-08) (tuning integration 0)
+- β 2.55: integrate_scalar_history (surfing_scan-beta2.55-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0014 at N=39.48116021, phi_E=1.5361e-14, pi_E=-0.00015826 (W = 1.254e-08, pi^2/2 = 1.2522e-08) (tuning integration 0)
+- β 2.6: integrate_scalar_history (surfing_scan-beta2.6-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1994 at N=39.42443982, phi_E=8.5663e-15, pi_E=-8.9223e-05 (W = 4.7743e-09, pi^2/2 = 3.9804e-09) (tuning integration 0)
+- β 2.65: integrate_scalar_history (surfing_scan-beta2.65-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.2484 at N=42.27524873, phi_E=2.6986e-13, pi_E=-0.0027602 (W = 4.7554e-06, pi^2/2 = 3.8093e-06) (tuning integration 0)
+- β 2.7: integrate_scalar_history (surfing_scan-beta2.7-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.062 at N=39.98400868, phi_E=9.6224e-15, pi_E=-0.00010071 (W = 5.386e-09, pi^2/2 = 5.0717e-09) (tuning integration 0)
+- β 2.75: integrate_scalar_history (surfing_scan-beta2.75-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0719 at N=40.60129378, phi_E=1.7563e-14, pi_E=-0.00018274 (W = 1.7898e-08, pi^2/2 = 1.6697e-08) (tuning integration 0)
+- β 2.8: integrate_scalar_history (surfing_scan-beta2.8-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0607 at N=40.8548673, phi_E=1.6169e-14, pi_E=-0.00016297 (W = 1.4085e-08, pi^2/2 = 1.3279e-08) (tuning integration 0)
+- β 2.85: integrate_scalar_history (surfing_scan-beta2.85-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1969 at N=38.19750588, phi_E=3.1788e-16, pi_E=-3.3189e-06 (W = 6.5921e-12, pi^2/2 = 5.5077e-12) (tuning integration 2)
+- β 2.9: integrate_scalar_history (surfing_scan-beta2.9-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1679 at N=40.6223989, phi_E=5.753e-15, pi_E=-6.023e-05 (W = 2.1183e-09, pi^2/2 = 1.8138e-09) (tuning integration 0)
+- β 2.95: integrate_scalar_history (surfing_scan-beta2.95-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.144 at N=41.6287731, phi_E=1.6035e-14, pi_E=-0.00016513 (W = 1.5598e-08, pi^2/2 = 1.3635e-08) (tuning integration 0)
+- β 3.0: integrate_scalar_history (surfing_scan-beta3-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1217 at N=39.67611097, phi_E=8.4698e-16, pi_E=-8.8836e-06 (W = 4.4262e-11, pi^2/2 = 3.9459e-11) (tuning integration 0)
+- β 3.05: integrate_scalar_history (surfing_scan-beta3.05-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.3752 at N=44.37011809, phi_E=2.9582e-13, pi_E=-0.0030217 (W = 6.2783e-06, pi^2/2 = 4.5652e-06) (tuning integration 0)
+- β 3.1: integrate_scalar_history (surfing_scan-beta3.1-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.7903 at N=45.66668426, phi_E=1.0688e-12, pi_E=-0.010752 (W = 0.00010348, pi^2/2 = 5.7801e-05) (tuning integration 0)
+- β 3.15: integrate_scalar_history (surfing_scan-beta3.15-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.4601 at N=44.82766, phi_E=2.7568e-13, pi_E=-0.0027922 (W = 5.6915e-06, pi^2/2 = 3.8981e-06) (tuning integration 0)
+- β 3.2: the normalization did not converge: after 30 integrations, H/H0-1=+4.736e-04, phi_ref/phi_min-1=-4.837e-06
+- β 3.25: integrate_scalar_history (surfing_scan-beta3.25-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0807 at N=42.39587247, phi_E=6.2584e-15, pi_E=-6.2788e-05 (W = 2.1302e-09, pi^2/2 = 1.9712e-09) (tuning integration 0)
+- β 3.3: integrate_scalar_history (surfing_scan-beta3.3-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1643 at N=46.68934089, phi_E=1.2436e-12, pi_E=-0.012897 (W = 9.6827e-05, pi^2/2 = 8.3163e-05) (tuning integration 0)
+- β 3.35: integrate_scalar_history (surfing_scan-beta3.35-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.4562 at N=49.15229863, phi_E=1.7204e-11, pi_E=-0.17345 (W = 0.021905, pi^2/2 = 0.015043) (tuning integration 0)
+- β 3.4: integrate_scalar_history (surfing_scan-beta3.4-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0311 at N=43.46419126, phi_E=9.525e-15, pi_E=-9.8347e-05 (W = 4.9864e-09, pi^2/2 = 4.8361e-09) (tuning integration 0)
+- β 3.45: integrate_scalar_history (surfing_scan-beta3.45-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.3603 at N=46.57763547, phi_E=3.9146e-13, pi_E=-0.0039651 (W = 1.0694e-05, pi^2/2 = 7.8611e-06) (tuning integration 0)
+- β 3.5: integrate_scalar_history (surfing_scan-beta3.5-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=48.15665834, phi_E=2.0561e-12, pi_E=-0.020798 (W = 0.00034816, pi^2/2 = 0.00021629) (tuning integration 0)
+- β 3.55: integrate_scalar_history (surfing_scan-beta3.55-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1856 at N=44.49505633, phi_E=1.3091e-14, pi_E=-0.00013699 (W = 1.1125e-08, pi^2/2 = 9.3832e-09) (tuning integration 0)
+- β 3.6: integrate_scalar_history (surfing_scan-beta3.6-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.6132 at N=49.28679507, phi_E=4.5164e-12, pi_E=-0.045268 (W = 0.0016529, pi^2/2 = 0.0010246) (tuning integration 0)
+- β 3.65: integrate_scalar_history (surfing_scan-beta3.65-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0014 at N=47.72909691, phi_E=5.2823e-13, pi_E=-0.0053502 (W = 1.4333e-05, pi^2/2 = 1.4313e-05) (tuning integration 0)
+- β 3.7: integrate_scalar_history (surfing_scan-beta3.7-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.7445 at N=50.77657047, phi_E=1.4199e-11, pi_E=-0.14258 (W = 0.017731, pi^2/2 = 0.010164) (tuning integration 5)
+- β 3.75: integrate_scalar_history (surfing_scan-beta3.75-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.3 at N=47.45889186, phi_E=1.7522e-13, pi_E=-0.0017844 (W = 2.0695e-06, pi^2/2 = 1.592e-06) (tuning integration 0)
+- β 3.8: integrate_scalar_history (surfing_scan-beta3.8-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.3131 at N=51.29056932, phi_E=1.5827e-11, pi_E=-0.15885 (W = 0.016567, pi^2/2 = 0.012617) (tuning integration 1)
+- β 3.85: integrate_scalar_history (surfing_scan-beta3.85-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.5916 at N=51.45719295, phi_E=1.3533e-11, pi_E=-0.13579 (W = 0.014674, pi^2/2 = 0.0092193) (tuning integration 2)
+- β 3.9: integrate_scalar_history (surfing_scan-beta3.9-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.476 at N=50.45195525, phi_E=3.0533e-12, pi_E=-0.03115 (W = 0.00071609, pi^2/2 = 0.00048516) (tuning integration 1)
+- β 3.95: integrate_scalar_history (surfing_scan-beta3.95-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.5877 at N=52.03926008, phi_E=1.4758e-11, pi_E=-0.14774 (W = 0.017327, pi^2/2 = 0.010913) (tuning integration 0)
+- β 4.0: integrate_scalar_history (surfing_scan-beta4-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.5155 at N=50.3297808, phi_E=1.3863e-12, pi_E=-0.013971 (W = 0.0001479, pi^2/2 = 9.7595e-05) (tuning integration 0)
+- β 4.05: integrate_scalar_history (surfing_scan-beta4.05-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.2521 at N=48.6243178, phi_E=1.1247e-13, pi_E=-0.0011667 (W = 8.5224e-07, pi^2/2 = 6.8065e-07) (tuning integration 0)
+- β 4.1: integrate_scalar_history (surfing_scan-beta4.1-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1185 at N=50.6000777, phi_E=1.1397e-12, pi_E=-0.011522 (W = 7.4245e-05, pi^2/2 = 6.6377e-05) (tuning integration 0)
+- β 4.15: integrate_scalar_history (surfing_scan-beta4.15-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0596 at N=50.00506615, phi_E=3.8626e-13, pi_E=-0.0039069 (W = 8.0866e-06, pi^2/2 = 7.6318e-06) (tuning integration 0)
+- β 4.2: integrate_scalar_history (surfing_scan-beta4.2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0308 at N=49.23658009, phi_E=9.9147e-14, pi_E=-0.0010409 (W = 5.5839e-07, pi^2/2 = 5.4173e-07) (tuning integration 0)
+- β 4.25: integrate_scalar_history (surfing_scan-beta4.25-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1217 at N=50.57395596, phi_E=4.118e-13, pi_E=-0.0042091 (W = 9.9364e-06, pi^2/2 = 8.8582e-06) (tuning integration 0)
+- β 4.3: integrate_scalar_history (surfing_scan-beta4.3-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1875 at N=50.70279934, phi_E=3.4113e-13, pi_E=-0.0035404 (W = 7.4421e-06, pi^2/2 = 6.2672e-06) (tuning integration 0)
+- β 4.35: integrate_scalar_history (surfing_scan-beta4.35-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.192 at N=51.3944251, phi_E=6.1654e-13, pi_E=-0.0062515 (W = 2.3292e-05, pi^2/2 = 1.954e-05) (tuning integration 0)
+- β 4.4: integrate_scalar_history (surfing_scan-beta4.4-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1232 at N=51.63831611, phi_E=6.115e-13, pi_E=-0.0063882 (W = 2.2918e-05, pi^2/2 = 2.0405e-05) (tuning integration 0)
+- β 4.45: integrate_scalar_history (surfing_scan-beta4.45-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1474 at N=54.48188659, phi_E=1.5301e-11, pi_E=-0.1544 (W = 0.013677, pi^2/2 = 0.01192) (tuning integration 0)
+- β 4.5: integrate_scalar_history (surfing_scan-beta4.5-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0682 at N=51.88432951, phi_E=5.1424e-13, pi_E=-0.005378 (W = 1.5448e-05, pi^2/2 = 1.4462e-05) (tuning integration 0)
+- β 4.55: integrate_scalar_history (surfing_scan-beta4.55-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.4455 at N=55.57090259, phi_E=2.7401e-11, pi_E=-0.27579 (W = 0.054973, pi^2/2 = 0.03803) (tuning integration 1)
+- β 4.6: integrate_scalar_history (surfing_scan-beta4.6-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.2695 at N=55.18462233, phi_E=1.4094e-11, pi_E=-0.14271 (W = 0.012926, pi^2/2 = 0.010182) (tuning integration 2)
+- β 4.65: integrate_scalar_history (surfing_scan-beta4.65-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1235 at N=53.05767369, phi_E=8.9034e-13, pi_E=-0.0091473 (W = 4.7003e-05, pi^2/2 = 4.1837e-05) (tuning integration 0)
+- β 4.7: integrate_scalar_history (surfing_scan-beta4.7-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0127 at N=52.26452216, phi_E=2.017e-13, pi_E=-0.0020938 (W = 2.2198e-06, pi^2/2 = 2.192e-06) (tuning integration 0)
+- β 4.75: integrate_scalar_history (surfing_scan-beta4.75-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1336 at N=55.9798461, phi_E=1.5265e-11, pi_E=-0.15476 (W = 0.013574, pi^2/2 = 0.011975) (tuning integration 0)
+- β 4.8: integrate_scalar_history (surfing_scan-beta4.8-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.0777 at N=54.88803225, phi_E=3.1477e-12, pi_E=-0.031538 (W = 0.00053597, pi^2/2 = 0.00049733) (tuning integration 0)
+- β 4.85: integrate_scalar_history (surfing_scan-beta4.85-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.2668 at N=54.64697976, phi_E=1.5878e-12, pi_E=-0.016171 (W = 0.00016563, pi^2/2 = 0.00013075) (tuning integration 0)
+- β 4.9: integrate_scalar_history (surfing_scan-beta4.9-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.3312 at N=55.60151696, phi_E=3.7842e-12, pi_E=-0.038475 (W = 0.00098528, pi^2/2 = 0.00074014) (tuning integration 0)
+- β 4.95: integrate_scalar_history (surfing_scan-beta4.95-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.2197 at N=53.62879135, phi_E=2.204e-13, pi_E=-0.0022855 (W = 3.1855e-06, pi^2/2 = 2.6118e-06) (tuning integration 0)
+- β 5.0: integrate_scalar_history (surfing_scan-beta5-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.1679 at N=53.90226539, phi_E=2.3122e-13, pi_E=-0.0023881 (W = 3.3303e-06, pi^2/2 = 2.8515e-06) (tuning integration 0)
+
+- onset of QCD capture: between β 1.1 (not captured) and 1.3
+- largest β QCD captures: 1.8; next successful row (grid edge)
+- no EW capture
+- uncaptured window: β 1.1 – 1.1, grid edge below, QCD above; failed rows inside: ['1.15', '1.2', '1.25']
+
+### c_n2 (.documents/power-law-wall/sample-04/surfing/c_n2.csv): 49 rows, 49 succeeded; wall_s summed 4316.9 s;
+load (1, 5, 15 min) at the start: 4.21 / 6.20 / 6.99
+
+| β | status | captured | kick | n_crossings | T_capture | T_max | T_deliver (first bounce) | N_deliver | reflections | accepted_steps | wall_s |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1.1 | ok | false | — | 0 | — | — | 0.14337 | 17.8406 | 2 | 24773 | 29.298 |
+| 1.15 | ok | true | QCD | 1 | 0.188582 | — | 0.204068 | 17.5772 | 10 | 35469 | 43.437 |
+| 1.2 | ok | true | QCD | 1 | 0.205377 | — | 0.231124 | 17.6679 | 4 | 32102 | 37.647 |
+| 1.25 | ok | true | QCD | 1 | 0.220966 | — | 0.249242 | 17.8252 | 7 | 34240 | 40.346 |
+| 1.3 | ok | true | QCD | 1 | 0.23701 | — | 0.266072 | 17.9968 | 6 | 31627 | 36.553 |
+| 1.35 | ok | true | QCD | 1 | 0.254682 | — | 0.285137 | 18.1652 | 6 | 29571 | 35.425 |
+| 1.4 | ok | true | QCD | 1 | 0.274715 | — | 0.307748 | 18.3267 | 6 | 30306 | 36.690 |
+| 1.45 | ok | true | QCD | 1 | 0.29703 | — | 0.333696 | 18.4841 | 6 | 39757 | 47.725 |
+| 1.5 | ok | true | QCD | 1 | 0.321107 | — | 0.361397 | 18.644 | 23 | 46084 | 57.318 |
+| 1.55 | ok | true | QCD | 2 | 0.346652 | 0.390352 | 0.390351 | 18.8077 | 9 | 37265 | 45.666 |
+| 1.6 | ok | true | QCD | 2 | 0.373738 | 0.420838 | 0.420754 | 18.9744 | 41 | 49346 | 208.479 |
+| 1.65 | ok | true | QCD | 2 | 0.402481 | 0.453135 | 0.452869 | 19.1433 | 12 | 45858 | 57.047 |
+| 1.7 | ok | true | QCD | 2 | 0.432997 | 0.487462 | 0.486946 | 19.3138 | 11 | 46004 | 56.195 |
+| 1.75 | ok | true | QCD | 2 | 0.465387 | 0.524063 | 0.52325 | 19.4853 | 13 | 47475 | 55.131 |
+| 1.8 | ok | true | QCD | 2 | 0.499736 | 0.563198 | 0.562051 | 19.6576 | 15 | 46832 | 56.026 |
+| 1.85 | ok | true | QCD | 2 | 0.5361 | 0.605133 | 0.603606 | 19.8305 | 18 | 49565 | 61.730 |
+| 1.9 | ok | true | QCD | 2 | 0.57449 | 0.650112 | 0.648142 | 20.0038 | 32 | 55007 | 66.739 |
+| 1.95 | ok | true | QCD | 2 | 0.614859 | 0.698337 | 0.69582 | 20.1776 | 16 | 49566 | 49.938 |
+| 2.0 | ok | true | QCD | 2 | 0.6571 | 0.749917 | 0.746688 | 20.3521 | 28 | 55118 | 67.210 |
+| 2.05 | ok | true | QCD | 2 | 0.70104 | 0.804826 | 0.80063 | 20.5277 | 19 | 55477 | 65.512 |
+| 2.1 | ok | true | QCD | 2 | 0.746452 | 0.862854 | 0.857315 | 20.7049 | 22 | 56817 | 68.299 |
+| 2.15 | ok | true | QCD | 2 | 0.793079 | 0.923582 | 0.916172 | 20.8845 | 25 | 58642 | 73.255 |
+| 2.2 | ok | true | QCD | 2 | 0.840653 | 0.986391 | 0.976435 | 21.0671 | 26 | 59178 | 72.888 |
+| 2.25 | ok | true | QCD | 2 | 0.888922 | 1.05054 | 1.03729 | 21.2533 | 27 | 56154 | 71.954 |
+| 2.3 | ok | true | QCD | 2 | 0.937675 | 1.11549 | 1.09847 | 21.4429 | 31 | 62781 | 75.986 |
+| 2.35 | ok | true | QCD | 2 | 0.986751 | 1.18104 | 1.16003 | 21.6356 | 29 | 60399 | 75.193 |
+| 2.4 | ok | true | QCD | 2 | 1.03606 | 1.24709 | 1.22199 | 21.831 | 39 | 64119 | 78.328 |
+| 2.45 | ok | true | QCD | 2 | 1.08555 | 1.31355 | 1.28433 | 22.0289 | 30 | 64500 | 76.205 |
+| 2.5 | ok | true | QCD | 2 | 1.1352 | 1.38034 | 1.347 | 22.2291 | 46 | 68488 | 82.972 |
+| 2.55 | ok | true | QCD | 2 | 1.18499 | 1.44739 | 1.40994 | 22.4314 | 33 | 67526 | 80.736 |
+| 2.6 | ok | true | QCD | 2 | 1.23488 | 1.51466 | 1.47306 | 22.6357 | 118 | 79320 | 98.523 |
+| 2.65 | ok | true | QCD | 3 | 1.28486 | 1.58206 | 1.53624 | 22.842 | 37 | 69813 | 82.024 |
+| 2.7 | ok | true | QCD | 3 | 1.33491 | 1.64956 | 1.59936 | 23.0501 | 60 | 73461 | 89.083 |
+| 2.75 | ok | true | QCD | 3 | 1.38501 | 1.7171 | 1.66236 | 23.26 | 49 | 71760 | 86.357 |
+| 2.8 | ok | true | QCD | 2 | 1.43514 | 1.78464 | 1.72542 | 23.4713 | 42 | 72820 | 88.230 |
+| 2.85 | ok | true | QCD | 2 | 1.48529 | 1.85213 | 1.79047 | 23.683 | 121 | 82335 | 103.175 |
+| 2.9 | ok | true | QCD | 2 | 1.53545 | 1.91953 | 1.8703 | 23.8878 | 59 | 76726 | 84.846 |
+| 2.95 | ok | true | QCD | 1 | 1.58562 | — | 1.97757 | 24.0802 | 86 | 82704 | 100.655 |
+| 3.0 | ok | false | — | 0 | — | — | 48.4902 | 21.065 | 167 | 95670 | 125.817 |
+| 3.05 | ok | true | EW | 1 | 56.0577 | — | 67.6694 | 20.9637 | 510 | 146609 | 193.776 |
+| 3.1 | ok | true | EW | 2 | 59.8518 | 74.9475 | 74.8933 | 21.1079 | 443 | 136531 | 176.465 |
+| 3.15 | ok | true | EW | 2 | 63.1479 | 80.8939 | 80.4439 | 21.2837 | 334 | 122705 | 159.348 |
+| 3.2 | ok | true | EW | 3 | 66.1589 | 86.3249 | 85.423 | 21.4716 | 216 | 101549 | 132.663 |
+| 3.25 | ok | true | EW | 3 | 68.9737 | 91.4002 | 90.0369 | 21.6674 | 170 | 96709 | 123.277 |
+| 3.3 | ok | true | EW | 3 | 71.6399 | 96.2044 | 94.35 | 21.8693 | 323 | 121344 | 158.121 |
+| 3.35 | ok | true | EW | 4 | 74.187 | 100.79 | 98.4075 | 22.0761 | 211 | 105540 | 131.535 |
+| 3.4 | ok | true | EW | 4 | 76.6345 | 105.19 | 102.253 | 22.2868 | 211 | 105516 | 132.298 |
+| 3.45 | ok | true | EW | 4 | 78.9964 | 109.43 | 105.926 | 22.5007 | 402 | 133031 | 172.852 |
+| 3.5 | ok | true | EW | 4 | 81.283 | 113.529 | 109.455 | 22.7173 | 384 | 133851 | 167.958 |
+
+- onset of QCD capture: between β 1.1 (not captured) and 1.15
+- largest β QCD captures: 2.95; next successful row 3.0
+- smallest β EW captures: 3.05; previous successful row 3.0
+- uncaptured window: β 1.1 – 1.1, grid edge below, QCD above
+- uncaptured window: β 3.0 – 3.0, QCD below, EW above
+
+### q_n2 (.documents/power-law-wall/sample-04/surfing/q_n2.csv): 51 rows, 50 succeeded; wall_s summed 1597.9 s;
+load (1, 5, 15 min) at the start: 3.05 / 4.54 / 5.25
+
+| β | status | captured | kick | n_crossings | T_capture | T_max | T_deliver (first bounce) | N_deliver | reflections | accepted_steps | wall_s |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1.1 | ok | false | — | 0 | — | — | 0.14337 | 17.8406 | 2 | 24773 | 28.460 |
+| 1.101 | ok | false | — | 0 | — | — | 0.145845 | 17.8196 | 2 | 23899 | 27.474 |
+| 1.102 | ok | false | — | 0 | — | — | 0.148171 | 17.8004 | 2 | 23308 | 26.405 |
+| 1.103 | ok | false | — | 0 | — | — | 0.150362 | 17.7828 | 2 | 22991 | 25.571 |
+| 1.104 | ok | false | — | 0 | — | — | 0.152435 | 17.7668 | 2 | 22834 | 25.383 |
+| 1.105 | ok | false | — | 0 | — | — | 0.154402 | 17.7521 | 2 | 22792 | 25.336 |
+| 1.106 | ok | false | — | 0 | — | — | 0.156274 | 17.7387 | 2 | 22863 | 25.407 |
+| 1.107 | ok | false | — | 0 | — | — | 0.158062 | 17.7263 | 2 | 23082 | 25.775 |
+| 1.108 | ok | false | — | 0 | — | — | 0.159775 | 17.7149 | 2 | 23307 | 25.943 |
+| 1.109 | ok | false | — | 0 | — | — | 0.161423 | 17.7044 | 2 | 23790 | 27.274 |
+| 1.11 | ok | false | — | 0 | — | — | 0.163011 | 17.6946 | 2 | 24303 | 27.364 |
+| 1.111 | ok | false | — | 0 | — | — | 0.164545 | 17.6855 | 2 | 24932 | 27.374 |
+| 1.112 | ok | false | — | 0 | — | — | 0.166031 | 17.677 | 2 | 25857 | 28.941 |
+| 1.113 | ok | false | — | 0 | — | — | 0.167472 | 17.6691 | 2 | 27067 | 30.032 |
+| 1.114 | ok | false | — | 0 | — | — | 0.168872 | 17.6618 | 2 | 28725 | 31.704 |
+| 1.115 | ok | false | — | 0 | — | — | 0.170233 | 17.6549 | 2 | 31190 | 34.873 |
+| 1.116 | ok | false | — | 0 | — | — | 0.171559 | 17.6485 | 2 | 34246 | 39.887 |
+| 1.117 | ok | true | QCD | 1 | 0.172719 | — | 0.172852 | 17.6425 | 3 | 31380 | 35.044 |
+| 1.118 | ok | true | QCD | 1 | 0.17359 | — | 0.174113 | 17.6369 | 3 | 28477 | 31.315 |
+| 1.119 | ok | true | QCD | 1 | 0.174343 | — | 0.175345 | 17.6317 | 3 | 26436 | 29.017 |
+| 1.12 | ok | true | QCD | 1 | 0.175029 | — | 0.176549 | 17.6268 | 3 | 25015 | 27.438 |
+| 1.121 | ok | true | QCD | 1 | 0.175668 | — | 0.177727 | 17.6222 | 3 | 24021 | 26.321 |
+| 1.122 | ok | true | QCD | 1 | 0.176272 | — | 0.17888 | 17.618 | 3 | 23380 | 25.881 |
+| 1.123 | ok | true | QCD | 1 | 0.176848 | — | 0.180009 | 17.614 | 3 | 22986 | 25.310 |
+| 1.124 | ok | true | QCD | 1 | 0.177402 | — | 0.181116 | 17.6103 | 3 | 22928 | 24.994 |
+| 1.125 | ok | true | QCD | 1 | 0.177936 | — | 0.1822 | 17.6068 | 3 | 23148 | 25.437 |
+| 1.126 | ok | true | QCD | 1 | 0.178454 | — | 0.183264 | 17.6036 | 3 | 23558 | 26.140 |
+| 1.127 | ok | true | QCD | 1 | 0.178958 | — | 0.184308 | 17.6006 | 3 | 24317 | 26.863 |
+| 1.128 | ok | true | QCD | 1 | 0.17945 | — | 0.185333 | 17.5979 | 3 | 25383 | 27.993 |
+| 1.129 | ok | true | QCD | 1 | 0.17993 | — | 0.186339 | 17.5953 | 3 | 27281 | 30.401 |
+| 1.13 | ok | true | QCD | 1 | 0.180401 | — | 0.187327 | 17.593 | 3 | 30762 | 34.260 |
+| 1.131 | ok | true | QCD | 1 | 0.180863 | — | 0.188298 | 17.5908 | 5 | 35050 | 39.675 |
+| 1.132 | ok | true | QCD | 1 | 0.181316 | — | 0.189252 | 17.5888 | 4 | 28292 | 31.168 |
+| 1.133 | ok | true | QCD | 1 | 0.181762 | — | 0.19019 | 17.587 | 4 | 26469 | 29.235 |
+| 1.134 | ok | true | QCD | 1 | 0.182201 | — | 0.191112 | 17.5853 | 4 | 26672 | 29.303 |
+| 1.135 | ok | true | QCD | 1 | 0.182633 | — | 0.192019 | 17.5839 | 4 | 28723 | 31.661 |
+| 1.136 | ok | true | QCD | 1 | 0.18306 | — | 0.192912 | 17.5825 | 4 | 34771 | 39.957 |
+| 1.137 | ok | true | QCD | 1 | 0.183481 | — | 0.19379 | 17.5814 | 5 | 29269 | 32.813 |
+| 1.138 | ok | true | QCD | 1 | 0.183897 | — | 0.194654 | 17.5803 | 5 | 29520 | 32.913 |
+| 1.139 | ok | true | QCD | 1 | 0.184308 | — | 0.195505 | 17.5794 | 6 | 35074 | 40.354 |
+| 1.14 | ok | true | QCD | 1 | 0.184715 | — | 0.196343 | 17.5786 | 6 | 30996 | 34.500 |
+| 1.141 | ok | true | QCD | 1 | 0.185117 | — | 0.197167 | 17.578 | 7 | 32143 | 47.796 |
+| 1.142 | ok | true | QCD | 1 | 0.185516 | — | 0.19798 | 17.5775 | 8 | 33555 | 37.795 |
+| 1.143 | ok | true | QCD | 1 | 0.18591 | — | 0.19878 | 17.577 | 9 | 33900 | 37.853 |
+| 1.144 | ok | true | QCD | 1 | 0.186301 | — | 0.199569 | 17.5768 | 11 | 35043 | 38.877 |
+| 1.145 | ok | true | QCD | 1 | 0.186689 | — | 0.200346 | 17.5766 | 14 | 36549 | 41.254 |
+| 1.146 | ok | true | QCD | 1 | 0.187074 | — | 0.201112 | 17.5765 | 17 | 36989 | 43.376 |
+| 1.147 | ok | true | QCD | 1 | 0.187455 | — | 0.201866 | 17.5765 | 19 | 38132 | 43.692 |
+| 1.148 | ok | true | QCD | 1 | 0.187834 | — | 0.202611 | 17.5766 | 16 | 37158 | 43.608 |
+| 1.149 | failure | — | — | — | — | — | — | — | — | — | 1.010 |
+| 1.15 | ok | true | QCD | 1 | 0.188582 | — | 0.204068 | 17.5772 | 10 | 35469 | 41.467 |
+
+Failed rows (the payload's reason):
+- β 1.149: integrate_scalar_history (surfing_scan-beta1.149-M0.001-inverse-power-n2): step size fell below 1e-13 e-folds after repeated trial-state exceptions at N=27.74322577, phi_E=1.3171e-13, pi_E=-0.00087427: !! phi is not positive in InversePowerModel log_V at p
+
+- onset of QCD capture: between β 1.116 (not captured) and 1.117
+- largest β QCD captures: 1.15; next successful row (grid edge)
+- no EW capture
+- uncaptured window: β 1.1 – 1.116, grid edge below, QCD above
+
+### e_n2 (.documents/power-law-wall/sample-04/surfing/e_n2.csv): 101 rows, 100 succeeded; wall_s summed 13663.3 s;
+load (1, 5, 15 min) at the start: 5.06 / 6.25 / 5.91
+
+| β | status | captured | kick | n_crossings | T_capture | T_max | T_deliver (first bounce) | N_deliver | reflections | accepted_steps | wall_s |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2.95 | ok | true | QCD | 1 | 1.58562 | — | 1.97757 | 24.0802 | 86 | 82704 | 99.811 |
+| 2.951 | ok | true | QCD | 1 | 1.58662 | — | 1.97539 | 24.0863 | 70 | 76220 | 92.206 |
+| 2.952 | ok | true | QCD | 1 | 1.58762 | — | 1.97247 | 24.0928 | 61 | 79292 | 94.061 |
+| 2.953 | ok | true | QCD | 1 | 1.58863 | — | 1.96871 | 24.0998 | 54 | 78269 | 90.304 |
+| 2.954 | ok | true | QCD | 1 | 1.58963 | — | 1.96405 | 24.1073 | 50 | 76894 | 89.076 |
+| 2.955 | ok | true | QCD | 1 | 1.59063 | — | 1.95839 | 24.1152 | 47 | 77130 | 90.989 |
+| 2.956 | ok | true | QCD | 1 | 1.59164 | — | 1.95165 | 24.1238 | 45 | 76742 | 90.310 |
+| 2.957 | ok | true | QCD | 1 | 1.59264 | — | 1.94375 | 24.133 | 45 | 76177 | 86.922 |
+| 2.958 | ok | true | QCD | 1 | 1.59364 | — | 1.93459 | 24.1429 | 46 | 76878 | 88.156 |
+| 2.959 | ok | true | QCD | 1 | 1.59465 | — | 1.92411 | 24.1535 | 50 | 77837 | 91.787 |
+| 2.96 | ok | true | QCD | 1 | 1.59565 | — | 1.91222 | 24.1649 | 62 | 77118 | 94.394 |
+| 2.961 | ok | true | QCD | 1 | 1.59665 | — | 1.89886 | 24.1771 | 103 | 84589 | 147.824 |
+| 2.962 | ok | true | QCD | 1 | 1.59766 | — | 1.88399 | 24.1903 | 123 | 87448 | 104.950 |
+| 2.963 | ok | true | QCD | 1 | 1.59866 | — | 1.86756 | 24.2043 | 76 | 77115 | 133.263 |
+| 2.964 | ok | true | QCD | 1 | 1.59966 | — | 1.84958 | 24.2193 | 59 | 77094 | 91.228 |
+| 2.965 | ok | true | QCD | 1 | 1.60067 | — | 1.83007 | 24.2353 | 50 | 77884 | 90.432 |
+| 2.966 | ok | true | QCD | 1 | 1.60167 | — | 1.8091 | 24.2523 | 46 | 76826 | 100.150 |
+| 2.967 | ok | true | QCD | 1 | 1.60267 | — | 1.78679 | 24.2701 | 44 | 76798 | 87.457 |
+| 2.968 | ok | true | QCD | 1 | 1.60368 | — | 1.76335 | 24.2888 | 43 | 76561 | 87.452 |
+| 2.969 | ok | true | QCD | 1 | 1.60468 | — | 1.73905 | 24.3082 | 43 | 76486 | 87.551 |
+| 2.97 | ok | true | QCD | 1 | 1.60568 | — | 1.7143 | 24.328 | 43 | 76520 | 86.771 |
+| 2.971 | ok | true | QCD | 1 | 1.60669 | — | 1.68967 | 24.3481 | 44 | 73674 | 86.350 |
+| 2.972 | ok | true | QCD | 1 | 1.60769 | — | 1.66596 | 24.3677 | 49 | 77656 | 89.001 |
+| 2.973 | ok | true | QCD | 1 | 1.60869 | — | 1.64429 | 24.3863 | 74 | 76843 | 107.417 |
+| 2.974 | ok | true | QCD | 1 | 1.6097 | — | 1.62627 | 24.4028 | 60 | 76241 | 89.566 |
+| 2.975 | ok | true | QCD | 1 | 1.6107 | — | 1.6143 | 24.4154 | 48 | 77585 | 87.737 |
+| 2.976 | ok | false | — | 0 | — | — | 1.6121 | 24.4219 | 54 | 78733 | 91.043 |
+| 2.977 | ok | false | — | 0 | — | — | 1.62584 | 24.418 | 64 | 76416 | 89.819 |
+| 2.978 | ok | false | — | 0 | — | — | 1.66662 | 24.3973 | 65 | 74011 | 174.039 |
+| 2.979 | ok | false | — | 0 | — | — | 1.75708 | 24.3475 | 74 | 77900 | 84.542 |
+| 2.98 | ok | false | — | 0 | — | — | 1.95252 | 24.2433 | 156 | 90185 | 109.229 |
+| 2.981 | ok | false | — | 0 | — | — | 2.43585 | 24.0205 | 121 | 87145 | 104.883 |
+| 2.982 | ok | false | — | 0 | — | — | 4.22643 | 23.4633 | 245 | 104022 | 143.597 |
+| 2.983 | ok | false | — | 0 | — | — | 10.006 | 22.6015 | 196 | 96460 | 142.065 |
+| 2.984 | ok | false | — | 0 | — | — | 15.8965 | 22.1428 | 257 | 102774 | 157.219 |
+| 2.985 | ok | false | — | 0 | — | — | 20.6487 | 21.8833 | 96 | 78566 | 121.350 |
+| 2.986 | ok | false | — | 0 | — | — | 24.5367 | 21.7116 | 113 | 89002 | 124.255 |
+| 2.987 | ok | false | — | 0 | — | — | 27.8008 | 21.5872 | 89 | 84421 | 115.715 |
+| 2.988 | ok | false | — | 0 | — | — | 30.6002 | 21.4921 | 118 | 86194 | 123.948 |
+| 2.989 | ok | false | — | 0 | — | — | 33.0396 | 21.4165 | 90 | 84497 | 119.843 |
+| 2.99 | ok | false | — | 0 | — | — | 35.1919 | 21.3549 | 81 | 79817 | 115.673 |
+| 2.991 | failure | — | — | — | — | — | — | — | — | — | 74.127 |
+| 2.992 | ok | false | — | 0 | — | — | 38.8372 | 21.2606 | 91 | 83275 | 192.977 |
+| 2.993 | ok | false | — | 0 | — | — | 40.4039 | 21.2237 | 108 | 87099 | 102.219 |
+| 2.994 | ok | false | — | 0 | — | — | 41.8368 | 21.1917 | 95 | 82898 | 100.852 |
+| 2.995 | ok | false | — | 0 | — | — | 43.1556 | 21.1637 | 128 | 88536 | 121.877 |
+| 2.996 | ok | false | — | 0 | — | — | 44.376 | 21.1391 | 93 | 82389 | 119.516 |
+| 2.997 | ok | false | — | 0 | — | — | 45.5104 | 21.1173 | 222 | 99288 | 148.894 |
+| 2.998 | ok | false | — | 0 | — | — | 46.5688 | 21.0979 | 103 | 85952 | 122.994 |
+| 2.999 | ok | false | — | 0 | — | — | 47.5597 | 21.0805 | 115 | 86311 | 112.713 |
+| 3.0 | ok | false | — | 0 | — | — | 48.4902 | 21.065 | 167 | 95670 | 138.184 |
+| 3.001 | ok | false | — | 0 | — | — | 49.3662 | 21.051 | 106 | 84726 | 124.442 |
+| 3.002 | ok | false | — | 0 | — | — | 50.193 | 21.0384 | 127 | 91320 | 128.602 |
+| 3.003 | ok | true | EW | 1 | 50.91 | — | 50.9749 | 21.027 | 196 | 97533 | 204.949 |
+| 3.004 | ok | true | EW | 1 | 51.1322 | — | 51.7159 | 21.0167 | 120 | 81383 | 125.880 |
+| 3.005 | ok | true | EW | 1 | 51.3146 | — | 52.4193 | 21.0074 | 120 | 89596 | 129.823 |
+| 3.006 | ok | true | EW | 1 | 51.4801 | — | 53.0883 | 20.999 | 222 | 101567 | 152.414 |
+| 3.007 | ok | true | EW | 1 | 51.6347 | — | 53.7255 | 20.9914 | 169 | 91285 | 136.222 |
+| 3.008 | ok | true | EW | 1 | 51.7814 | — | 54.3333 | 20.9845 | 128 | 87211 | 122.441 |
+| 3.009 | ok | true | EW | 1 | 51.9218 | — | 54.9139 | 20.9783 | 131 | 86961 | 125.800 |
+| 3.01 | ok | true | EW | 1 | 52.0573 | — | 55.4693 | 20.9726 | 196 | 99068 | 143.459 |
+| 3.011 | ok | true | EW | 1 | 52.1884 | — | 56.0012 | 20.9676 | 241 | 103754 | 152.683 |
+| 3.012 | ok | true | EW | 1 | 52.3159 | — | 56.5112 | 20.963 | 167 | 86719 | 132.466 |
+| 3.013 | ok | true | EW | 1 | 52.4402 | — | 57.0008 | 20.9589 | 137 | 91957 | 130.175 |
+| 3.014 | ok | true | EW | 1 | 52.5617 | — | 57.4713 | 20.9552 | 144 | 91939 | 133.543 |
+| 3.015 | ok | true | EW | 1 | 52.6805 | — | 57.924 | 20.9519 | 163 | 90232 | 137.303 |
+| 3.016 | ok | true | EW | 1 | 52.7971 | — | 58.3599 | 20.949 | 214 | 99449 | 147.686 |
+| 3.017 | ok | true | EW | 1 | 52.9116 | — | 58.7802 | 20.9465 | 296 | 111768 | 170.831 |
+| 3.018 | ok | true | EW | 1 | 53.0242 | — | 59.1857 | 20.9442 | 323 | 115921 | 194.074 |
+| 3.019 | ok | true | EW | 1 | 53.1349 | — | 59.5773 | 20.9423 | 271 | 106591 | 151.627 |
+| 3.02 | ok | true | EW | 1 | 53.2441 | — | 59.9559 | 20.9406 | 215 | 105337 | 149.057 |
+| 3.021 | ok | true | EW | 1 | 53.3516 | — | 60.3222 | 20.9392 | 203 | 97803 | 144.046 |
+| 3.022 | ok | true | EW | 1 | 53.4578 | — | 60.6768 | 20.9381 | 197 | 99113 | 143.605 |
+| 3.023 | ok | true | EW | 1 | 53.5626 | — | 61.0205 | 20.9371 | 214 | 98904 | 143.280 |
+| 3.024 | ok | true | EW | 1 | 53.6661 | — | 61.3539 | 20.9364 | 207 | 100974 | 144.287 |
+| 3.025 | ok | true | EW | 1 | 53.7684 | — | 61.6774 | 20.9359 | 206 | 98725 | 147.799 |
+| 3.026 | ok | true | EW | 1 | 53.8695 | — | 61.9917 | 20.9355 | 222 | 99537 | 146.919 |
+| 3.027 | ok | true | EW | 1 | 53.9696 | — | 62.2972 | 20.9354 | 233 | 104636 | 151.609 |
+| 3.028 | ok | true | EW | 1 | 54.0687 | — | 62.5943 | 20.9354 | 260 | 109508 | 156.541 |
+| 3.029 | ok | true | EW | 1 | 54.1668 | — | 62.8836 | 20.9355 | 307 | 112487 | 167.069 |
+| 3.03 | ok | true | EW | 1 | 54.2639 | — | 63.1653 | 20.9358 | 331 | 121060 | 211.066 |
+| 3.031 | ok | true | EW | 1 | 54.3602 | — | 63.4399 | 20.9363 | 368 | 127297 | 193.435 |
+| 3.032 | ok | true | EW | 1 | 54.4556 | — | 63.7078 | 20.9369 | 343 | 118100 | 173.284 |
+| 3.033 | ok | true | EW | 1 | 54.5502 | — | 63.9692 | 20.9376 | 265 | 108800 | 157.954 |
+| 3.034 | ok | true | EW | 1 | 54.644 | — | 64.2244 | 20.9384 | 239 | 103749 | 153.683 |
+| 3.035 | ok | true | EW | 1 | 54.737 | — | 64.4739 | 20.9393 | 234 | 104317 | 154.078 |
+| 3.036 | ok | true | EW | 1 | 54.8294 | — | 64.7177 | 20.9404 | 253 | 106369 | 157.096 |
+| 3.037 | ok | true | EW | 1 | 54.921 | — | 64.9563 | 20.9415 | 306 | 114344 | 167.099 |
+| 3.038 | ok | true | EW | 1 | 55.0119 | — | 65.1898 | 20.9427 | 376 | 126759 | 188.357 |
+| 3.039 | ok | true | EW | 1 | 55.1022 | — | 65.4184 | 20.9441 | 459 | 137539 | 201.704 |
+| 3.04 | ok | true | EW | 1 | 55.1919 | — | 65.6424 | 20.9455 | 314 | 116140 | 174.993 |
+| 3.041 | ok | true | EW | 1 | 55.2809 | — | 65.8621 | 20.947 | 289 | 111620 | 164.863 |
+| 3.042 | ok | true | EW | 1 | 55.3694 | — | 66.0775 | 20.9486 | 267 | 109610 | 166.302 |
+| 3.043 | ok | true | EW | 1 | 55.4572 | — | 66.2889 | 20.9502 | 289 | 111166 | 167.084 |
+| 3.044 | ok | true | EW | 1 | 55.5446 | — | 66.4964 | 20.952 | 340 | 121450 | 180.171 |
+| 3.045 | ok | true | EW | 1 | 55.6314 | — | 66.7003 | 20.9538 | 380 | 126802 | 195.535 |
+| 3.046 | ok | true | EW | 1 | 55.7176 | — | 66.9006 | 20.9556 | 520 | 146522 | 226.373 |
+| 3.047 | ok | true | EW | 1 | 55.8034 | — | 67.0975 | 20.9575 | 441 | 137030 | 210.060 |
+| 3.048 | ok | true | EW | 1 | 55.8886 | — | 67.2912 | 20.9595 | 477 | 139940 | 211.809 |
+| 3.049 | ok | true | EW | 1 | 55.9734 | — | 67.4818 | 20.9616 | 463 | 140240 | 213.651 |
+| 3.05 | ok | true | EW | 1 | 56.0577 | — | 67.6694 | 20.9637 | 510 | 146609 | 219.308 |
+
+Failed rows (the payload's reason):
+- β 2.991: integrate_scalar_history (surfing_scan-beta2.991-M0.001-inverse-power-n2): step size fell below 1e-13 e-folds after repeated trial-state exceptions at N=36.25465665, phi_E=4.7247e-14, pi_E=-0.00045465: !! phi is not positive in InversePowerModel log_V at p
+
+- onset of QCD capture: between β (grid edge) (not captured) and 2.95
+- largest β QCD captures: 2.975; next successful row 2.976
+- smallest β EW captures: 3.003; previous successful row 3.002
+- uncaptured window: β 2.976 – 3.002, QCD below, EW above; failed rows inside: ['2.991']
+
+### q_exp (.documents/power-law-wall/sample-04/surfing/q_exp.csv): 51 rows, 51 succeeded; wall_s summed 1164.3 s;
+load (1, 5, 15 min) at the start: 4.21 / 6.20 / 6.99
+
+| β | status | captured | kick | n_crossings | T_capture | T_max | T_deliver (first bounce) | N_deliver | reflections | accepted_steps | wall_s |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1.1 | ok | false | — | 0 | — | — | 0.14337 | 17.8406 | 0 | 19365 | 22.883 |
+| 1.101 | ok | false | — | 0 | — | — | 0.145846 | 17.8196 | 0 | 19068 | 22.557 |
+| 1.102 | ok | false | — | 0 | — | — | 0.148171 | 17.8003 | 0 | 18855 | 21.363 |
+| 1.103 | ok | false | — | 0 | — | — | 0.150362 | 17.7828 | 0 | 18652 | 21.239 |
+| 1.104 | ok | false | — | 0 | — | — | 0.152435 | 17.7668 | 0 | 18608 | 20.800 |
+| 1.105 | ok | false | — | 0 | — | — | 0.154402 | 17.7521 | 0 | 18607 | 21.184 |
+| 1.106 | ok | false | — | 0 | — | — | 0.156274 | 17.7387 | 0 | 18643 | 21.058 |
+| 1.107 | ok | false | — | 0 | — | — | 0.158062 | 17.7263 | 0 | 18760 | 21.026 |
+| 1.108 | ok | false | — | 0 | — | — | 0.159775 | 17.7149 | 0 | 18895 | 21.778 |
+| 1.109 | ok | false | — | 0 | — | — | 0.161423 | 17.7043 | 0 | 19062 | 22.553 |
+| 1.11 | ok | false | — | 0 | — | — | 0.163011 | 17.6946 | 0 | 19292 | 22.401 |
+| 1.111 | ok | false | — | 0 | — | — | 0.164545 | 17.6855 | 0 | 19519 | 23.555 |
+| 1.112 | ok | false | — | 0 | — | — | 0.166031 | 17.677 | 0 | 19833 | 34.321 |
+| 1.113 | ok | false | — | 0 | — | — | 0.167472 | 17.6691 | 0 | 20054 | 23.461 |
+| 1.114 | ok | false | — | 0 | — | — | 0.168872 | 17.6618 | 0 | 20126 | 23.694 |
+| 1.115 | ok | false | — | 0 | — | — | 0.170233 | 17.6549 | 0 | 19324 | 23.105 |
+| 1.116 | ok | false | — | 0 | — | — | 0.171559 | 17.6485 | 0 | 14030 | 18.271 |
+| 1.117 | ok | true | QCD | 2 | 0.172719 | 0.172852 | 0.172852 | 17.6425 | 0 | 19554 | 24.122 |
+| 1.118 | ok | true | QCD | 2 | 0.17359 | 0.174113 | 0.174113 | 17.6369 | 0 | 20315 | 25.329 |
+| 1.119 | ok | true | QCD | 2 | 0.174343 | 0.175345 | 0.175345 | 17.6317 | 0 | 20149 | 25.893 |
+| 1.12 | ok | true | QCD | 2 | 0.175029 | 0.176549 | 0.176549 | 17.6268 | 0 | 19709 | 23.787 |
+| 1.121 | ok | true | QCD | 2 | 0.175668 | 0.177727 | 0.177727 | 17.6222 | 0 | 19326 | 22.078 |
+| 1.122 | ok | true | QCD | 2 | 0.176272 | 0.17888 | 0.17888 | 17.618 | 0 | 19014 | 22.098 |
+| 1.123 | ok | true | QCD | 2 | 0.176848 | 0.180009 | 0.180009 | 17.614 | 0 | 18890 | 22.339 |
+| 1.124 | ok | true | QCD | 2 | 0.177402 | 0.181116 | 0.181116 | 17.6103 | 0 | 18855 | 22.197 |
+| 1.125 | ok | true | QCD | 2 | 0.177936 | 0.1822 | 0.1822 | 17.6068 | 0 | 18984 | 21.929 |
+| 1.126 | ok | true | QCD | 2 | 0.178454 | 0.183264 | 0.183264 | 17.6036 | 0 | 19135 | 22.726 |
+| 1.127 | ok | true | QCD | 2 | 0.178958 | 0.184308 | 0.184308 | 17.6006 | 0 | 19440 | 23.305 |
+| 1.128 | ok | true | QCD | 2 | 0.17945 | 0.185332 | 0.185332 | 17.5979 | 0 | 19938 | 23.298 |
+| 1.129 | ok | true | QCD | 2 | 0.17993 | 0.186339 | 0.186338 | 17.5953 | 0 | 20383 | 24.602 |
+| 1.13 | ok | true | QCD | 2 | 0.180401 | 0.187327 | 0.187327 | 17.5929 | 0 | 20283 | 36.233 |
+| 1.131 | ok | true | QCD | 2 | 0.180863 | 0.188297 | 0.188297 | 17.5908 | 0 | 18090 | 21.765 |
+| 1.132 | ok | true | QCD | 2 | 0.181316 | 0.189252 | 0.189252 | 17.5888 | 0 | 20653 | 24.469 |
+| 1.133 | ok | true | QCD | 2 | 0.181762 | 0.19019 | 0.19019 | 17.587 | 0 | 20378 | 23.408 |
+| 1.134 | ok | true | QCD | 2 | 0.182201 | 0.191112 | 0.191112 | 17.5853 | 0 | 20472 | 23.776 |
+| 1.135 | ok | true | QCD | 2 | 0.182633 | 0.192019 | 0.192019 | 17.5839 | 0 | 20668 | 24.336 |
+| 1.136 | ok | true | QCD | 2 | 0.18306 | 0.192912 | 0.192912 | 17.5825 | 0 | 16044 | 19.786 |
+| 1.137 | ok | true | QCD | 2 | 0.183481 | 0.19379 | 0.19379 | 17.5813 | 0 | 20875 | 24.210 |
+| 1.138 | ok | true | QCD | 2 | 0.183897 | 0.194654 | 0.194654 | 17.5803 | 0 | 20918 | 24.347 |
+| 1.139 | ok | true | QCD | 2 | 0.184308 | 0.195505 | 0.195505 | 17.5794 | 0 | 16822 | 19.931 |
+| 1.14 | ok | true | QCD | 2 | 0.184715 | 0.196342 | 0.196342 | 17.5786 | 0 | 20922 | 23.364 |
+| 1.141 | ok | true | QCD | 2 | 0.185117 | 0.197167 | 0.197167 | 17.578 | 0 | 20720 | 23.165 |
+| 1.142 | ok | true | QCD | 2 | 0.185516 | 0.19798 | 0.19798 | 17.5774 | 0 | 20188 | 22.766 |
+| 1.143 | ok | true | QCD | 2 | 0.18591 | 0.19878 | 0.19878 | 17.577 | 0 | 20190 | 22.960 |
+| 1.144 | ok | true | QCD | 2 | 0.186301 | 0.199569 | 0.199569 | 17.5767 | 0 | 19724 | 22.683 |
+| 1.145 | ok | true | QCD | 2 | 0.186689 | 0.200346 | 0.200346 | 17.5766 | 0 | 18401 | 21.568 |
+| 1.146 | ok | true | QCD | 2 | 0.187074 | 0.201112 | 0.201111 | 17.5765 | 0 | 12534 | 15.622 |
+| 1.147 | ok | true | QCD | 2 | 0.187455 | 0.201866 | 0.201866 | 17.5765 | 0 | 17528 | 21.000 |
+| 1.148 | ok | true | QCD | 2 | 0.187834 | 0.202611 | 0.202611 | 17.5766 | 0 | 18514 | 21.729 |
+| 1.149 | ok | true | QCD | 2 | 0.188209 | 0.203344 | 0.203344 | 17.5768 | 0 | 12971 | 16.204 |
+| 1.15 | ok | true | QCD | 2 | 0.188582 | 0.204068 | 0.204068 | 17.5771 | 0 | 18963 | 21.987 |
+
+- onset of QCD capture: between β 1.116 (not captured) and 1.117
+- largest β QCD captures: 1.15; next successful row (grid edge)
+- no EW capture
+- uncaptured window: β 1.1 – 1.116, grid edge below, QCD above
+
+### f_new_check (.documents/power-law-wall/sample-04/surfing/f_new_check.csv): 3 rows, 3 succeeded; wall_s summed 127.9 s;
+load (1, 5, 15 min) at the start: 8.85 / 7.23 / 7.48
+
+| β | status | captured | kick | n_crossings | T_capture | T_max | T_deliver (first bounce) | N_deliver | reflections | accepted_steps | wall_s |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2.975 | ok | true | QCD | 2 | 1.6107 | 1.6143 | 1.61429 | 24.4154 | 0 | 33329 | 42.037 |
+| 2.976 | ok | false | — | 0 | — | — | 1.6121 | 24.4218 | 0 | 31821 | 42.005 |
+| 3.003 | ok | true | EW | 2 | 50.91 | 50.9749 | 50.9749 | 21.027 | 0 | 28771 | 43.901 |
+
+- onset of QCD capture: between β (grid edge) (not captured) and 2.975
+- largest β QCD captures: 2.975; next successful row 2.976
+- smallest β EW captures: 3.003; previous successful row 2.976
+- uncaptured window: β 2.976 – 2.976, QCD below, EW above
+
+## The exponential's reference (electroweak-eos 02, the same w table)
+- s1_new.csv: {'onset': ('1.1', '1.15'), 'last_QCD': ('2.95', '3.0'), 'first_EW': ('3.0', '3.05')}
+- f_new.csv: {'onset': (None, '2.95'), 'last_QCD': ('2.975', '2.976'), 'first_EW': ('3.002', '3.003')}
+
+## Each power-law scan against the exponential's at the same β
+
+Rows compared: the β both scans hold, where the power-law row succeeded. 'same capture' counts rows whose captured and capture_kick agree; the largest relative difference is over T_capture, T_max and T_deliver where both rows hold them; the last three columns count the rows whose n_crossings differ, whose T_max is blank on one side only, and whose deliver_reflected differs (the power wall's value first).
+
+| scan | exponential's | β in both (succeeded) | same capture | differing β | largest relative difference in T | n_crossings differ | T_max blank on one side | deliver_reflected differs |
+|---|---|---|---|---|---|---|---|---|
+| c_n1 | s1_new.csv | 5 | 5 | — | 1.36e-06 | 3 | 3 | 5 (true / false) |
+| c_n2 | s1_new.csv | 49 | 49 | — | 1.36e-06 | 16 | 10 | 49 (true / false) |
+| q_n2 | q_exp.csv | 50 | 50 | — | 1.36e-06 | 33 | 33 | 50 (true / false) |
+| e_n2 | f_new.csv | 100 | 100 | — | 7.86e-05 | 74 | 74 | 100 (true / false) |
+
+## The edges per wall
+
+| wall | QCD onset (coarse) | QCD onset (fine) | largest β QCD captures (fine) | smallest β EW captures (fine) |
+|---|---|---|---|---|
+| exponential | (1.1, 1.15] | (1.116, 1.117] | 2.975 (next 2.976) | (3.002, 3.003] |
+| power n = 1 | (1.1, 1.3] | — | 1.8 (next …) | — |
+| power n = 2 | (1.1, 1.15] | (1.116, 1.117] | 2.975 (next 2.976) | (3.002, 3.003] |

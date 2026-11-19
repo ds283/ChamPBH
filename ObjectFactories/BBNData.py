@@ -123,7 +123,8 @@ class sqla_BBNDataFactory(SQLAFactoryBase):
         # (campaign README P15); the stored label, a job name and a time, is not. The history is
         # on this row's shard, since both take their shard key from the model's beta
         # (dk-and-rpk-migration prompt 09). The parent is "history", the ScalarHistory, since
-        # "model" names a ScalarHistory's ExponentialModel (jordan-normalization prompt 07)
+        # "model" names a ScalarHistory's model, an ExponentialModel or an InversePowerModel
+        # (jordan-normalization prompt 07; power-law-wall prompt 05)
         return InventorySpec(
             leaves=("failure", "PRyM_version"),
             parents={

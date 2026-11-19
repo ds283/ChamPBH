@@ -46,7 +46,7 @@ class TestTheScopeNamesAlpha(unittest.TestCase):
         self.assertEqual(parts[parts.index("tuning tolerance 1e-05") + 1], "α 0")
         self.assertEqual(
             text,
-            "no config file; β 0.1–3.0, 5 per unit; M 10^25–10^26.5 eV, 6 per decade; "
+            "no config file; models exponential; β 0.1–3.0, 5 per unit; M 10^25–10^26.5 eV, 6 per decade; "
             "n 1; φ* 5 Mp; tuning tolerance 1e-05; α 0; 20 shards; job ChamPBH-test",
         )
 

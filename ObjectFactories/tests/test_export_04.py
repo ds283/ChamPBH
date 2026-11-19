@@ -142,6 +142,7 @@ def _record(alpha, drain_model, beta=1.0, M_Mp=0.5, n=1, scalar=None, units=None
         phi_init_Mp=5.0,
         alpha=alpha,
         drain_model=drain_model,
+        model="exponential",
         scalar=scalar,
         bbn=None,
         baseline=None,
@@ -286,8 +287,8 @@ class TestDeltaNEffUnderTwoModels(unittest.TestCase):
             [
                 r"$\alpha$ = 0.1",
                 r"$\alpha$ = 0.5",
-                "A = 0.5 (one-loop-measured-v1)",
-                "A = 1 (one-loop-measured-v1)",
+                "A = 0.5 (one-loop-exponential-v2)",
+                "A = 1 (one-loop-exponential-v2)",
             ],
         )
         self.assertEqual([l.get_label() for l in lower.lines], labels)
@@ -295,7 +296,7 @@ class TestDeltaNEffUnderTwoModels(unittest.TestCase):
         # the same value 0.5 under the two models is two different curves
         self.assertEqual(curves[r"$\alpha$ = 0.5"], ([1.0, 2.0], [0.070, 0.060]))
         self.assertEqual(
-            curves["A = 0.5 (one-loop-measured-v1)"], ([1.0, 2.0], [0.030, 0.020])
+            curves["A = 0.5 (one-loop-exponential-v2)"], ([1.0, 2.0], [0.030, 0.020])
         )
 
     def test_a_one_loop_record_alone_is_drawn_and_alpha_zero_alone_is_not(self):
@@ -309,7 +310,7 @@ class TestDeltaNEffUnderTwoModels(unittest.TestCase):
             self.assertTrue(wrote)
             self.assertEqual(
                 [l.get_label() for l in fig.axes[0].lines],
-                ["A = 2 (one-loop-measured-v1)"],
+                ["A = 2 (one-loop-exponential-v2)"],
             )
             wrote, fig, _ = _draw(
                 ec.plot_Delta_N_eff,

@@ -1,0 +1,6 @@
+max |fit - f| (rms) on one identical point set per row: back out, ln R > 0.3, n = 2 with ln(V0/M^4) <= 10
+  n=1 every point                             82 pts: v1 0.629 (0.089)   (i) 0.332 (0.129)   (iii) 0.612 (0.082)   (iv) 0.417 (0.063)
+  n=1 planner's selection                     65 pts: v1 0.091 (0.027)   (i) 0.332 (0.124)   (iii) 0.071 (0.024)   (iv) 0.107 (0.034)
+  n=1 the grid rows above ln R = 15 alone      9 pts: v1 0.629 (0.255)   (i) 0.328 (0.148)   (iii) 0.612 (0.238)   (iv) 0.417 (0.159)
+  n=2 every point                             50 pts: v1 0.125 (0.051)   (i) 0.355 (0.091)   (iii) 0.056 (0.020)
+  n=2 the grid rows above ln R = 15 alone     23 pts: v1 0.125 (0.047)   (i) 0.177 (0.058)   (iii) 0.022 (0.010)

@@ -172,17 +172,24 @@ MASKED_FRAGMENTS = {
 #   equation of state is always Xav_EOS_spline (CosmologyModels/GenericEOS/QCD_Cosmology.py),
 #   whose type_id is XAV_IMPROVED_EOS_IDENTIFIER = 3 (Xav_EOS_spline.py:86-88);
 # - model (CosmologyConcepts/Models/model_ids.py and each class's type_id): ExponentialModel's is
-#   EXPONENTIAL_MODEL = 1. Until jordan-normalization prompt 07 the model was two references, the
+#   EXPONENTIAL_MODEL = 1, and InversePowerModel's INVERSE_POWER_MODEL = 2, which has a table since
+#   power-law-wall prompt 05 (README §6.9 P35; declared unstored from prompt 01, by the user's ruling of
+#   2026-11-14). The two tables' serials repeat each other, so a model row is named by the pair and never
+#   by its serial alone. Until jordan-normalization prompt 07 the model was two references, the
 #   potential (ExponentialPotential, 1) and the coupling (ExponentialCoupling, 0).
 POLYMORPHIC_REFERENCES = {
     "ScalarHistory": {
         "cosmology_serial": ("cosmology_type", {3: "QCD_Cosmology"}),
-        "model_serial": ("model_type", {1: "ExponentialModel"}),
+        "model_serial": (
+            "model_type",
+            {1: "ExponentialModel", 2: "InversePowerModel"},
+        ),
     }
 }
 
 # Type values the code defines but that no stored class carries. A row holding one is a named
-# problem, as is a value in neither map. table -> type column -> {value: why}
+# problem, as is a value in neither map. table -> type column -> {value: why}. Every model type is
+# stored since power-law-wall prompt 05, so model_type has no entry, as before prompt 01.
 UNSTORED_TYPE_VALUES = {
     "ScalarHistory": {
         "cosmology_type": {
@@ -191,7 +198,7 @@ UNSTORED_TYPE_VALUES = {
             "SaikawaShirai_EOS_jax_autodiff, a class no factory stores",
             2: "QCD_EOS_SPLINE_IDENTIFIER: the type_id of a LambdaCDM_GenericEOS on "
             "SaikawaShirai_EOS_spline, a class no factory stores",
-        }
+        },
     }
 }
 

@@ -43,13 +43,20 @@ from CosmologyConcepts import (
 # the drain law and the drain model, and their rules (one-loop-drain prompt 03; orchestrator note 03, ruling 1):
 # defined in the leaf module CosmologyConcepts/drain_model.py, which alpha_value imports too, and imported here
 # so that every SM.<name> resolves to the same object as before
+# (and, since power-law-wall prompt 03, the regimes, which a model's own fraction names)
 from CosmologyConcepts.drain_model import (
     DRAIN_LAW_FIXED,
     DRAIN_LAW_ONE_LOOP,
     DRAIN_LAWS,
     DRAIN_MODEL_FIXED,
-    DRAIN_MODEL_ONE_LOOP,
+    DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
+    DRAIN_MODEL_ONE_LOOP_INVERSE_POWER,
     DRAIN_MODELS,
+    DRAIN_REGIMES,
+    REGIME_CLASSICAL,
+    REGIME_GAP,
+    REGIME_ONE_LOOP,
+    REGIME_UNASSESSED,
     check_drain_law,
     law_of,
 )
@@ -166,134 +173,38 @@ RELEASE_ROOT_RTOL = 4.0 * float(np.finfo(float).eps)
 MARGIN_THRESHOLD = log(10.0)
 MARGIN_WEIGHT_SHARE = 1.0e-3
 
-# the drain law (one-loop-drain prompt 01; README §8.2, §8.8 P22, U9, U10; the measured law of prompt 02c,
-# README §8.10), an input of integrate_scalar_history, integrate_history and tune_history; since prompt 03 a key
-# of every stored history, through alpha_value's drain_model (README §8.11 P27). DRAIN_LAW_FIXED,
-# DRAIN_LAW_ONE_LOOP and DRAIN_LAWS are defined in CosmologyConcepts/drain_model.py and imported above
-# (orchestrator note 03, ruling 1); this comment and the constants below stay here
-#   DRAIN_LAW_FIXED:     alpha_eff = alpha w_gate at every candidate, 0 <= alpha < 1: the law to
-#                        VERSION_LABEL 2026.9.0, the default, unchanged
-#   DRAIN_LAW_ONE_LOOP:  alpha carries the law's strength A, finite and > 0 (A = 0 is natural mode, asked
-#                        for as the fixed law at alpha = 0); each candidate is classified in the loop
-#                        (drain_regime) and drains (drain_alpha_effective)
-#                          alpha_eff = min(DRAIN_ALPHA_CAP, A f) w_gate,
-#                        with f = drain_fraction(regime, ell, L, ln R) the measured law that the user adopted on
-#                        2026-11-05 (README §8.10, U13 re-ruled), in place of A 2.7/ell and the "zero" and "edge"
-#                        gap prescriptions, which are removed (decision 2):
-#                          one_loop, ell >= 1:  d = ell + DRAIN_ONE_LOOP_B0 - DRAIN_ONE_LOOP_C ln L;
-#                                               min(DRAIN_F_CAP, 1 - exp(-DRAIN_ONE_LOOP_A/d)) if d > 0, else
-#                                               DRAIN_F_CAP;
-#                          one_loop, ell < 1:   DRAIN_F_PLATEAU;
-#                          gap:                 0 if ln R <= DRAIN_GAP_R0 or s = 1 + DRAIN_GAP_Q ln L <= 0, else
-#                                               1 - exp(-DRAIN_GAP_G (ln R - DRAIN_GAP_R0)^DRAIN_GAP_P s);
-#                          classical:           exp(ln R) S(L) (drain_S_of_L; decision 3, "if it's cheap, keep the
-#                                               table");
-#                          unassessed:          0, counted (P19)
-#                        ell is the turnaround's, ln R the assessment's ClassicalTurningPoint.log_R, and
-#                        L the model's wall variable at the assessment's ln E (RealizedModel.drain_L; the model
-#                        defines it, with no default, by the user's ruling of 2026-11-05, and a model without it
-#                        is refused under this law: check_drain_law_model). For ExponentialModel it is
-#                        ln(1 + E/V0) at every n: U15 (b), ruled 2026-11-05, "OK, let's take option (b) for now".
-#                        At n = 1 it is M/phi_t, the variable stage 2 measured; at n = 2 crossover's measurement
-#                        supports it
-# and the law's constants (P17), each with its source. The fitted ones are
-# prompts/one-loop-drain/source/crossover/out/fit_law.txt's fits to every stage-2 point, rounded as the reference
-# implementation (fraction_adopted in prompts/one-loop-drain/source/crossover/measured_law_map.py) rounds them:
-#   DRAIN_ALPHA_CAP:    0.99 (U10, "0.99 is OK"), the probe's cap; the drain refuses alpha_eff >= 1
-#   DRAIN_ONE_LOOP_A:   2.69, the Born coefficient of the one-loop fraction (BriefingNotes/wall_backreaction.tex,
-#                       "The inelastic fraction"), held fixed in the fit
-#   DRAIN_ONE_LOOP_B0:  0.9691, the fitted shift of ell (fit_law.txt: within 0.074 of 27 one-loop points)
-#   DRAIN_ONE_LOOP_C:   0.41, the fitted coefficient of ln L in that shift
-#   DRAIN_ELL_PLATEAU:  1, the ell below which the plateau holds (README §8.10)
-#   DRAIN_F_CAP:        0.95, the one-loop cap, and DRAIN_F_PLATEAU, 0.9, the plateau below ell = 1: the user's
-#                       adopted judgement, qualitative behaviour (README §8.10; stage 2 measured 0.88-0.98 and
-#                       0.80-0.97 there)
-#   DRAIN_GAP_G, DRAIN_GAP_R0, DRAIN_GAP_P, DRAIN_GAP_Q:  0.0198, 1.5601, 1.5472 and 0.841, the gap fit's
-#                       amplitude, threshold in ln R, power and coefficient of ln L (fit_law.txt: within 0.062 of
-#                       34 gap points)
-# The gap's s <= 0 branch (L <= e^{-1/DRAIN_GAP_Q} = 0.304, where README §8.10's expression is negative) is the
-# user's ruling of 2026-11-05 on orchestrator note 02c's ruling 9: "I think probably we set `f = 0` there"
+# the drain law (one-loop-drain prompt 01; README §8.2, §8.8 P22, U9, U10), an input of integrate_scalar_history,
+# integrate_history and tune_history; since one-loop-drain prompt 03 a key of every stored history, through alpha_value's
+# drain_model (README §8.11 P27). DRAIN_LAW_FIXED, DRAIN_LAW_ONE_LOOP and DRAIN_LAWS are defined in
+# CosmologyConcepts/drain_model.py and imported above (orchestrator note 03, ruling 1)
+#   DRAIN_LAW_FIXED:     alpha_eff = alpha w_gate at every candidate, 0 <= alpha < 1: the law to VERSION_LABEL 2026.9.0,
+#                        the default, unchanged
+#   DRAIN_LAW_ONE_LOOP:  alpha carries the law's strength A, finite and > 0 (A = 0 is natural mode, asked for as the fixed
+#                        law at alpha = 0); each candidate is classified in the loop (drain_regime) and drains
+#                          alpha_eff = min(DRAIN_ALPHA_CAP, A f) w_gate (drain_alpha_effective),
+#                        with f the model's own one-loop fraction at the candidate (AbstractModel._drain_fraction,
+#                        RealizedModel.drain_fraction), from its regime, ell, the assessment's ln E and ln R. Each
+#                        potential owns its law, its constants and its tables, and names the drain model it is stored
+#                        under (AbstractModel.one_loop_drain_model): ExponentialModel's is one-loop-exponential-v2,
+#                        InversePowerModel's one-loop-inverse-power-v1 (power-law-wall README §6.14 P99; the user's
+#                        ruling of 2026-11-05, potential-specific quantities in the model class with no default). Nothing
+#                        of either is here (README §5). A model without _drain_fraction is refused under this law
+#                        (check_drain_law_model); _drain_L, where a model defines it, is recorded per candidate as L
+#   DRAIN_ALPHA_CAP:     0.99 (U10, "0.99 is OK"), the probe's cap; the drain refuses alpha_eff >= 1
 DRAIN_ALPHA_CAP = 0.99
-DRAIN_ONE_LOOP_A = 2.69
-DRAIN_ONE_LOOP_B0 = 0.9691
-DRAIN_ONE_LOOP_C = 0.41
-DRAIN_ELL_PLATEAU = 1.0
-DRAIN_F_CAP = 0.95
-DRAIN_F_PLATEAU = 0.9
-DRAIN_GAP_G = 0.0198
-DRAIN_GAP_R0 = 1.5601
-DRAIN_GAP_P = 1.5472
-DRAIN_GAP_Q = 0.841
-
-# S(L), the classical wall's production energy ratio (README §8.10, decision 3): the 21 values of
-# prompts/one-loop-drain/source/crossover/out/stage1a_S_of_L.txt (stage 1a, the classical bounce off
-# V0 (e^{M/phi} - 1); columns L and S(L)), as the same decimal literals. drain_S_of_L interpolates linearly in
-# (ln L, ln S), by np.interp on their np.log as the reference implementation's S_of does; holds S(0.3) below
-# L = 0.3; and above L = 134 continues as S(134) (134/L)^2, since L^2 S tends to a constant
-# (production_energy_ratio.tex). The table is 0.1% high from its quadrature (crossover stage 2, V2q), which is
-# immaterial here
-DRAIN_S_TABLE_L = (
-    0.3,
-    0.5,
-    0.7,
-    1.0,
-    2.0,
-    3.0,
-    4.0,
-    5.0,
-    6.0,
-    7.0,
-    8.0,
-    10.0,
-    13.0,
-    16.0,
-    20.0,
-    30.0,
-    40.0,
-    70.0,
-    90.0,
-    110.0,
-    134.0,
-)
-DRAIN_S_TABLE_S = (
-    1.0041e-02,
-    9.7145e-03,
-    9.3185e-03,
-    8.6688e-03,
-    6.6167e-03,
-    5.0735e-03,
-    3.9750e-03,
-    3.1852e-03,
-    2.6041e-03,
-    2.1664e-03,
-    1.8292e-03,
-    1.3529e-03,
-    9.2294e-04,
-    6.6916e-04,
-    4.6603e-04,
-    2.3302e-04,
-    1.3936e-04,
-    4.9353e-05,
-    3.0600e-05,
-    2.0810e-05,
-    1.4204e-05,
-)
-_DRAIN_S_LOG_L = np.log(np.array(DRAIN_S_TABLE_L))
-_DRAIN_S_LOG_S = np.log(np.array(DRAIN_S_TABLE_S))
 
 # the drain model, named in the "drain" record (README §8.10, decision 1) and, since prompt 03, stored as
-# alpha_value's drain_model, a key of every history (README §8.11 P27). DRAIN_MODEL_FIXED and DRAIN_MODEL_ONE_LOOP
-# ("one-loop-measured-v1") are defined in CosmologyConcepts/drain_model.py, with law_of, the one mapping from a
-# model to its law, and imported above. DRAIN_MODEL_ONE_LOOP names the measured law and its version: THE VERSION
-# MOVES whenever drain_fraction, its constants above or the S table change, so that a new version is a new key value
+# alpha_value's drain_model, a key of every history (README §8.11 P27). DRAIN_MODEL_FIXED and the one-loop models,
+# DRAIN_MODEL_ONE_LOOP_EXPONENTIAL ("one-loop-exponential-v2") and DRAIN_MODEL_ONE_LOOP_INVERSE_POWER
+# ("one-loop-inverse-power-v1"), are defined in CosmologyConcepts/drain_model.py, with law_of, the one mapping from a
+# model to its law (which refuses the retired names, power-law-wall prompt 07c), and imported above. Each one-loop model
+# names its potential's law and its version: THE VERSION MOVES whenever that law, its constants or its tables change
 
 # the regimes of a candidate under the one-loop law (README §8.2): peak_estimate's classification,
-# computed once, in the loop (P18), with a one-loop solution of ell <= 0 called gap (P24)
-REGIME_ONE_LOOP = "one_loop"
-REGIME_GAP = "gap"
-REGIME_CLASSICAL = "classical"
-REGIME_UNASSESSED = "unassessed"
-DRAIN_REGIMES = (REGIME_ONE_LOOP, REGIME_GAP, REGIME_CLASSICAL, REGIME_UNASSESSED)
+# computed once, in the loop (P18), with a one-loop solution of ell <= 0 called gap (P24). REGIME_ONE_LOOP,
+# REGIME_GAP, REGIME_CLASSICAL, REGIME_UNASSESSED and DRAIN_REGIMES are defined in CosmologyConcepts/drain_model.py
+# since power-law-wall prompt 03, so that a model's own fraction (AbstractModel._drain_fraction) can name them, and
+# imported above
 
 # the warnings of a history (inelastic-reflection prompt 05; README §8.1 R6, §8.2 P23), returned by
 # integrate_scalar_history and printed once per history by tune_history. Each line begins with one
@@ -619,8 +530,8 @@ def resolved_sign_changes(
 #   log_E_assessed:          ln E there, E = H_E^2 pi^2/2 + V(phi) - V_floor, the energy that reaches
 #                            the wall (prompt 05 §0.2)
 #   classical_turning_point: the model's ClassicalTurningPoint for (phi_assessed, E): phi_t,
-#                            ln omega_t^2, ln R, lambda_t, ln k_ex and ell_t (inelastic-reflection
-#                            prompt 04)
+#                            ln omega_t^2, ln R, the pulse rate |V'''/V''|, ln k_ex and ell_t
+#                            (inelastic-reflection prompt 04; the pulse rate since power-law-wall prompt 07c)
 Injection = namedtuple(
     "Injection",
     [
@@ -827,8 +738,10 @@ IntegrationResult = namedtuple(
 #   log_E:      ln E of the assessment the candidate was judged on (the Injection's log_E_assessed), the
 #               impact energy; None if unassessed
 #   log_H:      ln H_E before the candidate (ln of the Injection's H_Einstein_before)
-#   L:          the law's L, the model's (drain_law_inputs), the number drain_alpha_effective was given;
-#               None if unassessed (one-loop-drain prompt 02c §1.3; appended, orchestrator note 02c ruling 7)
+#   L:          the wall variable L, the model's (drain_law_inputs), which the exponential's own fraction reads (since
+#               power-law-wall prompt 07c drain_alpha_effective is not given it, README §6.14 P99);
+#               None if unassessed (one-loop-drain prompt 02c §1.3; appended, orchestrator note 02c ruling 7),
+#               and None on a model with no _drain_L (power-law-wall prompt 03)
 #   log_R:      the law's ln R, the assessment's ClassicalTurningPoint.log_R, as given; None if unassessed
 DrainCandidate = namedtuple(
     "DrainCandidate",
@@ -839,9 +752,12 @@ DrainCandidate = namedtuple(
 # Plain values only (strings, floats, ints, None and tuples of DrainCandidate), so that it crosses Ray
 #   law:                       DRAIN_LAW_FIXED or DRAIN_LAW_ONE_LOOP
 #   A:                         the one-loop law's A (the alpha argument); None under the fixed law
-#   model:                     the drain model and its version, DRAIN_MODEL_ONE_LOOP under the one-loop law and
-#                              DRAIN_MODEL_FIXED under the fixed law (one-loop-drain prompt 02c §1.3; README §8.10,
-#                              decision 1), where the gap prescription stood (orchestrator note 02c ruling 7)
+#   model:                     the drain model and its version: under the one-loop law the model's one-loop drain
+#                              model (AbstractModel.one_loop_drain_model; power-law-wall prompt 03),
+#                              DRAIN_MODEL_ONE_LOOP_EXPONENTIAL for ExponentialModel and DRAIN_MODEL_ONE_LOOP_INVERSE_POWER
+#                              for InversePowerModel (power-law-wall prompt 07c); DRAIN_MODEL_FIXED
+#                              under the fixed law (one-loop-drain prompt 02c §1.3; README §8.10, decision 1), where
+#                              the gap prescription stood (orchestrator note 02c ruling 7)
 #   unresolvable_assessments:  the assessments whose classical turning point was None with
 #                              _turning_point_unresolvable holding (§1.6): the calls the wall-search fix
 #                              answers. Counted under either law: the loop's assessments at every step
@@ -1861,18 +1777,56 @@ class ParkedSegment(DenseOutput):
 def check_drain_law_model(drain_law: str, model, context: str) -> None:
     """
     The model under the drain law (one-loop-drain prompt 02c; the user's ruling of 2026-11-05, "I suggest we move
-    `L` into the model class, with no default"), checked at entry by integrate_scalar_history, integrate_history
-    and tune_history, beside check_drain_law and before any integration (and, in tune_history, before the seed).
-    Under DRAIN_LAW_ONE_LOOP a model, realized or not, whose class does not override AbstractModel._drain_L
-    (drain_L_implemented) is a ValueError naming its class and the hook. Under the fixed law nothing is checked.
+    `L` into the model class, with no default"; power-law-wall prompt 03 §1.2, README §6.6 P16), checked at entry by
+    integrate_scalar_history, integrate_history and tune_history, beside check_drain_law and before any integration
+    (and, in tune_history, before the seed). Under DRAIN_LAW_ONE_LOOP a model, realized or not, is a ValueError
+    naming its class and the hooks, if its class
+      - does not override AbstractModel._drain_fraction, the model's own one-loop fraction (drain_fraction_implemented),
+        which since power-law-wall prompt 07c is every potential's law (README §6.14 P99); _drain_L, the wall variable
+        L, is optional and recorded where defined (drain_law_inputs); or
+      - does not name the drain model its one-loop law is stored under (AbstractModel.one_loop_drain_model raises
+        NotImplementedError), or names it as undefined at its parameters (it raises ValueError, naming the class,
+        the hook and why: InversePowerModel and ExponentialModel at n other than 1 and 2), or names a model whose law
+        is not the one-loop law.
+    Under the fixed law nothing is checked.
     """
     if drain_law != DRAIN_LAW_ONE_LOOP:
         return
-    if not model.drain_L_implemented:
+    cls = type(model.model if isinstance(model, RealizedModel) else model)
+    if not model.drain_fraction_implemented:
+        raise ValueError(
+            f"{context}: the one-loop drain law needs the model's own fraction, _drain_fraction(normalization, "
+            f"regime, ell, log_E, log_R); {cls.__name__} does not implement it"
+        )
+    try:
+        drain_model: str = model.one_loop_drain_model
+    except (NotImplementedError, ValueError) as e:
+        raise ValueError(f"{context}: the one-loop drain law: {e}") from None
+    if law_of(drain_model, context) != DRAIN_LAW_ONE_LOOP:
+        raise ValueError(
+            f"{context}: {cls.__name__}.one_loop_drain_model names {drain_model!r}, whose law is not the one-loop law"
+        )
+
+
+def check_key_drain_model(model, alpha, context: str) -> None:
+    """
+    The drain model a history's key names, against its model (power-law-wall prompt 05 §1.4; README §4, §6.9 P36),
+    checked when a ScalarHistory is constructed, so before any lookup, tuning or integration. The key's alpha_value
+    may name DRAIN_MODEL_FIXED, under which nothing is asked of the model, or the model's own one-loop drain model
+    (AbstractModel.one_loop_drain_model). Any other drain model is a ValueError naming the model's class, its
+    one_loop_drain_model and the key's drain model. Where the model names no one-loop drain model at its parameters
+    (InversePowerModel at n other than 1 and 2), its own ValueError propagates. The guard in ScalarHistory.store,
+    which compares a payload's drain record with the key after the integration, stays.
+    """
+    key_model: str = alpha.drain_model
+    if key_model == DRAIN_MODEL_FIXED:
+        return
+    own: str = model.one_loop_drain_model
+    if key_model != own:
         cls = type(model.model if isinstance(model, RealizedModel) else model)
         raise ValueError(
-            f"{context}: the one-loop drain law needs the model's wall variable L, "
-            f"_drain_L(normalization, log_E), which {cls.__name__} does not implement"
+            f"{context}: the key names the drain model {key_model!r}, but {cls.__name__}.one_loop_drain_model is "
+            f"{own!r}: a history of this model is keyed under {DRAIN_MODEL_FIXED!r} or {own!r} only"
         )
 
 
@@ -1911,85 +1865,37 @@ def drain_law_inputs(model: RealizedModel, assessment):
     The law's inputs at one candidate (one-loop-drain prompt 02c §1.1; orchestrator note 02c ruling 1), from the
     assessment it is judged on, (phi, ln E, ClassicalTurningPoint) or None: (L, ln R), L the model's
     (model.drain_L(ln E); AbstractModel._drain_L, which the model defines, by the user's ruling of 2026-11-05)
-    and ln R the turning point's log_R; (None, None) if unassessed. Computed once per candidate in the loop; the
-    same two numbers go to drain_alpha_effective and to the DrainCandidate. An assessment always carries a
-    turning point (drain_regime reads its log_R).
+    and ln R the turning point's log_R; (None, None) if unassessed. L is None on a model that does not define _drain_L
+    (InversePowerModel; power-law-wall prompt 03 §1.2), which has no L. Computed once per candidate in the loop; ln R
+    goes to drain_alpha_effective, and both to the DrainCandidate (since power-law-wall prompt 07c L is recorded, and
+    the model's own fraction reads it itself, README §6.14 P99). An assessment always carries a turning point
+    (drain_regime reads its log_R).
     """
     if assessment is None:
         return None, None
     _, log_E, turning_point = assessment
-    return model.drain_L(log_E), turning_point.log_R
-
-
-def drain_S_of_L(L: float) -> float:
-    """
-    S(L), the classical wall's production energy ratio (README §8.10, decision 3), from DRAIN_S_TABLE_*:
-    linear in (ln L, ln S) by np.interp on the table's np.log, as the reference implementation's S_of
-    computes it, so that at L <= 134 the two are bitwise equal; S(0.3) below L = 0.3 (np.interp holds the end
-    value); S(134) (134/L)^2 above L = 134, where the reference instead holds S(134) (README §8.10 rules the
-    continuation).
-    """
-    if L > DRAIN_S_TABLE_L[-1]:
-        return DRAIN_S_TABLE_S[-1] * (DRAIN_S_TABLE_L[-1] / L) ** 2
-    return float(np.exp(np.interp(log(L), _DRAIN_S_LOG_L, _DRAIN_S_LOG_S)))
-
-
-def drain_fraction(
-    regime: str, ell: Optional[float], L: Optional[float], log_R: Optional[float]
-) -> float:
-    """
-    f, the fraction of the kinetic energy one bounce gives to quanta under the measured law (one-loop-drain
-    prompt 02c §1.1; README §8.10), by regime, with the constants above, term for term as the reference
-    implementation (fraction_adopted, prompts/one-loop-drain/source/crossover/measured_law_map.py) writes it,
-    so that the values are bitwise equal to it but in two places:
-      - one_loop, ell >= DRAIN_ELL_PLATEAU: d = ell + B0 - C ln L; min(F_CAP, 1 - exp(-A/d)) if d > 0, else F_CAP;
-      - one_loop, ell < DRAIN_ELL_PLATEAU: F_PLATEAU, reading neither L nor ln R;
-      - gap: 0.0 if ln R <= R0, or if s = 1 + Q ln L <= 0 (the user's ruling of 2026-11-05: "I think probably
-        we set `f = 0` there"; the reference is negative there); else 1 - exp(-G (ln R - R0)^P s);
-      - classical: exp(ln R) drain_S_of_L(L) (above L = 134 the reference holds S(134));
-      - unassessed: 0.0.
-    An unknown regime is a ValueError.
-    """
-    if regime == REGIME_ONE_LOOP:
-        if ell < DRAIN_ELL_PLATEAU:
-            return DRAIN_F_PLATEAU
-        d: float = ell + DRAIN_ONE_LOOP_B0 - DRAIN_ONE_LOOP_C * log(L)
-        return (
-            min(DRAIN_F_CAP, 1.0 - exp(-DRAIN_ONE_LOOP_A / d))
-            if d > 0.0
-            else DRAIN_F_CAP
-        )
-    if regime == REGIME_GAP:
-        if log_R <= DRAIN_GAP_R0:
-            return 0.0
-        s: float = 1.0 + DRAIN_GAP_Q * log(L)
-        if s <= 0.0:
-            return 0.0
-        return 1.0 - exp(-DRAIN_GAP_G * (log_R - DRAIN_GAP_R0) ** DRAIN_GAP_P * s)
-    if regime == REGIME_CLASSICAL:
-        return exp(log_R) * drain_S_of_L(L)
-    if regime == REGIME_UNASSESSED:
-        return 0.0
-    raise ValueError(
-        f"drain_fraction: the regime must be one of {DRAIN_REGIMES}, not {regime!r}"
-    )
+    L = model.drain_L(log_E) if model.drain_L_implemented else None
+    return L, turning_point.log_R
 
 
 def drain_alpha_effective(
     regime: str,
     ell: Optional[float],
-    L: Optional[float],
     log_R: Optional[float],
     A: float,
     w_gate: float,
+    *,
+    model: RealizedModel,
+    log_E: Optional[float],
 ) -> float:
     """
     The fraction drained at one candidate under the one-loop law (one-loop-drain prompt 02c §1.1; README §8.10;
-    orchestrator note 02c ruling 1): min(DRAIN_ALPHA_CAP, A * drain_fraction(regime, ell, L, ln R)) * w_gate,
-    evaluated as the reference implementation's patch evaluates it. L and ln R are drain_law_inputs', computed
-    once per candidate by the caller. Unassessed: 0.0 exactly, without reading L or ln R, and the caller takes
-    the alpha_eff = 0 branch it takes at the fixed law; so it does wherever f = 0 (the gap below its
-    threshold, or where 1 + Q ln L <= 0) or w_gate = 0. An unknown regime is a ValueError.
+    orchestrator note 02c ruling 1): min(DRAIN_ALPHA_CAP, A f) * w_gate, with f = model.drain_fraction(regime, ell,
+    ln E, ln R), the model's own one-loop fraction (AbstractModel._drain_fraction), always: since power-law-wall prompt
+    07c every potential owns its law and this module holds none (README §6.14 P99), so the model is required. ln R is
+    drain_law_inputs', computed once per candidate by the caller, and ln E the assessment's. Unassessed: 0.0 exactly,
+    without reading ln E or ln R, and the caller takes the alpha_eff = 0 branch it takes at the fixed law; so it does
+    wherever f = 0 or w_gate = 0. An unknown regime is a ValueError.
     """
     if regime == REGIME_UNASSESSED:
         return 0.0
@@ -1997,7 +1903,8 @@ def drain_alpha_effective(
         raise ValueError(
             f"drain_alpha_effective: the regime must be one of {DRAIN_REGIMES}, not {regime!r}"
         )
-    return min(DRAIN_ALPHA_CAP, A * drain_fraction(regime, ell, L, log_R)) * w_gate
+    f: float = model.drain_fraction(regime, ell, log_E, log_R)
+    return min(DRAIN_ALPHA_CAP, A * f) * w_gate
 
 
 def integrate_scalar_history(
@@ -2213,7 +2120,9 @@ def integrate_scalar_history(
     # PeakEstimates, and the drain model's name (prompt 02c); under either law the count of the
     # assessments the wall-search fix answers
     one_loop: bool = drain_law == DRAIN_LAW_ONE_LOOP
-    drain_model: str = DRAIN_MODEL_ONE_LOOP if one_loop else DRAIN_MODEL_FIXED
+    drain_model: str = (
+        DRAIN_MODEL_FIXED  # under the one-loop law, the model's, set below
+    )
     drain_candidates: List[DrainCandidate] = []
     peak_estimates: List[Optional[PeakEstimate]] = []
     unresolvable_assessments: int = 0
@@ -2232,8 +2141,12 @@ def integrate_scalar_history(
     if policy is None:
         policy = RHS.policy
 
-    # the model must define the law's L under the one-loop law (prompt 02c), before any step
+    # the model must define the law's L, or its own fraction, under the one-loop law (prompt 02c; power-law-wall
+    # prompt 03), before any step; the record names the model's one-loop drain model (AbstractModel.
+    # one_loop_drain_model: DRAIN_MODEL_ONE_LOOP_EXPONENTIAL for ExponentialModel), DRAIN_MODEL_FIXED under the fixed law
     check_drain_law_model(drain_law, policy.model, "integrate_scalar_history")
+    if one_loop:
+        drain_model = policy.model.one_loop_drain_model
 
     # the ledger the drains go to (orchestrator note 02, ruling 5): at alpha > 0 it must exist, and
     # it must be the one the RHS reads, or a drain would change pi without changing the expansion
@@ -2474,12 +2387,20 @@ def integrate_scalar_history(
         if one_loop:
             # the one-loop law (one-loop-drain prompt 01 §1.2): the gate as alpha_effective forms it,
             # the regime from the assessment, once (P18), the law's inputs L and ln R, once (prompt 02c,
-            # orchestrator note 02c ruling 1), and alpha_eff by the measured law
+            # orchestrator note 02c ruling 1), and alpha_eff by the model's own one-loop fraction, which reads
+            # the assessment's ln E (power-law-wall prompts 03 and 07c, README §6.14 P99); L, where the model
+            # defines it, is recorded
             w_gate: float = gate_weight(nonadiabaticity) if resolved else 1.0
             regime, ell, estimate = drain_regime(model, assessment)
             law_L, law_log_R = drain_law_inputs(model, assessment)
             alpha_eff: float = drain_alpha_effective(
-                regime, ell, law_L, law_log_R, alpha, w_gate
+                regime,
+                ell,
+                law_log_R,
+                alpha,
+                w_gate,
+                model=model,
+                log_E=None if assessment is None else assessment[1],
             )
         else:
             alpha_eff, w_gate = alpha_effective(nonadiabaticity, resolved)
@@ -4190,7 +4111,8 @@ def peak_estimate(model: RealizedModel, injection: Injection) -> Optional[PeakEs
     - ln R <= 0: the classical estimate, ln k_ex and ln m = ln omega_t = ln omega_t^2/2 of the
       candidate's ClassicalTurningPoint.
     - ln R > 0: the model's one_loop_turnaround at (phi_assessed, ln E_assessed): its ln k_ex and ln m_ta.
-      If it raises ComputationFailureError (the chain has no solution, the gap of 1 < R < 10^2.9) or
+      If it raises ComputationFailureError (the chain has no solution: at R > 1 below the chain's fold, whose
+      extent moved with k_ex, power-law-wall prompt 07c) or
       returns None, the classical estimate, flagged ESTIMATE_CLASSICAL_GAP with the reason ("Classical,
       flagged", R19). Any other exception propagates.
     """
@@ -6271,6 +6193,10 @@ class ScalarHistory(DatastoreObject):
         :param label: optional label for the model
         :param tags: optional list of tags for the model
         """
+        # the key's drain model at entry (power-law-wall prompt 05 §1.4, P36): before anything is looked up or
+        # computed, through the model interface
+        check_key_drain_model(model, alpha, "ScalarHistory")
+
         self._solver_labels = solver_labels
 
         self._T_Jordan_init: temperature = T_Jordan_init

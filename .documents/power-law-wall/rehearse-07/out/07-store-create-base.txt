@@ -1,0 +1,19 @@
+>> create: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-base.manifest.json
+{
+  "created": "2026-11-16T19:10:17+00:00",
+  "datastore": "power-law-wall-07-base.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "a7e097874fe710e70438b1b4474c5368da6e3b25",
+      "operation": "create",
+      "to": "var/datastores/power-law-wall-07-base.db",
+      "when": "2026-11-16T19:10:17+00:00"
+    }
+  ],
+  "name": "power-law-wall-07-base",
+  "purpose": "power-law-wall 07 R: the base store at a7e0978 (runs a, b, c: 20 exponential histories at n 1), kept for the user",
+  "sidecar_format": 1,
+  "store_id": "60fc081b15c74c57968f9bd739bc30ba"
+}

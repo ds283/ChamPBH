@@ -19,7 +19,8 @@ note 03, ruling 1).
 
 Until prompt 03 alpha_value shared sqla_dimensionless_quantity_factory with beta_value. A row is now the pair
 (value, drain_model), unique: the value is alpha under DRAIN_MODEL_FIXED and the one-loop law's A under
-DRAIN_MODEL_ONE_LOOP. build() checks the pair (check_drain_model, the one statement of the rules) before it
+a one-loop drain model (CosmologyConcepts.drain_model.DRAIN_MODELS: each potential's own since power-law-wall
+prompt 07c; a retired name is refused by check_drain_model). build() checks the pair (check_drain_model, the one statement of the rules) before it
 queries or inserts, so that an unknown model, A = 0 under the one-loop model, or alpha >= 1 under the fixed one is
 a ValueError with no row written. It matches the value as the dimensionless factory does (relatively, or
 absolutely at 0) and drain_model exactly. A payload that names no drain_model asks for DRAIN_MODEL_FIXED, so that

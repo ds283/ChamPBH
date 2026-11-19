@@ -1,0 +1,215 @@
+{
+  "exit_code": 0,
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 15,
+        "digest": "bc9825c47cc7fce8f37b4721ed7e4c7a79db8fcc88bb8e1d096c7cf149ed3f91",
+        "tag_sets": [
+          {
+            "count": 15,
+            "digest": "bc9825c47cc7fce8f37b4721ed7e4c7a79db8fcc88bb8e1d096c7cf149ed3f91",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "BBNData": {
+        "count": 15,
+        "digest": "1ee191e305a0838868f992c1fd79e36a4706952938d44ac7441c7895994dccac",
+        "tag_sets": [
+          {
+            "count": 15,
+            "digest": "1ee191e305a0838868f992c1fd79e36a4706952938d44ac7441c7895994dccac",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "ExponentialModel": {
+        "count": 3,
+        "digest": "7f978a04ca6f0841cfc299beb1c7b43a1c11a1952ad0909b6484092063f0eb8f",
+        "tag_sets": [
+          {
+            "count": 3,
+            "digest": "7f978a04ca6f0841cfc299beb1c7b43a1c11a1952ad0909b6484092063f0eb8f",
+            "tags": []
+          }
+        ]
+      },
+      "IntegrationSolver": {
+        "count": 7,
+        "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+        "tag_sets": [
+          {
+            "count": 7,
+            "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+            "tags": []
+          }
+        ]
+      },
+      "InversePowerModel": {
+        "count": 0,
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tag_sets": []
+      },
+      "M_value": {
+        "count": 1,
+        "digest": "746c1d92721d75c079624d856160f50953e152ec9f7dbb1bb1b8310089d647da",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "746c1d92721d75c079624d856160f50953e152ec9f7dbb1bb1b8310089d647da",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ScalarHistory": {
+        "count": 15,
+        "digest": "95b241760b7b895caf763cc740c56f66b0d2b855cfaefb300e553f2be3238ef2",
+        "tag_sets": [
+          {
+            "count": 15,
+            "digest": "95b241760b7b895caf763cc740c56f66b0d2b855cfaefb300e553f2be3238ef2",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "alpha_value": {
+        "count": 5,
+        "digest": "401a0a2c12d7936e9f08cda15f3137465ef37429a2e17405d420e940a305fe19",
+        "tag_sets": [
+          {
+            "count": 5,
+            "digest": "401a0a2c12d7936e9f08cda15f3137465ef37429a2e17405d420e940a305fe19",
+            "tags": []
+          }
+        ]
+      },
+      "beta_value": {
+        "count": 3,
+        "digest": "638163f012ebbc4d909231cadbeb3abaa6d85992df7eb33a70fce0d08aa56751",
+        "tag_sets": [
+          {
+            "count": 3,
+            "digest": "638163f012ebbc4d909231cadbeb3abaa6d85992df7eb33a70fce0d08aa56751",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 1,
+        "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 75001,
+        "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+        "tag_sets": [
+          {
+            "count": 75001,
+            "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 1,
+        "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 2,
+        "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "d4371025b6073135c304f481dc90f40c5d006455a3f9353ec59ca2bea4093450",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "d4371025b6073135c304f481dc90f40c5d006455a3f9353ec59ca2bea4093450",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "225e83c44065fdf7833defeef224f5e0174dabcb6932477e2fce4dee27060f9f",
+    "encoding_format": 1,
+    "fingerprint_format": 8,
+    "problems": {},
+    "taken": {
+      "git_dirty": true,
+      "git_head": "945bf5dfcc7b949a84754a641e65ed11ee828420",
+      "run_id": "power-law-wall-07-exp-a-20261116T191457",
+      "when": "2026-11-16T19:17:20+00:00"
+    }
+  },
+  "fingerprint_sidecar": "not written: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp.manifest.json is not a problem-free registry sidecar (there is none)",
+  "heartbeat": "2026-11-16T19:17:43+00:00",
+  "host": {
+    "boot": "3032DE24-D9C7-47E8-B1C7-C366CDBC76DF",
+    "id": "8d2b247824882486"
+  },
+  "pid": 86035,
+  "stage": "CALCULATE BBN DATA, all work items complete",
+  "state": "done",
+  "units_done": 0,
+  "units_total": null
+}

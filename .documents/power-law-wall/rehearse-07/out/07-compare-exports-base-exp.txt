@@ -1,0 +1,41 @@
+A: var/power-law-wall/07/export-base/QCD_Cosmology
+B: var/power-law-wall/07/export-exp/QCD_Cosmology/exponential
+mode: --base (06's rule)
+excluded under var/power-law-wall/07/export-exp/QCD_Cosmology/exponential by --exclude quanta_*: 23 files
+base: 40 files; tip: 40 files
+the paths are the same, file for file
+alpha=0.01/csv/M=0.00097413eV_n=1/data.csv: differs only in timing columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.124771042028442' vs '1.1067951249424368'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.707923458889127' vs '8.911850250093266'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0016939169727265835' vs '0.0015221668872982264'
+alpha=0.1/csv/M=0.00097413eV_n=1/data.csv: differs only in timing columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.5086954580619931' vs '1.6705157908145338'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '7.949902082793415' vs '8.223724040901288'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.001709874952211976' vs '0.0018904588650912046'
+alpha=0/csv/M=2.4353e+24eV_n=1/data.csv: differs only in timing columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '6.039844500133768' vs '6.705637000035495'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.724780583987013' vs '8.998928833985701'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0019217920489609241' vs '0.0015545841306447983'
+histories.csv: model at column 3 (after n: True), cells ['exponential'], rows 48; with model removed: IDENTICAL (17911 and 17911 bytes; sha256 eeafb6ad9b2be5f5 and eeafb6ad9b2be5f5)
+one-loop-measured-v1/A=0.05/csv/M=0.00097413eV_n=1/data.csv: differs only in timing columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '11.991056834114715' vs '12.387978249927983'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '7.875988292042166' vs '8.152913292171434'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.002565540838986635' vs '0.0020418339408934116'
+one-loop-measured-v1/A=1/csv/M=0.00097413eV_n=1/data.csv: differs only in timing columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '2.6436204160563648' vs '2.6236509170848876'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.670667124912143' vs '8.101907416945323'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0016742919106036425' vs '0.0016972911544144154'
+one-loop-measured-v1/A=1/csv/M=2.4353e+12eV_n=1/data.csv: differs only in timing columns
+     timing: column 'scalar_compute_time' differs in 1 row(s); first '3.7329065420199186' vs '3.7880855828989297'
+     timing: column 'BBN_compute_time' differs in 1 row(s); first '10.47440837486647' vs '9.318350333953276'
+     timing: column 'NP_compute_time' differs in 1 row(s); first '0.0014967499300837517' vs '0.0016226251609623432'
+one-loop-measured-v1/A=1/csv/M=2.4353e-06eV_n=1/data.csv: differs only in timing columns
+     timing: column 'scalar_compute_time' differs in 1 row(s); first '4.301705291960388' vs '4.352782582864165'
+     timing: column 'BBN_compute_time' differs in 1 row(s); first '9.673551083076745' vs '8.802365917013958'
+     timing: column 'NP_compute_time' differs in 1 row(s); first '0.001448625000193715' vs '0.0016995840705931187'
+one-loop-measured-v1/A=10/csv/M=0.00097413eV_n=1/data.csv: differs only in timing columns
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.2138003748841584' vs '1.2324224170297384'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '7.796648500021547' vs '7.978976542130113'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0016648329328745604' vs '0.0017507909797132015'
+other files byte-identical: 31, differing only in timing columns: 8, of 39
+RESULT: every file equal byte for byte or in all but named timing columns, histories.csv once its model column is removed

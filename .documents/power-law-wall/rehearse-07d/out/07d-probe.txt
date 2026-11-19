@@ -1,0 +1,45 @@
+2026-11-19 09:29:53,406	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-19 09:29:53,461	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+tree root (driver's cwd, realpath): /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall
+job py_driver_sys_path: ['/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/.documents/power-law-wall/rehearse-07d', '/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall']
+== driver (pid 48771)
+   ScalarHistory: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/ObjectFactories/__init__.py
+   EOS_CSV: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/CosmologyModels/GenericEOS/Xav_EOS_data.csv
+   PRyMrates: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/PRyMrates
+   VERSION_LABEL: 2026.14.0
+   FINGERPRINT_FORMAT: 8
+   cwd: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall
+   EOS_CSV_SHA256: 690090c86e285f3ee30d03244a2c242dd2b5b3c3f405e4f94229b0e481d0119d
+   PRyMrates_files: 84
+   PRyMrates_SHA256: 49b4cea2006dc6f99a357ca3b87f3f4234409b49c041d1ac6802486586bf9224
+   sys.path[:5]: ['/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/.documents/power-law-wall/rehearse-07d', '/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13']
+   PYTHONPATH: .
+== task (pid 48776)
+   ScalarHistory: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/ObjectFactories/__init__.py
+   EOS_CSV: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/CosmologyModels/GenericEOS/Xav_EOS_data.csv
+   PRyMrates: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/PRyMrates
+   VERSION_LABEL: 2026.14.0
+   FINGERPRINT_FORMAT: 8
+   cwd: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall
+   EOS_CSV_SHA256: 690090c86e285f3ee30d03244a2c242dd2b5b3c3f405e4f94229b0e481d0119d
+   PRyMrates_files: 84
+   PRyMrates_SHA256: 49b4cea2006dc6f99a357ca3b87f3f4234409b49c041d1ac6802486586bf9224
+   sys.path[:5]: ['/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall', '/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/.documents/power-law-wall/rehearse-07d', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/workers', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip']
+   PYTHONPATH: None
+== actor (pid 48777)
+   ScalarHistory: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/ComputeTargets/ScalarHistory.py
+   ObjectFactories: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/ObjectFactories/__init__.py
+   EOS_CSV: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/CosmologyModels/GenericEOS/Xav_EOS_data.csv
+   PRyMrates: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/PRyMrates
+   VERSION_LABEL: 2026.14.0
+   FINGERPRINT_FORMAT: 8
+   cwd: /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall
+   EOS_CSV_SHA256: 690090c86e285f3ee30d03244a2c242dd2b5b3c3f405e4f94229b0e481d0119d
+   PRyMrates_files: 84
+   PRyMrates_SHA256: 49b4cea2006dc6f99a357ca3b87f3f4234409b49c041d1ac6802486586bf9224
+   sys.path[:5]: ['/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall', '/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/.documents/power-law-wall/rehearse-07d', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/thirdparty_files', '/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/_private/workers', '/opt/local/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip']
+   PYTHONPATH: None
+expected in every process: VERSION_LABEL 2026.14.0, FINGERPRINT_FORMAT 8, EOS_CSV_SHA256 690090c86e285f3ee30d03244a2c242dd2b5b3c3f405e4f94229b0e481d0119d, PRyMrates_files 84, PRyMrates_SHA256 49b4cea2006dc6f99a357ca3b87f3f4234409b49c041d1ac6802486586bf9224
+RESULT: every process imports the tree root code, in the tree root, and reads its data files, at the expected label, format and hashes (VERSION_LABEL 2026.14.0, FINGERPRINT_FORMAT 8, Xav_EOS_data.csv 690090c8…119d, PRyMrates/ 84 files 49b4cea2…9224)

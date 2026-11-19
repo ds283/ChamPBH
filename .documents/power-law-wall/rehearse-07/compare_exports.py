@@ -1,0 +1,358 @@
+"""
+power-law-wall prompt 07 §2.2, §2.4 and §2.5 (P65, P67, P68): export roots compared. Adapted from
+.documents/power-law-wall/export-06/compare_exports.py (R12's rule, mode --base) and from one-loop-drain 06's
+.documents/one-loop-drain/rehearse-06/compare_exports.py (the file-by-file mode). Stdlib only; it reads the two trees and
+writes nothing but stdout (prompt 07 sends it to a file under var/power-law-wall/07/). It opens no store.
+
+    ./venv/bin/python .documents/power-law-wall/rehearse-07/compare_exports.py ROOT_A ROOT_B
+    ./venv/bin/python .documents/power-law-wall/rehearse-07/compare_exports.py --base BASE_LABEL_ROOT TIP_MODEL_ROOT
+    ./venv/bin/python .documents/power-law-wall/rehearse-07/compare_exports.py --n1-subset ROOT_A ROOT_B
+
+- **File by file** (default; §2.2, §2.4's first item): every regular file under each root, by its path relative to the
+  root; the two lists must be equal, and each pair is compared byte for byte. Where two files differ they are read as
+  CSV: the headers and the row counts are compared, and every column with a differing cell is named, with its count and
+  its first difference, and said to hold a timing (TIMING, or a name ending in `time` or `_wall`) or not. Equal when
+  every pair is byte-identical or differs only in timing columns.
+- **--base** (§2.5, 06's rule): BASE_LABEL_ROOT is the base's `<output>/<label>`, TIP_MODEL_ROOT the tip's
+  `<output>/<label>/exponential`. Every file of the one is at the same path in the other and no file is in one only;
+  every pair is byte-identical, or differs only in timing columns (each named: two builds of one grid, unlike 06's one
+  store exported by two trees, carry their own compute times in data.csv), except `histories.csv`, whose tip copy with its `model` column removed (the csv module,
+  with the writer's default settings, as extract_common.write_histories_csv writes) equals the base's byte for byte,
+  with `model` directly after `n` and `exponential` in every row.
+- **failure reasons** (every mode), under the user's ruling (a) on prompt 07's §2.2 stop (2026-11-16): a cell of a
+  `failure_reason` or `failure_reasons` column that differs is equal when, with main.py's history label (the
+  parenthesised name after the reason's first word, up to the first "): ") masked in each, the shorter is a prefix of
+  the longer (production cuts a reason to 256 characters, label included). Such a column is named as a masked label,
+  never hidden, and accepted as a timing column is.
+- **--n1-subset** (§2.4's second item): ROOT_A is `mixed`'s inverse-power root (n = 1 only), ROOT_B `pl`'s (n = 1 and 2).
+  Every file of A is at the same path in B. A row file (one with an `n` column in its header: `histories.csv` and
+  `quanta_histories*.csv` at the root) equals, cell for cell, B's header and B's rows with n = 1, in their order; every
+  other file of A equals B's byte for byte, or differs only in timing or masked-label columns, each named. B's files not in A are counted, and each must lie under a path of n = 2
+  (a path component ending `_n=2`); a file of B under an n = 1 path missing from A is a difference.
+
+`--exclude GLOB …` (any mode) leaves out of both trees every file whose base name matches a glob, and prints how many
+were left out under each root: prompt 07 runs the quanta tools (R5) on the tip's roots only, so the base rule is taken
+over the plot scripts' files with `--exclude 'quanta_*'`.
+
+Exit 0 when the mode's rule holds; 1 otherwise.
+"""
+
+import argparse
+import csv
+import fnmatch
+import hashlib
+import io
+import re
+import sys
+from pathlib import Path
+
+TIMING = {
+    "compute_time",
+    "mean_RHS_time",
+    "max_RHS_time",
+    "min_RHS_time",
+    "NP_compute_time",
+    "BBN_compute_time",
+    "wall",
+}
+
+
+def is_timing(col):
+    return col in TIMING or (
+        bool(re.search(r"(time|_wall)$", col)) and not col.startswith("log_T")
+    )
+
+
+EXCLUDE = []
+
+
+def files(root: Path):
+    out = sorted(str(p.relative_to(root)) for p in root.rglob("*") if p.is_file())
+    if EXCLUDE:
+        gone = [
+            f for f in out if any(fnmatch.fnmatch(Path(f).name, g) for g in EXCLUDE)
+        ]
+        if gone:
+            print(
+                f"excluded under {root} by --exclude {' '.join(EXCLUDE)}: {len(gone)} files"
+            )
+        out = [f for f in out if f not in gone]
+    return out
+
+
+def rows(data: bytes):
+    return list(csv.reader(io.StringIO(data.decode(), newline="")))
+
+
+def sha(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+REASON_COLUMNS = ("failure_reason", "failure_reasons")
+LABEL = re.compile(r"^(\S+ \()(.*?)(\): )")
+
+
+def mask_label(reason):
+    """main.py's history label in a failure reason masked (the user's ruling (a) on prompt 07's §2.2 stop)."""
+    return LABEL.sub(r"\1<label>\3", reason, count=1)
+
+
+def label_equal(u, v):
+    """Two reason cells equal once the label is masked, to the shorter of the two (256-character) cuts."""
+    mu, mv = mask_label(u), mask_label(v)
+    k = min(len(mu), len(mv))
+    return mu[:k] == mv[:k]
+
+
+def cell_equal(col, u, v):
+    return u == v or (
+        col in REASON_COLUMNS and bool(u) and bool(v) and label_equal(u, v)
+    )
+
+
+def explain(a: bytes, b: bytes):
+    try:
+        ra, rb = rows(a), rows(b)
+    except Exception as e:  # noqa: BLE001 - a file that is not CSV text differs plainly
+        return [f"not comparable as CSV ({type(e).__name__})"], False
+    out, timing_only = [], True
+    if not ra or not rb or ra[0] != rb[0]:
+        return ["headers differ"], False
+    head = ra[0]
+    if len(ra) != len(rb):
+        out.append(f"row counts differ: {len(ra) - 1} vs {len(rb) - 1}")
+        timing_only = False
+    cols = {}
+    masked = {}
+    for x, y in zip(ra[1:], rb[1:]):
+        for i, (u, v) in enumerate(zip(x, y)):
+            if u != v:
+                n, first = cols.get(i, (0, (u, v)))
+                cols[i] = (n + 1, first)
+                if not cell_equal(head[i], u, v):
+                    masked[i] = False
+                else:
+                    masked.setdefault(i, True)
+    for i, (n, (u, v)) in sorted(cols.items()):
+        if is_timing(head[i]):
+            tag = "timing"
+        elif head[i] in REASON_COLUMNS and masked.get(i):
+            tag = "label (equal once main.py's label is masked, to the shorter cut; ruling (a))"
+        else:
+            tag = "DIFFERENCE"
+        if tag == "DIFFERENCE":
+            timing_only = False
+        out.append(
+            f"{tag}: column {head[i]!r} differs in {n} row(s); first {u!r} vs {v!r}"
+        )
+    if not cols and len(ra) == len(rb):
+        out.append("bytes differ but every cell is equal (line endings or quoting)")
+        timing_only = False
+    return out, timing_only
+
+
+def by_file(ra: Path, rb: Path) -> int:
+    fa, fb = files(ra), files(rb)
+    only_a, only_b = sorted(set(fa) - set(fb)), sorted(set(fb) - set(fa))
+    pairs = sorted(set(fa) & set(fb))
+    print(
+        f"files: A {len(fa)}, B {len(fb)}, in both {len(pairs)}, only A {len(only_a)}, only B {len(only_b)}"
+    )
+    for f in only_a:
+        print(f"  only A: {f}")
+    for f in only_b:
+        print(f"  only B: {f}")
+    ok = not only_a and not only_b
+    identical = timing = differ = 0
+    by_name = {}
+    for f in pairs:
+        a, b = (ra / f).read_bytes(), (rb / f).read_bytes()
+        t = by_name.setdefault(Path(f).name, [0, 0, 0])
+        if a == b:
+            identical += 1
+            t[0] += 1
+            continue
+        lines, timing_only = explain(a, b)
+        if timing_only:
+            timing += 1
+            t[1] += 1
+        else:
+            differ += 1
+            t[2] += 1
+            ok = False
+        print(f"  {f}:")
+        for line in lines:
+            print(f"     {line}")
+    print("per file name (identical / timing only / different):")
+    for name, (i, tm, d) in sorted(by_name.items()):
+        print(f"  {name}: {i} / {tm} / {d}")
+    print(
+        f"pairs compared: {len(pairs)}; byte-identical {identical}; differ only in timing columns {timing}; differ {differ}"
+    )
+    print(
+        f"RESULT: {'every pair byte-identical or differing only in timing columns, no file in one only' if ok else 'NOT EQUAL (see above)'}"
+    )
+    return 0 if ok else 1
+
+
+def without_column(data: bytes, column: str):
+    rs = rows(data)
+    header = rs[0]
+    k = header.index(column)
+    out = io.StringIO(newline="")
+    writer = csv.writer(out)
+    for row in rs:
+        writer.writerow(row[:k] + row[k + 1 :])
+    return header, rs, k, out.getvalue().encode()
+
+
+def base_rule(base: Path, tip: Path) -> int:
+    ok = True
+    fb, ft = files(base), files(tip)
+    print(f"base: {len(fb)} files; tip: {len(ft)} files")
+    only_b, only_t = sorted(set(fb) - set(ft)), sorted(set(ft) - set(fb))
+    if only_b or only_t:
+        print(f"paths differ; only in the base: {only_b}; only in the tip: {only_t}")
+        ok = False
+    else:
+        print("the paths are the same, file for file")
+    identical = timing = 0
+    for rel in sorted(set(fb) & set(ft)):
+        b, t = (base / rel).read_bytes(), (tip / rel).read_bytes()
+        if rel == "histories.csv":
+            header, rs, k, stripped = without_column(t, "model")
+            after_n = k == header.index("n") + 1
+            cells = sorted({row[k] for row in rs[1:]})
+            same = stripped == b
+            print(
+                f"{rel}: model at column {k} (after n: {after_n}), cells {cells}, rows {len(rs) - 1}; "
+                f"with model removed: {'IDENTICAL' if same else 'DIFFERS'} ({len(stripped)} and {len(b)} bytes; "
+                f"sha256 {sha(stripped)[:16]} and {sha(b)[:16]})"
+            )
+            if not (same and after_n and cells == ["exponential"]):
+                print("  histories.csv differs beyond the model column")
+                ok = False
+            continue
+        if b == t:
+            identical += 1
+        else:
+            lines, accepted = explain(b, t)
+            if accepted:
+                timing += 1
+            else:
+                ok = False
+            print(
+                f"{rel}: {'differs only in timing columns' if accepted else 'DIFFERS'}"
+            )
+            for line in lines:
+                print(f"     {line}")
+    print(
+        f"other files byte-identical: {identical}, differing only in timing columns: {timing}, of {len(set(fb) & set(ft)) - ('histories.csv' in fb)}"
+    )
+    print(
+        f"RESULT: {'every file equal byte for byte or in all but named timing columns, histories.csv once its model column is removed' if ok else 'NOT EQUAL (see above)'}"
+    )
+    return 0 if ok else 1
+
+
+def n1_subset(ra: Path, rb: Path) -> int:
+    ok = True
+    fa, fb = files(ra), files(rb)
+    missing = [f for f in fa if f not in fb]
+    extra = [f for f in fb if f not in fa]
+    print(
+        f"files: A {len(fa)}, B {len(fb)}; A's missing in B {len(missing)}; B's not in A {len(extra)}"
+    )
+    for f in missing:
+        print(f"  MISSING in B: {f}")
+        ok = False
+    not_n2 = [
+        f for f in extra if not any(part.endswith("_n=2") for part in Path(f).parts)
+    ]
+    print(
+        f"B's files not in A under an n = 2 path: {len(extra) - len(not_n2)}; elsewhere: {len(not_n2)}"
+    )
+    for f in not_n2:
+        print(f"  B only, not under an n = 2 path: {f}")
+        ok = False
+    identical = row_files = timing = 0
+    for rel in fa:
+        if rel in missing:
+            continue
+        a, b = (ra / rel).read_bytes(), (rb / rel).read_bytes()
+        ha = rows(a)[0] if rel.endswith(".csv") and a else []
+        if "n" in ha:
+            ra_rows, rb_rows = rows(a), rows(b)
+            k = rb_rows[0].index("n")
+            want = [rb_rows[0]] + [r for r in rb_rows[1:] if r[k] == "1"]
+            head = rb_rows[0]
+            exact = ra_rows == want
+            same = len(ra_rows) == len(want) and ra_rows[:1] == want[:1]
+            nmask = 0
+            for x, y in zip(ra_rows[1:], want[1:]):
+                for c, u, v in zip(head, x, y):
+                    if u != v:
+                        if cell_equal(c, u, v):
+                            nmask += 1
+                        else:
+                            same = False
+            if not exact and same:
+                print(
+                    f"{rel}: {nmask} failure-reason cell(s) equal only once main.py's label is masked, to the shorter cut "
+                    "(ruling (a))"
+                )
+            row_files += 1
+            print(
+                f"{rel}: a row file; A {len(ra_rows) - 1} rows, B {len(rb_rows) - 1} rows of which n = 1: "
+                f"{len(want) - 1}, n = 2: {sum(1 for r in rb_rows[1:] if r[k] == '2')}; A equal to B's n = 1 rows "
+                f"in order: {same}"
+            )
+            ok &= same
+            continue
+        if a == b:
+            identical += 1
+        else:
+            lines, accepted = explain(a, b)
+            if accepted:
+                timing += 1
+            else:
+                ok = False
+            print(
+                f"{rel}: {'differs only in timing or masked-label columns' if accepted else 'DIFFERS'}"
+            )
+            for line in lines:
+                print(f"     {line}")
+    print(
+        f"row files: {row_files}; other files of A byte-identical to B's: {identical}, differing only in timing or "
+        f"masked-label columns: {timing}, of {len(fa) - len(missing) - row_files}"
+    )
+    print(
+        f"RESULT: {'A is B at n = 1: every file equal (timing and masked-label columns named), the row files B rows at n = 1; B alone holds n = 2' if ok else 'NOT EQUAL (see above)'}"
+    )
+    return 0 if ok else 1
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    p.add_argument("root_a", type=Path)
+    p.add_argument("root_b", type=Path)
+    g = p.add_mutually_exclusive_group()
+    g.add_argument("--base", action="store_true")
+    g.add_argument("--n1-subset", action="store_true")
+    p.add_argument("--exclude", nargs="+", default=[], metavar="GLOB")
+    args = p.parse_args(argv)
+    EXCLUDE.extend(args.exclude)
+    print(f"A: {args.root_a}")
+    print(f"B: {args.root_b}")
+    if args.base:
+        print("mode: --base (06's rule)")
+        return base_rule(args.root_a, args.root_b)
+    if args.n1_subset:
+        print("mode: --n1-subset")
+        return n1_subset(args.root_a, args.root_b)
+    print("mode: file by file")
+    return by_file(args.root_a, args.root_b)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

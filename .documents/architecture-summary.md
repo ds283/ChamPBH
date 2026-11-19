@@ -330,6 +330,20 @@ ChamPBH/
 > their names and gain the code that §7.2's map of this date lists. The campaign's scripts and outputs are under
 > `.documents/one-loop-drain/`, and the side-campaign `crossover`'s under `prompts/one-loop-drain/source/`, outside the tree above.
 
+> **Note, 2026-11-19 (`power-law-wall`, prompt 08): the tree above gains four files.**
+> `CosmologyConcepts/Models/InversePowerModel.py` (the inverse-power-law model, V = V₀[1 + (M/φ)ⁿ]; §8.4a's note of this
+> date), `CosmologyConcepts/Models/model_options.py` (the potentials as the drivers name them, `exponential` and
+> `inverse-power`, each with its class, named once; §9's note of this date), `ObjectFactories/InversePowerModel.py` (its
+> table's factory; §4.2's note of this date) and `inverse_power.yaml`, beside `exponential.yaml`, a run configuration that
+> names `models: [inverse-power]` (`exponential.yaml` gained `models: [exponential]`). `ComputeTargets/ScalarHistory.py`,
+> `ComputeTargets/quanta_spectrum.py`, `CosmologyConcepts/drain_model.py`, `CosmologyConcepts/Models/AbstractModel.py`,
+> `CosmologyConcepts/Models/ExponentialModel.py`, `CosmologyConcepts/Models/model_ids.py`, `ObjectFactories/ScalarHistory.py`,
+> `config/`, `main.py`, the plot scripts, `plot_inputs.py`, `extract_common.py`, `pipeline_selection.py`,
+> `RunDrivers/registered_run.py`, `CosmologyConcepts/alpha_value.py`, `ObjectFactories/AdiabaticHistory.py`, `BBNData.py` and `alpha_value.py`, and ten tools keep their names and gain the code that the notes of this date in §7.2,
+> §8.4a and §9 map. The campaign's scripts and outputs are under `.documents/power-law-wall/`, and its research scripts under
+> `prompts/power-law-wall/source/`, outside the tree above; the measurements are
+> [`power-law-wall-verification.md`](power-law-wall-verification.md), and the two walls as they stand its §12.
+
 ---
 
 ## 3. The Ray Distributed Computing Layer
@@ -519,6 +533,16 @@ factory registered it, is in neither since `dk-and-rpk-migration` P8 (prompt 08)
 > `ScalarHistoryBounce` (`sqla_ScalarHistoryBounce_factory`, sharded by β, batch size 250, in the drop group `scalar-history`
 > before `ScalarHistory`) follows `ScalarHistoryValue`. §7.2's note of 2026-11-06 (03) describes both. The table above, and the
 > note of 2026-10-26, describe the registry as it was.
+
+> **Note, 2026-11-19 (`power-law-wall`, prompt 08): the registry has 24 entries.** `config/datastore.py:104`, read at
+> `278c58d`: `InversePowerModel` (`sqla_InversePowerModel_factory`, `ObjectFactories/InversePowerModel.py`) follows
+> `ExponentialModel`, sharded by β (`config/sharding.py:36`), batch size 50 (`config/datastore.py:147`), in no drop group,
+> with the exponential's columns and spec, keyed (M, n, β) (`power-law-wall` prompt 05, README §6.9 P33–P34).
+> `FINGERPRINT_FORMAT` is 8 (`config/fingerprint.py:100`), whose golden differs from format 7's only by the format, the new
+> class's empty entry and the top digest (`ObjectFactories/tests/data/store_fingerprint_power-law-wall-05.json`);
+> `VERSION_LABEL` is 2026.14.0 (`config/version.py:134`). A store of format 7 lacks the table, and this tree refuses it
+> (`review-remediation-verification.md` §4.22 point 1). The table above, and the notes before this one, describe the
+> registry as it was.
 
 ### 4.3 What the package does for a get, a store and a validate
 
@@ -1605,6 +1629,44 @@ SampleValues = namedtuple("SampleValues", [
 > 9. **The tool route.** `tools/history_and_bbn.py --drain-law {fixed,one_loop}` (`:430`; `--alpha` carries A under `one_loop`)
 >    and its `drain` line. Notes 01, 02c.
 
+> **Note, 2026-11-19 (`power-law-wall`, prompt 08): the drain on either wall, read at `278c58d`.** The order in which a
+> history meets these pieces is `numerical-strategies.md` §6.13; the two walls' laws, with every constant's source, are
+> `power-law-wall-verification.md` §12. The prompts' logs (`prompts/power-law-wall/logs/`) hold the detail; nothing below
+> repeats them.
+> - **The drain's dispatch.** Under the one-loop law `drain_alpha_effective` (`ComputeTargets/ScalarHistory.py:1881`) forms
+>   α_eff = min(`DRAIN_ALPHA_CAP`, A f) · w_gate with f = `model.drain_fraction(regime, ℓ, ln E, ln R)` (`:1906`), the
+>   model's own fraction, always; it takes the model and ln E as keyword arguments, with no default. `ScalarHistory.py`
+>   holds no potential's law: v1's `drain_fraction`, `drain_S_of_L` and the `DRAIN_*` constants of the notes above went
+>   with `power-law-wall` 07c, the S table into `ExponentialModel` (§8.4a's note of this date). `check_drain_law_model`
+>   (`:1777`) now requires the model's `_drain_fraction` and its `one_loop_drain_model`, not `_drain_L`, which is optional
+>   and, where a model defines it, recorded per candidate (`drain_law_inputs`, `:1863`; the bounce column `L`, NULL on the
+>   power wall). The record's `model` is the model's `one_loop_drain_model` under the one-loop law (`:2146`–`:2148`).
+>   So the notes of 2026-11-05 and 2026-11-07 above, which put the law and S(L) in this module and `DRAIN_MODEL_ONE_LOOP`
+>   (`"one-loop-measured-v1"`) in the record, are of the tree before `power-law-wall` 07c.
+> - **The step-start assessment** (`:3101`–`:3104`) and the regimes (`drain_regime`, `:1833`; `_assessed_peak`, `:4127`) are
+>   unchanged in form and read the model through its hooks: `classical_turning_point` and `one_loop_turnaround` take
+>   k_ex = ½E^{1/2}|V‴/V″| from the model's `_pulse_rate_hook`, on every potential and at every use (§8.4a's note of this
+>   date). Every stored k_ex, ℓ, ℓ_t, peak, ln q and margin carries that k_ex since 2026.13.0.
+> - **The key's drain model at entry** (P36). `check_key_drain_model` (`:1811`), called when a `ScalarHistory` is constructed,
+>   before any lookup or computation, refuses a key whose `alpha_value.drain_model` is neither `"fixed"` nor the model's
+>   `one_loop_drain_model`, with a `ValueError` naming both; where the model has no one-loop law at its n its own
+>   `ValueError` propagates. The guard in `ScalarHistory.store()` (03's note above) stays.
+> - **The drain models** (`CosmologyConcepts/drain_model.py:65`–`:89`): `"fixed"`, `"one-loop-exponential-v2"` and
+>   `"one-loop-inverse-power-v1"` (`DRAIN_MODELS`, in that order); `"one-loop-measured-v1"` and `"one-loop-measured-pl-v1"`
+>   are `RETIRED_DRAIN_MODELS`, which `law_of` (`:108`) refuses with a message naming the ruling and the successor.
+>   `model_of_law` is gone (04's note in §14 names it). So 03's note above, "`"one-loop-measured-v1"`, the measured law and
+>   its version", is of the tree before 07c.
+> - **The store** (`ObjectFactories/ScalarHistory.py:528`–`:546`): a `ScalarHistory`'s `model` is the polymorphic pair
+>   (`model_type`, `model_serial`), `model_type` 1 for `ExponentialModel` and 2 for `InversePowerModel`; the two tables'
+>   serials repeat each other, so every lookup and every raw join matches `model_type` (§14's note of this date).
+> - **The spectrum** (`ComputeTargets/quanta_spectrum.py`, read only by the post-processing). `SPECTRUM_MODEL =
+>   "U4-U17-v1"` and its fitted constants (`X_PEAK`, `KAPPA`, `KAPPA_FIT_L`, `BETA2_MAX_BY_L`), named by item 7 of the
+>   2026-11-07 note above and by `one-loop-drain` 05's note in §14, are of the tree before `power-law-wall` 07c. The module
+>   now holds `SPECTRUM_MODELS` (`:155`–`:159`), one measured table per wall in x = k/k_ex with the one k_ex
+>   (`R8-exponential-v2`, `R8-power-n1-v2`, `R8-power-n2-v2`; `_TABLES`, `:724`), and `X_STAR` = 0.005615853347600149
+>   (`:188`). Each quanta row reads the wall that its model's `spectrum_wall` names, from the export's `model` and `n`.
+>   Verification §12.4. *(Added by the orchestrator's review of prompt 08.)*
+
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 
 Computes the adiabatic perturbation parameter Q (which determines whether the chameleon field is adiabatically tracking its minimum). Requires a `ScalarHistoryProxy` as input.
@@ -1940,6 +2002,42 @@ class AbstractModel(DatastoreObject):
 >   `ComputeTargets/tests/test_margins.py`; `numerical-strategies.md` §6.8 has the definitions and
 >   the coverage bound.
 
+> **Note, 2026-11-19 (`power-law-wall`, prompt 08): two models, and the hooks every model now has.** Read at `278c58d`;
+> `power-law-wall-verification.md` §12.1–§12.4 gives each formula with its line, and the prompts' logs the detail.
+> - **`InversePowerModel(store_id, M, n, beta, units)`** (`CosmologyConcepts/Models/InversePowerModel.py:117`): V = V₀[1 +
+>   (M/φ)ⁿ], A = exp(β(φ − φ_ref)/M_P), any integer n ≥ 1; `type_id` `INVERSE_POWER_MODEL = 2` (`model_ids.py:24`), shard key
+>   β, normalization ln V₀. Its hooks are formed from ln u = n ln(M/φ) so that nothing overflows; φ ≤ 0 is a
+>   `ComputationFailureError` naming the hook (R4). `_log_V_floor` is ln V₀, `reflects_at_origin` True, and its `seed` is
+>   the tracking or static analytic minimum at every n (`:398`), where the exponential's is analytic at n = 1 only.
+> - **The hooks, each with no generic default** (the base raises `NotImplementedError` naming the class; none is an
+>   `abstractmethod`, so a test stand-in without it still constructs), which `ExponentialModel` and `InversePowerModel`
+>   both implement:
+>   - `_d3_logV_dphi3(normalization, φ)` (`AbstractModel.py:527`), (ln V)‴; read by the tests only since 07c2;
+>   - `_pulse_rate_hook(normalization, φ)` (`:545`), |V‴/V″| in closed form: (n + 2)/φ on the power wall
+>     (`InversePowerModel.py:292`), [(n + 1)(n + 2) + 3n(n + 1)u + n²u²]/([(n + 1) + nu]φ) on the exponential
+>     (`ExponentialModel.py:352`);
+>   - `_drain_fraction(normalization, regime, ℓ, ln E, ln R)` (`:614`), the model's own one-loop fraction;
+>   - `one_loop_drain_model` (`:645`), the drain model its one-loop law is stored under;
+>   - `spectrum_wall` (`:661`), the wall of its quanta spectrum, read by the post-processing only;
+>   - `_drain_L(normalization, ln E)` (`:591`) is optional: the exponential defines it (`ExponentialModel.py:238`), the power
+>     wall does not.
+>   **Which raise at which n:** `one_loop_drain_model` and `_drain_fraction` raise `ValueError` at n other than 1 and 2 on
+>   both models (R7 on the power wall, U14 on the exponential); `spectrum_wall` raises at n other than 1 and 2 on the power
+>   wall and answers the exponential's wall at every n on the exponential.
+> - **One k_ex** (R13–R16). `classical_turning_point` (`AbstractModel.py:807`) and `one_loop_turnaround` (`:891`) take
+>   ln k_ex = ln|V‴/V″| + ½ ln E − ln 2 from `_pulse_rate` (`:789`), which calls the model's hook and refuses a rate that is
+>   zero, negative or not finite. The tuples' fields `lambda_t` and `lambda_ta` are `pulse_rate_t` and `pulse_rate_ta`
+>   (`:78`–`:98`), holding |V‴/V″|. So the note of 2026-10-29 above, "λ_t = −d ln V/dφ; k_ex = λ_t E^{1/2}/2", and
+>   `lambda_ta`, are of the tree before 07c. The refusal of a wall that does not repel stays on −d ln V/dφ ≤ 0. The fixed
+>   point runs at most `ONE_LOOP_MAX_ITERATIONS` = 400 times (`:127`; 100 before 07c).
+> - **The S table moved** (P99): `DRAIN_EXP_S_TABLE_L`, `_S` and `drain_S_of_L` are in `ExponentialModel.py:88`–`:147`,
+>   unchanged in value, beside v2's constants (`:74`–`:79`) and `one_loop_fraction` (`:150`); the power wall's S_n and f_n
+>   are in `InversePowerModel.py:97`–`:103`.
+> - **`model_ids.py`** gains `INVERSE_POWER_MODEL = 2`; **`model_options.py`** (new) names the potentials once:
+>   `MODEL_EXPONENTIAL` `"exponential"` and `MODEL_INVERSE_POWER` `"inverse-power"` with their classes (`MODEL_CLASSES`,
+>   `:46`), `model_table`, and `reference_model`, `one_loop_drain_model`, `one_loop_drain_model_over` and `spectrum_wall`
+>   (`:91`–`:137`), which read a potential's hooks from a model built at M = M_P and β = 1, which the hooks do not read.
+
 ### 8.5 Cosmological Models (`CosmologyModels/`)
 
 `BaseCosmology` is the abstract base:
@@ -2142,6 +2240,32 @@ as before; prompt 08 moves it to the seed's φ_ref.
 > - **`tools/bbn_from_store.py`**, the one reader that selects `ScalarHistory` rows by SQL rather
 >   than through the factory, asks for successes only (`and sm.failure = 0`, `:217`), so a retried
 >   history is found once. A key holding only a failure is now "no ScalarHistory with …" there.
+
+> **Note, 2026-11-19 (`power-law-wall`, prompt 08): the potentials of a run.** Read at `278c58d`; the campaign's logs 05–07d
+> hold the detail. It amends the grid of the notes of 2026-10-26 above, which have one `ExponentialModel` per (M, n, β).
+> - **`--models`** (`config/argument_parser.py:486`; YAML `models`), one or more of `exponential` and `inverse-power`
+>   (`model_options.py`), default `[exponential]`, the one place a potential is named without being asked for, so a command
+>   without the option keeps its meaning. `exponential.yaml` names `models: [exponential]` and `inverse_power.yaml`
+>   `models: [inverse-power]`, with the same keys otherwise. `main.py` and both plot scripts take it.
+> - **`--n-values` is one list for every potential of a run**: a run of both potentials builds, and a plot run of both reads,
+>   each potential at every n of the list, so a run of both at n = 1 and 2 builds the exponential at n = 2 as well (§14's
+>   note of this date).
+> - **The grid.** For each potential of `--models`, in the order given, `main.py` builds its (M, n, β) rows in its own table
+>   (`convert_to_model(model_table(potential), …)`, `main.py:1193`) and runs one pipeline per alpha row of its own: the
+>   fixed rows, shared by every potential, then its `--A-values` rows, looked up under its own one-loop drain model
+>   (`one_loop_drain_model_over`, `main.py:1021`). A potential whose n name no one-loop law (n other than 1 and 2 on either)
+>   is refused with `--A-values` at parse, exit 2, before Ray. A run of one potential builds its rows, keys and pipelines in
+>   the order of before.
+> - **The exports.** Every potential is exported under `<output>/<label>/<model>/` (`extract_common.export_root`,
+>   `extract_common.py:131`), each in a pass of its own; below it nothing moved (`alpha=<α>/`, `<drain_model>/A=<A>/`,
+>   `csv/`, `plots/`, `M=…eV_n=…`). Every `histories.csv` has `model` directly after `n`. A potential of `--models` with no
+>   stored row is refused by the plot scripts (`PlotOptionNotStored`, exit 2). The quanta tools take each row's spectrum
+>   from its `model` and `n` and refuse a `histories.csv` without the column. So the export root `<output>/<label>/` of the
+>   notes in §14 (`one-loop-drain` 04, 05, 07) is now a potential's root, one directory down.
+> - **The registered run's scope** names the potentials, `models <values>`, for every run (`RunDrivers/registered_run.py:684`).
+> - **The store:** `ObjectFactories/InversePowerModel.py` (§4.2's note of this date), `FINGERPRINT_FORMAT` 8, `VERSION_LABEL`
+>   2026.14.0. A store of an earlier label is not extended (`config/version.py`); what the tip does with one is
+>   `review-remediation-verification.md` §4.22 point 1.
 
 ---
 
@@ -2491,3 +2615,20 @@ work_pool.run()
 >   A fixed-law row already in a store is left as it is and is not read. The wrapper's scope reads `α none` before the A
 >   part (`RunDrivers/registered_run.py`, `describe_scope`). The tests are `tools/tests/test_no_alpha_values.py` and
 >   `RunDrivers/tests/test_no_alpha_values.py`.
+
+> **Note, 2026-11-19 (`power-law-wall`, prompt 08): three things a reader of two potentials should know.**
+> - **The two model tables' serials repeat each other.** `ExponentialModel` and `InversePowerModel` each number their rows
+>   from 1, so a `ScalarHistory`'s `model_serial` alone does not say which model it names: every raw SQL join of a model
+>   table filters `model_type` (1 or 2) as well (`power-law-wall` 05, P37), and a factory lookup goes through the model's
+>   own table. Their fingerprint digests are equal where their rows are (07's mixed store, `132ac557…`), so the fingerprint
+>   does not tell the two tables apart (`power-law-wall-verification.md` §6.11).
+> - **`--n-values` is shared by every potential of a run.** `main.py --models exponential inverse-power --n-values 1 2`
+>   builds the exponential at n = 2 too, and with `--A-values` runs its one-loop law there (v2's rise at n = 2, which no
+>   history of the campaign ran). A build of the power law at n = 1, 2 beside the exponential at n = 1 is two runs, and a
+>   plot run of a store holding the potentials at different n is one run per potential (log 06 D1, log 07 §7).
+> - **The retired drain models are refused, not mapped.** `"one-loop-measured-v1"` and `"one-loop-measured-pl-v1"` are known
+>   names (`RETIRED_DRAIN_MODELS`, `CosmologyConcepts/drain_model.py:77`–`:89`), and `law_of` refuses them, so an option, a
+>   key or an alpha label naming either is refused, never mapped to its successor. A store of 2026.12.0 or earlier holds
+>   them. `main.py --inventory`, which interprets no drain model, lists such a store's `alpha_value` rows as stored, the
+>   retired names included (`power-law-wall-verification.md` §13.3); a tip plot script exits at its read-only open, on the
+>   store's other label (§11.9 there; `review-remediation-verification.md` §4.22 point 1).

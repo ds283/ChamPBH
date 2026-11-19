@@ -1,0 +1,5 @@
+The fingerprint differences of base against exp, explained from the two trees' inventory_spec()s:
+- version: its spec's one leaf is label (ObjectFactories/version.py:37 at both), the VERSION_LABEL, 2026.11.0 at a7e0978 and 2026.12.0 at the tip (U6, prompt 05).
+- ScalarHistory, AdiabaticHistory, BBNData: each spec names Parent("version", "version") at both trees (ScalarHistory.py:532/535, AdiabaticHistory.py:132/133, BBNData.py:130/131), so each identity carries the version's label; ScalarHistory's spec also gains the model type 2 map (prompt 05).
+- every other class names no version parent, and every one is equal in count and digest.
+- InversePowerModel: named by the tip only (format 8), count 0, the empty digest (P40).

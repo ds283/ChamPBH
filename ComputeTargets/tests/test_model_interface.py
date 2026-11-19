@@ -75,7 +75,7 @@ _units = Planck_units()
 Mp = _units.PlanckMass
 
 # the methods the integrator reads: V's, and the conformal factor's
-POTENTIAL_METHODS = ("log_V", "d_logV_dphi", "d2_logV_dphi2")
+POTENTIAL_METHODS = ("log_V", "d_logV_dphi", "d2_logV_dphi2", "d3_logV_dphi3")
 COUPLING_METHODS = ("log_Omega", "Omega", "d_logOmega_dphi", "d2_logOmega_dphi2")
 
 PHI_REFS_OVER_MP = (0.0, 0.01, 0.0349624, 0.3, 5.0)
@@ -134,6 +134,19 @@ class _MinimalModel(AbstractModel):
 
     def _d2_logV_dphi2(self, normalization, phi) -> float:
         return 0.0
+
+    def _d3_logV_dphi3(self, normalization, phi) -> float:
+        # the third hook (power-law-wall prompt 07c): constant V
+        return 0.0
+
+    def _pulse_rate_hook(self, normalization, phi) -> float:
+        # the pulse-rate hook (power-law-wall prompt 07c2) as the composition of this model's own hooks, V'''/V over
+        # V''/V: constant V has V'' = 0, so it is 0/0 and raises ZeroDivisionError. The model does not reflect, so the
+        # turning points refuse it before reading any pulse rate
+        d1 = self._d_logV_dphi(normalization, phi)
+        d2 = self._d2_logV_dphi2(normalization, phi)
+        d3 = self._d3_logV_dphi3(normalization, phi)
+        return abs((d3 + d1 * (3.0 * d2 + d1 * d1)) / (d2 + d1 * d1))
 
     def _log_Omega(self, phi) -> float:
         return self._gamma * phi

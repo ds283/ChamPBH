@@ -1,0 +1,63 @@
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-16 20:30:39,847	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-16 20:30:39,876	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl.db" read-only with 16 shards (version label "2026.12.0", serial 1)
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=1, β=1.2; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=1, β=2.9; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.2; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.9; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e+12 eV, n=1, β=1.2; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e+12 eV, n=1, β=2.9; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e+12 eV, n=2, β=1.2; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e+12 eV, n=2, β=2.9; no history can use it; skipped
+!! plot: 8 of 24 InversePowerModel combinations of the stored M and β are not stored, and were skipped
+@@ plot_ScalarHistory: alpha values 0, 0.01, 0.1
+@@ plot_ScalarHistory: A values 0.05, 1, 10 (one-loop-measured-pl-v1)
+@@ plot_ScalarHistory: inverse-power (InversePowerModel): 16 model(s), exported under /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07/export-pl/QCD_Cosmology/inverse-power
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** GENERATING ScalarHistory DATA PRODUCTS
+(Datastore pid=411) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+(plot_ScalarHistory pid=494) @@ plot_ScalarHistory: scalar field history for Model=InversePowerModel(M=2.4353e-06eV,n=2,beta=2) is not available; skipping this item
+   -- ALL WORK ITEMS COMPLETE in time 4.17s
+      Queue summary: 16 lookup (avg 230.3/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** GENERATING ScalarHistory DATA PRODUCTS
+   -- ALL WORK ITEMS COMPLETE in time 1.21s
+      Queue summary: 16 lookup (avg 13.21/sec)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** GENERATING ScalarHistory DATA PRODUCTS
+   -- ALL WORK ITEMS COMPLETE in time 1.25s
+      Queue summary: 16 lookup (avg 12.79/sec)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-measured-pl-v1)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+   -- ALL WORK ITEMS COMPLETE in time 1.26s
+      Queue summary: 16 lookup (avg 12.74/sec)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-pl-v1)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+   -- ALL WORK ITEMS COMPLETE in time 2.09s
+      Queue summary: 16 lookup (avg 458.3/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-measured-pl-v1)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+(plot_ScalarHistory pid=500) @@ plot_ScalarHistory: scalar field history for Model=InversePowerModel(M=0.001Mp,n=1,beta=1.2) is not available; skipping this item [repeated 43x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+   -- ALL WORK ITEMS COMPLETE in time 1.17s
+      Queue summary: 16 lookup (avg 13.67/sec)
+      (no compute items were evaluated - all assets read from datastore)
+(plot_ScalarHistory pid=491) @@ plot_ScalarHistory: scalar field history for Model=InversePowerModel(M=0.001Mp,n=2,beta=2.9) is not available; skipping this item [repeated 15x across cluster]

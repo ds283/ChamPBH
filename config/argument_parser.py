@@ -8,7 +8,14 @@ from ComputeTargets.ScalarHistory import (
     DEFAULT_TUNING_MAX_INTEGRATIONS,
     DEFAULT_TUNING_TOLERANCE,
 )
-from CosmologyConcepts.drain_model import DRAIN_MODEL_ONE_LOOP, check_drain_model
+from CosmologyConcepts.drain_model import DRAIN_LAW_ONE_LOOP, check_drain_law
+from CosmologyConcepts.Models.model_options import (
+    MODEL_EXPONENTIAL,
+    MODEL_INVERSE_POWER,
+    MODEL_OPTIONS,
+    MODEL_POTENTIALS,
+    one_loop_drain_model_over,
+)
 from config.defaults import DEFAULT_ABS_TOLERANCE, DEFAULT_REL_TOLERANCE
 
 DEFAULT_LABEL = "ChamPBH-test"
@@ -115,6 +122,28 @@ NO_ALPHA_WITHOUT_A = (
 )
 
 
+def models_problem(namespace) -> Optional[str]:
+    """
+    None unless --A-values is given and a potential of --models has not exactly one one-loop drain model over the n of
+    --n-values, and otherwise the message that refuses the parse (power-law-wall prompt 06 §1.3; README §6.10 P47):
+    each potential's --A-values rows are looked up under its own one-loop drain model (AbstractModel.one_loop_drain_model,
+    through CosmologyConcepts.Models.model_options), so a potential with none at one of its n (inverse-power at n other
+    than 1 and 2), or with more than one, cannot be built or read under --A-values. Under the fixed law alone every n is
+    accepted for every potential.
+    """
+    if not getattr(namespace, "A_values", None):
+        return None
+    for potential in distinct_values(getattr(namespace, "models", None) or []):
+        try:
+            one_loop_drain_model_over(potential, getattr(namespace, "n_values", []))
+        except ValueError as e:
+            return (
+                f"--A-values needs one one-loop drain model for each potential of --models over the n of --n-values: "
+                f"{e}"
+            )
+    return None
+
+
 def drain_rows_problem(namespace) -> Optional[str]:
     """
     None if the parsed drain-law options name at least one row, and otherwise the message that
@@ -134,7 +163,8 @@ def drain_rows_problem(namespace) -> Optional[str]:
 class DriverArgumentParser(configargparse.ArgumentParser):
     """
     The drivers' parser. After configargparse's parse it checks the drain-law options with
-    `drain_rows_problem`, calling ``self.error`` on a refusal (exit 2, before any Ray; a parser
+    `drain_rows_problem`, and then each potential's one-loop drain model under --A-values with `models_problem`
+    (power-law-wall prompt 06), calling ``self.error`` on a refusal (exit 2, before any Ray; a parser
     whose ``error`` is replaced, RunDrivers/registered_run.py's, refuses with the same message), and
     under --no-alpha-values sets ``alpha_values`` to the empty list. Every reader of
     ``alpha_values`` then sees the fixed-law rows the run has, none under the flag, and a command
@@ -144,6 +174,8 @@ class DriverArgumentParser(configargparse.ArgumentParser):
     def parse_known_args(self, *args, **kwargs):
         namespace, unknown = super().parse_known_args(*args, **kwargs)
         problem = drain_rows_problem(namespace)
+        if problem is None:
+            problem = models_problem(namespace)
         if problem is not None:
             self.error(problem)
         if hasattr(namespace, _ALPHA_VALUES_GIVEN):
@@ -196,13 +228,14 @@ def drain_strength_A(text: str) -> float:
     """
     An argparse type for --A-values: the strength A of the one-loop drain law, finite and > 0, with no
     upper bound (one-loop-drain prompt 04, README §8.12 P33). The rules are CosmologyConcepts.drain_model's
-    (check_drain_model under the code's current one-loop model), stated once; its ValueError is re-raised as
+    (check_drain_law under the one-loop law, which every potential's one-loop drain model shares; power-law-wall
+    prompt 06 §1.3: the rule on A is the law's, not one model's), stated once; its ValueError is re-raised as
     an ArgumentTypeError so that argparse prints the message, and the option is named by argparse (exit 2,
     before any Ray). ``-0`` is refused as 0 is.
     """
     value = float(text) + 0.0
     try:
-        check_drain_model(DRAIN_MODEL_ONE_LOOP, value, "--A-values")
+        check_drain_law(DRAIN_LAW_ONE_LOOP, value, "--A-values")
     except ValueError as e:
         raise argparse.ArgumentTypeError(str(e)) from None
     return value
@@ -328,7 +361,9 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         nargs="+",
         default=None,
         help="one or more values of A, the strength of the one-loop drain law, finite and > 0 with no upper "
-        "bound: each names a history key (A, the code's current one-loop drain model) beside the "
+        "bound: each names a history key (A, the code's current one-loop drain model of each potential of "
+        "--models, its own: one-loop-exponential-v2 for exponential, one-loop-inverse-power-v1 for inverse-power, "
+        "each at n = 1, 2; a potential with none at an n of --n-values is refused at parse) beside the "
         "--alpha-values rows, which are looked up first and are unchanged. A is a key of every stored "
         "history, as alpha is. The default is none, so a run without it is the fixed-law run; --alpha-values "
         "keeps its default, so a run given only --A-values also builds, or reads, alpha = 0, natural mode "
@@ -443,8 +478,22 @@ def create_argument_parser() -> configargparse.ArgumentParser:
         type=positive_int,
         nargs="+",
         default=[1],
-        help="one or more values of the model's exponent n, V = V0 exp((M/phi)^n); n is part of "
-        "the model's key (default %(default)s; jordan-normalization prompt 08)",
+        help="one or more values of the model's exponent n, V = V0 exp((M/phi)^n) (exponential) or "
+        "V = V0 [1 + (M/phi)^n] (inverse-power); n is part of the model's key (default %(default)s; "
+        "jordan-normalization prompt 08; power-law-wall prompt 06)",
+    )
+    parser.add_argument(
+        "--models",
+        choices=MODEL_OPTIONS,
+        nargs="+",
+        default=[MODEL_EXPONENTIAL],
+        help="one or more potentials, each built, or read and exported, for every M, n and beta of the grid, in the "
+        f"order given: {MODEL_EXPONENTIAL}, ExponentialModel, {MODEL_POTENTIALS[MODEL_EXPONENTIAL]}; "
+        f"{MODEL_INVERSE_POWER}, InversePowerModel, {MODEL_POTENTIALS[MODEL_INVERSE_POWER]}; each with "
+        "A = exp(beta (phi - phi_ref)/M_P). The list is a key of nothing: each potential's rows are its own, in "
+        "its own table, and its exports go under <output>/<label>/<potential>/ (power-law-wall prompt 06; README "
+        "§6.10 R12). The default %(default)s is the one place a potential is named without being asked for, so "
+        "that a command without the option keeps its meaning",
     )
     parser.add_argument(
         "--log10-one-plus-z-high",

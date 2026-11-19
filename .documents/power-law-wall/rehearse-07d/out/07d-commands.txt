@@ -1,0 +1,90 @@
+## r2-exp-a
+07   (exp-a):    power-law-wall 07 R: run a of the exp store at the tip (exponential n 1; beta 1.2 2.0 2.9 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.05 1 10)
+07d-r2 (r2-exp-a): power-law-wall 07d R2 (restart): run a of the exp store at the tip, one k_ex (exponential n 1; beta 1.2 2.0 2.9 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.05 1 10)
+07:     --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-exp-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+07d-r2: --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-exp-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+differ only in: ['--database', '--job-name']  (2 tokens of 25)
+
+## r2-exp-b
+07   (exp-b):    power-law-wall 07 R: run b of the exp store at the tip (exponential n 1; beta 1.2 2.0 2.9 at M 1e-3 Mp, phi* 5, alpha 0)
+07d-r2 (r2-exp-b): power-law-wall 07d R2 (restart): run b of the exp store at the tip, one k_ex (exponential n 1; beta 1.2 2.0 2.9 at M 1e-3 Mp, phi* 5, alpha 0)
+07:     --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-exp-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+07d-r2: --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-exp-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+differ only in: ['--database', '--job-name']  (2 tokens of 20)
+
+## r2-exp-c
+07   (exp-c):    power-law-wall 07 R: run c of the exp store at the tip (exponential n 1; beta 2.0 at M 1e-33 1e-15 Mp, phi* 5, A 1, no fixed alpha)
+07d-r2 (r2-exp-c): power-law-wall 07d R2 (restart): run c of the exp store at the tip, one k_ex (exponential n 1; beta 2.0 at M 1e-33 1e-15 Mp, phi* 5, A 1, no fixed alpha)
+07:     --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-exp-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+07d-r2: --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-exp-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+differ only in: ['--database', '--job-name']  (2 tokens of 20)
+
+## r2-pl-a
+07   (pl-a):    power-law-wall 07 R: run a of the pl store at the tip (inverse-power n 1 2; beta 1.2 2.0 2.9 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.05 1 10)
+07d-r2 (r2-pl-a): power-law-wall 07d R2 (restart): run a of the pl store at the tip, one k_ex (inverse-power n 1 2; beta 1.2 2.0 2.9 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.05 1 10)
+07:     --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-pl-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+07d-r2: --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-pl-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+differ only in: ['--database', '--job-name']  (2 tokens of 28)
+
+## r2-pl-b
+07   (pl-b):    power-law-wall 07 R: run b of the pl store at the tip (inverse-power n 1 2; beta 1.2 2.0 2.9 at M 1e-3 Mp, phi* 5, alpha 0)
+07d-r2 (r2-pl-b): power-law-wall 07d R2 (restart): run b of the pl store at the tip, one k_ex (inverse-power n 1 2; beta 1.2 2.0 2.9 at M 1e-3 Mp, phi* 5, alpha 0)
+07:     --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-pl-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+07d-r2: --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-pl-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+differ only in: ['--database', '--job-name']  (2 tokens of 23)
+
+## r2-pl-c
+07   (pl-c):    power-law-wall 07 R: run c of the pl store at the tip (inverse-power n 1 2; beta 2.0 at M 1e-33 1e-15 Mp, phi* 5, A 1, no fixed alpha)
+07d-r2 (r2-pl-c): power-law-wall 07d R2 (restart): run c of the pl store at the tip, one k_ex (inverse-power n 1 2; beta 2.0 at M 1e-33 1e-15 Mp, phi* 5, A 1, no fixed alpha)
+07:     --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-pl-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+07d-r2: --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-pl-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+differ only in: ['--database', '--job-name']  (2 tokens of 23)
+
+## r2-pl-resumed-a
+07   (pl-resumed-a):    power-law-wall 07 R: run a of the pl-resumed store at the tip, interrupted with SIGTERM in the A = 0.05 scalar stage (inverse-power n 1 2; beta 1.2 2.0 2.9 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.05 1 10)
+07d-r2 (r2-pl-resumed-a): power-law-wall 07d R2 (restart): run a of the pl-resumed store at the tip, one k_ex, interrupted with SIGTERM in the A = 0.05 scalar stage (inverse-power n 1 2; beta 1.2 2.0 2.9 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.05 1 10)
+07:     --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl-resumed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-pl-resumed-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+07d-r2: --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-pl-resumed-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+differ only in: ['--database', '--job-name']  (2 tokens of 28)
+
+## r2-pl-resumed-a2
+07   (pl-resumed-a2):    power-law-wall 07 R: the resume of run a of the pl-resumed store at the tip, with --prune-unvalidated (inverse-power n 1 2; beta 1.2 2.0 2.9 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.05 1 10)
+07d-r2 (r2-pl-resumed-a2): power-law-wall 07d R2 (restart): the resume of run a of the pl-resumed store at the tip, one k_ex, with --prune-unvalidated (inverse-power n 1 2; beta 1.2 2.0 2.9 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.05 1 10)
+07:     --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl-resumed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-pl-resumed-a2 --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10 --prune-unvalidated
+07d-r2: --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-pl-resumed-a2 --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10 --prune-unvalidated
+differ only in: ['--database', '--job-name']  (2 tokens of 29)
+
+## r2-pl-resumed-b
+07   (pl-resumed-b):    power-law-wall 07 R: run b of the pl-resumed store at the tip (inverse-power n 1 2; beta 1.2 2.0 2.9 at M 1e-3 Mp, phi* 5, alpha 0)
+07d-r2 (r2-pl-resumed-b): power-law-wall 07d R2 (restart): run b of the pl-resumed store at the tip, one k_ex (inverse-power n 1 2; beta 1.2 2.0 2.9 at M 1e-3 Mp, phi* 5, alpha 0)
+07:     --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl-resumed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-pl-resumed-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+07d-r2: --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-pl-resumed-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+differ only in: ['--database', '--job-name']  (2 tokens of 23)
+
+## r2-pl-resumed-c
+07   (pl-resumed-c):    power-law-wall 07 R: run c of the pl-resumed store at the tip (inverse-power n 1 2; beta 2.0 at M 1e-33 1e-15 Mp, phi* 5, A 1, no fixed alpha)
+07d-r2 (r2-pl-resumed-c): power-law-wall 07d R2 (restart): run c of the pl-resumed store at the tip, one k_ex (inverse-power n 1 2; beta 2.0 at M 1e-33 1e-15 Mp, phi* 5, A 1, no fixed alpha)
+07:     --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl-resumed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-pl-resumed-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+07d-r2: --config inverse_power.yaml --n-values 1 2 --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-pl-resumed-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+differ only in: ['--database', '--job-name']  (2 tokens of 23)
+
+## r2-mixed-a
+07   (mixed-a):    power-law-wall 07 R: run a of the mixed store at the tip (exponential and inverse-power n 1; beta 1.2 2.0 2.9 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.05 1 10)
+07d-r2 (r2-mixed-a): power-law-wall 07d R2 (restart): run a of the mixed store at the tip, one k_ex (exponential and inverse-power n 1; beta 1.2 2.0 2.9 at M 4e-31 Mp, phi* 5, alpha 0.01 0.1, A 0.05 1 10)
+07:     --config exponential.yaml --models exponential inverse-power --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-mixed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-mixed-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+07d-r2: --config exponential.yaml --models exponential inverse-power --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-mixed-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+differ only in: ['--database', '--job-name']  (2 tokens of 28)
+
+## r2-mixed-b
+07   (mixed-b):    power-law-wall 07 R: run b of the mixed store at the tip (exponential and inverse-power n 1; beta 1.2 2.0 2.9 at M 1e-3 Mp, phi* 5, alpha 0)
+07d-r2 (r2-mixed-b): power-law-wall 07d R2 (restart): run b of the mixed store at the tip, one k_ex (exponential and inverse-power n 1; beta 1.2 2.0 2.9 at M 1e-3 Mp, phi* 5, alpha 0)
+07:     --config exponential.yaml --models exponential inverse-power --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-mixed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-mixed-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+07d-r2: --config exponential.yaml --models exponential inverse-power --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-mixed-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+differ only in: ['--database', '--job-name']  (2 tokens of 23)
+
+## r2-mixed-c
+07   (mixed-c):    power-law-wall 07 R: run c of the mixed store at the tip (exponential and inverse-power n 1; beta 2.0 at M 1e-33 1e-15 Mp, phi* 5, A 1, no fixed alpha)
+07d-r2 (r2-mixed-c): power-law-wall 07d R2 (restart): run c of the mixed store at the tip, one k_ex (exponential and inverse-power n 1; beta 2.0 at M 1e-33 1e-15 Mp, phi* 5, A 1, no fixed alpha)
+07:     --config exponential.yaml --models exponential inverse-power --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-mixed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07-mixed-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+07d-r2: --config exponential.yaml --models exponential inverse-power --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db --shards 16 --phi-init-Mp 5 --ray-address 127.0.0.1:6380 --job-name power-law-wall-07d-r2-mixed-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+differ only in: ['--database', '--job-name']  (2 tokens of 23)

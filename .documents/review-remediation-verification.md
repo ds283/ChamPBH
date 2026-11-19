@@ -2954,6 +2954,314 @@ code now says about the table is in `architecture-summary.md` §8.5's note of th
    0: `main` (`ec6bca8`) is an ancestor of this branch, so the merge is a fast-forward. `main` is one commit ahead
    of `github/main` (`edf72b3`), not pushed, and `electroweak-eos` has no upstream and is not pushed. Pushing is the user's.
 
+### 4.22 Addendum 2026-11-19 — the `power-law-wall` campaign
+
+Added by `power-law-wall` prompt 08 (`8f7a77e`), written on `278c58d`. Nothing above this heading has been changed;
+where it is superseded, this section says so by statement. The campaign added a second potential, the inverse power law
+V = V₀[1 + (M/φ)ⁿ], beside the exponential, took it through the pipeline, and on the way gave k_ex one definition on every
+potential, which refitted the exponential's one-loop law. It started no production run: it built small rehearsal stores
+under `var/`. It did, in order:
+
+- it was planned on 2026-11-13 on a branch from `main` at `a7e0978` (the `2026.11.0` plan), at the user's request ("a
+  similar science campaign for the inverse power law potential with `n=1` and `n=2`"), and worked in its own worktree;
+  R1–R3 and U1–U7 were ruled the same day;
+- it built `InversePowerModel` and the tool route's `--model` and `--n` (01, `3aae9a5`: the gate "Model"); the user ruled
+  R4 (φ ≤ 0 a failure) and R5 (natural mode at n = 1 and large M noted, not chased) on its measurements;
+- it measured the wall: S_n, the one-loop fraction and the spectrum at n = 1, 2 (02, `693784b`: "Wall"); the user ruled R6–R8
+  (S_n constant, the law f_n(ln R), the spectrum as measured tables on every wall, the exponential's too);
+- it put the law and the tables into the code (03, `d924275`: "Law"); R9–R10 ruled with it;
+- it measured U7's forty histories by the tool route beside the exponential (04, `05f6920`: "Sample"); the user ruled R11 (the
+  n = 1 surfing scan recorded as measured);
+- it stored the model, as type id 2 in its own table, with `FINGERPRINT_FORMAT` 8 (05, `bdb6ae7`: "Store"), after a stop at its
+  ruling 4 that the user ruled (a);
+- it took the drivers and the exports to every potential symmetrically, `--models` and `<output>/<label>/<model>/` (06,
+  `fda2df2`: "Export"), re-planned on the user's R12;
+- it rehearsed both potentials under Ray (07, `bbd99f4`: "R"), after a stop at its §2.2 that the user ruled (a);
+- re-planned on 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|), it re-measured everything k_ex defines (07b, `0223d50`:
+  "Remeasure"), measured the min(rise, fall) form the user asked for (07b2, `2f638e0`: "Form"; U13 ruled on it), put one
+  k_ex and the exponential's law `one-loop-exponential-v2` into production (07c, `c8461ab`: "Consistent"; U11, U12, U14
+  ruled), formed the pulse rate in closed form after 07d's first attempt stopped on it and the user ruled (a) (07c2,
+  `bd8d648`: "Range"), and rehearsed again on the tip (07d, `b5f863a`: "R2"), after a stop at its suites that the user
+  ruled (a);
+- and prompt 08 wrote the documents and this handover (`8f7a77e`: "Close").
+
+Its board is [`prompts/power-law-wall/IMPLEMENTATION_STATE.md`](../prompts/power-law-wall/IMPLEMENTATION_STATE.md); its plan is
+its [`README.md`](../prompts/power-law-wall/README.md) (§6 the decisions, R1–R17, U1–U14, P1–P148); the measurements are in
+[`power-law-wall-verification.md`](power-law-wall-verification.md) §1–§11, **the two walls as they stand, for quotation, its
+§12**, and this prompt's checks its §13; what the code now says is `numerical-strategies.md` §6.13 and the notes of this date
+in `architecture-summary.md` §2, §4.2, §7.2, §8.4a, §9 and §14. It **bumped** `VERSION_LABEL` three times, to `"2026.14.0"`
+(`config/version.py:134`; 2026.12.0 at 05, 2026.13.0 at 07c), and `FINGERPRINT_FORMAT` to 8 (`config/fingerprint.py:100`).
+The branch `power-law-wall` **is not merged into `main` when this is written** (point 8).
+
+**This supersedes**, by statement and not by edit:
+
+- **§4.21's "`VERSION_LABEL` (`"2026.11.0"`, `config/version.py:100`) and left `FINGERPRINT_FORMAT` at 7
+  (`config/fingerprint.py:95`)"**: it is `"2026.14.0"` at `config/version.py:134`, and the format is 8 at
+  `config/fingerprint.py:100`.
+- **§4.21 point 1's "A rebuild starts a new store", at 2026.11.0, and "What the tip does with a `2026.10.0` store. It reads
+  it, read-only"**: a rebuild starts a new store at 2026.14.0 and format 8, and the tip does not read a format-7 store
+  (point 1 below).
+- **§4.21 point 3's "a rebuild under `2026.11.0` repeats every row"** and its path for Relativistic quanta, "`tools/quanta_measures.py`
+  on that root": the rebuild is at 2026.14.0, of both potentials, and the root is a potential's, `<output>/<label>/<model>/`
+  (points 2 and 3).
+- **§4.20's account of the law, `one-loop-measured-v1`** (its points 1–3: the drain model of the one-loop rows, the key
+  `alpha_value` (A, `"one-loop-measured-v1"`), the export path `<drain_model>/A=<A>/` under it, `model_of_law`): that name is
+  retired and refused (point 1); the exponential's one-loop rows are `one-loop-exponential-v2`, the power wall's
+  `one-loop-inverse-power-v1`. Its law and constants (`one-loop-drain-verification.md` §8.1) are the record of v1;
+  `power-law-wall-verification.md` §12.3 is the law now.
+- **§4.20's spectrum, `SPECTRUM_MODEL` `"U4-U17-v1"`**, its constants (x_p = 0.62, κ, x_* = 0.0058) and the column value
+  it puts in every quanta output: the spectrum is a measured table per wall, `R8-<wall>-v2`, with x_* = 0.005615853347600149
+  (point 1; verification §12.4).
+- **§4.20's and §4.21's k_ex**, ½E^{1/2}(−d ln V/dφ) (implicit in every stored k_ex, ℓ, ln q and margin they describe): k_ex
+  is ½E^{1/2}|V‴/V″| at both turning points (point 1).
+- **§4.20's and §4.21's export root `<output>/<label>/`** (`$OUT/main/QCD_Cosmology` in the run script): every potential is
+  exported under `<output>/<label>/<model>/` (point 1).
+- **§4.21 point 5's stores and §4.20's `one-loop-drain-06-*` "of the tip"**, and the `2026.11.0` science stores as current:
+  the tip does not read a format-7 store (point 1); they are read with the tree of their own commit.
+
+**The points.**
+
+1. **What changed for a build.**
+   - **The model.** `--models` (`config/argument_parser.py:486`; YAML `models`) takes one or more of `exponential` and
+     `inverse-power`, default `[exponential]`, in `main.py` and both plot scripts. `inverse_power.yaml` beside
+     `exponential.yaml` names `models: [inverse-power]` (`exponential.yaml` names `models: [exponential]`); the two have the
+     same keys otherwise. `--n-values` is one list for every potential of a run. `tools/history_and_bbn.py`,
+     `tools/surfing_scan.py` and `tools/bbn_from_store.py` take a single `--model` and `--n`.
+   - **The laws.** The one-loop drain models are `one-loop-exponential-v2` (the exponential's refitted law, v2: f = 1 −
+     exp(−min(y_rise, y_fall)) above R·S(L)) and `one-loop-inverse-power-v1` (the power wall's f_n(ln R) above R·S_n), each
+     its model's own (`one_loop_drain_model`). `one-loop-measured-v1` (the exponential's v1, retired by R13) and
+     `one-loop-measured-pl-v1` (the power wall's first name, U11) are known names that `law_of` refuses, with a
+     `ValueError` naming the ruling and the successor, and with it `check_drain_model`, `alpha_value` and its factory and
+     `alpha_label` (verification §9.4); no option takes a drain model's name, and the stores that hold them are of an
+     older label (below). **Both one-loop laws are defined at n = 1 and 2 only**: `--A-values` with an
+     n of `--n-values` outside them is refused at parse, exit 2, before Ray, naming `--A-values`, `--models` and
+     `--n-values` (verification §11.8, R4). The fixed law and natural mode run every n.
+   - **One k_ex.** k_ex = ½E^{1/2}|V‴/V″| at φ_t and at φ_ta, on every potential (verification §12.2). Every stored k_ex,
+     ℓ, ℓ_t, peak, ln q, birth margin and margin record now means that form, under every law, the fixed law's margins
+     included; φ_t, ω_t and ln R do not change.
+   - **The exports.** Every potential under `<output>/<label>/<model>/`, each in a pass of its own; `histories.csv` has
+     `model` directly after `n`; below the root nothing moved. The quanta tools take each row's wall from its `model` and
+     `n` and refuse a `histories.csv` without the column; `spectrum_model` is `R8-exponential-v2`, `R8-power-n1-v2` or
+     `R8-power-n2-v2`.
+   - **The registered run's scope** names the potentials, `models <values>` (`RunDrivers/registered_run.py:684`).
+   - **The labels, and the older stores.** A run of record starts new stores, at 2026.14.0 and format 8. What the tip does
+     with each older kind of store, measured on 2026-11-19 with `main.py --inventory` (no Ray), the store's or the copy's
+     18 files hashed with `shasum -a 256` before and after (verification §13.3; `.documents/power-law-wall/close-08/out/`):
+     - **a `2026.14.0` store** (`power-law-wall-07d-r2-exp`, in place): **read**, exit 0 in 27 s: "read-only; 16
+       shards … 75,097 records in 17 classes", "problems: none", `version` 2026.14.0, 20 `ScalarHistory`,
+       `AdiabaticHistory` and `BBNData` records each, all validated, nothing on stderr. The 18 files' hashes were
+       identical before and after (the list of them hashes to `4e09e63d75aed0ad…` both times).
+     - **a `2026.12.0`, format-8 store** (a copy of `power-law-wall-07-exp`, built at `945bf5d`): **read**, exit 0 in
+       26 s: "problems: none", `version` 2026.12.0, 20 histories of each kind validated, `InversePowerModel` 0 records,
+       and its `alpha_value` rows listed as stored, `one-loop-measured-v1` among them: the inventory interprets no drain
+       model. The copy was equal to the original before and unchanged after (`b16661285bbf9207…`). Reading is not
+       extending: lookups are keyed on the label, a tip plot script on 07's `exp` store exits 1 at its read-only open
+       (`ReadOnlyMiss` on the `version` lookup; verification §11.9, `[07d-a-reader-refuses-an-older-label-by-a-traceback]`),
+       and `config/version.py` says a store of an earlier label is not extended.
+     - **a `2026.11.0`, format-7 store** (a copy of `power-law-wall-07-base`, built at `a7e0978`): **refused**, exit 1 in
+       2 s: "!! --inventory: Cannot read sharded datastore "<scratch>/copy-07-base/power-law-wall-07-base.db": shard #0 …
+       differs from the tables this code declares (it lacks the table(s) "InversePowerModel"), so nothing was read". The
+       copy was equal to the original before and unchanged after (`09f3baeda61fc60a…`). The `2026.11.0` science stores
+       are of this kind: the tip does not read them; they are read with the tree of their own commit.
+     The two originals were hashed again at the end, unchanged.
+   - **What did not move.** Every history whose law reads no ℓ (the fixed law, natural mode, and the power wall under both
+     laws) keeps its integration and BBN bit for bit: 07's grid rebuilt at the tip equals 07's in 16 291 536 compared values
+     outside the k_ex columns (verification §11.4). The exponential's one-loop histories moved: ΔN_eff today −0.36% to
+     −6.70% in 10 of 11, the eleventh (10⁻¹⁵ M_P, gap and classical only) equal (§11.5).
+
+2. **What a science run of record after this campaign repeats** (convention 8; README §6.5 R8, §6.12 P89). Every row of
+   `science-runs/README.md`'s "Standard analyses", as the file on `main` names them, for both potentials:
+   - **Figure 6** — "Which β are excluded by Y_p, D/H and ΔN_eff at laboratory M?", from the main store's `histories.csv`
+     (`plot_by_beta.py`): for the exponential it moves with its one-loop law (v2) wherever A > 0, and is unchanged under the
+     fixed law; for the power law at n = 1 and 2 it is new;
+   - **Relativistic quanta** — from `histories.csv` and each one-loop history's `fields.csv` and `bounces.csv`
+     (`plot_ScalarHistory.py`), then `tools/quanta_measures.py` on that root at c_a = 1, 0 and 10: for the exponential it
+     moves with v2, the one k_ex and the new tables and x_* (`R8-exponential-v2`; verification §11.7: on 07d's grid
+     `k_ex_over_H_min` up by a factor up to 3.0 on the power wall); for the power law it is new.
+   The tip cannot read the `2026.11.0` stores (point 1), so the exponential is rebuilt, not re-exported. Figure 6 around
+   M_crit and the trend in M are not on the list (`science-runs/README.md` says why); on the power wall the first impact
+   is one-loop at every M ≤ M_P (point 4), so a figure "around M_crit" has no counterpart there.
+
+3. **The run script's and the analyses' changes against 2026.11.0's**, read on `main` by `git show
+   main:science-runs/2026-11-13-science-2026.11.0/<file>`. 08 edits none of them and writes no script.
+   - **The builds.** `run_science_2026.11.0.sh`'s `run()` passes `--config exponential.yaml` to every block. A power-law
+     block passes `--config inverse_power.yaml --n-values 1 2` (or `--models inverse-power`), and a block of both
+     `--models exponential inverse-power`. One store of both potentials, or one per potential: 07's and 07d's mixed store,
+     both potentials at n = 1 in one store, equals the separate stores history for history and in its exports (verification
+     §6.7, §11.6), so either holds the same values; but `--n-values` is shared, so a run of both potentials at n = 1, 2
+     builds, and with `--A-values` runs the one-loop law of, the exponential at n = 2 too, which 2026.11.0 did not build and
+     no history of this campaign ran. A block of the form, every option checked against `--help` (verification §13.4):
+
+         PYTHONPATH=. ./venv/bin/python -u RunDrivers/registered_run.py --campaign "$RUN" --prompt A \
+             --register A-lab-pl --purpose "…" -- --config inverse_power.yaml --n-values 1 2 \
+             --database "$DB" --shards 16 --ray-address 127.0.0.1:6380 --job-name A-lab-pl \
+             --bbn-wall-clock-limit 600 --phi-init-Mp 5 --M-values-Mp 4e-31 --beta-values $BETA_DENSE \
+             --alpha-values 0.01 0.1 --A-values $A_ALL
+
+   - **The exports and measures.** The script exports with `--output "$OUT/main"` and runs `quanta_measures` and
+     `plot_quanta_grid` on `$OUT/main/QCD_Cosmology`, which at the tip is the parent of the potentials' roots: each
+     exporter is run once per potential (`--models` the potential's, or both in one plot run, which writes both roots), and
+     `tools/quanta_measures.py` on each root, `$OUT/main/QCD_Cosmology/exponential` and `…/inverse-power`, at
+     `--assoc-scale` 1, 0 and 10. `tools/plot_quanta_grid.py` refuses every figure of a power-law root that holds n = 1 and
+     2 at one (β, M) (`[06-plot-quanta-grid-refuses-two-n-at-one-cell]`). Measured on a copy of 07d's power-law root
+     (verification §13.5): `all` (both n): `quanta_measures --assoc-scale 1` exit 0, measured 22 and rewrote 07d's quanta files byte for byte;
+     `plot_quanta_grid` exit 1, "figures written 0, refused 3", each "two rows in one cell" of n = 1 and n = 2. **`n1` and
+     `n2`** (one root per n, made by `close-08/split_by_n.py`, which keeps each n's directories and its rows of the root
+     CSVs): `quanta_measures` exit 0, measured 11 each, every quanta row equal to `all`'s of that n; `plot_quanta_grid`
+     exit 0, "figures written 3, refused 0", one figure per A (0.05, 1, 10), with the wall's spectrum `R8-power-n1-v2` |
+     `R8-power-n2-v2`. So a root per n is a route to the grid figures with no code change; the issue stays open. `tools/plot_quanta_history.py` takes a root and is not affected (each history has its
+     own directory, by n).
+   - **The analyses.** What a tip export needs each of the five to change:
+     - `fig6/fig6.py` sets `ONE_LOOP = "one-loop-measured-v1"` (`:52`), a retired name, and selects the one-loop rows by it
+       (`:163`); it selects M = 4 × 10⁻³¹ M_P (`:117`) and reads `inputs/histories.csv`, but no `n` and no `model`: on a
+       power-law root it takes both n's rows into one band;
+     - `fig6b/fig6b.py` sets `ONE_LOOP = "one-loop-measured-v1"` (`:42`) and selects by it (`:154`, `:160`); it reads
+       `../fig6/inputs/histories.csv`, with no `n`;
+     - `m-trend/m_trend.py` selects `drain_model != "fixed"` (`:160`, `:231`), which takes any one-loop model, and reads its
+       bounces from `inputs/bounces/beta=<β>/M=<M>eV_n=1/` (`:153`), n = 1 written into the path;
+     - `relativistic/relativistic.py` sets `ONE_LOOP = "one-loop-measured-v1"` (`:61`) and joins `histories.csv` to
+       `quanta_histories*.csv` on a key of (drain model, A or α, M, β) (`key`, `:136`–`:145`), with no `n` or `model`: on a
+       power-law root two rows share a key;
+     - `changes/changes.py` joins two runs' `histories.csv` on `KEY = ["M_Mp", "beta", "drain_model", "alpha"]` (`:61`),
+       with no `n` or `model`, and `drain_model` differs between a v1 and a v2 run, so no one-loop row of 2026.11.0 would
+       match one of the tip.
+     Each reads a copy of the export's `histories.csv` (`fig6/inputs/`), which a power-law root holds with both n.
+
+4. **The power law's grid: what is known.** 2026.11.0's blocks (its `PLAN.md` §1 and run script), and what 04 (by the
+   tool route, before the one k_ex) and 07d (under Ray, at the tip) measured on the power wall at their M and β:
+
+   | block | 2026.11.0 | measured on the power wall | not measured |
+   |---|---|---|---|
+   | A, laboratory M | 4 × 10⁻³¹ M_P, the dense β grid (191, 0.5–20), α 0.01, 0.1, A 0.05–10 (ten values); 2292 histories | β 1.2, 2, 2.9 at α 0.01, 0.1 and A 0.05, 1, 10, both n (07d's run a): every one tunes in one integration, parks and is not released | the other 188 β, among them the surfing region 2.95–3.04 at this M; A 0.1, 0.2, 0.5, 1.5, 2, 3, 5 |
+   | B, the trend in M | 10⁻³⁰, 10⁻³², 10⁻³³, 10⁻³⁶, 10⁻⁴⁰, 10⁻⁴² M_P, sparse β (30); 2160 | 10⁻³³ M_P, β = 2, A = 1, both n (07d's run c) | every other M and β; 10⁻³⁶–10⁻⁴² M_P were not reached by any history (07c2's scaling puts the end of the turning points' range near M ≈ 4 × 10⁻⁷⁶ M_P at β = 2.9 at n = 1, an extrapolation, verification §10.8) |
+   | D, large M, natural mode | 10⁻³, 0.1, 0.5 M_P, coarse β (62); 186 | 10⁻³ M_P, β 1.2, 2, 2.9: n = 2 succeeds (4 integrations, 4–59 reflections); n = 1 fails at G2 (R5), and in the surfing scan at 73 of 79 coarse β (§4.6) | 0.1 and 0.5 M_P |
+   | R-lab, R-ladder, R-natural | 4 × 10⁻³¹ M_P at β 1.2, 2, 2.9 (A 0.05, 1, 10; α 0.01, 0.1); 10⁻¹⁶ M_P at β 2 (A 0.1, 1, 10); natural at 10⁻³ and 0.5 M_P; 26 | R-lab is 07d's run a exactly; natural at 10⁻³ M_P as D | 10⁻¹⁶ M_P (10⁻¹⁵ M_P at A = 1 was measured: first impact one-loop); 0.5 M_P |
+   | C and R-Mcrit, M_crit | 10⁻¹⁵, 10⁻¹² M_P, sparse β, A 1, α 0.01, 0.1; 180 + 18 | 10⁻¹⁵ M_P, β = 2, A = 1, both n (07d's run c) | 10⁻¹² M_P; every other β |
+
+   - **M_crit on the power wall** (§4.5 item 5, an estimate from the path formula): the first impact is one-loop at every
+     M ≤ M_P on both n (1.4 × 10³ to 7.0 × 10²⁸ M_P), where the exponential's first impact turns classical near 10⁻¹⁵ M_P; the
+     late cascade's classical turn lies between about 10⁻²⁷ M_P and above M_P, by n, β and the law. So block C's M sit deep
+     in the one-loop regime on the power wall. R9's share of K below E/V₀ = 10³ is 0 on the sample (§4.4).
+   - **The surfing edges** at 10⁻³ M_P (§4.6): n = 2 as the exponential's (QCD onset (1.116, 1.117], last QCD capture 2.975,
+     EW from (3.002, 3.003]); n = 1 recorded as measured (R11): the onset only in (1.10, 1.30], no EW edge.
+   - **Natural mode at n = 1 and large M** fails at G2 (R5): every D row at n = 1 and 10⁻³ M_P, by the sample and the scan.
+   - **The cost per history**, the tuning's wall under Ray (07d, `rehearse-07d/out/07d-07d-costs.txt`; §11.10), summed over
+     the fifteen histories of laboratory M at β 1.2, 2, 2.9: the exponential 165.5 s, n = 1 163.0 s (×0.985), n = 2 166.1 s
+     (×1.004); natural mode at 10⁻³ M_P, three β: the exponential 117.3 s, n = 2 274.4 s (×2.339), n = 1's failures 38.7 s
+     (×0.330); at 10⁻³³ M_P, A = 1: 9.1, 8.8 (×0.967), 10.4 s (×1.143); at 10⁻¹⁵ M_P, A = 1: 9.7, 9.4 (×0.969), 5.0 s (×0.515).
+     By the tool route, BBN included, 11–32 s at α > 0 and 48–97 s in natural mode at n = 2 (§4.1).
+   - **On the exponential, v2's domain** (§11.11): 47 one-loop candidates with ln(V₀/M⁴) > 10, up to 27.31, all in the
+     history at 10⁻³³ M_P (β = 2, A = 1), outside the fitted domain ln(V₀/M⁴) ≤ 10; the grid's 10⁻³⁶–10⁻⁴² M_P were not
+     measured, and lie further out by the same formula.
+
+   **A projection, not a measurement** (P144), of the power law's build time on 2026.11.0's grid. Basis: 2026.11.0's block
+   walls ("The registered runs" of its README: A 4 h 00 min, B 4 h 09 min, D 23 min, R-lab 3 min, R-ladder 14 min,
+   R-natural 1 min, C 3 h 13 min, R-Mcrit 25 min; 12 h 28 min), each times the power/exponential ratio of the per-history
+   cost above that is nearest its M: laboratory M for A and R-lab, 10⁻³³ M_P for B, natural mode at 10⁻³ M_P for D and
+   R-natural, 10⁻¹⁵ M_P for C, R-Mcrit and R-ladder.
+
+   | n | A | B | D | R-lab | R-ladder | R-natural | C | R-Mcrit | sum |
+   |---|---|---|---|---|---|---|---|---|---|
+   | 1 | 240 × 0.985 = 236 | 249 × 0.967 = 241 | 23 × 0.330 = 8 | 3 | 14 × 0.969 = 14 | 0.3 | 193 × 0.969 = 187 | 25 × 0.969 = 24 | 713 min, 11 h 53 min |
+   | 2 | 240 × 1.004 = 241 | 249 × 1.143 = 285 | 23 × 2.339 = 54 | 3 | 14 × 0.515 = 7 | 2 | 193 × 0.515 = 99 | 25 × 0.515 = 13 | 704 min, 11 h 44 min |
+
+   About 23 h 37 min for the power law at both n, beside the exponential's own rebuild (12 h 28 min in 2026.11.0; 07d's
+   exponential store took 301.7 s of tuning against 07's 294.3 s). The number of n is 2; a run of both potentials at
+   `--n-values 1 2` adds the exponential at n = 2, which nothing measured. **Its weakest assumption is the M_crit block, C:**
+   2026.11.0's C was set by the exponential's tunings at M_crit near β ≈ 1.1–1.4, which run to tens of integrations
+   (its README, "Timings against the plan"); on the power wall those M are one-loop at the first impact, and no history of
+   this campaign was near any M_crit, so C's ratio rests on one history at β = 2 per n. Each ratio rests on three to fifteen
+   histories at β ≤ 2.9 only; the block walls include the cluster's parallelism, which the ratios assume unchanged. Nothing
+   was run to refine it.
+
+5. **What to expect while it runs.**
+   - **The failures.** On the power wall at n = 1 in natural mode at large M, G2's "reflection requested inside the wall"
+     (R5), in the seed's integration or a later tuning integration (§4.6); `main.py` stores each as a failure row, with the
+     reason in `ScalarHistory.failure_reason` (cut to 256 characters, the run's label inside it:
+     `[07-failure-reason-carries-the-run-label]`), and does not recompute it under the same label unless
+     `--retry-failed-scalar` is given. In 04's scans also a tuning that did not converge in 30 integrations (n = 1, β = 3.20)
+     and φ ≤ 0 step underflows (n = 2, β 1.149 and 2.991; R4), all in natural mode at 10⁻³ M_P.
+   - **The tuning cap and the step budget.** At most 30 integrations per tuning (`DEFAULT_TUNING_MAX_INTEGRATIONS`,
+     `ComputeTargets/ScalarHistory.py:5498`; `--tuning-max-integrations`, `config/argument_parser.py:373`), and at most
+     2 000 000 accepted steps per integration (`StepControl.step_budget`, `ScalarHistory.py:296`, checked at `:2916`).
+     Neither is a wall-clock limit; BBN has its own, `--bbn-wall-clock-limit` (600 s in 2026.11.0's script).
+   - **The heartbeat.** 07d's longest silence was 54 s (`r2-pl-b`, the α = 0 scalar stage; §11.2), against the registry's
+     900 s window. 2026.11.0's script says that a pipeline of slow M_crit tunings reads stale, and to read it with
+     `./venv/bin/python -m runregistrykit list --stale-after 4000`, or by its pid.
+   - **The disk.** On 2026-11-19 at 12:51 `df -h .` showed 92% used and 76 GB free. 07d's stores took 124 720–154 880 KiB for
+     20–40 histories (point 6); 2026.11.0's script refuses a build slot below 55 GB free and the exports below 70 GB.
+   - **The workers' working directory.** A Ray worker runs in the cluster's working directory and reads
+     `Xav_EOS_data.csv` and `PRyMrates/` from there (`architecture-summary.md` §14's note of 2026-11-07;
+     `[02-a-worktree-build-reads-the-data-files-of-the-tree-that-started-the-cluster]`), so the cluster is started from the
+     tree that builds; 07 and 07d each started theirs from the building tree, and their probes found the data files' hashes
+     equal (verification §6.1, §11.1).
+   - **`tools/compare_stores.py` and a failed history.** Two builds of the same failing history never compare equal, since
+     the stored reason carries the run's label (`[07-failure-reason-carries-the-run-label]`); 07 and 07d read
+     `compare_stores` with the user's mask (§6.5, §11.6).
+
+6. **The stores and outputs kept** (P124, P134), in the main checkout's `var/datastores/`. Retiring, moving or deleting any of
+   them is the user's (`runregistrykit store retire`, which a person runs). Sizes are `du -sk` of each store's files on
+   2026-11-19; the label is the building tree's, the format the sidecar's.
+
+   | store | built at | label, format | `store_id` | shards | size (KiB) | read by 08 |
+   |---|---|---|---|---|---|---|
+   | `power-law-wall-07d-r2-exp` | `00fb718` | 2026.14.0, 8 | `9e8f48d02581410784a0d457a772d48d` | 16 | 124 720 | the inventory, in place |
+   | `power-law-wall-07d-r2-pl` | `00fb718` | 2026.14.0, 8 | `460a62f94a7f442d9bb4061d3c0f590a` | 16 | 154 880 | no |
+   | `power-law-wall-07d-r2-pl-resumed` | `00fb718` | 2026.14.0, 8 | `2a9064f9cc1b4fc38ed0a6ace6f6553a` | 16 | 153 148 | no |
+   | `power-law-wall-07d-r2-mixed` | `00fb718` | 2026.14.0, 8 | `cabc80c14eb24023a69731227321ec24` | 16 | 153 964 | no |
+   | `power-law-wall-07-base` | `a7e0978` | 2026.11.0, 7 | `60fc081b15c74c57968f9bd739bc30ba` | 16 | 119 104 | a copy, by the inventory |
+   | `power-law-wall-07-exp` | `945bf5d` | 2026.12.0, 8 | `63364222c77e45febdb266f188c347ce` | 16 | 119 412 | a copy, by the inventory |
+   | `power-law-wall-07-pl` | `945bf5d` | 2026.12.0, 8 | `fd4e59b1f5eb4977b4a5128cd7d86b78` | 16 | 155 756 | no |
+   | `power-law-wall-07-pl-resumed` | `945bf5d` | 2026.12.0, 8 | `92eadd6a69a74e69b8a9c95cb2ba50f3` | 16 | 155 428 | no |
+   | `power-law-wall-07-mixed` | `945bf5d` | 2026.12.0, 8 | `e48589b6f2d0437b86b2f4782c8dcc29` | 16 | 153 740 | no |
+   | `power-law-wall-07d-exp` (first attempt) | `e6e50b0` | 2026.13.0, 8 | `eaded4ba983f4935ba016663bb8eb8e4` | 16 | 122 324 | no |
+   | `power-law-wall-07d-pl` (first attempt, runs a and b) | `e6e50b0` | 2026.13.0 | no sidecar | 16 | 136 208 | no |
+
+   `power-law-wall-07d-pl` has no sidecar (17 files): its retirement needs a `runregistrykit store create` first. The run
+   records are `var/runs/power-law-wall-07-*` (16), `power-law-wall-07d-{exp,pl}-*` (5) and `power-law-wall-07d-r2-*` (13).
+   This worktree's ignored `var/power-law-wall/` holds the campaign's raw outputs: `06/` 77 328 KiB (06's harness store and
+   exports), `07/` 669 280 KiB (07's exports, figures and logs), `07d/` 788 KiB (the first attempt's outputs) and `07d-r2/`
+   526 524 KiB (07d's exports, its 215 figures, logs and comparisons); 1 273 920 KiB in all. **Removing the worktree deletes
+   them**; the stores, in the main checkout's `var/`, are not touched by it.
+
+7. **What stays open.** The board's four issues (`.documents/OPEN_ISSUES.md` §1.26; none assigned; **36 open** in the whole
+   index), each with its next step:
+   - `[06-plot-quanta-grid-refuses-two-n-at-one-cell]`: bears on the run's Relativistic quanta figures (point 3, with the
+     per-n roots measured). Next: group the grid by (drain model, A, n), or draw n as panels, in a prompt of its own.
+   - `[07-failure-reason-carries-the-run-label]`: bears on checking two builds of a store with failures (point 5). Next: a
+     `MASKED_FRAGMENTS` entry for `ScalarHistory.failure_reason` in `compare_stores.py`, and a ruling on where the stored
+     reason is cut.
+   - `[07-a-refused-plot-leaves-ray-errors-unretrieved]`: cosmetic. Next: gather the lookups before refusing.
+   - `[07d-a-reader-refuses-an-older-label-by-a-traceback]`: cosmetic; a tip plot script on a store of an older label exits
+     1 on a `ReadOnlyMiss` traceback. Next: catch it and refuse with a `!! plot:` line, exit 2.
+
+   **Observations the logs left unopened** that a reader of the run should know:
+   - `REMOVED_OPTIONS["--potential-type"]`'s message still says "there is one model, ExponentialModel"
+     (`config/argument_parser.py:65`–`:68`; log 06 §6);
+   - `plot_inputs.exponential_models` has no production caller, kept with its tests (log 06 §6);
+   - the surfing scans on the power wall leave `T_max` blank and count one fewer `n_crossings` where the first bounce is a
+     reflection, so an analysis reading those columns reads them differently from the exponential's (log 04 §6);
+   - 06's unintended Ray session directory is under `/tmp/ray`, for the user (log 06 D4, §6);
+   - `ExponentialModel`'s docstring and its law's comment say "every history of record has ln(V_0/M^4) <= 3.3"
+     (`ExponentialModel.py:39`–`:40`, `:169`–`:170`), which 07d's 10⁻³³ M_P history does not satisfy (log 07d §6);
+   - `integrate_scalar_history`'s comment says "the model must define the law's L, or its own fraction"
+     (`ComputeTargets/ScalarHistory.py:2143`), where since 07c the fraction is required and L optional;
+   - `tools/outward_step_scan.py` re-runs every selected exponential row at n = 1 (log 05 §6);
+   - the exponential's first two log hooks compute `pow(M/φ, n)` outside their `try`, so an overflow there is a raw
+     `OverflowError` (log 07c §6);
+   - the plot scripts print "number of shards read from database (=16) does not match specified number of shards (=10)" on
+     a 16-shard store given `--shards 16` (log 07 §6, log 07d §6).
+
+8. **The merge into `main` is the user's** (P146). At the time of writing: the merge base of `main` and `power-law-wall`
+   is `a7e0978`; `git merge-base --is-ancestor main power-law-wall` exits 1, since `main` (`9df9e13`) has 15 commits since
+   `a7e0978`, every one under `science-runs/` (`git diff --name-only a7e0978 main` names no other path), which this branch
+   does not change; so the merge is **not a fast-forward**. `git merge-tree --write-tree main power-law-wall` exits 0 (no
+   conflict; tree `e58d1249df9422e3fd0fe8612fd6183d2bd77871`). Local `main` is 16 commits ahead of `github/main`
+   (`84a2494`), and `power-law-wall` has no upstream. Pushing is the user's.
+   **After the merge**, the `2026.11.0` run record (`science-runs/2026-11-13-science-2026.11.0/README.md`, on `main` only)
+   needs a dated note: its one-loop rows are under `one-loop-measured-v1`, a law the tip retires and refuses, and the tip
+   cannot read its stores (format 7). That note is a step for after the merge; this branch does not hold the record.
+
 ---
 
 ## 5. Reproduce

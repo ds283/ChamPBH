@@ -1,0 +1,44 @@
+case 1 --beta-values 1.5 2 --M-values-Mp 4e-31: lookups, pipelines and printed lines IDENTICAL (1675 characters of output)
+case 1 --beta-values 1.5 2 --M-values-Mp 4e-31 --models exponential: lookups, pipelines and printed lines IDENTICAL (1675 characters of output)
+      | ** BUILDING GRID OF MODELS TO SAMPLE
+      |    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      |    -- populated beta sample grid with 2 values = [ 1.5, 2 ]
+      |    -- populated M sample grid with 1 value = [ 0.00097413 eV ]
+      |    -- populated alpha grid with 1 value = [ 0 ]
+      |    -- total number of models to integrate = 2
+case 2 --beta-values 1.5 2 --M-values-Mp 4e-31 --alpha-values 0 0.1 --A-values 1 0.5: lookups, pipelines and printed lines IDENTICAL (2343 characters of output)
+case 2 --beta-values 1.5 2 --M-values-Mp 4e-31 --alpha-values 0 0.1 --A-values 1 0.5 --models exponential: lookups, pipelines and printed lines IDENTICAL (2343 characters of output)
+      | ** BUILDING GRID OF MODELS TO SAMPLE
+      |    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      |    -- populated beta sample grid with 2 values = [ 1.5, 2 ]
+      |    -- populated M sample grid with 1 value = [ 0.00097413 eV ]
+      |    -- populated alpha grid with 2 values = [ 0, 0.1 ]
+      |    -- populated A grid with 2 values = [ 1, 0.5 ] (one-loop-measured-v1)
+      |    -- total number of models to integrate = 2
+case 3 --beta-values 1.2 2 2.9 --M-values-Mp 4e-31 1e-15 --n-values 1 2 --no-alpha-values --A-values 0.05 1 10: lookups, pipelines and printed lines IDENTICAL (4742 characters of output)
+case 3 --beta-values 1.2 2 2.9 --M-values-Mp 4e-31 1e-15 --n-values 1 2 --no-alpha-values --A-values 0.05 1 10 --models exponential: lookups, pipelines and printed lines IDENTICAL (4742 characters of output)
+      | ** BUILDING GRID OF MODELS TO SAMPLE
+      |    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1, 2 ]
+      |    -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+      |    -- populated M sample grid with 2 values = [ 0.00097413 eV, 2435.3 GeV ]
+      |    -- no alpha grid (--no-alpha-values): no fixed-law row is built
+      |    -- populated A grid with 3 values = [ 0.05, 1, 10 ] (one-loop-measured-v1)
+      |    -- total number of models to integrate = 12
+case 4 --M-values-eV 1e25 3e25 --beta-low 1 --beta-high 2 --samples-per-beta 2 --alpha-values 0.01 0.1 0.01: lookups, pipelines and printed lines IDENTICAL (2285 characters of output)
+case 4 --M-values-eV 1e25 3e25 --beta-low 1 --beta-high 2 --samples-per-beta 2 --alpha-values 0.01 0.1 0.01 --models exponential: lookups, pipelines and printed lines IDENTICAL (2285 characters of output)
+      | ** BUILDING GRID OF MODELS TO SAMPLE
+      |    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      |    -- populated beta sample grid with 2 values = [ 1, 2 ]
+      |    -- populated M sample grid with 2 values = [ 0.0041062 Mp, 0.012319 Mp ]
+      |    -- populated alpha grid with 2 values = [ 0.01, 0.1 ]
+      |    -- total number of models to integrate = 4
+case 5 --config exponential.yaml --A-values 1: lookups, pipelines and printed lines IDENTICAL (30039 characters of output)
+case 5 --config exponential.yaml --A-values 1 --models exponential: lookups, pipelines and printed lines IDENTICAL (30039 characters of output)
+      | ** BUILDING GRID OF MODELS TO SAMPLE
+      |    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      |    -- populated beta sample grid with 125 values = [ 0.1, 0.30081, 0.50161, 0.70242, 0.90323, 1.104, 1.3048, 1.5056, 1.7065, 1.9073, ..., 23.193, 23.394, 23.594, 23.795, 23.996, 24.197, 24.398, 24.598, 24.799, 25 ]
+      |    -- populated M sample grid with 1 value = [ 0.5 Mp ]
+      |    -- populated alpha grid with 1 value = [ 0 ]
+      |    -- populated A grid with 1 value = [ 1 ] (one-loop-measured-v1)
+      |    -- total number of models to integrate = 125
+STOP CONDITION HIT: False

@@ -19,9 +19,10 @@ Draw the figures of a store that main.py built, reading it read-only.
 The store is opened with ``ShardedPool(read_only=True)``, so a plot run never changes it
 (read-only-plots prompt 02). What it reads before the histories comes from ``plot_inputs.py``: a
 parameter the build was not run with (``--abs-tol``, ``--rel-tol``, ``--T-init-GeV``,
-``--phi-init-Mp``, or the constant tuning tolerance) stops the run with exit 2, and a model (an
-``ExponentialModel`` of a stored M and beta) that was never stored is skipped with a warning
-(jordan-normalization prompt 07). The shared parser's ``--drop`` and
+``--phi-init-Mp``, or the constant tuning tolerance) stops the run with exit 2, and a model (of a
+potential of ``--models``, in its own table, at a stored M and beta) that was never stored is skipped
+with a warning (jordan-normalization prompt 07). Each potential is exported in a pass of its own, under
+``<output>/<label>/<potential>/`` (power-law-wall prompt 06; README §6.10 R12, P50). The shared parser's ``--drop`` and
 ``--prune-unvalidated`` are main.py's: a plot run refuses ``--drop`` (exit 2, before Ray starts)
 and ignores ``--prune-unvalidated``.
 """
@@ -48,10 +49,14 @@ from ComputeTargets import (
 )
 from CosmologyConcepts import alpha_value, temperature, phi_value, pi_value
 from CosmologyConcepts.Models import AbstractModel
+from CosmologyConcepts.Models.model_options import (
+    model_option,
+    model_table,
+    one_loop_drain_model_over,
+)
 from CosmologyConcepts.drain_model import (
     DRAIN_LAW_ONE_LOOP,
     DRAIN_MODEL_FIXED,
-    DRAIN_MODEL_ONE_LOOP,
     alpha_label,
 )
 from datastorekit.SQL.ProfileAgent import ProfileAgent
@@ -79,6 +84,7 @@ from extract_common import (
     add_ScalarHistory_labels,
     alpha_path,
     build_fields_frame,
+    export_root,
     history_directory,
     plot_dark_radiation,
     write_bounces_csv,
@@ -1388,12 +1394,14 @@ def plot_ScalarHistory(
     CONST_MP2: float = CONST_MP * CONST_MP
     CONST_3_MP2: float = 3.0 * CONST_MP2
 
-    # every per-row product goes under <output>/<label>/alpha=<alpha>/ (the fixed model) or
-    # <output>/<label>/<drain_model>/A=<A>/ (any other), the history's own alpha_value row
-    # (inelastic-reflection prompt 10, R26, ruling 3; one-loop-drain prompt 04, P35)
-    base_path = Path(args.output).resolve()
+    # every per-row product goes under <root>/alpha=<alpha>/ (the fixed model) or
+    # <root>/<drain_model>/A=<A>/ (any other), the history's own alpha_value row
+    # (inelastic-reflection prompt 10, R26, ruling 3; one-loop-drain prompt 04, P35); <root> is the history's
+    # potential's, <output>/<label>/<potential>/ (export_root; power-law-wall prompt 06, P50)
     base_path = alpha_path(
-        base_path / f"{model_label}", model.alpha.value, model.alpha.drain_model
+        export_root(args.output, model_label, model_option(lagrangian)),
+        model.alpha.value,
+        model.alpha.drain_model,
     )
     plot_path = base_path / f"plots/{history_directory(beta, M / units.eV, n)}"
     csv_path = base_path / f"csv/{history_directory(beta, M / units.eV, n)}"
@@ -1603,9 +1611,18 @@ with ShardedPool(
     # README P1). A parameter the build was not run with stops the run here, before any figure
     # (U4); a model that was never stored is skipped with a warning (U3)
     units = Planck_units()
+    # the potentials, in the order of --models, each exported in a pass of its own (power-law-wall prompt 06, P50)
+    models = distinct_values(args.models)
     try:
         alpha_values = distinct_values(args.alpha_values)
         A_values = distinct_values(args.A_values or [])
+        # each potential's A rows are under its own one-loop drain model (P47; the parser refused a potential with
+        # none at an n of --n-values)
+        A_drain_models = (
+            {p: one_loop_drain_model_over(p, args.n_values) for p in models}
+            if A_values
+            else {}
+        )
         atol, rtol, T_init, phi_init, pi_init, tuning_tol, alpha_rows = (
             plot_inputs.parameters(
                 pool,
@@ -1617,15 +1634,20 @@ with ShardedPool(
                 tuning_tol=args.tuning_tolerance,
                 alpha_values=alpha_values,
                 A_values=A_values,
+                A_drain_models=distinct_values(list(A_drain_models.values())),
             )
         )
 
         # read in the stored tables of beta and M
         beta_table, M_table = plot_inputs.stored_grid(pool, units)
 
-        Model_array = plot_inputs.exponential_models(
-            pool, M_table, beta_table, args.n_values, units
-        )
+        # each potential's models, in its own table (P49)
+        Model_arrays = {
+            p: plot_inputs.potential_models(
+                pool, p, M_table, beta_table, args.n_values, units
+            )
+            for p in models
+        }
 
         model_list = plot_inputs.models(pool, units)
     except plot_inputs.PlotOptionNotStored as e:
@@ -1641,26 +1663,44 @@ with ShardedPool(
         print(
             "@@ plot_ScalarHistory: no alpha values (--no-alpha-values): no fixed-law row is read"
         )
-    if A_values:
+    # the A rows of each potential's own drain model, one line per drain model, which names its potentials when
+    # --models names more than one (power-law-wall prompt 06, P47)
+    for drain_model in distinct_values(list(A_drain_models.values())):
+        named = [p for p in models if A_drain_models[p] == drain_model]
         print(
-            f"@@ plot_ScalarHistory: A values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == DRAIN_MODEL_ONE_LOOP)} ({DRAIN_MODEL_ONE_LOOP})"
+            f"@@ plot_ScalarHistory: A values {', '.join(f'{a.value:.5g}' for a in alpha_rows if a.drain_model == drain_model)} ({drain_model})"
+            + (f" for {', '.join(named)}" if len(models) > 1 else "")
         )
 
     for model_data in model_list:
         tags = []
 
-        # one pipeline per alpha row: the fixed rows in the order of --alpha-values, then the one-loop rows in
-        # the order of --A-values (one-loop-drain prompt 04)
-        for alpha in alpha_rows:
-            run_pipeline(
-                model_data,
-                Model_array,
-                T_init,
-                phi_init,
-                pi_init,
-                atol,
-                rtol,
-                tuning_tol,
-                alpha,
-                tags,
+        # one pass per potential, in the order of --models: its own models and rows, under its own root
+        # (power-law-wall prompt 06, P50)
+        for potential in models:
+            Model_array = Model_arrays[potential]
+            print(
+                f"@@ plot_ScalarHistory: {potential} ({model_table(potential)}): "
+                f"{len(Model_array)} model(s), exported under {export_root(args.output, model_data['label'], potential)}"
             )
+
+            # one pipeline per alpha row of the potential: the fixed rows in the order of --alpha-values, then its
+            # one-loop rows in the order of --A-values (one-loop-drain prompt 04; power-law-wall prompt 06, P47)
+            for alpha in alpha_rows:
+                if alpha.drain_model not in (
+                    DRAIN_MODEL_FIXED,
+                    A_drain_models.get(potential),
+                ):
+                    continue
+                run_pipeline(
+                    model_data,
+                    Model_array,
+                    T_init,
+                    phi_init,
+                    pi_init,
+                    atol,
+                    rtol,
+                    tuning_tol,
+                    alpha,
+                    tags,
+                )

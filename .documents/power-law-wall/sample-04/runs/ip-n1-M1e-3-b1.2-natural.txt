@@ -1,0 +1,11 @@
+# command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 1e-3 --model inverse-power --n 1
+# start: 2026-11-15 19:38:23 19:38  up 15 days, 21:59, 1 user, load averages: 20.09 15.98 9.56
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- integrate_history (history_and_bbn-beta1.2-M0.001-inverse-power-n1): integration failure
+   integrate_scalar_history (history_and_bbn-beta1.2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-05, pi^2/2 = 3.998e-05)
+!! integrate_history (history_and_bbn-beta1.2-M0.001-inverse-power-n1): marked as total integration failure
+!! tune_history (history_and_bbn-beta1.2-M0.001-inverse-power-n1): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 4.184e-48 M_P at the floor reflection at N = 17.66785152), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+!! tune_history (history_and_bbn-beta1.2-M0.001-inverse-power-n1): integrate_scalar_history (history_and_bbn-beta1.2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-05, pi^2/2 = 3.998e-05) (tuning integration 0)
+history beta=1.2 M=0.001 model=inverse-power n=1: FAILURE wall=1.4 s reason=integrate_scalar_history (history_and_bbn-beta1.2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-05, pi^2/2 = 3.998e-05) (tuning integration 0)
+sample outcome: status=failure exit=1 reason=integrate_scalar_history (history_and_bbn-beta1.2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-05, pi^2/2 = 3.998e-05) (tuning integration 0)
+# end: 2026-11-15 19:38:26 exit=1 wall=3 s 19:38  up 15 days, 21:59, 1 user, load averages: 20.09 15.98 9.56

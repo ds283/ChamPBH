@@ -1,0 +1,53 @@
+** registered_run: registered as power-law-wall-07-mixed-c-20261116T202347
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/power-law-wall-07-mixed-c-20261116T202347/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-16 20:23:47,657	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-16 20:23:47,689	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-mixed.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- using model InversePowerModel, V = V0 [1 + (M/phi)^n], with n = [ 1 ]
+   -- populated beta sample grid with 1 value = [ 2 ]
+   -- populated M sample grid with 2 values = [ 2.4353e-06 eV, 2435.3 GeV ]
+   -- no alpha grid (--no-alpha-values): no fixed-law row is built
+   -- populated A grid with 1 value = [ 1 ] (one-loop-measured-v1 for exponential; one-loop-measured-pl-v1 for inverse-power)
+   -- total number of models to integrate = 4 (exponential 2, inverse-power 2)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+(Datastore pid=99135) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+(compute_scalar_history pid=99170) !! tune_history (power-law-wall-07-mixed-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-16T20:24:00): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.7029 < ln 10 at N = 21.40767202 (generation 1); the generations below ln 10 carry 0.007975 of K
+(compute_scalar_history pid=99170) !! tune_history (power-law-wall-07-mixed-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-16T20:24:00): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.1436 < ln 10 at N = 21.93611759 (generation 1); the generations below ln 10 carry 0.007975 of K
+   -- ALL WORK ITEMS COMPLETE in time 9.68s
+      Queue summary: 2 lookup (avg 12.4/min), 2 compute (avg 12.4/min), 2 store (avg 12.4/min), 2 validation (avg 12.4/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.875s
+      Queue summary: 2 lookup (avg 137.2/min), 2 compute (avg 137.2/min), 2 store (avg 137.2/min), 2 validation (avg 137.2/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 10s
+      Queue summary: 2 lookup (avg 12.01/min), 2 compute (avg 12.01/min), 2 store (avg 12.01/min), 2 validation (avg 12.01/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-pl-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 9.11s
+      Queue summary: 2 lookup (avg 13.18/min), 2 compute (avg 13.18/min), 2 store (avg 13.18/min), 2 validation (avg 13.18/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.861s
+      Queue summary: 2 lookup (avg 139.3/min), 2 compute (avg 139.3/min), 2 store (avg 139.3/min), 2 validation (avg 139.3/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.1s
+      Queue summary: 2 lookup (avg 13.19/min), 2 compute (avg 13.19/min), 2 store (avg 13.19/min), 2 validation (avg 13.19/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0
+** launcher saw exit status 0

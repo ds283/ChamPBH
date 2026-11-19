@@ -80,7 +80,7 @@ PILOT = [
     ADDRESS,
 ]
 PILOT_SCOPE = (
-    "config exponential.yaml; β 1.1, 1.15, 1.2, 10, 25; M 0.001 Mp; n 1; φ* 5 Mp; "
+    "config exponential.yaml; models exponential; β 1.1, 1.15, 1.2, 10, 25; M 0.001 Mp; n 1; φ* 5 Mp; "
     "tuning tolerance 1e-05; α 0; 16 shards; job rrk-adoption-04-reference"
 )
 
@@ -144,7 +144,7 @@ class TestRegistration(WrapperCase):
         self.assertIs(manifest["git_dirty"], False)
         self.assertEqual(
             manifest["scope"],
-            "no config file; β 0.1–3.0, 5 per unit; "
+            "no config file; models exponential; β 0.1–3.0, 5 per unit; "
             "M 10^25–10^26.5 eV, 6 per decade; n 1; φ* 5 Mp; tuning tolerance 1e-05; "
             "α 0; 20 shards; job ChamPBH-test",
         )
@@ -407,7 +407,7 @@ class TestScope(WrapperCase):
         )
         self.assertEqual(
             scope,
-            "no config file; β 7 values, 0.1–3; M 1e+24 eV; n 1, 2; φ* 2.5 Mp; "
+            "no config file; models exponential; β 7 values, 0.1–3; M 1e+24 eV; n 1, 2; φ* 2.5 Mp; "
             "tuning tolerance 1e-06; α 0; 20 shards; job ChamPBH-test",
         )
 

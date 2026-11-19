@@ -82,22 +82,23 @@ invariants that hold across all of them:
   the repository root:
   ```bash
   PYTHONPATH=. ./venv/bin/python -m unittest discover -s CosmologyModels/tests -t .   # 26 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 684 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 163 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 292 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 76 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t .    # 809 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ObjectFactories/tests -t .   # 175 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s tools/tests -t .             # 312 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s RunDrivers/tests -t .        # 79 tests
   ```
-  `ComputeTargets/tests` took 807 s on 2026-11-13 (the two halves below, 175.6 s and 631.3 s, at one-minute
-  loads of 4.4 and 4.2 at their starts), and longer on a loaded machine; a Bash call is
+  `ComputeTargets/tests` took 710 s on 2026-11-19, in a worktree (the two halves below, 150.4 s and 559.7 s, at one-minute
+  loads of 8.5 and 3.9 at their starts), and longer on a loaded machine; a Bash call is
   capped at ten minutes, so run it in two halves:
   ```bash
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 219 tests
-  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 465 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[a-f]*.py'   # 226 tests
+  PYTHONPATH=. ./venv/bin/python -m unittest discover -s ComputeTargets/tests -t . -p 'test_[g-z]*.py'   # 583 tests
   ```
-  (The counts are those of 2026-11-13; the last change to a count was `electroweak-eos` 01 on 2026-11-12, which added 15
-  tests to `tools/tests` (`test_build_w_table`) and, with its 01a, 19 to the `test_[g-z]` half
-  (`test_resolved_turning_points`). `tools/tests` holds tuned histories and took 333.3 s on 2026-11-13, at a one-minute
-  load of 6.6 at its start; run it alone.) They **must not
+  (The counts are those of 2026-11-19, when `power-law-wall` 07c2 last changed one, adding 4 tests to the `test_[g-z]`
+  half (`test_k_ex`'s class (d)) to the 22 that `power-law-wall` 07c added there on 2026-11-18 (`test_k_ex`, new, 12;
+  `test_measured_drain_law` 7; `test_power_wall_law`, `test_wall_model` and `test_models_option` 1 each).
+  `tools/tests` holds tuned histories and took 376.2 s on 2026-11-19, in a worktree, at a one-minute load of 46.7 at its
+  start; run it alone.) They **must not
   need a Ray cluster or a persistent datastore**. A test may build a temporary
   SQLite datastore in a `tempfile` directory, through `datastorekit`'s undecorated actor
   (`standin_pool.DatastoreClass`) inside ChamPBH's stand-in cluster (`StoreFixtures/standin_pool.py`,
@@ -135,15 +136,17 @@ invariants that hold across all of them:
   convention T_ν = T_γ. The per-sample ρ_χ/ρ_R is a payload key beside the samples, not a field of
   `SampleValues`, and a `ScalarHistoryValue` column. α is a key of every history, in its own table
   `alpha_value`, whose row is the pair (value, `drain_model`) since `one-loop-drain` 03: `"fixed"`, where the
-  value is α, or `"one-loop-measured-v1"`, the one-loop law's model and version, where it is A
+  value is α, or `"one-loop-exponential-v2"` or `"one-loop-inverse-power-v1"`, the one-loop law's model and version, where it is A
   (`CosmologyConcepts/drain_model.py`); a lookup that names no model is `"fixed"`.
 - **The plot scripts** (`plot_by_beta.py`, `plot_ScalarHistory.py`) read a store read-only, through
   `plot_inputs.py`, and stop (exit 2) if their options do not match the ones the build used: the
-  tolerances, T*, φ*, `--tuning-tolerance` (a key of every history), `--alpha-values` (an α with no stored
-  `alpha_value` row under the fixed model; each α's output goes under `<label>/alpha=<α>/`, α = 0 included),
-  `--A-values` (an A with no stored `alpha_value` row under the one-loop model, `one-loop-measured-v1`, even when the
+  tolerances, T*, φ*, `--tuning-tolerance` (a key of every history), `--models` (a potential, `exponential` or
+  `inverse-power`, with no stored model row; each potential's output goes under `<label>/<model>/`, every potential's
+  alike, with a `model` column in its `histories.csv`), `--alpha-values` (an α with no stored
+  `alpha_value` row under the fixed model; each α's output goes under `<label>/<model>/alpha=<α>/`, α = 0 included),
+  `--A-values` (an A with no stored `alpha_value` row under its potential's one-loop model, `one-loop-exponential-v2` or `one-loop-inverse-power-v1`, even when the
   same value is stored as an α, as an α stored only as an A is refused likewise; each A's output goes under
-  `<label>/<drain_model>/A=<A>/`) and `--n-values` (an n with no stored model). `--tuning-max-integrations` is not
+  `<label>/<model>/<drain_model>/A=<A>/`) and `--n-values` (an n with no stored model). `--tuning-max-integrations` is not
   matched; it is not a key. `main.py` and the plot scripts hold the `--alpha-values` rows first and the `--A-values`
   rows after them; `--A-values` has no default, so a run without it is the fixed-law run, and a run given only
   `--A-values` also builds, or reads, α = 0, unless it is also given `--no-alpha-values`, which builds, or reads, no

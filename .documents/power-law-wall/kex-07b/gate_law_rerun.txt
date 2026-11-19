@@ -1,0 +1,33 @@
+# fit_fn.py gate (power-law-wall prompt 03 §1.4); start: 11:38  up 17 days, 13:59, 1 user, load averages: 8.25 12.66 12.17
+
+## the law at synthetic inputs
+Planck_units n = 1: 122019 evaluations, 122019 equal bit for bit, largest |difference| 0
+Planck_units n = 2: 122019 evaluations, 122019 equal bit for bit, largest |difference| 0
+GeV_units    n = 1: 122019 evaluations, 122019 equal bit for bit, largest |difference| 0
+GeV_units    n = 2: 122019 evaluations, 122019 equal bit for bit, largest |difference| 0
+
+## 02's maps, candidate by candidate (A = 1, w_gate = 1)
+ip-n1-M1e-15-b2.0-a0.01.txt    n = 1:  85 candidates (one_loop 85), 85 equal bit for bit, largest |difference| 0
+ip-n1-M1e-15-b2.0-a0.1.txt     n = 1:  49 candidates (one_loop 49), 49 equal bit for bit, largest |difference| 0
+ip-n1-M1e-33-b2.0-a0.01.txt    n = 1:  85 candidates (one_loop 85), 85 equal bit for bit, largest |difference| 0
+ip-n1-M1e-33-b2.0-a0.1.txt     n = 1:  49 candidates (one_loop 49), 49 equal bit for bit, largest |difference| 0
+ip-n1-M4e-31-b1.2-a0.01.txt    n = 1:   5 candidates (one_loop 5), 5 equal bit for bit, largest |difference| 0
+ip-n1-M4e-31-b1.2-a0.1.txt     n = 1:   9 candidates (one_loop 9), 9 equal bit for bit, largest |difference| 0
+ip-n1-M4e-31-b2.0-a0.01.txt    n = 1:  85 candidates (one_loop 85), 85 equal bit for bit, largest |difference| 0
+ip-n1-M4e-31-b2.0-a0.1.txt     n = 1:  49 candidates (one_loop 49), 49 equal bit for bit, largest |difference| 0
+ip-n1-M4e-31-b2.9-a0.01.txt    n = 1:  55 candidates (one_loop 55), 55 equal bit for bit, largest |difference| 0
+ip-n1-M4e-31-b2.9-a0.1.txt     n = 1:  42 candidates (one_loop 42), 42 equal bit for bit, largest |difference| 0
+ip-n1-M4e-31-b3.05-a0.1.txt    n = 1:  61 candidates (one_loop 61), 61 equal bit for bit, largest |difference| 0
+ip-n2-M1e-15-b2.0-a0.01.txt    n = 2:  85 candidates (one_loop 85), 85 equal bit for bit, largest |difference| 0
+ip-n2-M1e-15-b2.0-a0.1.txt     n = 2:  49 candidates (one_loop 49), 49 equal bit for bit, largest |difference| 0
+ip-n2-M1e-33-b2.0-a0.01.txt    n = 2:  85 candidates (one_loop 85), 85 equal bit for bit, largest |difference| 0
+ip-n2-M1e-33-b2.0-a0.1.txt     n = 2:  49 candidates (one_loop 49), 49 equal bit for bit, largest |difference| 0
+ip-n2-M4e-31-b1.2-a0.01.txt    n = 2:   5 candidates (one_loop 5), 5 equal bit for bit, largest |difference| 0
+ip-n2-M4e-31-b1.2-a0.1.txt     n = 2:   9 candidates (one_loop 9), 9 equal bit for bit, largest |difference| 0
+ip-n2-M4e-31-b2.0-a0.01.txt    n = 2:  85 candidates (one_loop 85), 85 equal bit for bit, largest |difference| 0
+ip-n2-M4e-31-b2.0-a0.1.txt     n = 2:  49 candidates (one_loop 49), 49 equal bit for bit, largest |difference| 0
+ip-n2-M4e-31-b2.9-a0.01.txt    n = 2:  55 candidates (one_loop 55), 55 equal bit for bit, largest |difference| 0
+ip-n2-M4e-31-b2.9-a0.1.txt     n = 2:  42 candidates (one_loop 42), 42 equal bit for bit, largest |difference| 0
+ip-n2-M4e-31-b3.05-a0.1.txt    n = 2:  61 candidates (one_loop 61), 61 equal bit for bit, largest |difference| 0
+all 22 files: 1148 candidates, 1148 equal bit for bit
+# end: 11:38  up 17 days, 13:59, 1 user, load averages: 8.25 12.66 12.17

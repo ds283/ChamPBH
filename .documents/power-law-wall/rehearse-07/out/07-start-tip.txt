@@ -1,0 +1,28 @@
+acquired the rehearsal lock (/Users/ds283/.raypoolkit/rehearsal-lock) for ChamPBH: power-law-wall 07 (rehearsal, tip)
+2026-11-16 19:14:31,915	INFO usage_lib.py:448 -- Usage stats collection is disabled.
+2026-11-16 19:14:31,915	INFO scripts.py:1043 -- Local node IP: 127.0.0.1
+2026-11-16 19:14:37,156	SUCC scripts.py:1084 -- --------------------
+2026-11-16 19:14:37,156	SUCC scripts.py:1085 -- Ray runtime started.
+2026-11-16 19:14:37,156	SUCC scripts.py:1086 -- --------------------
+2026-11-16 19:14:37,156	INFO scripts.py:1088 -- Next steps
+2026-11-16 19:14:37,156	INFO cli_output_helpers.py:16 -- Note: The following commands are intended for use on
+2026-11-16 19:14:37,156	INFO cli_output_helpers.py:17 -- the head node or within the cluster network.
+2026-11-16 19:14:37,156	INFO scripts.py:1106 -- To connect to this Ray cluster:
+2026-11-16 19:14:37,156	INFO scripts.py:1108 -- import ray
+2026-11-16 19:14:37,157	INFO scripts.py:1109 -- ray.init()
+2026-11-16 19:14:37,157	INFO scripts.py:1123 -- To submit a Ray job using the Ray Jobs CLI:
+2026-11-16 19:14:37,157	INFO scripts.py:1124 --   RAY_API_SERVER_ADDRESS='http://127.0.0.1:8267' ray job submit --working-dir . -- python my_script.py
+2026-11-16 19:14:37,157	INFO scripts.py:1133 -- See https://docs.ray.io/en/latest/cluster/running-applications/job-submission/index.html 
+2026-11-16 19:14:37,157	INFO scripts.py:1137 -- for more information on submitting Ray jobs to the Ray cluster.
+2026-11-16 19:14:37,157	INFO scripts.py:1142 -- To terminate the Ray runtime, run
+2026-11-16 19:14:37,157	INFO scripts.py:1143 --   ray stop
+2026-11-16 19:14:37,157	INFO scripts.py:1146 -- To view the status of the cluster, use
+2026-11-16 19:14:37,157	INFO scripts.py:1147 --   ray status
+2026-11-16 19:14:37,157	INFO scripts.py:1151 -- To monitor and debug Ray, view the dashboard at 
+2026-11-16 19:14:37,157	INFO scripts.py:1152 --   127.0.0.1:8267
+2026-11-16 19:14:37,157	INFO scripts.py:1159 -- If connection to the dashboard fails, check your firewall settings and network configuration.
+recorded pid 85681 in /Users/ds283/.raypoolkit/rehearsal-lock/owner
+>> ray_cluster: address 127.0.0.1:6380
+>> ray_cluster: dashboard http://127.0.0.1:8267
+>> ray_cluster: actors: RAY_AUTH_MODE=token ./venv/bin/ray list actors --address 127.0.0.1:6380
+>> ray_cluster: started in 7s; gcs_server pid 85681

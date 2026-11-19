@@ -160,7 +160,7 @@ def turning_point(phi_t: float, log_R: float) -> ClassicalTurningPoint:
         phi_t=phi_t,
         log_omega_t_squared=0.0,
         log_R=log_R,
-        lambda_t=1.0,
+        pulse_rate_t=1.0,
         log_k_ex=0.0,
         ell_t=0.0,
     )

@@ -1,0 +1,37 @@
+# stage1a_power.py; start: 23:56  up 15 days,  2:17, 1 user, load averages: 15.51 16.41 11.28
+# EPS = 1e-05, rtol = 1e-11, atol = 1e-14; S_n by the 241-point ln-k trapezoid on [1e-3, 10] omega_t
+S n=1 x= 1.0e-03 (M     units): S_n = 1.0262017e-02  |beta|^2_max 7.67986e-02 at k/omega_t 0.1647  exponential S(L_E = 0.0009995) 1.0041e-02  ratio S_n/S(L_E) 1.022  (10 s)
+S n=1 x= 1.0e-02 (M     units): S_n = 1.0262017e-02  |beta|^2_max 7.67986e-02 at k/omega_t 0.1647  exponential S(L_E = 0.00995) 1.0041e-02  ratio S_n/S(L_E) 1.022  (10 s)
+S n=1 x= 1.0e-01 (M     units): S_n = 1.0262017e-02  |beta|^2_max 7.67986e-02 at k/omega_t 0.1647  exponential S(L_E = 0.09531) 1.0041e-02  ratio S_n/S(L_E) 1.022  (10 s)
+S n=1 x= 3.0e-01 (M     units): S_n = 1.0262017e-02  |beta|^2_max 7.67986e-02 at k/omega_t 0.1647  exponential S(L_E = 0.2624) 1.0041e-02  ratio S_n/S(L_E) 1.022  (10 s)
+S n=1 x= 1.0e+00 (M     units): S_n = 1.0262017e-02  |beta|^2_max 7.67986e-02 at k/omega_t 0.1647  exponential S(L_E = 0.6931) 9.3298e-03  ratio S_n/S(L_E) 1.100  (10 s)
+S n=1 x= 3.0e+00 (M     units): S_n = 1.0262017e-02  |beta|^2_max 7.67986e-02 at k/omega_t 0.1647  exponential S(L_E = 1.386) 7.6326e-03  ratio S_n/S(L_E) 1.344  (10 s)
+S n=1 x= 1.0e+01 (M     units): S_n = 1.0262017e-02  |beta|^2_max 7.67986e-02 at k/omega_t 0.1647  exponential S(L_E = 2.398) 5.8753e-03  ratio S_n/S(L_E) 1.747  (10 s)
+S n=1 x= 1.0e+02 (M     units): S_n = 1.0262017e-02  |beta|^2_max 7.67986e-02 at k/omega_t 0.1647  exponential S(L_E = 4.615) 3.4488e-03  ratio S_n/S(L_E) 2.976  (10 s)
+S n=1 x= 1.0e+03 (M     units): S_n = 1.0262017e-02  |beta|^2_max 7.67986e-02 at k/omega_t 0.1647  exponential S(L_E = 6.909) 2.2006e-03  ratio S_n/S(L_E) 4.663  (10 s)
+S n=2 x= 1.0e-03 (M     units): S_n = 5.2161510e-03  |beta|^2_max 3.39016e-02 at k/omega_t 0.2073  exponential S(L_E = 0.0009995) 1.0041e-02  ratio S_n/S(L_E) 0.519  (8 s)
+S n=2 x= 1.0e-02 (M     units): S_n = 5.2161510e-03  |beta|^2_max 3.39016e-02 at k/omega_t 0.2073  exponential S(L_E = 0.00995) 1.0041e-02  ratio S_n/S(L_E) 0.519  (8 s)
+S n=2 x= 1.0e-01 (M     units): S_n = 5.2161510e-03  |beta|^2_max 3.39016e-02 at k/omega_t 0.2073  exponential S(L_E = 0.09531) 1.0041e-02  ratio S_n/S(L_E) 0.519  (8 s)
+S n=2 x= 3.0e-01 (M     units): S_n = 5.2161510e-03  |beta|^2_max 3.39016e-02 at k/omega_t 0.2073  exponential S(L_E = 0.2624) 1.0041e-02  ratio S_n/S(L_E) 0.519  (8 s)
+S n=2 x= 1.0e+00 (M     units): S_n = 5.2161510e-03  |beta|^2_max 3.39016e-02 at k/omega_t 0.2073  exponential S(L_E = 0.6931) 9.3298e-03  ratio S_n/S(L_E) 0.559  (8 s)
+S n=2 x= 3.0e+00 (M     units): S_n = 5.2161510e-03  |beta|^2_max 3.39016e-02 at k/omega_t 0.2073  exponential S(L_E = 1.386) 7.6326e-03  ratio S_n/S(L_E) 0.683  (8 s)
+S n=2 x= 1.0e+01 (M     units): S_n = 5.2161510e-03  |beta|^2_max 3.39016e-02 at k/omega_t 0.2073  exponential S(L_E = 2.398) 5.8753e-03  ratio S_n/S(L_E) 0.888  (8 s)
+S n=2 x= 1.0e+02 (M     units): S_n = 5.2161510e-03  |beta|^2_max 3.39016e-02 at k/omega_t 0.2073  exponential S(L_E = 4.615) 3.4488e-03  ratio S_n/S(L_E) 1.512  (8 s)
+S n=2 x= 1.0e+03 (M     units): S_n = 5.2161510e-03  |beta|^2_max 3.39016e-02 at k/omega_t 0.2073  exponential S(L_E = 6.909) 2.2006e-03  ratio S_n/S(L_E) 2.370  (8 s)
+S n=1 x= 1.0e+10 (phi_t units): S_n = 1.0262017e-02  |beta|^2_max 7.67986e-02 at k/omega_t 0.1647  exponential S(L_E = 23.03) 3.6629e-04  ratio S_n/S(L_E) 28.016  (10 s)
+S n=2 x= 1.0e+10 (phi_t units): S_n = 5.2161510e-03  |beta|^2_max 3.39016e-02 at k/omega_t 0.2073  exponential S(L_E = 23.03) 3.6629e-04  ratio S_n/S(L_E) 14.241  (8 s)
+Q n=1 [1e-3, 10] 121 points: ln-k trapezoid 1.0262015e-02  linear-k trapezoid 1.0272094e-02
+Q n=1 [1e-3, 10] 241 points: ln-k trapezoid 1.0262017e-02  linear-k trapezoid 1.0264536e-02
+Q n=1 [1e-3, 10] 481 points: ln-k trapezoid 1.0262015e-02  linear-k trapezoid 1.0262644e-02
+Q n=1 [1e-4, 20] 601 points: ln-k trapezoid 1.0262016e-02  linear-k trapezoid 1.0262723e-02
+Q n=1 [1e-3, 10] 121 points at EPS/100: ln-k trapezoid 1.0262008e-02
+Q n=1 stage 2, loop off, 80 modes a decade on [1e-3, 10.61]: S = 1.0262021e-02
+Q n=1 stage 2, loop off, 160 modes a decade on [1e-3, 10.61]: S = 1.0262021e-02  (82 s)
+Q n=2 [1e-3, 10] 121 points: ln-k trapezoid 5.2161479e-03  linear-k trapezoid 5.2212708e-03
+Q n=2 [1e-3, 10] 241 points: ln-k trapezoid 5.2161510e-03  linear-k trapezoid 5.2174314e-03
+Q n=2 [1e-3, 10] 481 points: ln-k trapezoid 5.2161506e-03  linear-k trapezoid 5.2164707e-03
+Q n=2 [1e-4, 20] 601 points: ln-k trapezoid 5.2161533e-03  linear-k trapezoid 5.2165131e-03
+Q n=2 [1e-3, 10] 121 points at EPS/100: ln-k trapezoid 5.2161499e-03
+Q n=2 stage 2, loop off, 80 modes a decade on [1e-3, 12.25]: S = 5.2161592e-03
+Q n=2 stage 2, loop off, 160 modes a decade on [1e-3, 12.25]: S = 5.2161591e-03  (65 s)
+# end (109 s): 23:58  up 15 days,  2:19, 1 user, load averages: 5.59 12.63 10.42

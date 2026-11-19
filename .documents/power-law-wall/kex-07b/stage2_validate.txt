@@ -1,0 +1,41 @@
+# stage2_kex.py validate; start: 11:42  up 17 days, 14:03, 1 user, load averages: 12.17 10.71 11.28
+# start lab n=1 ell_new~1.48 (running 1, load 12.17)
+# start lab n=1 ell_new~1.48 (running 2, load 12.17)
+# start lab n=1 ell_new~1.48 (running 3, load 12.17)
+# start lab n=1 ell_new~1.23 (running 4, load 12.17)
+born lab n=1 ell_new~1.48: ell_new 1.4800, k_IR = 10 m_ta = 2.276 k_ex: born.run -5.543153e+00, stage 2 cut 8.056871e+04, rel -1.5e+04 (FAILS 2e-3); |dE/E| 1.2e+05  (14 s, load 12.17 -> 10.95)
+# start lab n=1 ell_new~1.23 (running 4, load 10.95)
+classical lab n=1 ell_new~1.48: L=3.88445 loop off, grid [3e-3, 30 k_ex(v3) = 23.4259]: 8 pi^2 rho 4.079875e-03, walls.py 4.079873e-03, rel +4.6e-07 (holds 1e-4); v_out/v_in 0.998290  (17 s, load 12.17 -> 10.95)
+# start lab n=1 ell_new~1.23 (running 4, load 10.95)
+classical lab n=1 ell_new~1.23: L=3.31586 loop off, grid [3e-3, 30 k_ex(v3) = 24.3396]: 8 pi^2 rho 4.680869e-03, walls.py 4.680856e-03, rel +2.7e-06 (holds 1e-4); v_out/v_in 0.997881  (19 s, load 12.17 -> 10.64)
+# start lab n=2 ell_new~1.45 (running 4, load 10.64)
+born lab n=1 ell_new~1.23: ell_new 1.2300, k_IR = 10 m_ta = 2.923 k_ex: born.run -9.985838e+00, stage 2 cut 6.834293e+04, rel -6.8e+03 (FAILS 2e-3); |dE/E| 1.2e+05  (13 s, load 10.95 -> 10.16)
+# start lab n=2 ell_new~1.45 (running 4, load 10.16)
+classical lab n=2 ell_new~1.45: L=3.52507 loop off, grid [3e-3, 30 k_ex(v3) = 21.8622]: 8 pi^2 rho 3.082766e-03, walls.py 3.082764e-03, rel +6.3e-07 (holds 1e-4); v_out/v_in 0.999543  (16 s, load 10.64 -> 9.74)
+born lab n=2 ell_new~1.45: ell_new 1.4500, k_IR = 10 m_ta = 2.346 k_ex: born.run -5.999811e+00, stage 2 cut 6.979116e+05, rel -1.2e+05 (FAILS 2e-3); |dE/E| 8.9e+05  (7 s, load 10.16 -> 9.74)
+# start lab n=2 ell_new~1.45 (running 3, load 9.74)
+convergence lab n=2 ell_new~1.45: base frac 0.864112 (passes 1, mref 4.3311e-02, kref 1.8464e-01)
+    ppd x2   frac 0.864112 d -4.4e-08 |dE/E| 4.6e-11
+    kmax x2  frac 0.864082 d -3.0e-05 |dE/E| 2.5e-11
+    kmin /2  frac 0.863969 d -1.4e-04 |dE/E| 4.5e-11
+    h /2     frac 0.864112 d -3.7e-08 |dE/E| 5.9e-12
+    EPS /10  frac 0.864112 d -5.2e-07 |dE/E| 4.1e-11
+    F0 /100  frac 0.864111 d -7.0e-07 |dE/E| 4.2e-11
+    largest |d| 1.4e-04 (holds +-0.006)  (202 s, load 9.36 -> 32.90)
+convergence lab n=1 ell_new~1.23: base frac 0.799314 (passes 1, mref 5.3889e-02, kref 1.8437e-01)
+    ppd x2   frac 0.799314 d -2.3e-07 |dE/E| 4.3e-11
+    kmax x2  frac 0.799332 d +1.8e-05 |dE/E| 1.5e-11
+    kmin /2  frac 0.798394 d -9.2e-04 |dE/E| 3.6e-11
+    h /2     frac 0.799314 d -9.1e-09 |dE/E| 2.0e-12
+    EPS /10  frac 0.799314 d -2.3e-07 |dE/E| 4.6e-11
+    F0 /100  frac 0.799314 d -1.2e-07 |dE/E| 5.8e-11
+    largest |d| 9.2e-04 (holds +-0.006)  (324 s, load 10.64 -> 25.63)
+convergence lab n=1 ell_new~1.48: base frac 0.858766 (passes 1, mref 3.3594e-02, kref 1.4758e-01)
+    ppd x2   frac 0.858766 d -3.6e-08 |dE/E| 3.4e-11
+    kmax x2  frac 0.858735 d -3.2e-05 |dE/E| 1.4e-11
+    kmin /2  frac 0.858653 d -1.1e-04 |dE/E| 2.7e-11
+    h /2     frac 0.858766 d -5.1e-09 |dE/E| 2.1e-12
+    EPS /10  frac 0.858766 d -1.4e-07 |dE/E| 2.8e-11
+    F0 /100  frac 0.858766 d -3.6e-07 |dE/E| 4.0e-11
+    largest |d| 1.1e-04 (holds +-0.006)  (356 s, load 12.17 -> 21.70)
+# stage2_kex.py validate end (357 s): 11:48  up 17 days, 14:09, 1 user, load averages: 21.70 21.24 15.94

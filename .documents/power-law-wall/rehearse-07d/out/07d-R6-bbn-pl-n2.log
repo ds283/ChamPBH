@@ -1,0 +1,5 @@
+$ env PYTHONPATH=. ./venv/bin/python -u tools/bbn_from_store.py /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl --beta 2.0 --M-Mp 4e-31 --phi-init-Mp 5 --model inverse-power --n 2 --drain-law one_loop --alpha 1 --small-network --variant prod
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+store beta=2 M=4e-31 model=inverse-power n=2 phi=5 A=1 (one-loop-inverse-power-v1): shard=0000 serial=48 RHS=71382 window_samples=1483 lowT rtol=default atol=default, small network
+  stored: failure=0 Yp=0.247252831052115 DoH=2.4689877633886104 PRyM_version=bf24c3d+ri02+sr01+bt02 reason=
+  prod   Yp=0.2472528311 DoH=2.468987763 He3oH=1.043471562 Li7oH=5.468473532 wall=14.7 s

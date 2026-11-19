@@ -24,7 +24,8 @@ T_J = T_CMB with `integrate_history` and adjusts the model's normalization and p
 H_J(T_CMB) = H0 and phi_ref = phi_min(T_CMB), within --tuning-tolerance on both residuals and
 --tuning-max-integrations integrations (main.py's options and defaults, 1e-5 and 30). The setup
 is tools/history_and_bbn.py's, whose constants and z grid are imported from it: QCD_Cosmology on
-Planck2018, ExponentialModel with n = 1 and the given M and beta, pi* = 0, T* = 2e4 GeV, the
+Planck2018, ExponentialModel with n = 1 (by default; --model and --n below) and the given M and beta,
+pi* = 0, T* = 2e4 GeV, the
 default tolerances and step control, and 250 samples per decade of 1 + z to main.py's 300
 decades. The final integration's IntegrationResult is kept by wrapping integrate_scalar_history
 for the duration of the call, as history_and_bbn.py does, and its turning points of T_J are
@@ -45,7 +46,8 @@ Run from the repository root, since the EOS reads its table from the working dir
     ./venv/bin/python tools/surfing_scan.py --out PATH.csv \\
         (--beta-min B0 --beta-max B1 --beta-step DB | --beta-values B [B ...]) \\
         [--phi-init-Mp X] [--M M] [--T-window-low-GeV T] \\
-        [--tuning-tolerance TOL] [--tuning-max-integrations K]
+        [--tuning-tolerance TOL] [--tuning-max-integrations K] \\
+        [--model {exponential,inverse-power}] [--n N]
 
 The beta grid is beta_k = beta_min + k * beta_step, rounded to 10 decimal places, for every k with
 beta_k <= beta_max. M is in units of the (reduced) Planck mass. --T-stop-GeV was removed by
@@ -68,6 +70,15 @@ payload's reason, so it is not retried. PATH.csv.meta.json records the git HEAD,
 tracked file differs from it, VERSION_LABEL, the options (the tuning tolerance, the cap and the
 window's edge among them), the start time and the Python and SciPy versions; it is written at the
 start of a run, and a resumed run adds an entry to it.
+
+--model {exponential,inverse-power} (default exponential) and --n N (an integer >= 1, default 1)
+(power-law-wall prompt 01 §1.4, README §6.3 P5) choose the model, as tools/history_and_bbn.py's options
+do: ExponentialModel, V_0 e^{(M/phi)^n}, or InversePowerModel, V_0 [1 + (M/phi)^n]. With neither given,
+or with both at their defaults, every console line, the CSV and PATH.csv.meta.json are as before.
+Otherwise the run's first console line and every beta's line name `model=<model> n=<n>` (each beta's
+just after beta=...), the meta.json entry's options record "model" and "n", and the CSV gains no column.
+A CSV is resumed only by a run of its own model and n, as recorded in the last entry of its meta.json
+(absent keys are the defaults, and so is a missing meta.json); another model or n is refused, exit 2.
 
 One console line per beta:
 
@@ -128,21 +139,22 @@ from config.argument_parser import (  # noqa: E402
     positive_int,
 )
 from config.version import VERSION_LABEL  # noqa: E402
-from CosmologyConcepts import (  # noqa: E402
-    M_value,
-    beta_value,
-    temperature,
-)
+from CosmologyConcepts import temperature  # noqa: E402
 from CosmologyConcepts.FieldValues import phi_value, pi_value  # noqa: E402
-from CosmologyConcepts.Models.ExponentialModel import ExponentialModel  # noqa: E402
 from CosmologyModels.GenericEOS.QCD_Cosmology import QCD_Cosmology  # noqa: E402
 from CosmologyModels.LambdaCDM import Planck2018  # noqa: E402
 from extract_common import find_kicks, reachability_roots  # noqa: E402
 from tools.history_and_bbn import (  # noqa: E402
+    MODEL_CLASSES,
+    MODEL_DEFAULT,
+    N_DEFAULT,
     PHI_INIT_MP,
     PI_INIT,
     T_INIT_GEV,
     _z_grid,
+    build_model,
+    model_label,
+    model_task_suffix,
 )
 from Units import Planck_units  # noqa: E402
 
@@ -242,12 +254,17 @@ def beta_grid(beta_min: float, beta_max: float, beta_step: float) -> List[float]
     return [round(beta_min + k * beta_step, 10) for k in range(n + 1)]
 
 
-def make_setup() -> SimpleNamespace:
-    """The units, parameters and cosmology of history_and_bbn.py, built once per run."""
+def make_setup(model: str = MODEL_DEFAULT, n: int = N_DEFAULT) -> SimpleNamespace:
+    """
+    The units, parameters and cosmology of history_and_bbn.py, built once per run, and the model's
+    option name and n (power-law-wall prompt 01 §1.4), which run_history reads.
+    """
     units = Planck_units()
     params = Planck2018()
     cosmology = QCD_Cosmology(0, units, params)
-    return SimpleNamespace(units=units, params=params, cosmology=cosmology)
+    return SimpleNamespace(
+        units=units, params=params, cosmology=cosmology, model=model, n=n
+    )
 
 
 def in_window(
@@ -282,13 +299,14 @@ def run_history(
     final integration's IntegrationResult captured by wrapping integrate_scalar_history for the
     duration of the call (history_and_bbn.py's idiom; only the last is kept, and the wrapper is
     removed in a finally), and its turning points of T_J on the tuned realization, restricted to
-    the window that ends at the first crossing of T_J = T_window_low_GeV (`in_window`).
+    the window that ends at the first crossing of T_J = T_window_low_GeV (`in_window`). The model is
+    setup.model's, at setup.n (make_setup; exponential at n = 1 by default).
     """
     units = setup.units
 
-    model = ExponentialModel(
-        0, M_value(0, M_Mp * units.PlanckMass), 1, beta_value(0, beta), units
-    )
+    model_name = getattr(setup, "model", MODEL_DEFAULT)
+    n = getattr(setup, "n", N_DEFAULT)
+    model = build_model(model_name, M_Mp, n, beta, units)
     T_init = temperature(0, T_INIT_GEV * units.GeV)
 
     SM = importlib.import_module("ComputeTargets.ScalarHistory")
@@ -310,7 +328,8 @@ def run_history(
             phi_value(0, phi_init_Mp * units.PlanckMass),
             pi_value(0, PI_INIT),
             _z_grid(),
-            task_label=f"surfing_scan-beta{beta:g}-M{M_Mp:g}",
+            task_label=f"surfing_scan-beta{beta:g}-M{M_Mp:g}"
+            + model_task_suffix(model_name, n),
             tolerance=tolerance,
             max_integrations=max_integrations,
             # one line per integration, as before (tuning-followups prompt 02, U2); the default is
@@ -499,6 +518,12 @@ def _provenance(args, betas: Sequence[float], skipped: int, resumed: bool) -> di
             "tuning_tolerance": args.tuning_tolerance,
             "tuning_max_integrations": args.tuning_max_integrations,
             "out": str(args.out),
+            # the model and n only away from the defaults, so that a default run's entry is as before
+            **(
+                {}
+                if model_label(args.model, args.n) == ""
+                else {"model": args.model, "n": args.n}
+            ),
         },
         "beta_grid": list(betas),
         "resumed": resumed,
@@ -563,6 +588,22 @@ def read_existing(path: Path, args) -> Optional[List[float]]:
     return betas
 
 
+def recorded_model(meta_path: Path) -> Tuple[str, int]:
+    """
+    (model, n) of the run that last wrote a CSV, from the last entry of its meta.json: the entry's
+    options' "model" and "n", each the default where absent, as they are in a default run's entry and
+    in every entry written before power-law-wall prompt 01; the defaults if there is no meta.json.
+    """
+    if not meta_path.exists():
+        return MODEL_DEFAULT, N_DEFAULT
+    with open(meta_path) as f:
+        runs = json.load(f).get("runs", [])
+    if len(runs) == 0:
+        return MODEL_DEFAULT, N_DEFAULT
+    options = runs[-1].get("options", {})
+    return options.get("model", MODEL_DEFAULT), options.get("n", N_DEFAULT)
+
+
 def _console_T(value: Optional[float]) -> str:
     return "-" if value is None else f"{value:.6g}"
 
@@ -620,6 +661,20 @@ def main(argv=None) -> int:
         removed_by="08",
         replacement=T_STOP_REMOVED,
     )
+    parser.add_argument(
+        "--model",
+        choices=tuple(MODEL_CLASSES),
+        default=MODEL_DEFAULT,
+        help="the model (default %(default)s): exponential, V_0 exp((M/phi)^n); inverse-power, "
+        "V_0 [1 + (M/phi)^n] (power-law-wall prompt 01). Away from the defaults the console names "
+        "the model and n",
+    )
+    parser.add_argument(
+        "--n",
+        type=positive_int,
+        default=N_DEFAULT,
+        help="the model's index n, an integer >= 1 (default %(default)s)",
+    )
     parser.add_argument("--out", type=Path, required=True, help="the CSV path")
     args = parser.parse_args(argv)
 
@@ -656,20 +711,29 @@ def main(argv=None) -> int:
         existing = read_existing(out, args)
         if existing is None:
             return 2
+        recorded = recorded_model(meta_path)
+        if recorded != (args.model, args.n):
+            print(
+                f"!! surfing_scan: {out} was written with model={recorded[0]} n={recorded[1]} "
+                f"(its {meta_path.name}), but this run has model={args.model} n={args.n}; "
+                f"not resumed"
+            )
+            return 2
         done = existing
 
     todo = [b for b in betas if not any(abs(b - d) <= BETA_MATCH for d in done)]
     skipped = len(betas) - len(todo)
 
     _write_meta(meta_path, _provenance(args, betas, skipped, resumed), resumed)
+    shown_model = model_label(args.model, args.n)
     print(
         f"-- surfing_scan: {len(todo)} beta to run, {skipped} already in {out}; "
         f"phi*={args.phi_init_Mp:g} M_P, M={args.M:g} M_P, tuned to T_CMB with tolerance "
         f"{args.tuning_tolerance:g} (at most {args.tuning_max_integrations} integrations), "
-        f"window to T_J={args.T_window_low_GeV:g} GeV"
+        f"window to T_J={args.T_window_low_GeV:g} GeV" + shown_model
     )
 
-    setup = make_setup()
+    setup = make_setup(args.model, args.n)
     units = setup.units
     cosmology = setup.cosmology
     kicks = find_kicks(
@@ -730,12 +794,12 @@ def main(argv=None) -> int:
 
             if outcome.failure_reason is not None:
                 print(
-                    f"beta={beta!r} status=failure wall={outcome.wall_s:.1f} s "
+                    f"beta={beta!r}{shown_model} status=failure wall={outcome.wall_s:.1f} s "
                     f"reason={outcome.failure_reason}"
                 )
             else:
                 print(
-                    f"beta={beta!r} status=ok "
+                    f"beta={beta!r}{shown_model} status=ok "
                     f"capture={_console_T(row['T_capture_GeV'])} "
                     f"max={_console_T(row['T_max_GeV'])} "
                     f"second_dip={_console_T(row['T_second_dip_GeV'])} "

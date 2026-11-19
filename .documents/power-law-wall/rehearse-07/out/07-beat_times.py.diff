@@ -1,0 +1,57 @@
+--- .documents/one-loop-drain/rehearse-06/beat_times.py	2026-11-13 20:15:33
++++ .documents/power-law-wall/rehearse-07/beat_times.py	2026-11-16 18:52:57
+@@ -1,13 +1,14 @@
+ """
+-one-loop-drain prompt 06: copied from inelastic-reflection 11's (.documents/inelastic-reflection/out/11-beat_times.py.txt),
+-with this paragraph added. Run from the main checkout's root as
+-`./venv/bin/python -u .documents/one-loop-drain/rehearse-06/beat_times.py var/one-loop-drain/06/runs/<slug>.log
+-var/one-loop-drain/06/runs/<slug>.beats`; it reads the log and var/runs/<RUN_ID>/status.json, and writes only OUT, under
+-var/one-loop-drain/06/.
++power-law-wall prompt 07: copied from one-loop-drain 06's (.documents/one-loop-drain/rehearse-06/beat_times.py), with this
++paragraph replacing 06's and --runs defaulting to the registry's own runs root (runregistrykit.find_client_root(), which is
++the main checkout's var/runs from any worktree of the repository, P61). Run from this worktree's root as
++`./venv/bin/python -u .documents/power-law-wall/rehearse-07/beat_times.py var/power-law-wall/07/runs/<slug>.log
++var/power-law-wall/07/runs/<slug>.beats`; it reads the log and <runs>/<RUN_ID>/status.json, and writes only OUT, under
++var/power-law-wall/07/.
+ 
+ The recorder of jordan-normalization prompt 09 (the orchestrator's note for 09, ruling 7).
+ 
+-    ./venv/bin/python -u beat_times.py LOG OUT [--runs var/runs] [--poll 0.5] [--limit 3600]
++    ./venv/bin/python -u beat_times.py LOG OUT [--runs <the registry's runs root>] [--poll 0.5] [--limit 3600]
+ 
+ Reads only. It waits for LOG to exist, then appends to OUT one line per complete line of LOG as it
+ appears,
+@@ -42,14 +43,20 @@
+ 
+ 
+ def main(argv=None):
+-    p = argparse.ArgumentParser(description="Record a launch log's lines and heartbeats.")
++    p = argparse.ArgumentParser(
++        description="Record a launch log's lines and heartbeats."
++    )
+     p.add_argument("log", type=Path)
+     p.add_argument("out", type=Path)
+-    p.add_argument("--runs", type=Path, default=Path("var/runs"))
++    p.add_argument("--runs", type=Path, default=None)
+     p.add_argument("--poll", type=float, default=0.5)
+     p.add_argument("--limit", type=float, default=3600.0)
+     args = p.parse_args(argv)
++    if args.runs is None:
++        import runregistrykit
+ 
++        args.runs = Path(runregistrykit.find_client_root().runs_root)
++
+     start = time.monotonic()
+     deadline = start + args.limit
+     out = open(args.out, "a", buffering=1, encoding="utf-8")
+@@ -57,7 +64,9 @@
+     def emit(kind, text):
+         out.write(f"{_utc()} {kind} {text}\n")
+ 
+-    emit("X", f"recorder started: log {args.log}, runs {args.runs}, poll {args.poll:g} s")
++    emit(
++        "X", f"recorder started: log {args.log}, runs {args.runs}, poll {args.poll:g} s"
++    )
+ 
+     offset = 0
+     pending = b""

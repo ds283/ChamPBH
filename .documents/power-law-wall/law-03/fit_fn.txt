@@ -1,0 +1,118 @@
+# fit_fn.py (power-law-wall prompt 03 §1.1); start: 11:04  up 15 days, 13:25, 1 user, load averages: 2.96 5.06 6.44
+# from ../../../../.documents/power-law-wall/wall-02/stage2_scan.txt; residual = fraction_power - stage 2 (at production's literals)
+# windows: rising branch on 0.3 < ln R < 20.0, falling branch on ln R > 28.0; unweighted least squares in f
+
+## n = 1
+points: 78 curve rows, 71 with the field back out, 62 of them not classical; rising branch fitted on 22, falling branch on 40
+the fit, with curve_fit's standard errors:
+  G  = 0.002867691398 +- 0.00333
+  R0 = -1.274144764 +- 1.64
+  P  = 2.221263776 +- 0.339
+  A  = 27.96707093 +- 0.137
+  c  = 14.98350653 +- 0.141
+  switch (at the unrounded constants) ln R_x = 23.08937095
+the literals (six significant figures): {'G': 0.00286769, 'R0': -1.27414, 'P': 2.22126, 'A': 27.9671, 'c': 14.9835}; the fit's rounding equals them
+  switch at the literals: brentq 23.08943252571177, literal 23.08943252571177 (equal)
+  f at the switch: rising 0.968260757534008, falling (as fraction_power) 0.9682607575340081, step 1.11e-16; f_prev = fraction_power(nextafter(switch, 0)) 0.968260757534008
+  note 03 §0: G 0.002868, R0 -1.2741, P 2.2213, A 27.9671, c 14.9835, switch 23.089; worst all 0.054, rms 0.019, worst mapped 0.004, peak f 0.968
+  peak f 0.9683 at ln R 23.09
+residuals at the literals:
+  all non-classical back-out points      max |res| 0.0541  rms 0.0191  mean -0.0004  (62 points)
+  the mapped histories' points           max |res| 0.0042  rms 0.0033  mean -0.0033  (12 points)
+  regime one-loop ell >= 1               max |res| 0.0090  rms 0.0035  mean -0.0017  (34 points)
+  regime one-loop ell >= 1  mapped       max |res| 0.0042  rms 0.0033  mean -0.0033  (12 points)
+  regime one-loop ell < 1                max |res| 0.0270  rms 0.0187  mean +0.0158  (5 points)
+  regime gap                             max |res| 0.0541  rms 0.0299  mean -0.0019  (23 points)
+  curve 4e-31  all                     max |res| 0.0541  rms 0.0214  mean -0.0010  (20 points)
+  curve 4e-31  one-loop ell >= 1       max |res| 0.0090  rms 0.0040  mean -0.0018  (12 points)
+  curve 4e-31  gap                     max |res| 0.0541  rms 0.0335  mean +0.0001  (8 points)
+  curve 1e-33  all                     max |res| 0.0425  rms 0.0107  mean -0.0013  (21 points)
+  curve 1e-33  one-loop ell >= 1       max |res| 0.0042  rms 0.0029  mean -0.0017  (12 points)
+  curve 1e-33  one-loop ell < 1        max |res| 0.0040  rms 0.0038  mean +0.0038  (2 points)
+  curve 1e-33  gap                     max |res| 0.0425  rms 0.0180  mean -0.0021  (7 points)
+  curve 1e-15  all                     max |res| 0.0508  rms 0.0231  mean +0.0012  (21 points)
+  curve 1e-15  one-loop ell >= 1       max |res| 0.0047  rms 0.0035  mean -0.0016  (10 points)
+  curve 1e-15  one-loop ell < 1        max |res| 0.0270  rms 0.0240  mean +0.0238  (3 points)
+  curve 1e-15  gap                     max |res| 0.0508  rms 0.0341  mean -0.0038  (8 points)
+  the fit at its unrounded constants, for comparison: max |res| 0.0541  rms 0.0191  mean -0.0004  (62 points)
+not back out (7; law - measured): curve-4e-31-n1 ln R 26.10 (one-loop ell < 1): -0.0172, curve-4e-31-n1 ln R 23.09 (one-loop ell < 1): -0.0062, curve-4e-31-n1 ln R 21.22 (one-loop ell < 1): +0.0040, curve-4e-31-n1 ln R 20.46 (one-loop ell < 1): +0.0114, curve-1e-33-n1 ln R 22.91 (gap): -0.0070, curve-1e-15-n1 ln R 25.86 (one-loop ell >= 1): -0.0177, curve-1e-15-n1 ln R 22.62 (one-loop ell < 1): -0.0070
+classical points (f against R S_n; not fitted): curve-4e-31-n1 ln R -0.50: f 2.9450e-03, R S_n 6.2242e-03, ratio 0.473, curve-4e-31-n1 ln R -2.00: f 1.1830e-03, R S_n 1.3888e-03, ratio 0.852, curve-4e-31-n1 ln R -5.00: f 6.9000e-05, R S_n 6.9145e-05, ratio 0.998, curve-1e-33-n1 ln R -0.50: f 2.9450e-03, R S_n 6.2242e-03, ratio 0.473, curve-1e-33-n1 ln R -2.00: f 1.1830e-03, R S_n 1.3888e-03, ratio 0.852, curve-1e-33-n1 ln R -5.00: f 6.9000e-05, R S_n 6.9145e-05, ratio 0.998, curve-1e-15-n1 ln R -0.50: f 2.9450e-03, R S_n 6.2242e-03, ratio 0.473, curve-1e-15-n1 ln R -2.00: f 1.1830e-03, R S_n 1.3888e-03, ratio 0.852, curve-1e-15-n1 ln R -5.00: f 6.9000e-05, R S_n 6.9145e-05, ratio 0.998
+grid rows back out with |dE/E| <= 1e-8 (20), not fitted: max |res| 0.0165  rms 0.0115  mean +0.0094  (20 points)
+  grid-power ln R   10.00 ln x  230.2585 gap                f 0.451178  law 0.463663  res +0.0125
+  grid-copy  ln R   10.00 ln x    4.6052 gap                f 0.451413  law 0.463663  res +0.0123
+  grid-copy  ln R   10.00 ln x    6.9078 gap                f 0.451201  law 0.463663  res +0.0125
+  grid-copy  ln R   10.00 ln x    9.2103 gap                f 0.451180  law 0.463663  res +0.0125
+  grid-copy  ln R   10.00 ln x   23.0259 gap                f 0.451178  law 0.463663  res +0.0125
+  grid-copy  ln R   10.00 ln x   92.1034 gap                f 0.451178  law 0.463663  res +0.0125
+  grid-power ln R   20.00 ln x  230.2585 one-loop ell < 1   f 0.905632  law 0.922146  res +0.0165
+  grid-copy  ln R   20.00 ln x    4.6052 one-loop ell < 1   f 0.906469  law 0.922146  res +0.0157
+  grid-copy  ln R   20.00 ln x    6.9078 one-loop ell < 1   f 0.905625  law 0.922146  res +0.0165
+  grid-copy  ln R   20.00 ln x    9.2103 one-loop ell < 1   f 0.905632  law 0.922146  res +0.0165
+  grid-copy  ln R   20.00 ln x   23.0259 one-loop ell < 1   f 0.905632  law 0.922146  res +0.0165
+  grid-copy  ln R   20.00 ln x   92.1034 one-loop ell < 1   f 0.905632  law 0.922146  res +0.0165
+  grid-power ln R   40.00 ln x  230.2585 one-loop ell >= 1  f 0.668714  law 0.673049  res +0.0043
+  grid-copy  ln R   40.00 ln x    6.9078 one-loop ell >= 1  f 0.668419  law 0.673049  res +0.0046
+  grid-copy  ln R   40.00 ln x    9.2103 one-loop ell >= 1  f 0.668690  law 0.673049  res +0.0044
+  grid-copy  ln R   40.00 ln x   23.0259 one-loop ell >= 1  f 0.668714  law 0.673049  res +0.0043
+  grid-copy  ln R   40.00 ln x   92.1034 one-loop ell >= 1  f 0.668714  law 0.673049  res +0.0043
+  grid-power ln R  100.00 ln x  230.2585 one-loop ell >= 1  f 0.282933  law 0.280329  res -0.0026
+  grid-copy  ln R  100.00 ln x   23.0259 one-loop ell >= 1  f 0.282933  law 0.280329  res -0.0026
+  grid-copy  ln R  100.00 ln x   92.1034 one-loop ell >= 1  f 0.282933  law 0.280329  res -0.0026
+the step at ln R = 0: f_n(0+) = 0.00489983 (rising branch at the smallest positive ln R) against R S_n = 0.010262 at ln R = 0; ratio 0.4775
+
+## n = 2
+points: 75 curve rows, 69 with the field back out, 60 of them not classical; rising branch fitted on 23, falling branch on 32
+the fit, with curve_fit's standard errors:
+  G  = 0.002859133016 +- 0.00383
+  R0 = -1.109027154 +- 1.45
+  P  = 2.456129839 +- 0.423
+  A  = 19.60997131 +- 0.0572
+  c  = 10.90389777 +- 0.0956
+  switch (at the unrounded constants) ln R_x = 16.7101814
+the literals (six significant figures): {'G': 0.00285913, 'R0': -1.10903, 'P': 2.45613, 'A': 19.61, 'c': 10.9039}; the fit's rounding equals them
+  switch at the literals: brentq 16.710187997698853, literal 16.710187997698853 (equal)
+  f at the switch: rising 0.9658629831718698, falling (as fraction_power) 0.9658629831718698, step 0; f_prev = fraction_power(nextafter(switch, 0)) 0.9658629831718697
+  note 03 §0: G 0.002859, R0 -1.109, P 2.4561, A 19.61, c 10.9039, switch 16.71; worst all 0.056, rms 0.022, worst mapped 0.003, peak f 0.966
+  peak f 0.9659 at ln R 16.71
+residuals at the literals:
+  all non-classical back-out points      max |res| 0.0557  rms 0.0215  mean -0.0016  (60 points)
+  the mapped histories' points           max |res| 0.0030  rms 0.0017  mean -0.0012  (15 points)
+  regime one-loop ell >= 1               max |res| 0.0309  rms 0.0075  mean -0.0028  (31 points)
+  regime one-loop ell >= 1  mapped       max |res| 0.0030  rms 0.0017  mean -0.0012  (15 points)
+  regime one-loop ell < 1                max |res| 0.0336  rms 0.0250  mean +0.0152  (6 points)
+  regime gap                             max |res| 0.0557  rms 0.0311  mean -0.0044  (23 points)
+  curve 4e-31  all                     max |res| 0.0483  rms 0.0240  mean +0.0007  (21 points)
+  curve 4e-31  one-loop ell >= 1       max |res| 0.0309  rms 0.0105  mean -0.0049  (11 points)
+  curve 4e-31  one-loop ell < 1        max |res| 0.0336  rms 0.0331  mean +0.0331  (2 points)
+  curve 4e-31  gap                     max |res| 0.0483  rms 0.0330  mean +0.0004  (8 points)
+  curve 1e-33  all                     max |res| 0.0380  rms 0.0115  mean -0.0047  (20 points)
+  curve 1e-33  one-loop ell >= 1       max |res| 0.0017  rms 0.0013  mean -0.0003  (12 points)
+  curve 1e-33  one-loop ell < 1        max |res| 0.0018  rms 0.0018  mean +0.0018  (1 points)
+  curve 1e-33  gap                     max |res| 0.0380  rms 0.0194  mean -0.0131  (7 points)
+  curve 1e-15  all                     max |res| 0.0557  rms 0.0262  mean -0.0009  (19 points)
+  curve 1e-15  one-loop ell >= 1       max |res| 0.0221  rms 0.0080  mean -0.0035  (8 points)
+  curve 1e-15  one-loop ell < 1        max |res| 0.0318  rms 0.0228  mean +0.0078  (3 points)
+  curve 1e-15  gap                     max |res| 0.0557  rms 0.0370  mean -0.0017  (8 points)
+  the fit at its unrounded constants, for comparison: max |res| 0.0557  rms 0.0215  mean -0.0016  (60 points)
+not back out (6; law - measured): curve-4e-31-n2 ln R 18.91 (one-loop ell >= 1): -0.0491, curve-4e-31-n2 ln R 17.01 (one-loop ell < 1): -0.0148, curve-4e-31-n2 ln R 15.20 (one-loop ell < 1): +0.0233, curve-1e-33-n2 ln R 15.00 (gap): +0.0262, curve-1e-15-n2 ln R 20.15 (one-loop ell >= 1): -0.0434, curve-1e-15-n2 ln R 16.55 (one-loop ell >= 1): +0.0018
+classical points (f against R S_n; not fitted): curve-4e-31-n2 ln R -0.50: f 1.6560e-03, R S_n 3.1638e-03, ratio 0.523, curve-4e-31-n2 ln R -2.00: f 6.1500e-04, R S_n 7.0593e-04, ratio 0.871, curve-4e-31-n2 ln R -5.00: f 3.5000e-05, R S_n 3.5146e-05, ratio 0.996, curve-1e-33-n2 ln R -0.50: f 1.6560e-03, R S_n 3.1638e-03, ratio 0.523, curve-1e-33-n2 ln R -2.00: f 6.1500e-04, R S_n 7.0593e-04, ratio 0.871, curve-1e-33-n2 ln R -5.00: f 3.5000e-05, R S_n 3.5146e-05, ratio 0.996, curve-1e-15-n2 ln R -0.50: f 1.6560e-03, R S_n 3.1638e-03, ratio 0.523, curve-1e-15-n2 ln R -2.00: f 6.1500e-04, R S_n 7.0593e-04, ratio 0.871, curve-1e-15-n2 ln R -5.00: f 3.5000e-05, R S_n 3.5146e-05, ratio 0.996
+grid rows back out with |dE/E| <= 1e-8 (15), not fitted: max |res| 0.0300  rms 0.0225  mean +0.0081  (15 points)
+  grid-power ln R    8.00 ln x  230.2585 gap                f 0.447927  law 0.477883  res +0.0300
+  grid-copy  ln R    8.00 ln x    4.6052 gap                f 0.447988  law 0.477883  res +0.0299
+  grid-copy  ln R    8.00 ln x    6.9078 gap                f 0.447933  law 0.477883  res +0.0299
+  grid-copy  ln R    8.00 ln x    9.2103 gap                f 0.447927  law 0.477883  res +0.0300
+  grid-copy  ln R    8.00 ln x   23.0259 gap                f 0.447927  law 0.477883  res +0.0300
+  grid-copy  ln R    8.00 ln x   92.1034 gap                f 0.447927  law 0.477883  res +0.0300
+  grid-copy  ln R   15.00 ln x    4.6052 one-loop ell < 1   f 0.902069  law 0.928356  res +0.0263
+  grid-power ln R   25.00 ln x  230.2585 one-loop ell >= 1  f 0.768603  law 0.751215  res -0.0174
+  grid-copy  ln R   25.00 ln x    6.9078 one-loop ell >= 1  f 0.768522  law 0.751215  res -0.0173
+  grid-copy  ln R   25.00 ln x    9.2103 one-loop ell >= 1  f 0.768597  law 0.751215  res -0.0174
+  grid-copy  ln R   25.00 ln x   23.0259 one-loop ell >= 1  f 0.768603  law 0.751215  res -0.0174
+  grid-copy  ln R   25.00 ln x   92.1034 one-loop ell >= 1  f 0.768603  law 0.751215  res -0.0174
+  grid-power ln R   60.00 ln x  230.2585 one-loop ell >= 1  f 0.328317  law 0.329292  res +0.0010
+  grid-copy  ln R   60.00 ln x   23.0259 one-loop ell >= 1  f 0.328317  law 0.329292  res +0.0010
+  grid-copy  ln R   60.00 ln x   92.1034 one-loop ell >= 1  f 0.328317  law 0.329292  res +0.0010
+the step at ln R = 0: f_n(0+) = 0.00367977 (rising branch at the smallest positive ln R) against R S_n = 0.00521615 at ln R = 0; ratio 0.7055
+
+# beside: the exponential law's accuracy (crossover out/fit_law.txt): one-loop max 0.074 (rms 0.021), gap max 0.062 (rms 0.024)
+# end: 11:04  up 15 days, 13:25, 1 user, load averages: 2.96 5.06 6.44

@@ -103,18 +103,22 @@ class TestTheKey(unittest.TestCase):
             "DRAIN_LAW_ONE_LOOP",
             "DRAIN_LAWS",
             "DRAIN_MODEL_FIXED",
-            "DRAIN_MODEL_ONE_LOOP",
+            "DRAIN_MODEL_ONE_LOOP_EXPONENTIAL",
             "DRAIN_MODELS",
             "check_drain_law",
             "law_of",
         ):
             with self.subTest(name=name):
                 self.assertIs(getattr(SM, name), getattr(DM, name))
-        self.assertEqual(DM.DRAIN_MODELS, ("fixed", "one-loop-measured-v1"))
+        # power-law-wall prompt 03 (README §6.6 P17): the power wall's model joins after the two, whose order is kept
+        self.assertEqual(
+            DM.DRAIN_MODELS,
+            ("fixed", "one-loop-exponential-v2", "one-loop-inverse-power-v1"),
+        )
 
     def test_the_mapping(self):
         self.assertEqual(DM.law_of("fixed"), "fixed")
-        self.assertEqual(DM.law_of("one-loop-measured-v1"), "one_loop")
+        self.assertEqual(DM.law_of("one-loop-exponential-v2"), "one_loop")
         for bad in ("one_loop", "one-loop-measured-v0", "", None, 1):
             with self.subTest(bad=bad):
                 with self.assertRaises(ValueError) as caught:
@@ -137,17 +141,17 @@ class TestTheKey(unittest.TestCase):
     def test_alpha_value_checks_the_pair(self):
         a = alpha_value(1, 0.1)
         self.assertEqual((a.drain_model, a.drain_law), ("fixed", "fixed"))
-        b = alpha_value(2, 5.0, "one-loop-measured-v1")
+        b = alpha_value(2, 5.0, "one-loop-exponential-v2")
         self.assertEqual(
-            (b.drain_model, b.drain_law), ("one-loop-measured-v1", "one_loop")
+            (b.drain_model, b.drain_law), ("one-loop-exponential-v2", "one_loop")
         )
         # alpha = 0 is natural mode under the fixed model only; A > 0 has no upper bound
         alpha_value(3, 0.0)
-        alpha_value(4, 1.0e6, "one-loop-measured-v1")
+        alpha_value(4, 1.0e6, "one-loop-exponential-v2")
         for args in (
-            (5, 0.0, "one-loop-measured-v1"),
-            (5, -0.0, "one-loop-measured-v1"),
-            (5, inf, "one-loop-measured-v1"),
+            (5, 0.0, "one-loop-exponential-v2"),
+            (5, -0.0, "one-loop-exponential-v2"),
+            (5, inf, "one-loop-exponential-v2"),
             (5, 1.0),
             (5, -0.1),
             (5, 0.1, "bogus"),
@@ -522,7 +526,7 @@ class TestTheHistoryRecord(unittest.TestCase):
         return dict(
             bounces=SM.BounceRecord(rows=(None,) * 7, K_final=K_final),
             drain=SM.DrainRecord(
-                "one_loop", 1.0, "one-loop-measured-v1", 3, candidates, 2
+                "one_loop", 1.0, "one-loop-exponential-v2", 3, candidates, 2
             ),
             injections=injections,
             parking=parking,
@@ -651,7 +655,7 @@ class TestTheLawThroughTheStoredPath(unittest.TestCase):
     def test_compute_passes_the_keys_law(self):
         for alpha, law in (
             (alpha_value(7, 0.1), "fixed"),
-            (alpha_value(8, 0.5, "one-loop-measured-v1"), "one_loop"),
+            (alpha_value(8, 0.5, "one-loop-exponential-v2"), "one_loop"),
         ):
             with self.subTest(law=law):
                 history = SM.ScalarHistory(
@@ -661,7 +665,7 @@ class TestTheLawThroughTheStoredPath(unittest.TestCase):
                     T_Jordan_init=mock.Mock(),
                     phi_Einstein_init=mock.Mock(),
                     pi_Einstein_init=mock.Mock(),
-                    model=mock.Mock(),
+                    model=mock.Mock(one_loop_drain_model="one-loop-exponential-v2"),
                     tuning_tol=mock.Mock(tol=1e-5),
                     alpha=alpha,
                     atol=mock.Mock(tol=1e-8),

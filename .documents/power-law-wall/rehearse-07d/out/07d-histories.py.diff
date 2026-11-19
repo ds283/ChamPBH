@@ -1,0 +1,34 @@
+--- rehearse-07/histories.py	2026-11-16 18:52:58
++++ rehearse-07d/histories.py	2026-11-19 07:44:55
+@@ -1,15 +1,16 @@
+ """
+-The stored-values reader of power-law-wall prompt 07 (§1.6, R7), adapted from one-loop-drain prompt 06's
+-(.documents/one-loop-drain/rehearse-06/histories.py) to read the potential: each history's model through its model_type
++The stored-values reader of power-law-wall prompt 07d (§1.5, R7), copied from prompt 07's
++(.documents/power-law-wall/rehearse-07/histories.py) with only its paths, its dates and this sentence changed. 07's was
++adapted from one-loop-drain prompt 06's (.documents/one-loop-drain/rehearse-06/histories.py) to read the potential: each history's model through its model_type
+ (1 ExponentialModel, 2 InversePowerModel; CosmologyConcepts/Models/model_ids.py), from that table, never by model_serial
+ alone (README §6.9 P37). Stdlib only.
+ 
+-    ./venv/bin/python .documents/power-law-wall/rehearse-07/histories.py STORE_STEM
++    ./venv/bin/python .documents/power-law-wall/rehearse-07d/histories.py STORE_STEM
+ 
+-STORE_STEM is the store's path without `.db` (e.g. <main checkout>/var/datastores/power-law-wall-07-pl). Every shard
++STORE_STEM is the store's path without `.db` (e.g. <main checkout>/var/datastores/power-law-wall-07d-r2-pl). Every shard
+ (`<stem>-shard*.db`) is read through sqlite3 with `file:...?mode=ro` URIs only; the primary is not opened, no file is
+-written, and neither datastorekit nor Ray is used. Its output goes to stdout; prompt 07 sends it to a file under
+-var/power-law-wall/07/.
++written, and neither datastorekit nor Ray is used. Its output goes to stdout; prompt 07d sends it to a file under
++var/power-law-wall/07d-r2/.
+ 
+ One line per ScalarHistory row, sorted by (potential, n, drain_model, alpha, M, beta), with:
+   - its key: the potential (`exponential` or `inverse-power`, from model_type), drain_model (`fixed` where the store's
+@@ -18,7 +19,7 @@
+   - failure, validated, failure_reason;
+   - the tuning's outputs (TUNING_OUTPUT_KEYS) by repr, the integrations (tuning_iterations) and the steps by kind;
+   - compute_time (the final integration's) and the tuning wall: the store's `timestamp` less the time in the history's
+-    label (main.py's datetime.now() at the compute's submission, whole seconds, local time = UTC on 2026-11-16), so that
++    label (main.py's datetime.now() at the compute's submission, whole seconds, local time = UTC on 2026-11-16 and 2026-11-19), so that
+     it includes the queueing of the compute task;
+   - Delta_N_eff today and at 1 MeV, and the BBNData row's Yp and D/H (or its failure);
+   - for a one-loop history: the drain record's counts and shares, ell_min, log_R_min_drain, bounce_rows, and the bounce

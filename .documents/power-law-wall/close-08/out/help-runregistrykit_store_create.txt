@@ -1,0 +1,10 @@
+$ PYTHONPATH=. ./venv/bin/python -m runregistrykit store create --help
+# exit 0
+usage: runregistrykit store create [-h] --purpose TEXT PRIMARY
+
+positional arguments:
+  PRIMARY
+
+options:
+  -h, --help      show this help message and exit
+  --purpose TEXT

@@ -1,0 +1,258 @@
+A store: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed
+B store: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp
+selection: potential exponential, n any
+matched by (potential, M, n, beta, phi*, alpha, drain model); floats by float.hex
+left out, by name: serial and every *_serial column; version; label; timestamp; compute_time; mean_RHS_time; max_RHS_time; min_RHS_time; NP_compute_time; BBN_compute_time
+key tables: every column both hold but serial, timestamp, version
+A: 16 shard files, 20 selected histories; B: 16 shard files, 20 selected histories
+
+=== exponential n=1 fixed alpha=0 M=2.43532e+24eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #65; B shard0015.db #46
+    key QCD_Cosmology (via cosmology_serial): compared name, omega_m, omega_cc, h, f_baryon, T_CMB_Kelvin, Neff; A only []; B only []
+    key ExponentialModel (via model_serial): compared n_value; A only []; B only []
+    key tolerance (via atol_serial): compared log10_tol; A only []; B only []
+    key alpha_value (via alpha_serial): compared value, drain_model; A only []; B only []
+    key phi_value (via phi_Einstein_init_serial): compared value_PlanckMass; A only []; B only []
+    key pi_value (via pi_Einstein_init_serial): compared value_PlanckMass; A only []; B only []
+    key temperature (via T_Jordan_init_serial): compared value_GeV; A only []; B only []
+    key IntegrationSolver (via solver_serial): compared stepping, label; A only []; B only []
+    key M_value (via M_serial): compared value_eV; A only []; B only []
+    key beta_value (via beta_serial): compared value; A only []; B only []
+    ScalarHistory: compared (77 + extra_data): cosmology_type, model_type, failure, z_samples, compute_steps, RHS_evaluations, first_bounce_N, first_bounce_log_T_Jordan, first_bounce_phi_Einstein, first_bounce_reflected, phi_Einstein_1MeV, density_NP_ratio_1MeV, phi_Einstein_70keV, density_NP_ratio_70keV, normalization, V_ref, phi_ref, phi_0, pi_0, tracking, residual_H, residual_phi, tuning_iterations, plain_steps, secant_steps, guard_steps, seed_kind, seed_normalization, seed_phi_ref, injections, resolved_candidates, unresolved_candidates, injected_fraction, rho_chi_ratio_1MeV, rho_chi_ratio_70keV, rho_chi_ratio_today, Delta_N_eff_1MeV, Delta_N_eff_today, log_R_first_impact, parking_N, parking_log_T_Jordan, release_N, release_log_T_Jordan, worst_birth_margin, worst_birth_margin_N, birth_failing_share, worst_reflection_margin, worst_reflection_margin_N, reflection_failing_share, worst_tracker_margin, worst_tracker_margin_N, tracker_failing_share, unassessed_share, drained_share_one_loop, drained_share_gap, drained_share_classical, drained_share_unassessed, parking_share, candidates_one_loop, candidates_gap, candidates_classical, candidates_unassessed, ell_min, log_R_min_drain, unresolvable_assessments, unresolved_declined, all_worst_birth_margin, all_worst_birth_margin_N, all_birth_failing_share, all_worst_reflection_margin, all_worst_reflection_margin_N, all_reflection_failing_share, all_worst_tracker_margin, all_worst_tracker_margin_N, all_tracker_failing_share, bounce_rows, validated
+    ScalarHistory: left out, held by both: serial, version, timestamp, label, cosmology_serial, model_serial, atol_serial, rtol_serial, tuning_tol_serial, alpha_serial, phi_Einstein_init_serial, pi_Einstein_init_serial, T_Jordan_init_serial, solver_serial, compute_time, mean_RHS_time, max_RHS_time, min_RHS_time
+    ScalarHistory: A-only columns: none
+    ScalarHistory: B-only columns: none
+    extra_data: 5 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 4998, B 4998, matched 4998; duplicates A 0 B 0
+    ScalarHistoryValue: compared: raw_N, phi_Einstein_Mp, pi_Einstein_Mp, log_rhorad_Einstein_Mp4, log_rhorad_Jordan_Mp4, log_fm, log_T_Jordan_GeV, H_Einstein_Mp, H_Jordan_Mp, gstar_rho, gstar_s, dgstar_rho_dlogT, dgstar_s_dlogT, Sigma, friction_term_Mp, reflecting_term_Mp, kicking_term_Mp, log_one_plus_z_Jordan, rho_chi_over_rho_rad, log_m_eff_Mp, log_m_tracker_Mp
+    ScalarHistoryValue: left out: serial, history_serial, z_serial
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistory: compared: max_abs_Q_kp_over_H_1E1, max_abs_Q_kp_over_H_1E2, max_abs_Q_kp_over_H_1E3, max_abs_Q_kp_over_H_1E4, z_samples, validated; left out: serial, version, timestamp, scalar_history_serial, compute_time, label
+    AdiabaticHistoryValue: A 4998, B 4998, matched 4998; duplicates A 0 B 0
+    AdiabaticHistoryValue: compared: raw_N, abs_Q_kp_over_H_1E1, abs_Q_kp_over_H_1E2, abs_Q_kp_over_H_1E3, abs_Q_kp_over_H_1E4; left out: serial, history_serial, z_serial
+    BBNData: A 1 row(s), B 1
+    BBNData: compared: failure, failure_reason, Yp_BBN, DOverH, He3OverH, Li7OverH, small_network, PRyM_version, z_samples, validated; left out: serial, version, timestamp, scalar_history_serial, label, NP_compute_time, BBN_compute_time
+    BBNDataValue: A 1509, B 1509, matched 1509; duplicates A 0 B 0
+    BBNDataValue: compared: raw_N, log_T_Jordan_MeV, density_NP_MeV4, density_NP_ratio; left out: serial, bbn_serial, z_serial
+
+=== exponential n=1 fixed alpha=0 M=2.43532e+24eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #85; B shard0000.db #66
+    extra_data: 5 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5431, B 5431, matched 5431; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5431, B 5431, matched 5431; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1487, B 1487, matched 1487; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0 M=2.43532e+24eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #105; B shard0001.db #86
+    extra_data: 5 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5919, B 5919, matched 5919; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5919, B 5919, matched 5919; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1480, B 1480, matched 1480; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.01 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #1; B shard0015.db #1
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1510, B 1510, matched 1510; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.01 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #21; B shard0000.db #21
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1487, B 1487, matched 1487; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.01 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #41; B shard0001.db #41
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1481, B 1481, matched 1481; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.1 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #2; B shard0015.db #2
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1506, B 1506, matched 1506; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.1 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #22; B shard0000.db #22
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1479, B 1479, matched 1479; duplicates A 0 B 0
+
+=== exponential n=1 fixed alpha=0.1 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #42; B shard0001.db #42
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 0 rows, B 0 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1479, B 1479, matched 1479; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=0.05 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #3; B shard0015.db #3
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 287 rows, B 287 rows
+    ScalarHistoryBounce: compared: ordinal, source, candidate_index, N, N_turn, kind, resolved, log_T_Jordan_GeV, delta_K_Mp4, log_rho_kin_Mp4, nonadiabaticity, alpha_eff, w_gate, K_before_Mp4, regime, ell, L, log_R, log_E_Mp4, log_H_Mp, log_k_ex_Mp, log_m_Mp, log_q_Mp, share, weighted, birth_margin, reflection_margin, reflection_margin_N, tracker_margin, tracker_margin_N; left out: serial, history_serial
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1510, B 1510, matched 1510; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=0.05 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #23; B shard0000.db #23
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 77 rows, B 77 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1487, B 1487, matched 1487; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=0.05 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #43; B shard0001.db #43
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 231 rows, B 231 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1481, B 1481, matched 1481; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=1 M=2.43532e-06eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #107; B shard0000.db #87
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 93 rows, B 93 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1483, B 1483, matched 1483; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=1 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #4; B shard0015.db #4
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 41 rows, B 41 rows
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1505, B 1505, matched 1505; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=1 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #24; B shard0000.db #24
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 91 rows, B 91 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1481, B 1481, matched 1481; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=1 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #44; B shard0001.db #44
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 81 rows, B 81 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1480, B 1480, matched 1480; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=1 M=2.43532e+12eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #108; B shard0000.db #88
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 55 rows, B 55 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1487, B 1487, matched 1487; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=10 M=0.000974129eV beta=1.2 phi*=5: 1 row(s) in B
+    A shard0015.db #5; B shard0015.db #5
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 13 rows, B 13 rows
+    ScalarHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5003, B 5003, matched 5003; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1480, B 1480, matched 1480; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=10 M=0.000974129eV beta=2 phi*=5: 1 row(s) in B
+    A shard0000.db #25; B shard0000.db #25
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 15 rows, B 15 rows
+    ScalarHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5437, B 5437, matched 5437; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1478, B 1478, matched 1478; duplicates A 0 B 0
+
+=== exponential n=1 one-loop-exponential-v2 alpha=10 M=0.000974129eV beta=2.9 phi*=5: 1 row(s) in B
+    A shard0001.db #45; B shard0001.db #45
+    extra_data: 7 keys compared; only A []; only B []
+    ScalarHistoryBounce: A 15 rows, B 15 rows
+    ScalarHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    AdiabaticHistory: A 1 row(s), B 1
+    AdiabaticHistoryValue: A 5926, B 5926, matched 5926; duplicates A 0 B 0
+    BBNData: A 1 row(s), B 1
+    BBNDataValue: A 1478, B 1478, matched 1478; duplicates A 0 B 0
+
+A histories matched exactly once in B: 20 of 20
+B histories matched exactly once by A: 20 of 20
+histories failing in both: 0
+
+failure_reason values equal only once the label is masked and cut to the shorter length: 0
+
+Values compared, per table:
+  AdiabaticHistory: 120
+  AdiabaticHistoryValue: 545260
+  BBNData: 200
+  BBNDataValue: 119072
+  ScalarHistory: 1560
+  ScalarHistory.extra_data: 134
+  ScalarHistoryBounce: 29970
+  ScalarHistoryValue: 2290092
+  key:ExponentialModel: 20
+  key:IntegrationSolver: 40
+  key:M_value: 20
+  key:QCD_Cosmology: 140
+  key:alpha_value: 40
+  key:beta_value: 20
+  key:phi_value: 20
+  key:pi_value: 20
+  key:temperature: 20
+  key:tolerance: 60
+  total: 2986808
+
+DIFFERENCES: none
+RESULT: every history matched once each way, every compared value bitwise equal

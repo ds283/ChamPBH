@@ -27,7 +27,8 @@ from CosmologyConcepts.drain_model import (
 #
 # Since one-loop-drain prompt 03 (README §8.10 decision 1, §8.11 P27) a row is the pair (value, drain_model),
 # unique: drain_model is DRAIN_MODEL_FIXED ("fixed"), under which the value is alpha, 0 <= alpha < 1, or
-# DRAIN_MODEL_ONE_LOOP (the measured law and its version), under which the value is the law's strength A,
+# a one-loop drain model (a potential's one-loop law and its version, DRAIN_MODEL_ONE_LOOP_EXPONENTIAL or
+# DRAIN_MODEL_ONE_LOOP_INVERSE_POWER since power-law-wall prompt 07c), under which the value is the law's strength A,
 # finite and > 0. The pair is checked on construction by check_drain_law under the model's law (law_of), so an
 # unknown model, A = 0 under the one-loop model, or alpha >= 1 under the fixed one is a ValueError. The default
 # model is "fixed", so that alpha_value(store_id, value) is the construction of before

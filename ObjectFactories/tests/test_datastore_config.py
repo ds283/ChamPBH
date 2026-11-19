@@ -21,7 +21,8 @@ expected values below were captured from the datastore layer's own module-level 
 prompt 04's tree, before ``config/datastore.py`` existed, not copied from it; prompt 08 removed
 ``LambdaCDM`` from the batch sizes (campaign README, P8). jordan-normalization prompt 07 replaced
 ``Lambda_value``, ``ExponentialPotential`` and ``ExponentialCoupling`` with ``ExponentialModel``,
-in ``ExponentialPotential``'s place, with ``ExponentialCoupling``'s batch size.
+in ``ExponentialPotential``'s place, with ``ExponentialCoupling``'s batch size. power-law-wall prompt 05
+added ``InversePowerModel`` immediately after ``ExponentialModel``, with its batch size.
 
 One test runs a subprocess from the repository root: ``import config.datastore`` alone. It takes a
 few seconds.
@@ -58,6 +59,7 @@ EXPECTED_FACTORIES = [
     ("phi_value", "sqla_dimensionful_quantity_factory", "phi_value"),
     ("pi_value", "sqla_dimensionful_quantity_factory", "pi_value"),
     ("ExponentialModel", "sqla_ExponentialModel_factory", None),
+    ("InversePowerModel", "sqla_InversePowerModel_factory", None),
     ("QCD_Cosmology", "sqla_QCDCosmology_factory", None),
     ("IntegrationSolver", "sqla_IntegrationSolver_factory", None),
     ("ScalarHistory", "sqla_ScalarHistoryFactory", None),
@@ -100,6 +102,7 @@ EXPECTED_SERIAL_BATCH_SIZES = {
     "phi_value": 200,
     "pi_value": 200,
     "ExponentialModel": 50,
+    "InversePowerModel": 50,
     "QCD_Cosmology": 5,
     "IntegrationSolver": 6,
     "ScalarHistory": 20,

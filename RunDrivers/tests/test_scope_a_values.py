@@ -41,7 +41,7 @@ class TestTheScopeNamesA(unittest.TestCase):
     def test_no_A_values_is_the_scope_of_before(self):
         self.assertEqual(
             scope(),
-            "no config file; β 0.1–3.0, 5 per unit; M 10^25–10^26.5 eV, 6 per decade; "
+            "no config file; models exponential; β 0.1–3.0, 5 per unit; M 10^25–10^26.5 eV, 6 per decade; "
             "n 1; φ* 5 Mp; tuning tolerance 1e-05; α 0; 20 shards; job ChamPBH-test",
         )
         self.assertNotIn("; A ", scope("--alpha-values", "0", "0.1"))
@@ -53,7 +53,7 @@ class TestTheScopeNamesA(unittest.TestCase):
         self.assertEqual(parts[parts.index("A 0.5, 1, 10") + 1], "20 shards")
         self.assertEqual(
             scope("--A-values", "1"),
-            "no config file; β 0.1–3.0, 5 per unit; M 10^25–10^26.5 eV, 6 per decade; "
+            "no config file; models exponential; β 0.1–3.0, 5 per unit; M 10^25–10^26.5 eV, 6 per decade; "
             "n 1; φ* 5 Mp; tuning tolerance 1e-05; α 0; A 1; 20 shards; job ChamPBH-test",
         )
 

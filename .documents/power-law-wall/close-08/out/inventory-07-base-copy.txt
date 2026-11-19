@@ -1,0 +1,87 @@
+# power-law-wall prompt 08, §2 item 4: main.py --inventory on a scratch copy of power-law-wall-07-base (2026.11.0, format 7, built at a7e0978).
+# <scratch> is this prompt's directory of the session scratchpad (agent-08); <main> the main checkout. The copy is cp -p of the 18 files. Run from the worktree's root, no Ray.
+## shasum -a 256 of the original's 18 files (in <main>/var/datastores), before
+e3ce39851ac0284062496d5c94f4be4a104c0241b8d1aa6ad05740af5dd0d6d0  power-law-wall-07-base.db
+26905ee33963d6b0a6e6c0a7a83f8ed7dd19affd20049723d21160d381c3217b  power-law-wall-07-base-shard0000.db
+5d7dc440f5e7f39d492723798e45a71657240439f7bd6c5ccfb02aa63b22c945  power-law-wall-07-base-shard0001.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0002.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0003.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0004.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0005.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0006.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0007.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0008.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0009.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0010.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0011.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0012.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0013.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0014.db
+54a44815752b045cd6c35f66cfe58709399b749625ae21a7ba4900619bd70685  power-law-wall-07-base-shard0015.db
+f2465caa0b673be7a7383057bdeb35171d31b85dc4619b74fb16ad0fd74fbb5e  power-law-wall-07-base.manifest.json
+## shasum -a 256 of the copy's 18 files (in <scratch>/copy-07-base), before: equal to the original
+e3ce39851ac0284062496d5c94f4be4a104c0241b8d1aa6ad05740af5dd0d6d0  power-law-wall-07-base.db
+26905ee33963d6b0a6e6c0a7a83f8ed7dd19affd20049723d21160d381c3217b  power-law-wall-07-base-shard0000.db
+5d7dc440f5e7f39d492723798e45a71657240439f7bd6c5ccfb02aa63b22c945  power-law-wall-07-base-shard0001.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0002.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0003.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0004.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0005.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0006.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0007.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0008.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0009.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0010.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0011.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0012.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0013.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0014.db
+54a44815752b045cd6c35f66cfe58709399b749625ae21a7ba4900619bd70685  power-law-wall-07-base-shard0015.db
+f2465caa0b673be7a7383057bdeb35171d31b85dc4619b74fb16ad0fd74fbb5e  power-law-wall-07-base.manifest.json
+## the command
+# 2026-11-19 13:20:51 GMT 13:20  up 19 days, 15:41, 1 user, load averages: 46.97 47.00 40.01
+$ PYTHONPATH=. ./venv/bin/python -u main.py --config exponential.yaml --database <scratch>/copy-07-base/power-law-wall-07-base.db --shards 16 --phi-init-Mp 5 --inventory
+# exit 1
+# wall 2 s
+## stdout
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+## stderr (504 bytes)
+!! --inventory: Cannot read sharded datastore "<scratch>/copy-07-base/power-law-wall-07-base.db": shard #0 "<scratch>/copy-07-base/power-law-wall-07-base-shard0000.db" differs from the tables this code declares (it lacks the table(s) "InversePowerModel"), so nothing was read
+## shasum -a 256 of the copy, after: unchanged
+e3ce39851ac0284062496d5c94f4be4a104c0241b8d1aa6ad05740af5dd0d6d0  power-law-wall-07-base.db
+26905ee33963d6b0a6e6c0a7a83f8ed7dd19affd20049723d21160d381c3217b  power-law-wall-07-base-shard0000.db
+5d7dc440f5e7f39d492723798e45a71657240439f7bd6c5ccfb02aa63b22c945  power-law-wall-07-base-shard0001.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0002.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0003.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0004.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0005.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0006.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0007.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0008.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0009.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0010.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0011.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0012.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0013.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0014.db
+54a44815752b045cd6c35f66cfe58709399b749625ae21a7ba4900619bd70685  power-law-wall-07-base-shard0015.db
+f2465caa0b673be7a7383057bdeb35171d31b85dc4619b74fb16ad0fd74fbb5e  power-law-wall-07-base.manifest.json
+## shasum -a 256 of the original, at the end: unchanged
+e3ce39851ac0284062496d5c94f4be4a104c0241b8d1aa6ad05740af5dd0d6d0  power-law-wall-07-base.db
+26905ee33963d6b0a6e6c0a7a83f8ed7dd19affd20049723d21160d381c3217b  power-law-wall-07-base-shard0000.db
+5d7dc440f5e7f39d492723798e45a71657240439f7bd6c5ccfb02aa63b22c945  power-law-wall-07-base-shard0001.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0002.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0003.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0004.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0005.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0006.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0007.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0008.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0009.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0010.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0011.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0012.db
+15a2c36c83dfba4d7c655a0859eb08e9228ed6fe44a1233b2949190e6273130e  power-law-wall-07-base-shard0013.db
+42c46053cb0f916d3abd4e6b9d2daae7af09e6ed735cbc284401f5c56d9ba0af  power-law-wall-07-base-shard0014.db
+54a44815752b045cd6c35f66cfe58709399b749625ae21a7ba4900619bd70685  power-law-wall-07-base-shard0015.db
+f2465caa0b673be7a7383057bdeb35171d31b85dc4619b74fb16ad0fd74fbb5e  power-law-wall-07-base.manifest.json

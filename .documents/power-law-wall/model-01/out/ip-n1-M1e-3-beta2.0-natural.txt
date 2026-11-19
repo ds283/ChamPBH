@@ -1,0 +1,11 @@
+# command: PYTHONPATH=. ./venv/bin/python tools/history_and_bbn.py 2.0 1e-3 --model inverse-power --n 1
+# start: 2026-11-14 18:52:58 18:52  up 14 days, 21:13, 1 user, load averages: 6.12 8.14 6.41
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+!! phi is not positive in InversePowerModel log_V at phi=-1.8953e-05 Mp, M=2.4353e+24 eV, n=1 (InversePowerModel(M=0.001Mp,n=1,beta=2))
+-- integrate_history (history_and_bbn-beta2-M0.001-inverse-power-n1): integration failure
+   integrate_scalar_history (history_and_bbn-beta2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.5358 at N=37.75808722, phi_E=4.7358e-14, pi_E=-0.00048214 (W = 1.785e-07, pi^2/2 = 1.1623e-07)
+!! integrate_history (history_and_bbn-beta2-M0.001-inverse-power-n1): marked as total integration failure
+!! tune_history (history_and_bbn-beta2-M0.001-inverse-power-n1): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 8.365e-50 M_P at the floor reflection at N = 20.35209825), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+!! tune_history (history_and_bbn-beta2-M0.001-inverse-power-n1): integrate_scalar_history (history_and_bbn-beta2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.5358 at N=37.75808722, phi_E=4.7358e-14, pi_E=-0.00048214 (W = 1.785e-07, pi^2/2 = 1.1623e-07) (tuning integration 0)
+history beta=2 M=0.001 model=inverse-power n=1: FAILURE wall=4.8 s reason=integrate_scalar_history (history_and_bbn-beta2-M0.001-inverse-power-n1): reflection requested inside the wall: W/(pi^2/2) = 1.5358 at N=37.75808722, phi_E=4.7358e-14, pi_E=-0.00048214 (W = 1.785e-07, pi^2/2 = 1.1623e-07) (tuning integration 0)
+# end: 2026-11-14 18:53:04 exit=1 wall=6 s 18:53  up 14 days, 21:13, 1 user, load averages: 6.11 8.10 6.41

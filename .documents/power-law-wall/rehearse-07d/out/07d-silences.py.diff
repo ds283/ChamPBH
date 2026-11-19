@@ -1,0 +1,13 @@
+--- rehearse-07/silences.py	2026-11-16 18:52:58
++++ rehearse-07d/silences.py	2026-11-19 07:44:49
+@@ -1,7 +1,8 @@
+ """
+-power-law-wall prompt 07: copied from one-loop-drain 06's (.documents/one-loop-drain/rehearse-06/silences.py), with this
++power-law-wall prompt 07d: copied from power-law-wall 07's .documents/power-law-wall/rehearse-07/silences.py, with only
++its paths (rehearse-07d/, var/power-law-wall/07d-r2/) and this sentence changed; 07's was copied from one-loop-drain 06's (.documents/one-loop-drain/rehearse-06/silences.py), with this
+ paragraph replacing 06's. Run from this worktree's root as
+-`./venv/bin/python .documents/power-law-wall/rehearse-07/silences.py var/power-law-wall/07/runs/<slug>.beats ...`;
++`./venv/bin/python .documents/power-law-wall/rehearse-07d/silences.py var/power-law-wall/07d-r2/runs/<slug>.beats ...`;
+ it reads the recorders' outputs and writes nothing but stdout.
+ 
+ The recorders' summariser of jordan-normalization prompt 09 (the orchestrator's note for 09,

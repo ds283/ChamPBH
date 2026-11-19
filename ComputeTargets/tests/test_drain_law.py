@@ -20,13 +20,14 @@ orchestrator note 01, rulings 3, 4 and 5).
 integrate_scalar_history, integrate_history and tune_history take `drain_law`: "fixed" (the default,
 alpha as before) or "one_loop" (alpha carries A > 0, finite). Under the one-loop law each candidate is
 classified in the loop (drain_regime, peak_estimate's classification computed once) and drains
-alpha_eff = min(DRAIN_ALPHA_CAP, A f) w_gate, f the measured law of one-loop-drain prompt 02c (README §8.10),
-which replaced prompt 01's A DRAIN_C1/ell and its gap prescriptions; the law itself is tested in
+alpha_eff = min(DRAIN_ALPHA_CAP, A f) w_gate, f the model's own one-loop fraction (since power-law-wall prompt 07c,
+README §6.14 P99: the exponential's one-loop-exponential-v2, which replaced one-loop-drain prompt 02c's measured
+law, which had replaced prompt 01's A DRAIN_C1/ell and its gap prescriptions); the law itself is tested in
 test_measured_drain_law. The payload gains "drain", a DrainRecord. The items are those of prompt 01 §1.8, as
 prompt 02c §1.6 rewrote them:
 
   (1) the law's inputs at each of the three entry points, under both laws;
-  (2) the regime on synthetic assessments: each row of §1.2's table, ell <= 0; alpha_eff by the measured law
+  (2) the regime on synthetic assessments: each row of §1.2's table, ell <= 0; alpha_eff by the model's own law
       at a one-loop turnaround, the cap, w_gate's two cases, and the unassessed case;
   (3) the fixed law is unchanged: the payload's keys are the merged tree's and "drain", whose fixed-law
       form is DrainRecord("fixed", None, "fixed", count, None, declined); alpha_eff = alpha w_gate at every
@@ -75,8 +76,10 @@ from CosmologyConcepts.Models.AbstractModel import (
     OneLoopTurnaround,
 )
 from CosmologyConcepts.Models.ExponentialModel import ExponentialModel
+from Units import Planck_units
 
 SM = importlib.import_module("ComputeTargets.ScalarHistory")
+EM = importlib.import_module("CosmologyConcepts.Models.ExponentialModel")
 AM = importlib.import_module("CosmologyConcepts.Models.AbstractModel")
 
 # the keys of integrate_history's success payload on the merged tree (1561b60), before this prompt
@@ -131,7 +134,7 @@ def _ct(log_R: float) -> ClassicalTurningPoint:
         phi_t=1.0e-20,
         log_omega_t_squared=-150.0,
         log_R=log_R,
-        lambda_t=1.0e20,
+        pulse_rate_t=1.0e20,
         log_k_ex=-70.0,
         ell_t=log(0.5),
     )
@@ -141,7 +144,7 @@ def _turnaround(ell: float) -> OneLoopTurnaround:
     return OneLoopTurnaround(
         phi_ta=2.0e-20,
         log_m_ta=-80.0,
-        lambda_ta=3.0e19,
+        pulse_rate_ta=3.0e19,
         log_k_ex=-80.0 + ell,
         ell=ell,
         iterations=7,
@@ -219,8 +222,8 @@ class TestTheConstants(unittest.TestCase):
         self.assertEqual(SM.DRAIN_LAW_FIXED, "fixed")
         self.assertEqual(SM.DRAIN_LAW_ONE_LOOP, "one_loop")
         self.assertEqual(SM.DRAIN_ALPHA_CAP, 0.99)
-        # prompt 02c removed DRAIN_C1, DRAIN_ELL_EDGE and the gap prescriptions; the measured law's
-        # constants are test_measured_drain_law's
+        # prompt 02c removed DRAIN_C1, DRAIN_ELL_EDGE and the gap prescriptions; the exponential's law and its
+        # constants are ExponentialModel's since power-law-wall prompt 07c, tested by test_measured_drain_law
         for name in (
             "DRAIN_C1",
             "DRAIN_ELL_EDGE",
@@ -229,7 +232,7 @@ class TestTheConstants(unittest.TestCase):
         ):
             self.assertFalse(hasattr(SM, name), name)
         self.assertEqual(SM.DRAIN_MODEL_FIXED, "fixed")
-        self.assertEqual(SM.DRAIN_MODEL_ONE_LOOP, "one-loop-measured-v1")
+        self.assertEqual(SM.DRAIN_MODEL_ONE_LOOP_EXPONENTIAL, "one-loop-exponential-v2")
         self.assertEqual(
             SM.DRAIN_REGIMES, ("one_loop", "gap", "classical", "unassessed")
         )
@@ -382,7 +385,7 @@ class TestTheLawsInputs(unittest.TestCase):
         self.assertEqual(seen[0]["drain_law"], "fixed")
 
     def test_1_tune_history_hands_the_law_on_and_returns_the_integrations_drain(self):
-        sentinel = SM.DrainRecord("one_loop", 1.5, "one-loop-measured-v1", 0, (), 0)
+        sentinel = SM.DrainRecord("one_loop", 1.5, "one-loop-exponential-v2", 0, (), 0)
         failure = {"failure": True, "failure_reason": "stand-in", "drain": sentinel}
         cosmology = gth.make_cosmology()
         with mock.patch.object(
@@ -501,54 +504,97 @@ class TestTheRegimeAndAlphaEff(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             SM.drain_regime(model, (self.PHI, self.LOG_E, _ct(3.0)))
 
+    @staticmethod
+    def _exponential():
+        """2197's model, realized at its normalization: the exponential's own fraction (power-law-wall prompt 07c, P99)."""
+        units = Planck_units()
+        return ExponentialModel(
+            0,
+            M_value(0, H2197["M_eV"] * units.eV),
+            1,
+            beta_value(0, H2197["beta"]),
+            units,
+        ).realize(H2197["normalization"], H2197["phi_ref_Mp"] * units.PlanckMass)
+
     def test_2_alpha_eff_at_a_one_loop_turnaround(self):
-        """The measured law (prompt 02c): min(0.99, A f) w_gate, f = 1 - exp(-2.69/(ell + 0.9691 - 0.41 ln L))."""
-        for A, ell, L, w in (
+        """
+        min(0.99, A f) w_gate with f the model's own (one-loop-exponential-v2 since power-law-wall prompt 07c): where the
+        fall is the smaller branch, f = 1 - exp(-A_f/(ell - ell_0)).
+        """
+        model = self._exponential()
+        for A, ell, x, w in (
             (1.0, 10.0, 30.0, 1.0),
             (0.1, 1.8, 7.0, 1.0),
             (0.05, 32.2579, 102.1, 0.37),
             (1.0, 2.7, 10.0, 1.0),
         ):
-            with self.subTest(A=A, ell=ell, L=L, w=w):
-                f = 1.0 - exp(-2.69 / (ell + 0.9691 - 0.41 * log(L)))
-                self.assertLess(f, 0.95)
+            with self.subTest(A=A, ell=ell, x=x, w=w):
+                log_E = H2197["normalization"] + x
+                f = 1.0 - exp(
+                    -EM.DRAIN_EXP_FALL_COEFFICIENT / (ell - EM.DRAIN_EXP_FALL_ELL0)
+                )
+                self.assertEqual(model.drain_fraction("one_loop", ell, log_E, 50.0), f)
                 self.assertEqual(
-                    SM.drain_alpha_effective("one_loop", ell, L, 50.0, A, w),
+                    SM.drain_alpha_effective(
+                        "one_loop", ell, 50.0, A, w, model=model, log_E=log_E
+                    ),
                     min(0.99, A * f) * w,
                 )
 
     def test_2_the_cap(self):
-        """alpha_cap binds once A f >= 0.99: at the plateau (f = 0.9) from A = 1.1."""
+        """alpha_cap binds once A f >= 0.99; the gate multiplies after the cap."""
+        model = self._exponential()
+        log_E = H2197["normalization"] + 3.0
         self.assertEqual(
-            SM.drain_alpha_effective("one_loop", 0.5, None, None, 1.1, 1.0), 0.99
+            SM.drain_alpha_effective(
+                "one_loop", 1.5, 13.6, 100.0, 1.0, model=model, log_E=log_E
+            ),
+            0.99,
         )
         self.assertEqual(
-            SM.drain_alpha_effective("one_loop", 0.5, None, None, 100.0, 0.5),
+            SM.drain_alpha_effective(
+                "one_loop", 1.5, 13.6, 100.0, 0.5, model=model, log_E=log_E
+            ),
             0.99 * 0.5,
         )
         self.assertEqual(
-            SM.drain_alpha_effective("one_loop", 1e-300, None, None, 10.0, 1.0), 0.99
+            SM.drain_alpha_effective(
+                "gap", None, 40.0, 10.0, 1.0, model=model, log_E=log_E
+            ),
+            0.99,
         )
 
     def test_2_w_gate_zero_drains_nothing(self):
+        model = self._exponential()
         self.assertEqual(
-            SM.drain_alpha_effective("one_loop", 10.0, 30.0, 50.0, 1.0, 0.0), 0.0
+            SM.drain_alpha_effective(
+                "one_loop", 10.0, 50.0, 1.0, 0.0, model=model, log_E=-250.0
+            ),
+            0.0,
         )
 
     def test_2_nothing_where_unassessed(self):
-        """Unassessed drains 0.0 exactly; classical now drains A R S(L) (prompt 02c; README §8.10, decision 3)."""
+        """Unassessed drains 0.0 exactly; classical drains A R S(L) (prompt 02c; README §8.10, decision 3)."""
+        model = self._exponential()
         for w in (1.0, 0.5):
             with self.subTest(w=w):
-                value = SM.drain_alpha_effective("unassessed", None, None, None, 1.0, w)
+                value = SM.drain_alpha_effective(
+                    "unassessed", None, None, 1.0, w, model=model, log_E=None
+                )
                 self.assertEqual(value, 0.0)
                 self.assertEqual(str(value), "0.0")
         self.assertGreater(
-            SM.drain_alpha_effective("classical", None, 54.52, -16.6, 1.0, 1.0), 0.0
+            SM.drain_alpha_effective(
+                "classical", None, -16.6, 1.0, 1.0, model=model, log_E=-250.0
+            ),
+            0.0,
         )
 
     def test_2_an_unknown_regime_is_refused(self):
         with self.assertRaises(ValueError):
-            SM.drain_alpha_effective("elastic", None, 1.0, 1.0, 1.0, 1.0)
+            SM.drain_alpha_effective(
+                "elastic", None, 1.0, 1.0, 1.0, model=self._exponential(), log_E=-250.0
+            )
 
 
 class TestTheFixedLawIsUnchanged(unittest.TestCase):
@@ -617,21 +663,31 @@ class TestTheOneLoopLawOn2197(unittest.TestCase):
     cross-checked against prompts/one-loop-drain/source/crossover/measured_law_map.py --law=adopted on the
     same inputs; log 02c). One integration to T_CMB, about 2-4 s at a load of 4-8, with one_loop_turnaround
     counted. electroweak-eos prompt 01 re-pinned the values on its w table: still five candidates, all
-    one-loop, now parking at N = 28.876.
+    one-loop, now parking at N = 28.876. power-law-wall prompt 07c re-pinned them under the one k_ex and the
+    exponential's law one-loop-exponential-v2: eleven candidates, all one-loop (ell 32.36 down to 10.04), parking at
+    N = 33.594, from this tree's history (not cross-checked against a reference map).
     """
 
     # prompt 02c's pins: each candidate's alpha_eff as the reference map prints it (:.4e), and the parking N.
     # Re-pinned by electroweak-eos prompt 01 when the w table changed, from this tree's history (not
     # cross-checked against the reference map); 02c's were ("8.2276e-02", "9.1886e-02", "1.1431e-01",
-    # "1.2001e-01", "1.6459e-01") and 29.035264723467392
+    # "1.2001e-01", "1.6459e-01") and 29.035264723467392. Re-pinned by power-law-wall prompt 07c (k_ex from |V'''/V''|,
+    # one-loop-exponential-v2), from this tree's history; electroweak-eos 01's were ("8.2277e-02", "9.1883e-02",
+    # "1.1431e-01", "1.2001e-01", "1.6185e-01") and 28.876391476457353
     PINNED_ALPHA_EFF = (
-        "8.2277e-02",
-        "9.1883e-02",
-        "1.1431e-01",
-        "1.2001e-01",
-        "1.6185e-01",
+        "7.7483e-02",
+        "8.6750e-02",
+        "1.0845e-01",
+        "1.1409e-01",
+        "1.9622e-01",
+        "2.1127e-01",
+        "2.2136e-01",
+        "2.2929e-01",
+        "2.3598e-01",
+        "2.4189e-01",
+        "2.4727e-01",
     )
-    PINNED_PARKING_N = 28.876391476457353
+    PINNED_PARKING_N = 33.59383919340034
 
     @classmethod
     def setUpClass(cls):
@@ -650,7 +706,7 @@ class TestTheOneLoopLawOn2197(unittest.TestCase):
         self.assertIs(drain, self.result.drain)
         self.assertEqual(drain.law, "one_loop")
         self.assertEqual(drain.A, 1.0)
-        self.assertEqual(drain.model, "one-loop-measured-v1")
+        self.assertEqual(drain.model, "one-loop-exponential-v2")
         self.assertIsInstance(drain.unresolvable_assessments, int)
         self.assertIsInstance(drain.candidates, tuple)
         self.assertEqual(len(drain.candidates), len(self.result.injections))
@@ -674,10 +730,11 @@ class TestTheOneLoopLawOn2197(unittest.TestCase):
                 SM.drain_alpha_effective(
                     record.regime,
                     record.ell,
-                    record.L,
                     record.log_R,
                     1.0,
                     record.w_gate,
+                    model=self.model,
+                    log_E=record.log_E,
                 ),
             )
             # the law's inputs, as given (prompt 02c §1.3; orchestrator note 02c ruling 1)
@@ -697,9 +754,12 @@ class TestTheOneLoopLawOn2197(unittest.TestCase):
                 self.assertIsNone(record.ell)
 
     def test_4_the_values_under_the_measured_law(self):
-        """Re-pinned by prompt 02c: the regimes, alpha_eff and the parking N under the measured law at A = 1."""
+        """
+        Re-pinned by prompt 02c, electroweak-eos 01 and power-law-wall 07c: the regimes, alpha_eff and the parking N
+        under the exponential's one-loop law at A = 1.
+        """
         candidates = self.data["drain"].candidates
-        self.assertEqual(tuple(c.regime for c in candidates), ("one_loop",) * 5)
+        self.assertEqual(tuple(c.regime for c in candidates), ("one_loop",) * 11)
         self.assertEqual(
             tuple(format(c.alpha_eff, ".4e") for c in candidates), self.PINNED_ALPHA_EFF
         )

@@ -26,11 +26,13 @@ class, `ReadOnlyWrite` for a sharded one. What a refusal means depends on the lo
   cosmology): the plot run was given options the build did not use, and no history in the store
   can match them. The refusal becomes `PlotOptionNotStored`, whose message names the option (or
   the constant) and the value; the scripts print it to stderr and exit 2, before any figure (U4);
-- **a model** (an `ExponentialModel`, one per stored M with each `--n-values` n and each stored
-  beta): the combination was never stored, so no history can use it. It is skipped, with one
-  warning line each and a count; every other combination is returned, M outer, n, and beta inner
-  (U3). Each is looked up on its own, and each reference is read on its own, so that one miss
-  cannot hide the others (P2). An n with no stored model at any stored (M, beta) is a parameter
+- **a model** (a model of a potential of `--models`, in its own table, `ExponentialModel` or
+  `InversePowerModel`, one per stored M with each `--n-values` n and each stored beta): the combination
+  was never stored, so no history can use it. It is skipped, with one warning line each and a count;
+  every other combination is returned, M outer, n, and beta inner (U3). Each is looked up on its own,
+  and each reference is read on its own, so that one miss cannot hide the others (P2). A potential with
+  no stored model at any of the combinations was not built: `PlotOptionNotStored`, naming `--models`
+  (power-law-wall prompt 06, P49); an n with no stored model at any stored (M, beta) is a parameter
   the build was not run with: `PlotOptionNotStored`, naming `--n-values` (jordan-normalization
   prompt 08).
 
@@ -55,12 +57,9 @@ from typing import List, NamedTuple, Sequence
 import ray
 from datastorekit.replication import ReadOnlyMiss, ReadOnlyWrite
 
-from CosmologyConcepts.drain_model import DRAIN_MODEL_ONE_LOOP
+from CosmologyConcepts.Models.model_options import MODEL_EXPONENTIAL, model_table
 from MetadataConcepts import tolerance
 from config.model_list import build_model_list
-
-# the one model class main.py builds (jordan-normalization prompt 08 removed --potential-type)
-MODEL_CLASS = "ExponentialModel"
 
 
 class PlotOptionNotStored(RuntimeError):
@@ -70,7 +69,7 @@ class PlotOptionNotStored(RuntimeError):
 
     `class_name` is the class that was looked up, `option` the option or constant it came from,
     and `value` the value, as given. The `ReadOnlyMiss` the pool raised is chained as `__cause__`;
-    an `--n-values` n with no stored model (`exponential_models`) has no single miss to chain.
+    an `--n-values` n, or a `--models` potential, with no stored model (`stored_models`) has no single miss to chain.
     """
 
     def __init__(self, class_name: str, option: str, value: str):
@@ -105,9 +104,9 @@ class PlotParameters(NamedTuple):
     phi_init: object
     pi_init: object
     tuning_tol: object
-    # one `alpha_value` row per distinct --alpha-values value, then one per distinct --A-values value, in
-    # the drivers' order (a tuple): the fixed rows first, each row carrying its `drain_model`
-    # (one-loop-drain prompt 04, P34)
+    # one `alpha_value` row per distinct --alpha-values value, then one per distinct --A-values value and drain
+    # model, in the drivers' order (a tuple): the fixed rows first, each row carrying its `drain_model`
+    # (one-loop-drain prompt 04, P34; power-law-wall prompt 06, P47)
     alphas: tuple
 
 
@@ -121,6 +120,7 @@ def parameters(
     tuning_tol: float,
     alpha_values: Sequence[float],
     A_values: Sequence[float] = (),
+    A_drain_models: Sequence[str] = (),
 ) -> PlotParameters:
     """
     The tolerances, `T_init`, `phi_init` and `pi_init` (README §0.3 rows 1-5), from `--abs-tol`,
@@ -132,15 +132,23 @@ def parameters(
     stored raises `PlotOptionNotStored`. `alphas` is the tuple of the alpha rows.
 
     One-loop-drain prompt 04 (P33, P34) adds `A_values` (`--A-values`, deduplicated by the caller; none by
-    default): one row per A, looked up under `DRAIN_MODEL_ONE_LOOP`, the code's current one-loop model, after
-    the alpha rows and in the order given. `alphas` is then the alpha rows (model `fixed`, no model named in
-    the lookup, as before) followed by the A rows. An A with no row under that model is `PlotOptionNotStored`
-    naming `--A-values`, the value and the model, even when the same value is stored under `fixed`; an alpha
-    with no `fixed` row is refused as before, even when the value is stored under the one-loop model.
+    default), after the alpha rows and in the order given. Power-law-wall prompt 06 (P47) adds
+    `A_drain_models`, the one-loop drain models of the potentials of `--models` (each potential's own,
+    `AbstractModel.one_loop_drain_model`; distinct, in the order of `--models`): each A is looked up under
+    every one of them in that order, A by A, so that a run of one potential looks up one row per A as before.
+    No drain model is assumed: `A_values` without `A_drain_models` is a ValueError. `alphas` is then the alpha
+    rows (model `fixed`, no model named in the lookup, as before) followed by the A rows. An A with no row under
+    one of the models is `PlotOptionNotStored` naming `--A-values`, the value and the model, even when the same
+    value is stored under `fixed` or under another potential's model; an alpha with no `fixed` row is refused
+    as before, even when the value is stored under a one-loop model.
 
     Under `--no-alpha-values` the parser has emptied `--alpha-values`, so `alpha_values` is empty and `alphas`
     is the A rows alone; no fixed row is looked up (no-alpha-values, 2026-11-07).
     """
+    if len(A_values) > 0 and len(A_drain_models) == 0:
+        raise ValueError(
+            "plot_inputs.parameters: --A-values are given with no one-loop drain model to look them up under"
+        )
     lookups = [
         (
             pool.object_get(tolerance, tol=abs_tol),
@@ -191,15 +199,16 @@ def parameters(
         )
         for a in alpha_values
     ]
-    # then the A rows, under the code's current one-loop model, in the order given
+    # then the A rows, A by A in the order given, each under every potential's own one-loop model in the order given
     lookups += [
         (
-            pool.object_get("alpha_value", value=A, drain_model=DRAIN_MODEL_ONE_LOOP),
+            pool.object_get("alpha_value", value=A, drain_model=drain_model),
             "alpha_value",
             "--A-values",
-            f"{_value(A)} ({DRAIN_MODEL_ONE_LOOP})",
+            f"{_value(A)} ({drain_model})",
         )
         for A in A_values
+        for drain_model in A_drain_models
     ]
     rows = [_get_parameter(*lookup) for lookup in lookups]
     return PlotParameters(*rows[:6], tuple(rows[6:]))
@@ -219,31 +228,37 @@ def stored_grid(pool, units) -> StoredGrid:
     )
 
 
-def exponential_models(
+def stored_models(
     pool,
+    class_name: str,
     M_table: list,
     beta_table: list,
     n_values: list,
     units,
+    potential=None,
 ) -> list:
     """
-    The `ExponentialModel` of every stored M with every n of `n_values` (`--n-values`) and every
-    stored beta (jordan-normalization prompt 07, S6; prompt 08 gives n its option), in
+    The model of the table `class_name` (a potential's class, `ExponentialModel` or `InversePowerModel`) of
+    every stored M with every n of `n_values` (`--n-values`) and every stored beta (jordan-normalization prompt
+    07, S6; prompt 08 gives n its option; power-law-wall prompt 06 makes it generic, P49), in
     `itertools.product(M_table, n_values, beta_table)` order (M outer, n, beta inner), as main.py
     builds its grid. Each combination is looked up on its own and each reference read on its own
-    (P2). The class is sharded by beta, so a read-only miss is the inserter's `ReadOnlyWrite` ("an
-    insert" of `ExponentialModel`); that combination is skipped, with one warning line printed and
+    (P2). Each class is sharded by beta, so a read-only miss is the inserter's `ReadOnlyWrite` ("an
+    insert" of the class); that combination is skipped, with one warning line printed naming the class and
     a count line after the last (U3). Any other exception, a `ReadOnlyWrite` of any other operation
     or class included, propagates.
 
-    An n with no stored model at any stored (M, beta) was not built: after the count line,
-    `PlotOptionNotStored("ExponentialModel", "--n-values", n)` is raised for the first such n, as
+    With `potential` (the value of `--models` the class is the table of), a potential with no stored model at
+    any of the combinations was not built: after the count line,
+    `PlotOptionNotStored(class_name, "--models", potential)` is raised, before the check of n (power-law-wall
+    prompt 06, P49). Then an n with no stored model at any stored (M, beta) was not built:
+    `PlotOptionNotStored(class_name, "--n-values", n)` is raised for the first such n, as
     for a parameter (prompt 08). With no stored (M, beta) there is nothing to judge, and nothing is
     raised.
     """
     combinations = list(itertools.product(M_table, n_values, beta_table))
     refs = [
-        pool.object_get(MODEL_CLASS, shard_key=beta, M=M, n=n, beta=beta, units=units)
+        pool.object_get(class_name, shard_key=beta, M=M, n=n, beta=beta, units=units)
         for M, n, beta in combinations
     ]
 
@@ -255,23 +270,67 @@ def exponential_models(
             found.append(ray.get(ref))
             found_n.add(n)
         except ReadOnlyWrite as e:
-            if e.operation != "an insert" or e.class_name != MODEL_CLASS:
+            if e.operation != "an insert" or e.class_name != class_name:
                 raise
             skipped += 1
             print(
-                f"!! plot: no {MODEL_CLASS} stored for M={_value(M.value / units.eV)} eV, "
+                f"!! plot: no {class_name} stored for M={_value(M.value / units.eV)} eV, "
                 f"n={n}, β={_value(beta.value)}; no history can use it; skipped"
             )
     if skipped > 0:
         print(
-            f"!! plot: {skipped} of {len(combinations)} {MODEL_CLASS} combinations of the stored "
+            f"!! plot: {skipped} of {len(combinations)} {class_name} combinations of the stored "
             f"M and β are not stored, and were skipped"
         )
     if len(M_table) > 0 and len(beta_table) > 0:
+        if potential is not None and len(found) == 0:
+            raise PlotOptionNotStored(class_name, "--models", potential)
         for n in n_values:
             if n not in found_n:
-                raise PlotOptionNotStored(MODEL_CLASS, "--n-values", str(n))
+                raise PlotOptionNotStored(class_name, "--n-values", str(n))
     return found
+
+
+def potential_models(
+    pool,
+    potential: str,
+    M_table: list,
+    beta_table: list,
+    n_values: list,
+    units,
+) -> list:
+    """
+    The models of one potential of `--models` (its option value, CosmologyConcepts.Models.model_options): the
+    stored models of its table, by `stored_models`, refused naming `--models` if it has none at all
+    (power-law-wall prompt 06, P49). The plot scripts call this once per potential, in a pass of its own.
+    """
+    return stored_models(
+        pool,
+        model_table(potential),
+        M_table,
+        beta_table,
+        n_values,
+        units,
+        potential=potential,
+    )
+
+
+def exponential_models(
+    pool,
+    M_table: list,
+    beta_table: list,
+    n_values: list,
+    units,
+) -> list:
+    """
+    The `ExponentialModel` of every stored M with every n of `n_values` and every stored beta: `stored_models`
+    of the exponential's table, with its behaviour before power-law-wall prompt 06 (an n with no stored model is
+    refused naming `--n-values`; the potential itself is not judged). The exponential's call of the generic
+    lookup, kept with its signature (P49).
+    """
+    return stored_models(
+        pool, model_table(MODEL_EXPONENTIAL), M_table, beta_table, n_values, units
+    )
 
 
 def models(pool, units) -> List[dict]:

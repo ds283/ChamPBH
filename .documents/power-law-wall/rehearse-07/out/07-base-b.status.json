@@ -1,0 +1,210 @@
+{
+  "exit_code": 0,
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 18,
+        "digest": "c7f9d6865ec8378acb2179d16fbec22be991969db4320d60cb650daa0c80928d",
+        "tag_sets": [
+          {
+            "count": 18,
+            "digest": "c7f9d6865ec8378acb2179d16fbec22be991969db4320d60cb650daa0c80928d",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "BBNData": {
+        "count": 18,
+        "digest": "ec352b95e69f1f372dc3f4752e3b88281157eee84e3dcc16f2b0e574af56918a",
+        "tag_sets": [
+          {
+            "count": 18,
+            "digest": "ec352b95e69f1f372dc3f4752e3b88281157eee84e3dcc16f2b0e574af56918a",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "ExponentialModel": {
+        "count": 6,
+        "digest": "bb772413830ad0bd9429ea4373739f931fe95dc5c50b334aee8317c80ff490da",
+        "tag_sets": [
+          {
+            "count": 6,
+            "digest": "bb772413830ad0bd9429ea4373739f931fe95dc5c50b334aee8317c80ff490da",
+            "tags": []
+          }
+        ]
+      },
+      "IntegrationSolver": {
+        "count": 7,
+        "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+        "tag_sets": [
+          {
+            "count": 7,
+            "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+            "tags": []
+          }
+        ]
+      },
+      "M_value": {
+        "count": 2,
+        "digest": "8e64c206e41d54f55ea14292b1250a638c6145a21ebc8d92a33c760e8c0ba154",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "8e64c206e41d54f55ea14292b1250a638c6145a21ebc8d92a33c760e8c0ba154",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ScalarHistory": {
+        "count": 18,
+        "digest": "3bf6713427c6104603ac0e1617a4af113c0703688f5e9baeb6ed53817dcd135f",
+        "tag_sets": [
+          {
+            "count": 18,
+            "digest": "3bf6713427c6104603ac0e1617a4af113c0703688f5e9baeb6ed53817dcd135f",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "alpha_value": {
+        "count": 6,
+        "digest": "e1ff5c4a4c8658d9155c3745c6e6d1c5e91e311e5e5d58c8884e8aeb65b12a53",
+        "tag_sets": [
+          {
+            "count": 6,
+            "digest": "e1ff5c4a4c8658d9155c3745c6e6d1c5e91e311e5e5d58c8884e8aeb65b12a53",
+            "tags": []
+          }
+        ]
+      },
+      "beta_value": {
+        "count": 3,
+        "digest": "638163f012ebbc4d909231cadbeb3abaa6d85992df7eb33a70fce0d08aa56751",
+        "tag_sets": [
+          {
+            "count": 3,
+            "digest": "638163f012ebbc4d909231cadbeb3abaa6d85992df7eb33a70fce0d08aa56751",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 1,
+        "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 75001,
+        "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+        "tag_sets": [
+          {
+            "count": 75001,
+            "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 1,
+        "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 2,
+        "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "c5c399c6972cf65ad4177eb59989f518e99a227db622349bf08be8ca1cb778b5",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "c5c399c6972cf65ad4177eb59989f518e99a227db622349bf08be8ca1cb778b5",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "f8f4a0c1000524e113b5724972316ae65c1fad96ba9a323d121fdf0a600c44b7",
+    "encoding_format": 1,
+    "fingerprint_format": 7,
+    "problems": {},
+    "taken": {
+      "git_dirty": true,
+      "git_head": "a7e097874fe710e70438b1b4474c5368da6e3b25",
+      "run_id": "power-law-wall-07-base-b-20261116T190723",
+      "when": "2026-11-16T19:08:30+00:00"
+    }
+  },
+  "fingerprint_sidecar": "not written: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-base.manifest.json is not a problem-free registry sidecar (there is none)",
+  "heartbeat": "2026-11-16T19:08:54+00:00",
+  "host": {
+    "boot": "3032DE24-D9C7-47E8-B1C7-C366CDBC76DF",
+    "id": "8d2b247824882486"
+  },
+  "pid": 83771,
+  "stage": "CALCULATE BBN DATA, all work items complete",
+  "state": "done",
+  "units_done": 0,
+  "units_total": null
+}

@@ -1,0 +1,16 @@
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+-- tune power-law-wall-02-path-map-inverse-power-n2 it=0 kind=seed H/H0-1=+6.132e-07 phi_ref/phi_min-1=+6.430e-07 norm=-276.630728594 phi_ref=8.3892364002e-21 wall=1.8
+# beta=1.2 M=4e-31 model=inverse-power n=2 alpha=0.1: uptime at end: 23:41  up 15 days,  2:02, 1 user, load averages: 6.19 7.24 7.35
+# beta=1.2 M=4e-31 model=inverse-power n=2 alpha=0.1: tuned normalization ln V0 = -276.63072859401797, phi_ref = 8.389236400198545e-21 M_P, integrations = 1, wall = 2.1 s
+# ln(V0/M^4) = 3.344645; injections = 9; reflections = 9; N_final = 46.075643; parking: N = 32.045906 at candidate 8, ln T_J = -15.050026 (GeV)
+# first bounce: N = 17.667851520, T_J = 231.124418 MeV, phi = 7.802618e-11 M_P, reflected = True
+# idx        N         kind   ln(E/V0)       ln R    phi_t/M_P     ell_t        ell     regime lnkex_t/MP lnkex_ta/MP  phi_ta/M_P  lnR(path) resid(path) lnA(phi_t) P
+    0  17.66785        floor 102.1423115  308.986198  2.64325e-53  -0.89588   38.00884   one_loop   33.820791    -5.083924  2.0809e-36  308.98620   0.000e+00 -1.007e-20 
+    1  19.90292        floor  90.7745640  274.882955  7.77345e-51  -0.89588   33.73101   one_loop   22.453043   -12.173842  8.4894e-36  274.88296   5.684e-14 -1.007e-20 
+    2  24.77966        floor  69.7581181  211.833617  2.84628e-46  -0.89588   25.81641   one_loop    1.436597   -25.275694  1.1357e-34  211.83362   0.000e+00 -1.007e-20 
+    3  25.40105        floor  67.0637951  203.750648  1.09482e-45  -0.89588   24.80102   one_loop   -1.257726   -26.954631  1.5826e-34  203.75065   0.000e+00 -1.007e-20 
+    4  25.84266        floor  64.8911042  197.232576  3.24441e-45  -0.89588   23.98207   one_loop   -3.430417   -28.308365  2.0677e-34  197.23258   0.000e+00 -1.007e-20 
+    5  26.27791        floor  62.3890301  189.726354  1.13359e-44  -0.89588   23.03877   one_loop   -5.932491   -29.867146  2.8128e-34  189.72635   0.000e+00 -1.007e-20 
+    6  28.00169        floor  49.6879256  151.623040  6.49328e-42  -0.89588   18.24670   one_loop  -18.633595   -37.776198  1.3366e-33  151.62304   0.000e+00 -1.007e-20 
+    7  31.39468        floor  36.0094536  110.587624  6.06326e-39  -0.89588   13.07531   one_loop  -32.312067   -46.283888  7.0869e-33  110.58762   1.421e-14 -1.007e-20 
+    8  32.04591        floor  33.2991249  102.456638  2.35097e-38  -0.89588   12.04842   one_loop  -35.022396   -47.967911  9.8435e-33  102.45664   1.421e-14 -1.007e-20 P

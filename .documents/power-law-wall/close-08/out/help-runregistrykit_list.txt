@@ -1,0 +1,9 @@
+$ PYTHONPATH=. ./venv/bin/python -m runregistrykit list --help
+# exit 0
+usage: runregistrykit list [-h] [--root DIR] [--stale-after SECONDS]
+
+options:
+  -h, --help            show this help message and exit
+  --root DIR            the runs root; default the client config's runs_root
+  --stale-after SECONDS
+                        heartbeat staleness window, default 900

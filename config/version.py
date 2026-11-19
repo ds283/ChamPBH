@@ -97,7 +97,41 @@
 # T* = 2e4 GeV, is above it. No table or column changes (FINGERPRINT_FORMAT stays 7). A 2026.10.0 store is not extended at 2026.11.0:
 # start a fresh datastore file, and read a 2026.10.0 store with the tree of its own commit (before electroweak-eos
 # prompt 01).
-VERSION_LABEL = "2026.11.0"
+# On 2026-11-16 (power-law-wall prompt 05), 2026.12.0: from 2026.12.0 an InversePowerModel (V_0 [1 + (M/phi)^n],
+# CosmologyConcepts/Models/InversePowerModel.py) and its histories can be stored. The registry gains the table
+# InversePowerModel, keyed by (M, n, beta) as ExponentialModel's is; a ScalarHistory names it by model_type 2, and its
+# key may name the power wall's one-loop drain model, "one-loop-measured-pl-v1". A ScalarHistory whose key names a
+# one-loop drain model other than its model's own is refused when it is constructed. FINGERPRINT_FORMAT is 8. No
+# exponential value, column or row moves: every exponential history, sample and bounce row is as at 2026.11.0. A
+# 2026.11.0 store is not extended at 2026.12.0, and this tree cannot read one: DatastoreKit refuses a store that lacks
+# a table the code declares (StoreSchemaMismatch from the inventory and the fingerprint, and a RuntimeError from the
+# pool on reopening it), so a 2026.11.0 store is read with the tree of its own commit (before power-law-wall prompt
+# 05), and the two models are compared through their exports (power-law-wall README §6.2 U6).
+# On 2026-11-18 (power-law-wall prompt 07c), 2026.13.0: from 2026.13.0 k_ex has one definition on every potential and at
+# every use, k_ex = E^{1/2}|V'''/V''|/2 at the point the estimate is taken (power-law-wall README §6.12 R13-R15), in place
+# of -d ln V/dphi E^{1/2}/2: the classical turning point's at phi_t and the one-loop turnaround's at phi_ta, through the
+# models' new hook _d3_logV_dphi3. phi_t, ln omega_t^2 and ln R do not change (R16); every stored k_ex, ell, ell_t, peak,
+# ln q, birth margin, regime label and margin record does, on both potentials and under every law (the fixed law's
+# margins included), and the one-loop fixed point now has 400 iterations, not 100. The exponential's one-loop law is
+# "one-loop-exponential-v2", f = 1 - exp(-min(y_rise, y_fall)) (README §6.13 U13), at n = 1 and 2 only (U14), in place
+# of "one-loop-measured-v1", which is retired and refused; the power wall's is renamed "one-loop-inverse-power-v1"
+# from "one-loop-measured-pl-v1" (U11), its law and constants unchanged, and the old name is refused. The quanta
+# spectrum's tables are re-measured in the new x = k/k_ex, with x_* = 0.005615853347600149 (SPECTRUM_MODELS
+# R8-<wall>-v2), which moves the post-processing's outputs, not a stored value. The integration and BBN of every history
+# whose law reads no ell (natural mode, the fixed law, and the power wall under both laws) are unchanged, bit for bit;
+# the exponential's one-loop histories change. No table or column changes (FINGERPRINT_FORMAT stays 8). A 2026.12.0
+# store is not extended at 2026.13.0: start a fresh datastore file, and read a 2026.12.0 store with the tree of its own
+# commit (before power-law-wall prompt 07c).
+# On 2026-11-19 (power-law-wall prompt 07c2), 2026.14.0: from 2026.14.0 the pulse rate |V'''/V''| of k_ex is each model's
+# hook _pulse_rate_hook in closed form ((n + 2)/phi on the power wall; [(n + 1)(n + 2) + 3n(n + 1)u + n^2 u^2]/([(n + 1)
+# + nu] phi), u = (M/phi)^n, on the exponential; power-law-wall README §6.16 P126), in place of 2026.13.0's composition
+# of the three log hooks, which overflowed on the power wall below phi ~ 3e-103 M_P. k_ex, and what reads it (ell, ell_t,
+# ln q, the peaks, the margins, the one-loop chain), move at round-off where 2026.13.0's rate was finite; the power
+# wall's assessments below phi ~ 3e-103 M_P, which raised at 2026.13.0 (07d's stop: n = 1, beta = 2.9, M = 4e-31 M_P),
+# now return, down to where V'' leaves float range (~1e-154 M_P), as before 2026.13.0. phi_t, ln omega_t^2 and ln R do
+# not change, nor the integration and BBN of any history whose law reads no ell. No table or column changes
+# (FINGERPRINT_FORMAT stays 8). A 2026.13.0 store is not extended at 2026.14.0: start a fresh datastore file.
+VERSION_LABEL = "2026.14.0"
 
 # The reserved payload key of a version-keyed lookup (VERSION_SERIAL_KEY) and its reader
 # (require_version_serial) were defined here until dk-and-rpk-migration prompt 08; they are

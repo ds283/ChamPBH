@@ -408,6 +408,7 @@ class TestTheHistoriesCsv(_TunedStoreCase):
             phi_init_Mp=gt.PHI_INIT_OVER_MP,
             alpha=0.0,
             drain_model="fixed",
+            model="exponential",
             scalar=got,
             bbn=None,
             baseline=None,

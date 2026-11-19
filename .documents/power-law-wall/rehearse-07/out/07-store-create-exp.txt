@@ -1,0 +1,19 @@
+>> create: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp.manifest.json
+{
+  "created": "2026-11-16T19:20:55+00:00",
+  "datastore": "power-law-wall-07-exp.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "945bf5dfcc7b949a84754a641e65ed11ee828420",
+      "operation": "create",
+      "to": "var/datastores/power-law-wall-07-exp.db",
+      "when": "2026-11-16T19:20:55+00:00"
+    }
+  ],
+  "name": "power-law-wall-07-exp",
+  "purpose": "power-law-wall 07 R: the exp store at the tip (runs a, b, c: 20 exponential histories at n 1, the base's commands), kept for the user",
+  "sidecar_format": 1,
+  "store_id": "63364222c77e45febdb266f188c347ce"
+}

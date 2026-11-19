@@ -1,0 +1,39 @@
+$ env PYTHONPATH=. ./venv/bin/python -u plot_by_beta.py --config exponential.yaml --models inverse-power --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db --alpha-values 0 0.01 0.1 --A-values 0.05 1 10 --ray-address 127.0.0.1:6380 --shards 16 --phi-init-Mp 5 --output /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/refuse-models-exp
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-19 10:14:04,178	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-19 10:14:04,853	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db" read-only with 16 shards (version label "2026.14.0", serial 1)
+!! plot: the store holds no alpha_value for --A-values 0.05 (one-loop-inverse-power-v1); main.py was not run with it, so no history in this store can match. Give the plot the options the build used
+2026-11-19 10:14:25,148	ERROR worker.py:439 -- Unhandled error (suppress with 'RAY_IGNORE_UNHANDLED_ERRORS=1'): ray::Datastore.object_get() (pid=91105, ip=127.0.0.1, actor_id=5e4fc88b3590b3261745d16f19000000, repr=<datastorekit.SQL.Datastore.Datastore object at 0x108238980>)
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/datastorekit/SQL/Datastore.py", line 565, in object_get
+    factory.build(
+    ~~~~~~~~~~~~~^
+        payload=p,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        inserters=inserters,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/ObjectFactories/alpha_value.py", line 97, in build
+    store_id = inserter(conn, insert_data)
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/datastorekit/SQL/Datastore.py", line 306, in _refuse_insert
+    raise ReadOnlyMiss(cls_name, dict(payload), store=self._my_name)
+datastorekit.replication.ReadOnlyMiss: Datastore "shard0004-store" was opened read-only, and a lookup of "alpha_value" matched no row; a read-write store would have inserted one with payload {'value': 10.0, 'drain_model': 'one-loop-inverse-power-v1'}. Nothing was written
+2026-11-19 10:14:25,173	ERROR worker.py:439 -- Unhandled error (suppress with 'RAY_IGNORE_UNHANDLED_ERRORS=1'): ray::Datastore.object_get() (pid=91098, ip=127.0.0.1, actor_id=4395ac97aa8c6d9718571fb619000000, repr=<datastorekit.SQL.Datastore.Datastore object at 0x10bda8980>)
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/datastorekit/SQL/Datastore.py", line 565, in object_get
+    factory.build(
+    ~~~~~~~~~~~~~^
+        payload=p,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        inserters=inserters,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/ObjectFactories/alpha_value.py", line 97, in build
+    store_id = inserter(conn, insert_data)
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/datastorekit/SQL/Datastore.py", line 306, in _refuse_insert
+    raise ReadOnlyMiss(cls_name, dict(payload), store=self._my_name)
+datastorekit.replication.ReadOnlyMiss: Datastore "shard0001-store" was opened read-only, and a lookup of "alpha_value" matched no row; a read-write store would have inserted one with payload {'value': 1.0, 'drain_model': 'one-loop-inverse-power-v1'}. Nothing was written

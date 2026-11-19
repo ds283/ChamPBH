@@ -220,7 +220,8 @@ def _seed_and_log_Omega(model: Any, phi: float, cosmology: Any) -> Tuple[Any, fl
     """
     The seed of `model` on `cosmology` (`model.seed(cosmology)`, the start of its tuning; analytic
     and cheap), and ln Omega(phi) of the model realized at the seed's phi_ref (the normalization
-    does not enter Omega). For `ExponentialModel`, ln Omega(phi) = beta (phi - phi_ref)/M_P.
+    does not enter Omega). For each model main.py builds, `ExponentialModel` and `InversePowerModel` (the coupling is
+    theirs alike; power-law-wall prompt 06), ln Omega(phi) = beta (phi - phi_ref)/M_P.
     (jordan-normalization prompt 08, P11; before it, Omega was taken at phi_ref = 0.)
     """
     seed = model.seed(cosmology)
@@ -239,8 +240,9 @@ def super_planckian_couplings(
     Omega is the model's conformal factor A, which is 1 at phi_ref. Since jordan-normalization
     prompt 08 (P11) it is evaluated at the phi_ref of the model's seed on `cosmology`
     (`model.seed(cosmology)`), which is known before any history runs; the tuned phi_ref, which a
-    stored history holds, differs from it (see `warn_super_planckian`). For `ExponentialModel`,
-    ln Omega(phi*) = beta (phi* - phi_ref)/M_P, so the test is
+    stored history holds, differs from it (see `warn_super_planckian`). For `ExponentialModel` and
+    `InversePowerModel` (the same coupling; power-law-wall prompt 06), ln Omega(phi*) = beta (phi* - phi_ref)/M_P,
+    so the test is
 
         beta (phi* - phi_ref)/M_P > ln(M_P/T*).
 

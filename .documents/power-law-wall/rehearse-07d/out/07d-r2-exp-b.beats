@@ -1,0 +1,43 @@
+2026-11-19T09:33:18.206+00:00 X recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-exp-b.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s
+2026-11-19T09:33:19.719+00:00 L ** registered_run: registered as power-law-wall-07d-r2-exp-b-20261119T093319
+2026-11-19T09:33:19.719+00:00 L **   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/power-law-wall-07d-r2-exp-b-20261119T093319/manifest.json
+2026-11-19T09:33:19.719+00:00 L **   list it with: ./venv/bin/python -m runregistrykit list
+2026-11-19T09:33:19.719+00:00 H 2026-11-19T09:33:19+00:00 running list it with: ./venv/bin/python -m runregistrykit list
+2026-11-19T09:33:20.225+00:00 L >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-19T09:33:20.225+00:00 L 2026-11-19 09:33:20,204	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-19T09:33:20.225+00:00 H 2026-11-19T09:33:20+00:00 running packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-19T09:33:20.730+00:00 L 2026-11-19 09:33:20,262	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+2026-11-19T09:33:22.240+00:00 L >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db" with 16 shards
+2026-11-19T09:33:22.240+00:00 H 2026-11-19T09:33:22+00:00 running Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db" with 16 shards
+2026-11-19T09:33:32.821+00:00 L 
+2026-11-19T09:33:32.821+00:00 L ** BUILDING GRID OF MODELS TO SAMPLE
+2026-11-19T09:33:32.821+00:00 L    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+2026-11-19T09:33:32.821+00:00 L    -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+2026-11-19T09:33:32.821+00:00 L    -- populated M sample grid with 1 value = [ 0.001 Mp ]
+2026-11-19T09:33:32.821+00:00 L    -- populated alpha grid with 1 value = [ 0 ]
+2026-11-19T09:33:32.821+00:00 L    -- total number of models to integrate = 3
+2026-11-19T09:33:32.821+00:00 L 
+2026-11-19T09:33:32.821+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+2026-11-19T09:33:32.821+00:00 L 
+2026-11-19T09:33:32.821+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-19T09:33:32.821+00:00 L (Datastore pid=49308) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+2026-11-19T09:33:32.821+00:00 H 2026-11-19T09:33:32+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-19T09:34:14.643+00:00 L    -- ALL WORK ITEMS COMPLETE in time 42s
+2026-11-19T09:34:14.643+00:00 L       Queue summary: 3 lookup (avg 257.1/hr), 3 compute (avg 257.1/hr), 3 store (avg 257.1/hr), 3 validation (avg 257.1/hr)
+2026-11-19T09:34:14.643+00:00 L 
+2026-11-19T09:34:14.643+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-19T09:34:14.643+00:00 H 2026-11-19T09:34:14+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-19T09:34:15.653+00:00 L    -- ALL WORK ITEMS COMPLETE in time 0.751s
+2026-11-19T09:34:15.653+00:00 L       Queue summary: 3 lookup (avg 239.8/min), 3 compute (avg 239.8/min), 3 store (avg 239.8/min), 3 validation (avg 239.8/min)
+2026-11-19T09:34:15.653+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-11-19T09:34:15.653+00:00 L 
+2026-11-19T09:34:15.653+00:00 L ** CALCULATE BBN DATA
+2026-11-19T09:34:15.653+00:00 H 2026-11-19T09:34:15+00:00 running CALCULATE BBN DATA
+2026-11-19T09:34:25.739+00:00 L    -- ALL WORK ITEMS COMPLETE in time 10.4s
+2026-11-19T09:34:25.740+00:00 L       Queue summary: 3 lookup (avg 17.3/min), 3 compute (avg 17.3/min), 3 store (avg 17.3/min), 3 validation (avg 17.3/min)
+2026-11-19T09:34:25.740+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-19T09:34:25.741+00:00 H 2026-11-19T09:34:25+00:00 running CALCULATE BBN DATA, all work items complete
+2026-11-19T09:34:49.928+00:00 H 2026-11-19T09:34:49+00:00 done CALCULATE BBN DATA, all work items complete
+2026-11-19T09:34:50.434+00:00 L ** driver exit status 0
+2026-11-19T09:34:50.434+00:00 L ** launcher saw exit status 0
+2026-11-19T09:34:50.434+00:00 X exit: the launcher's line was seen; status.json read once more

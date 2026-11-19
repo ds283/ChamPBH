@@ -83,7 +83,7 @@ INVENTORY_CATEGORIES: List[Tuple[str, List[str]]] = [
         ],
     ),
     ("Cosmologies and solvers", ["QCD_Cosmology", "IntegrationSolver"]),
-    ("Models", ["ExponentialModel"]),
+    ("Models", ["ExponentialModel", "InversePowerModel"]),
     ("Compute targets", ["ScalarHistory", "AdiabaticHistory", "BBNData"]),
 ]
 

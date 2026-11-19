@@ -1,0 +1,13 @@
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+  job 01000000 SUCCEEDED driver pid 48771: hon.app/Contents/MacOS/Python -u .documents/power-law-wall/rehearse-07d/code_probe.py --address 127.0.0.1:6380
+  job 02000000 SUCCEEDED driver pid 48835: w-wall-07d-r2-exp-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+  job 03000000 SUCCEEDED driver pid 49263: .0.1:6380 --job-name power-law-wall-07d-r2-exp-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+  job 04000000 SUCCEEDED driver pid 49473: ob-name power-law-wall-07d-r2-exp-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+  job 05000000 SUCCEEDED driver pid 49906: aw-wall-07d-r2-pl-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+  job 06000000 SUCCEEDED driver pid 50508: 0.0.1:6380 --job-name power-law-wall-07d-r2-pl-b --M-values-Mp 1e-3 --beta-values 1.2 2.0 2.9 --alpha-values 0
+  job 07000000 SUCCEEDED driver pid 50924: job-name power-law-wall-07d-r2-pl-c --M-values-Mp 1e-33 1e-15 --beta-values 2.0 --A-values 1 --no-alpha-values
+  job 08000000 SUCCEEDED driver pid 51274: 07d-r2-pl-resumed-a --M-values-Mp 4e-31 --beta-values 1.2 2.0 2.9 --alpha-values 0.01 0.1 --A-values 0.05 1 10
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+  workers: 165 recorded, 0 alive
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+  actors: 120 recorded, 0 ALIVE; by (job, class, state): {('02000000', 'Datastore', 'DEAD'): 16, ('07000000', 'Datastore', 'DEAD'): 16, ('04000000', 'SerialPoolBroker', 'DEAD'): 1, ('06000000', 'Datastore', 'DEAD'): 16, ('08000000', 'Datastore', 'DEAD'): 16, ('05000000', 'Datastore', 'DEAD'): 16, ('03000000', 'Datastore', 'DEAD'): 16, ('04000000', 'Datastore', 'DEAD'): 16, ('06000000', 'SerialPoolBroker', 'DEAD'): 1, ('03000000', 'SerialPoolBroker', 'DEAD'): 1, ('07000000', 'SerialPoolBroker', 'DEAD'): 1, ('08000000', 'SerialPoolBroker', 'DEAD'): 1, ('05000000', 'SerialPoolBroker', 'DEAD'): 1, ('02000000', 'SerialPoolBroker', 'DEAD'): 1, ('01000000', 'ProbeActor', 'DEAD'): 1}

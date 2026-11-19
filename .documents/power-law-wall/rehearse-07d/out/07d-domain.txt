@@ -1,0 +1,37 @@
+=== /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp: 505 assessed candidates, 0 with log_E NULL (left out)
+  domain (exponential one-loop candidates, 505): largest ln(V_0/M^4) = 27.3105 at M=1e-33Mp n=1 beta=2 A=1 (one-loop-exponential-v2) ordinal 0; 47 exceed 10; largest |ln V_0 (from L) - normalization| 0
+    M=1e-33Mp n=1 beta=2 A=1: largest ln(V_0/M^4) 27.3105
+    M=4e-31Mp n=1 beta=1.2 A=0.05: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=1.2 A=1: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=1.2 A=10: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2 A=0.05: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2 A=1: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2 A=10: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2.9 A=0.05: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2.9 A=1: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2.9 A=10: largest ln(V_0/M^4) 3.34465
+    M=1e-15Mp n=1 beta=2 A=1: largest ln(V_0/M^4) -138.476
+  third hook [exponential n=1, 505 candidates]: least phi_t = 10^-35.0255 Mp at M=1e-33Mp beta=2 A=1 (one-loop-exponential-v2) ordinal 0 (ln(M/phi_t)^n = 4.66384); V''/V there = 10^74.1100, the largest float 10^308.2547 (234.14 decades); the end of the range at this M, phi = 10^-93.5637 Mp: least phi_t 58.54 decades above it
+=== /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl: 1142 assessed candidates, 0 with log_E NULL (left out)
+  domain: no exponential one-loop candidate in this store
+  third hook [inverse-power n=1, 579 candidates]: least phi_t = 10^-79.0537 Mp at M=1e-33Mp beta=2 A=1 (one-loop-inverse-power-v1) ordinal 0 (ln(M/phi_t)^n = 106.043); V''/V there = 10^158.4084, the largest float 10^308.2547 (149.85 decades); the end of the range at this M, phi = 10^-153.9768 Mp: least phi_t 74.92 decades above it (74.92 decades above 07c2's measured 1.054769e-154 Mp)
+  third hook [inverse-power n=2, 563 candidates]: least phi_t = 10^-56.0268 Mp at M=1e-33Mp beta=2 A=1 (one-loop-inverse-power-v1) ordinal 0 (ln(M/phi_t)^n = 106.043); V''/V there = 10^112.8318, the largest float 10^308.2547 (195.42 decades); the end of the range at this M, phi = 10^-153.7383 Mp: least phi_t 97.71 decades above it (97.71 decades above 07c2's measured 1.826913e-154 Mp)
+=== /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed: 1142 assessed candidates, 0 with log_E NULL (left out)
+  domain: no exponential one-loop candidate in this store
+  third hook [inverse-power n=1, 579 candidates]: least phi_t = 10^-79.0537 Mp at M=1e-33Mp beta=2 A=1 (one-loop-inverse-power-v1) ordinal 0 (ln(M/phi_t)^n = 106.043); V''/V there = 10^158.4084, the largest float 10^308.2547 (149.85 decades); the end of the range at this M, phi = 10^-153.9768 Mp: least phi_t 74.92 decades above it (74.92 decades above 07c2's measured 1.054769e-154 Mp)
+  third hook [inverse-power n=2, 563 candidates]: least phi_t = 10^-56.0268 Mp at M=1e-33Mp beta=2 A=1 (one-loop-inverse-power-v1) ordinal 0 (ln(M/phi_t)^n = 106.043); V''/V there = 10^112.8318, the largest float 10^308.2547 (195.42 decades); the end of the range at this M, phi = 10^-153.7383 Mp: least phi_t 97.71 decades above it (97.71 decades above 07c2's measured 1.826913e-154 Mp)
+=== /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed: 1084 assessed candidates, 0 with log_E NULL (left out)
+  domain (exponential one-loop candidates, 505): largest ln(V_0/M^4) = 27.3105 at M=1e-33Mp n=1 beta=2 A=1 (one-loop-exponential-v2) ordinal 0; 47 exceed 10; largest |ln V_0 (from L) - normalization| 0
+    M=1e-33Mp n=1 beta=2 A=1: largest ln(V_0/M^4) 27.3105
+    M=4e-31Mp n=1 beta=1.2 A=0.05: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=1.2 A=1: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=1.2 A=10: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2 A=0.05: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2 A=1: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2 A=10: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2.9 A=0.05: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2.9 A=1: largest ln(V_0/M^4) 3.34465
+    M=4e-31Mp n=1 beta=2.9 A=10: largest ln(V_0/M^4) 3.34465
+    M=1e-15Mp n=1 beta=2 A=1: largest ln(V_0/M^4) -138.476
+  third hook [exponential n=1, 505 candidates]: least phi_t = 10^-35.0255 Mp at M=1e-33Mp beta=2 A=1 (one-loop-exponential-v2) ordinal 0 (ln(M/phi_t)^n = 4.66384); V''/V there = 10^74.1100, the largest float 10^308.2547 (234.14 decades); the end of the range at this M, phi = 10^-93.5637 Mp: least phi_t 58.54 decades above it
+  third hook [inverse-power n=1, 579 candidates]: least phi_t = 10^-79.0537 Mp at M=1e-33Mp beta=2 A=1 (one-loop-inverse-power-v1) ordinal 0 (ln(M/phi_t)^n = 106.043); V''/V there = 10^158.4084, the largest float 10^308.2547 (149.85 decades); the end of the range at this M, phi = 10^-153.9768 Mp: least phi_t 74.92 decades above it (74.92 decades above 07c2's measured 1.054769e-154 Mp)

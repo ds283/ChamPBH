@@ -1,0 +1,31 @@
+== the exponential root: the base's tools on the base's root, the tip's on the tip's exponential root
+quanta file one-loop-measured-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/quanta_bounces.csv: IDENTICAL byte for byte (10776 bytes, sha256 46a7519810144a46)
+quanta file one-loop-measured-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/quanta_samples.csv: IDENTICAL byte for byte (759453 bytes, sha256 9b2e944e4fcf6413)
+quanta file quanta_histories.csv: IDENTICAL byte for byte (871 bytes, sha256 2829cb9a50d71ddd)
+figure one-loop-measured-v1/A=1/plots/beta=2/M=0.00097413eV_n=1/quanta_history.pdf: IDENTICAL with CreationDate masked (42461 bytes, sha256 549ba2bd03872f03)
+figure one-loop-measured-v1/A=1/plots/beta=2/M=0.00097413eV_n=1/quanta_history.png: IDENTICAL byte for byte (279123 bytes, sha256 aa70a7fd19b62487)
+figure one-loop-measured-v1/A=1/plots/quanta_grid.pdf: IDENTICAL with CreationDate masked (47334 bytes, sha256 b9a64dfbc5e115d8)
+figure one-loop-measured-v1/A=1/plots/quanta_grid.png: IDENTICAL byte for byte (184639 bytes, sha256 8f68bf5218845b27)
+quanta_measures: printed lines IDENTICAL with the timing fields masked and the --output directory named alike (3 lines; raw text identical: False)
+plot_quanta_grid: printed lines IDENTICAL with the timing fields masked and the --output directory named alike (4 lines; raw text identical: False)
+plot_quanta_history: printed lines IDENTICAL with the timing fields masked and the --output directory named alike (4 lines; raw text identical: False)
+
+== the power-law root (the tip's <label>/inverse-power/, copied to V/quanta-power)
+quanta_measures exit 0
+   one-loop-measured-pl-v1 A=1.0 M_Mp=4e-31 n=1 beta=2.0: generations 37; drains without spectrum 0; leftover after the last candidate; K bitwise 36/36; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall <masked> s
+   one-loop-measured-pl-v1 A=1.0 M_Mp=4e-31 n=2 beta=2.0: generations 48; drains without spectrum 0; leftover after the last candidate; K bitwise 47/47; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall <masked> s
+   quanta_measures (R8-power-n1-v1, R8-power-n2-v1, assoc scale 1): measured 2, skipped as fixed-law 3, failed histories 1, missing files 0, refused 0, failed the K check 0; wall <masked> s
+quanta_histories.csv n=1 one-loop-measured-pl-v1 A=1.0: spectrum_model R8-power-n1-v1 (right)
+quanta_histories.csv n=2 one-loop-measured-pl-v1 A=1.0: spectrum_model R8-power-n2-v1 (right)
+one-loop-measured-pl-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/quanta_bounces.csv: spectrum_model ['R8-power-n1-v1'] (right)
+one-loop-measured-pl-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/quanta_samples.csv: spectrum_model ['R8-power-n1-v1'] (right)
+one-loop-measured-pl-v1/A=1/csv/beta=2/M=0.00097413eV_n=2/quanta_bounces.csv: spectrum_model ['R8-power-n2-v1'] (right)
+one-loop-measured-pl-v1/A=1/csv/beta=2/M=0.00097413eV_n=2/quanta_samples.csv: spectrum_model ['R8-power-n2-v1'] (right)
+histories measured: 2 (the one-loop histories at n = 1 and n = 2)
+
+== a root without model (a copy of the base's root)
+its histories.csv has model: False
+quanta_measures exit 2; stderr: !! quanta_measures: cannot read /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/06/nomodel-root/histories.csv: it has no 'model' column, which names the potential whose spectrum each row takes (power-law-wall prompt 06)
+files written: []
+
+STOP CONDITION HIT: False

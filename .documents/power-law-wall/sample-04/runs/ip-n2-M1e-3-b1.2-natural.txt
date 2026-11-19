@@ -1,0 +1,26 @@
+# command: PYTHONPATH=. ./venv/bin/python prompts/power-law-wall/source/sample/sample_run.py 1.2 1e-3 --model inverse-power --n 2
+# start: 2026-11-15 19:43:24 19:43  up 15 days, 22:04, 1 user, load averages: 5.51 8.42 7.84
+@@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+!! tune_history (history_and_bbn-beta1.2-M0.001-inverse-power-n2): natural mode: the classical turning point lies below 1e-08 M_P (phi_t = 6.572e-26 M_P at the floor reflection at N = 17.66785152), where dissipation mode would reflect without resolving it; this history may fail on Radau's float spacing or the step budget
+-- tune history_and_bbn-beta1.2-M0.001-inverse-power-n2 it=0 kind=seed H/H0-1=-9.675e-03 phi_ref/phi_min-1=-2.275e-04 norm=-276.713754499 phi_ref=1.5031299939e-02 wall=9.2
+-- tune history_and_bbn-beta1.2-M0.001-inverse-power-n2 it=1 kind=plain H/H0-1=+5.090e-05 phi_ref/phi_min-1=-9.344e-03 norm=-276.684952479 phi_ref=1.5034720096e-02 wall=9.1
+-- tune history_and_bbn-beta1.2-M0.001-inverse-power-n2 it=2 kind=secant H/H0-1=+6.095e-05 phi_ref/phi_min-1=-1.968e-04 norm=-276.685102221 phi_ref=1.5176165304e-02 wall=9.7
+-- tune history_and_bbn-beta1.2-M0.001-inverse-power-n2 it=3 kind=secant H/H0-1=+1.898e-07 phi_ref/phi_min-1=+3.092e-07 norm=-276.685283804 phi_ref=1.5178311039e-02 wall=9.1
+history beta=1.2 M=0.001 model=inverse-power n=2: RHS=301108 accepted_steps=32102 reflections=4 samples=5001 integrations=4 wall=37.4 s
+tuning beta=1.2 M=0.001 model=inverse-power n=2: normalization=-276.6852838040269 V_ref=6.9022240670975665e-121 phi_ref=0.015178311039344371 phi_0=0.01497629427787523 pi_0=0.014303338545302656 tracking=0.6367101803206977 residual_H=1.8980928606637804e-07 residual_phi=3.092361249290576e-07 tuning_iterations=4 plain_steps=1 secant_steps=2 guard_steps=0 seed_kind=tracking seed_normalization=-276.71375449860835 seed_phi_ref=0.015031299938854704
+bounce beta=1.2 M=0.001 model=inverse-power n=2: N=17.667851521 T_J=231.124418 MeV phi=8.161242e-11 reflected=True
+fixed_T beta=1.2 M=0.001 model=inverse-power n=2: 1MeV crossings=1 phi=1.210492701e-01 ratio=2.582100785e-01 stand_in_phi=1.210491013e-01 stand_in_ratio=2.582088981e-01 | 70keV crossings=1 phi=2.435133165e-02 ratio=3.571018239e-02 stand_in_phi=2.435043683e-02 stand_in_ratio=3.571950377e-02
+ratio beta=1.2 M=0.001 model=inverse-power n=2 [0.3,1) keV: n=131 min=-0.02197 median=-0.01179 max=-0.006155 rms_step=0.0001284
+ratio beta=1.2 M=0.001 model=inverse-power n=2 [1,3) keV: n=119 min=-0.006092 median=-0.00322 max=-0.001549 rms_step=4.03e-05
+ratio beta=1.2 M=0.001 model=inverse-power n=2 [3,10) keV: n=131 min=-0.001528 median=-0.0004928 max=7.474e-05 rms_step=1.303e-05
+ratio beta=1.2 M=0.001 model=inverse-power n=2 [10,100) keV: n=256 min=8.106e-05 median=0.0005581 max=0.1868 rms_step=0.001584
+bbn beta=1.2 M=0.001 model=inverse-power n=2: Yp=0.2534231058 DoH=2.507814782 He3oH=1.050411292 Li7oH=5.531148342 network=small PRyM_time=8.4 s wall=8.4 s PRyM_version=bf24c3d+ri02+sr01+bt02
+sample outcome: status=ok exit=0 reason=None
+sample tuning: integrations=4 seed_kind=tracking residual_H=1.8980928606637804e-07 residual_phi=3.092361249290576e-07 normalization=-276.6852838040269 phi_ref_Mp=0.015178311039344371
+sample cascade: reflections=4 candidates=0 injections=0 resolved=0 unresolved=0 N_final=46.057671755 first_impact_log_R=None first_impact_log_x=None
+sample drain: law=fixed A=None model=fixed f_min=None f_max=None alpha_eff_min=None alpha_eff_max=None at_cap=None log_R_min=None log_R_max=None ell_min=None ell_max=None consistency_mismatches=None
+sample parking: parked=False N=None T_J_GeV=None candidate_index=None rho_kin_over_rho_rad=None m_eff_over_H=None min_m_eff_over_H=None parked_steps=None K_share_parking=None released=False release_N=None release_T_J_GeV=None release_m_eff_over_H=None release_N_check=None release_m_eff_over_H_check=None release_candidate_index=None min_ratio_before_cut=None min_ratio_before_cut_index=None
+sample r9: K_final=0.0 share_x_lt_100=None share_x_lt_1000=None log_x_min=None inv_s_t_minus_1_at_min=None log_x_max=None
+sample thresholds: phi_t_max_Mp=None phi_t_ge_1e-8=0 log_R_min=None log_R_le_0=0 unresolvable_assessments=0 unresolved_declined=0 log1p_x_min_over_16ulp=None max_wall_to_kinetic_ratio=3.70203e-13
+cand idx N kind log_x phi_t_Mp log_R ell regime f alpha_eff w_gate dK_over_K resolved rho_kin_over_rho_rad
+# end: 2026-11-15 19:44:12 exit=0 wall=48 s 19:44  up 15 days, 22:04, 1 user, load averages: 4.64 7.76 7.62

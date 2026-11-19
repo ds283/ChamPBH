@@ -1,0 +1,121 @@
+2026-11-16T19:21:56.102+00:00 X recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07/runs/pl-a.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s
+2026-11-16T19:21:58.116+00:00 L ** registered_run: registered as power-law-wall-07-pl-a-20261116T192157
+2026-11-16T19:21:58.116+00:00 L **   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/power-law-wall-07-pl-a-20261116T192157/manifest.json
+2026-11-16T19:21:58.116+00:00 L **   list it with: ./venv/bin/python -m runregistrykit list
+2026-11-16T19:21:58.116+00:00 H 2026-11-16T19:21:57+00:00 running list it with: ./venv/bin/python -m runregistrykit list
+2026-11-16T19:21:58.619+00:00 L >> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-16T19:21:58.619+00:00 L 2026-11-16 19:21:58,487	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-16T19:21:58.619+00:00 L 2026-11-16 19:21:58,543	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+2026-11-16T19:21:58.619+00:00 L >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl.db" with 16 shards
+2026-11-16T19:21:58.619+00:00 H 2026-11-16T19:21:58+00:00 running Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl.db" with 16 shards
+2026-11-16T19:22:35.540+00:00 L 
+2026-11-16T19:22:35.540+00:00 L ** BUILDING GRID OF MODELS TO SAMPLE
+2026-11-16T19:22:35.540+00:00 L    -- using model InversePowerModel, V = V0 [1 + (M/phi)^n], with n = [ 1, 2 ]
+2026-11-16T19:22:35.540+00:00 L    -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+2026-11-16T19:22:35.540+00:00 L    -- populated M sample grid with 1 value = [ 0.00097413 eV ]
+2026-11-16T19:22:35.540+00:00 L    -- populated alpha grid with 2 values = [ 0.01, 0.1 ]
+2026-11-16T19:22:35.540+00:00 L    -- populated A grid with 3 values = [ 0.05, 1, 10 ] (one-loop-measured-pl-v1)
+2026-11-16T19:22:35.540+00:00 L    -- total number of models to integrate = 6
+2026-11-16T19:22:35.540+00:00 H 2026-11-16T19:22:35+00:00 running BUILDING GRID OF MODELS TO SAMPLE
+2026-11-16T19:22:36.042+00:00 L (Datastore pid=87422) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+2026-11-16T19:22:36.042+00:00 L 
+2026-11-16T19:22:36.042+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+2026-11-16T19:22:36.042+00:00 L 
+2026-11-16T19:22:36.042+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T19:22:36.042+00:00 H 2026-11-16T19:22:35+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T19:22:55.196+00:00 L    -- ALL WORK ITEMS COMPLETE in time 19.3s
+2026-11-16T19:22:55.197+00:00 L       Queue summary: 6 lookup (avg 18.65/min), 6 compute (avg 18.65/min), 6 store (avg 18.65/min), 6 validation (avg 18.65/min)
+2026-11-16T19:22:55.197+00:00 L 
+2026-11-16T19:22:55.197+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T19:22:55.197+00:00 H 2026-11-16T19:22:55+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T19:22:56.709+00:00 L    -- ALL WORK ITEMS COMPLETE in time 1.32s
+2026-11-16T19:22:56.709+00:00 L       Queue summary: 6 lookup (avg 271.8/min), 6 compute (avg 271.8/min), 6 store (avg 271.8/min), 6 validation (avg 271.8/min)
+2026-11-16T19:22:56.709+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-11-16T19:22:56.709+00:00 L 
+2026-11-16T19:22:56.709+00:00 L ** CALCULATE BBN DATA
+2026-11-16T19:22:56.709+00:00 H 2026-11-16T19:22:56+00:00 running CALCULATE BBN DATA
+2026-11-16T19:23:09.304+00:00 L    -- ALL WORK ITEMS COMPLETE in time 12.5s
+2026-11-16T19:23:09.304+00:00 L       Queue summary: 6 lookup (avg 28.8/min), 6 compute (avg 28.8/min), 6 store (avg 28.8/min), 6 validation (avg 28.8/min)
+2026-11-16T19:23:09.304+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-16T19:23:09.304+00:00 L 
+2026-11-16T19:23:09.304+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+2026-11-16T19:23:09.304+00:00 L 
+2026-11-16T19:23:09.304+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T19:23:09.304+00:00 H 2026-11-16T19:23:08+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T19:23:23.918+00:00 L    -- ALL WORK ITEMS COMPLETE in time 14.7s
+2026-11-16T19:23:23.919+00:00 L       Queue summary: 6 lookup (avg 24.45/min), 6 compute (avg 24.45/min), 6 store (avg 24.45/min), 6 validation (avg 24.45/min)
+2026-11-16T19:23:23.919+00:00 L 
+2026-11-16T19:23:23.919+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T19:23:23.919+00:00 H 2026-11-16T19:23:23+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T19:23:24.925+00:00 L    -- ALL WORK ITEMS COMPLETE in time 1.2s
+2026-11-16T19:23:24.925+00:00 L       Queue summary: 6 lookup (avg 300.8/min), 6 compute (avg 300.8/min), 6 store (avg 300.8/min), 6 validation (avg 300.8/min)
+2026-11-16T19:23:24.925+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-11-16T19:23:24.925+00:00 L 
+2026-11-16T19:23:24.925+00:00 L ** CALCULATE BBN DATA
+2026-11-16T19:23:24.925+00:00 H 2026-11-16T19:23:24+00:00 running CALCULATE BBN DATA
+2026-11-16T19:23:35.514+00:00 L    -- ALL WORK ITEMS COMPLETE in time 10.3s
+2026-11-16T19:23:35.515+00:00 L       Queue summary: 6 lookup (avg 35.06/min), 6 compute (avg 35.06/min), 6 store (avg 35.06/min), 6 validation (avg 35.06/min)
+2026-11-16T19:23:35.515+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-16T19:23:35.515+00:00 L 
+2026-11-16T19:23:35.515+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-measured-pl-v1)
+2026-11-16T19:23:35.515+00:00 L 
+2026-11-16T19:23:35.515+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T19:23:35.515+00:00 H 2026-11-16T19:23:35+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T19:24:00.208+00:00 L    -- ALL WORK ITEMS COMPLETE in time 25.1s
+2026-11-16T19:24:00.208+00:00 L       Queue summary: 6 lookup (avg 14.36/min), 6 compute (avg 14.36/min), 6 store (avg 14.36/min), 6 validation (avg 14.36/min)
+2026-11-16T19:24:00.208+00:00 L 
+2026-11-16T19:24:00.208+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T19:24:00.208+00:00 H 2026-11-16T19:24:00+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T19:24:01.718+00:00 L    -- ALL WORK ITEMS COMPLETE in time 1.07s
+2026-11-16T19:24:01.718+00:00 L       Queue summary: 6 lookup (avg 335.6/min), 6 compute (avg 335.6/min), 6 store (avg 335.6/min), 6 validation (avg 335.6/min)
+2026-11-16T19:24:01.718+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-11-16T19:24:01.718+00:00 L 
+2026-11-16T19:24:01.718+00:00 L ** CALCULATE BBN DATA
+2026-11-16T19:24:01.718+00:00 H 2026-11-16T19:24:01+00:00 running CALCULATE BBN DATA
+2026-11-16T19:24:12.304+00:00 L    -- ALL WORK ITEMS COMPLETE in time 11s
+2026-11-16T19:24:12.305+00:00 L       Queue summary: 6 lookup (avg 32.8/min), 6 compute (avg 32.8/min), 6 store (avg 32.8/min), 6 validation (avg 32.8/min)
+2026-11-16T19:24:12.305+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-16T19:24:12.305+00:00 L 
+2026-11-16T19:24:12.305+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-measured-pl-v1)
+2026-11-16T19:24:12.305+00:00 L 
+2026-11-16T19:24:12.305+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T19:24:12.305+00:00 H 2026-11-16T19:24:12+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T19:24:26.427+00:00 L    -- ALL WORK ITEMS COMPLETE in time 14s
+2026-11-16T19:24:26.427+00:00 L       Queue summary: 6 lookup (avg 25.73/min), 6 compute (avg 25.73/min), 6 store (avg 25.73/min), 6 validation (avg 25.73/min)
+2026-11-16T19:24:26.427+00:00 L 
+2026-11-16T19:24:26.427+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T19:24:26.427+00:00 H 2026-11-16T19:24:26+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T19:24:27.435+00:00 L    -- ALL WORK ITEMS COMPLETE in time 1.19s
+2026-11-16T19:24:27.435+00:00 L       Queue summary: 6 lookup (avg 303/min), 6 compute (avg 303/min), 6 store (avg 303/min), 6 validation (avg 303/min)
+2026-11-16T19:24:27.435+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-11-16T19:24:27.435+00:00 L 
+2026-11-16T19:24:27.435+00:00 L ** CALCULATE BBN DATA
+2026-11-16T19:24:27.435+00:00 H 2026-11-16T19:24:27+00:00 running CALCULATE BBN DATA
+2026-11-16T19:24:38.018+00:00 L    -- ALL WORK ITEMS COMPLETE in time 10.3s
+2026-11-16T19:24:38.018+00:00 L       Queue summary: 6 lookup (avg 34.98/min), 6 compute (avg 34.98/min), 6 store (avg 34.98/min), 6 validation (avg 34.98/min)
+2026-11-16T19:24:38.018+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-16T19:24:38.018+00:00 L 
+2026-11-16T19:24:38.018+00:00 L >> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-measured-pl-v1)
+2026-11-16T19:24:38.018+00:00 L 
+2026-11-16T19:24:38.018+00:00 L ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T19:24:38.018+00:00 H 2026-11-16T19:24:37+00:00 running CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+2026-11-16T19:24:47.083+00:00 L    -- ALL WORK ITEMS COMPLETE in time 8.9s
+2026-11-16T19:24:47.083+00:00 L       Queue summary: 6 lookup (avg 40.45/min), 6 compute (avg 40.45/min), 6 store (avg 40.45/min), 6 validation (avg 40.45/min)
+2026-11-16T19:24:47.083+00:00 L 
+2026-11-16T19:24:47.083+00:00 L ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T19:24:47.083+00:00 H 2026-11-16T19:24:46+00:00 running CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+2026-11-16T19:24:48.085+00:00 L    -- ALL WORK ITEMS COMPLETE in time 1.14s
+2026-11-16T19:24:48.085+00:00 L       Queue summary: 6 lookup (avg 316.3/min), 6 compute (avg 316.3/min), 6 store (avg 316.3/min), 6 validation (avg 316.3/min)
+2026-11-16T19:24:48.085+00:00 L -- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+2026-11-16T19:24:48.085+00:00 L 
+2026-11-16T19:24:48.085+00:00 L ** CALCULATE BBN DATA
+2026-11-16T19:24:48.085+00:00 H 2026-11-16T19:24:47+00:00 running CALCULATE BBN DATA
+2026-11-16T19:24:56.644+00:00 L    -- ALL WORK ITEMS COMPLETE in time 8.83s
+2026-11-16T19:24:56.645+00:00 L       Queue summary: 6 lookup (avg 40.77/min), 6 compute (avg 40.77/min), 6 store (avg 40.77/min), 6 validation (avg 40.77/min)
+2026-11-16T19:24:56.645+00:00 L -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+2026-11-16T19:24:56.646+00:00 H 2026-11-16T19:24:56+00:00 running CALCULATE BBN DATA, all work items complete
+2026-11-16T19:25:23.396+00:00 L (Datastore pid=87475) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO" [repeated 15x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)
+2026-11-16T19:25:23.396+00:00 L ** driver exit status 0
+2026-11-16T19:25:23.397+00:00 H 2026-11-16T19:25:22+00:00 done CALCULATE BBN DATA, all work items complete
+2026-11-16T19:25:23.899+00:00 L ** launcher saw exit status 0
+2026-11-16T19:25:23.900+00:00 X exit: the launcher's line was seen; status.json read once more

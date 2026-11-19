@@ -1,0 +1,54 @@
+# definition.py; start: 12:11  up 17 days, 14:32, 1 user, load averages: 5.54 8.14 8.86
+
+## E64: Eq. (64) at the v3 chain's phi_ta (tolerance 1e-7 relative); and the factor left out by V_D ~ V''^2
+  exponential n=1 L=26.74    lnR=52.151  ell= 10.02950  k_ex(chain) 3.9240152240e-02  Eq.(64), V_D ~ V''^2: 3.9240152241e-02 (rel +1.3e-11)  with ell(phi): ratio 0.98745812, (1 - 1/4 ell)^1/2 = 0.98745812 (diff +1.1e-11)
+  exponential n=1 L=7.885    lnR=23.833  ell=  3.12576  k_ex(chain) 6.2609413957e-02  Eq.(64), V_D ~ V''^2: 6.2609413955e-02 (rel -3.1e-11)  with ell(phi): ratio 0.95917639, (1 - 1/4 ell)^1/2 = 0.95917639 (diff -3.0e-11)
+  exponential n=1 L=3.619    lnR=13.791  ell=  1.36424  k_ex(chain) 1.6290565502e-01  Eq.(64), V_D ~ V''^2: 1.6290565503e-01 (rel +3.4e-11)  with ell(phi): ratio 0.90374115, (1 - 1/4 ell)^1/2 = 0.90374115 (diff +2.9e-11)
+  exponential n=2 L=60       lnR=20      ell=  4.09925  k_ex(chain) 4.0378458390e-01  Eq.(64), V_D ~ V''^2: 4.0378458551e-01 (rel +4.0e-09)  with ell(phi): ratio 0.96902699, (1 - 1/4 ell)^1/2 = 0.96902698 (diff +3.4e-09)
+  exponential n=2 L=16       lnR=20      ell=  3.50032  k_ex(chain) 2.3077288693e-01  Eq.(64), V_D ~ V''^2: 2.3077288697e-01 (rel +1.7e-10)  with ell(phi): ratio 0.96362749, (1 - 1/4 ell)^1/2 = 0.96362749 (diff +1.4e-10)
+  exponential n=2 L=4        lnR=12      ell=  1.27691  k_ex(chain) 2.3749096143e-01  Eq.(64), V_D ~ V''^2: 2.3749096144e-01 (rel +2.4e-11)  with ell(phi): ratio 0.89678043, (1 - 1/4 ell)^1/2 = 0.89678043 (diff +1.4e-11)
+  power       n=1 x=1e+40    lnR=40      ell=  3.37814  k_ex(chain) 1.3883853311e-03  Eq.(64), V_D ~ V''^2: 1.3883853311e-03 (rel +5.1e-12)  with ell(phi): ratio 0.96228627, (1 - 1/4 ell)^1/2 = 0.96228627 (diff +1.1e-11)
+  power       n=1 x=1000     lnR=40      ell=  3.37814  k_ex(chain) 1.3883853311e-03  Eq.(64), V_D ~ V''^2: 1.3883853311e-03 (rel +5.1e-12)  with ell(phi): ratio 0.96228627, (1 - 1/4 ell)^1/2 = 0.96228627 (diff +1.1e-11)
+  power       n=1 x=100      lnR=29.5    ell=  2.47730  k_ex(chain) 8.4134740146e-03  Eq.(64), V_D ~ V''^2: 8.4134740146e-03 (rel -4.1e-12)  with ell(phi): ratio 0.94820018, (1 - 1/4 ell)^1/2 = 0.94820018 (diff -6.0e-12)
+  power       n=2 x=1e+40    lnR=30      ell=  3.53170  k_ex(chain) 1.9503364513e-02  Eq.(64), V_D ~ V''^2: 1.9503364513e-02 (rel -8.2e-12)  with ell(phi): ratio 0.96395675, (1 - 1/4 ell)^1/2 = 0.96395675 (diff -5.4e-12)
+  power       n=2 x=1000     lnR=28.5    ell=  3.33712  k_ex(chain) 2.3692795922e-02  Eq.(64), V_D ~ V''^2: 2.3692795923e-02 (rel +4.9e-11)  with ell(phi): ratio 0.96181344, (1 - 1/4 ell)^1/2 = 0.96181344 (diff +4.4e-11)
+  power       n=2 x=100      lnR=20      ell=  2.22389  k_ex(chain) 7.2125121282e-02  Eq.(64), V_D ~ V''^2: 7.2125121284e-02 (rel +2.8e-11)  with ell(phi): ratio 0.94211690, (1 - 1/4 ell)^1/2 = 0.94211690 (diff +2.7e-11)
+# E64 largest |rel| 4.0e-09: holds
+
+## E71: the power wall's k_ex against Eq. (71) (tolerance 1e-13 relative)
+  n=1 x=1e+40  lnR=40    phi_ta/phi_t=7.63952303e+02 ell=  3.37814  k_ex(chain) 1.388385331064189e-03  Eq.(71) 1.388385331064189e-03  rel +2.2e-16
+  n=1 x=1000   lnR=40    phi_ta/phi_t=7.63952303e+02 ell=  3.37814  k_ex(chain) 1.388385331064189e-03  Eq.(71) 1.388385331064189e-03  rel +2.2e-16
+  n=1 x=100    lnR=29.5  phi_ta/phi_t=1.26066851e+02 ell=  2.47730  k_ex(chain) 8.413474014632091e-03  Eq.(71) 8.413474014632091e-03  rel +0.0e+00
+  n=2 x=1e+40  lnR=30    phi_ta/phi_t=4.18643963e+01 ell=  3.53170  k_ex(chain) 1.950336451271822e-02  Eq.(71) 1.950336451271822e-02  rel +4.4e-16
+  n=2 x=1000   lnR=28.5  phi_ta/phi_t=3.44618079e+01 ell=  3.33712  k_ex(chain) 2.369279592189109e-02  Eq.(71) 2.369279592189109e-02  rel +2.2e-16
+  n=2 x=100    lnR=20    phi_ta/phi_t=1.13205575e+01 ell=  2.22389  k_ex(chain) 7.212512128196287e-02  Eq.(71) 7.212512128196286e-02  rel +2.2e-16
+# E71 largest |rel| 4.4e-16: holds
+
+## E66: the exponential's new/old ratio against its closed form, and Eq. (66) as its leading term (tolerance 1e-13 relative)
+  n=1 L=26.74  lnR=52.151  u=(M/phi_ta)^n=   5.97966  k_ex(v3)/k_ex(lambda) 1.627019005871780  closed form 1.627019005871780 (rel +0.0e+00);  Eq.(66) leading term / k_ex(lambda) - 1 = +0.0e+00;  u (ratio - 1) = 3.74936 -> 2(n+1)/n = 4
+  n=1 L=7.885  lnR=23.833  u=(M/phi_ta)^n=   1.69260  k_ex(v3)/k_ex(lambda) 3.043238175896836  closed form 3.043238175896836 (rel +0.0e+00);  Eq.(66) leading term / k_ex(lambda) - 1 = +0.0e+00;  u (ratio - 1) = 3.45838 -> 2(n+1)/n = 4
+  n=1 L=3.619  lnR=13.791  u=(M/phi_ta)^n=   1.18329  k_ex(v3)/k_ex(lambda) 3.849448434119553  closed form 3.849448434119553 (rel +0.0e+00);  Eq.(66) leading term / k_ex(lambda) - 1 = +0.0e+00;  u (ratio - 1) = 3.37172 -> 2(n+1)/n = 4
+  n=2 L=60     lnR=20      u=(M/phi_ta)^n=  50.50027  k_ex(v3)/k_ex(lambda) 1.058834423795858  closed form 1.058834423795858 (rel +2.2e-16);  Eq.(66) leading term / k_ex(lambda) - 1 = +0.0e+00;  u (ratio - 1) = 2.97115 -> 2(n+1)/n = 3
+  n=2 L=16     lnR=20      u=(M/phi_ta)^n=   8.04720  k_ex(v3)/k_ex(lambda) 1.353276336161524  closed form 1.353276336161524 (rel +0.0e+00);  Eq.(66) leading term / k_ex(lambda) - 1 = +0.0e+00;  u (ratio - 1) = 2.84289 -> 2(n+1)/n = 3
+  n=2 L=4      lnR=12      u=(M/phi_ta)^n=   1.36798  k_ex(v3)/k_ex(lambda) 2.810685712215340  closed form 2.810685712215339 (rel +2.2e-16);  Eq.(66) leading term / k_ex(lambda) - 1 = +0.0e+00;  u (ratio - 1) = 2.47698 -> 2(n+1)/n = 3
+# E66 largest |rel| 2.2e-16: holds
+
+## R16: phi_t, ln omega_t^2, ln R from production's classical_turning_point and from the v3 version (==)
+  exp-n1-M4e-31-b2.0-a0.1 #0     phi_t 3.7720712481981856e-33 | 3.7720712481981856e-33; ln omega_t^2 -11.92645997053856 | -11.92645997053856; ln R 142.3663716395622 | 142.3663716395622; bitwise True; ln k_ex old -6.665720 new -6.628861, ell_t old -0.702490 new -0.665631
+  exp-n1-M4e-31-b2.0-a0.1 #24    phi_t 6.42670480937389e-33 | 6.42670480937389e-33; ln omega_t^2 -57.84710856199911 | -57.84710856199911; ln R 94.3273156566411 | 94.3273156566411; bitwise True; ln k_ex old -29.632515 new -29.570699, ell_t old -0.708961 new -0.647145
+  exp-n1-M4e-31-b2.0-a0.1 #48    phi_t 7.132747415936562e-33 | 7.132747415936562e-33; ln omega_t^2 -64.42155421728557 | -64.42155421728557; ln R 87.33934624606817 | 87.33934624606817; bitwise True; ln k_ex old -32.921446 new -32.853120, ell_t old -0.710668 new -0.642343
+  ip-n1-M1e-15-b2.0-a0.1 #0      phi_t 8.837143321256676e-62 | 8.837143321256676e-62; ln omega_t^2 111.26757815648276 | 111.26757815648276; ln R 388.75444821348543 | 388.75444821348543; bitwise True; ln k_ex old 54.594068 new 55.692681, ell_t old -1.039721 new 0.058892
+  ip-n1-M1e-15-b2.0-a0.1 #24     phi_t 9.319304522215778e-43 | 9.319304522215778e-43; ln omega_t^2 -20.139145143517254 | -20.139145143517254; ln R 169.74324271348542 | 169.74324271348542; bitwise True; ln k_ex old -11.109293 new -10.010681, ell_t old -1.039721 new 0.058892
+  ip-n1-M1e-15-b2.0-a0.1 #48     phi_t 4.416090157430279e-40 | 4.416090157430279e-40; ln omega_t^2 -38.62191114351725 | -38.62191114351725; ln R 138.93863271348542 | 138.93863271348542; bitwise True; ln k_ex old -20.350676 new -19.252064, ell_t old -1.039721 new 0.058892
+  ip-n2-M1e-15-b2.0-a0.1 #0      phi_t 9.400608129933237e-39 | 9.400608129933237e-39; ln omega_t^2 6.323655063837236 | 6.323655063837236; ln R 178.86660170950802 | 178.86660170950802; bitwise True; ln k_ex old 2.265948 new 2.959095, ell_t old -0.895880 new -0.202733
+  ip-n2-M1e-15-b2.0-a0.1 #24     phi_t 3.0527537493460284e-29 | 3.0527537493460284e-29; ln omega_t^2 -81.28082733616276 | -81.28082733616276; ln R 47.459878109508026 | 47.459878109508026; bitwise True; ln k_ex old -41.536293 new -40.843146, ell_t old -0.895880 new -0.202733
+  ip-n2-M1e-15-b2.0-a0.1 #48     phi_t 6.645367257751295e-28 | 6.645367257751295e-28; ln omega_t^2 -93.60267133616276 | -93.60267133616276; ln R 28.977112109508028 | 28.977112109508028; bitwise True; ln k_ex old -47.697215 new -47.004068, ell_t old -0.895880 new -0.202733
+# R16: 9 of 9 candidates bitwise in all three
+
+## B: the breakage record. Each broken form through E64, E71 and E66 at the same points (largest |rel|, against the tolerances above) and the count of regime moves on crossover's n = 1 rows (v3: below)
+  v3 (the ruled form): E64/E71/E66 as above; regime moves 20 of 107
+  v3_over_V1  : E64 1.08e+01, E71 inf, E66 7.28e+02; regime moves 41 of 107; caught by E64, E71, E66
+  v3_double   : E64 5.00e-01, E71 1.00e+00, E66 1.00e+00; regime moves 31 of 107; caught by E64, E71, E66
+  v3_at_phi_t : E64 9.99e-01, E71 9.19e+02, E66 1.34e+01; regime moves 24 of 107; caught by E64, E71, E66
+
+# definition.py end (0 s): 12:11  up 17 days, 14:32, 1 user, load averages: 5.54 8.14 8.86

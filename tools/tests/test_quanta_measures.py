@@ -59,13 +59,16 @@ from scipy.integrate import quad
 
 import extract_common as ec
 from ComputeTargets import quanta_spectrum as qs
-from CosmologyConcepts.drain_model import DRAIN_MODEL_FIXED, DRAIN_MODEL_ONE_LOOP
+from CosmologyConcepts.drain_model import (
+    DRAIN_MODEL_FIXED,
+    DRAIN_MODEL_ONE_LOOP_EXPONENTIAL,
+)
 from ObjectFactories.ScalarHistory import LINEAR_MP4, to_column
 from Units import GeV_units, Mpc_units, Planck_units
 from tools import quanta_measures as qm
 from tools.tests import quanta_exports as qe
 
-ONE_LOOP = DRAIN_MODEL_ONE_LOOP
+ONE_LOOP = DRAIN_MODEL_ONE_LOOP_EXPONENTIAL
 EPS = 2.0**-52
 PROBE = qe.ROOT / "prompts/one-loop-drain/source/probe/all_generations.py"
 
@@ -79,13 +82,31 @@ PROBE_B = 8.0
 # ---------------------------------------------------------------------------------------------------------------------
 
 
+# the spectrum's wall: the exponential's, as the tool passes it (power-law-wall prompt 03; prompt 06 takes it from the
+# export's model column)
+WALL = qs.WALL_EXPONENTIAL
+
+
 def _quad_x(f, extra=()):
-    """int_0^inf f(x) dx for an integrand carrying s(x) of a generation (x = q/Q), split at x_p and the extra points."""
-    xp, k = qs.X_PEAK, qs.KAPPA
+    """int_0^inf f(x) dx for an integrand carrying s(x) of a generation (x = q/Q), split at the wall's table edges, x_p,
+    sixty points between the edges, the tail's scales and the extra points (power-law-wall prompt 03: the measured
+    shape; before it, at U4's x_p and its tail's scales)."""
+    sp = qs.spectrum(WALL)
+    xp, k, lo, hi = sp.x_p, sp.kappa_hi, sp.x_lo, sp.x_hi
+    end = hi + 60 / k
     pts = sorted(
-        {0.0, xp, *[p for p in extra if p > 0.0], xp + 4 / k, xp + 16 / k, xp + 60 / k}
+        {
+            0.0,
+            lo,
+            xp,
+            *np.geomspace(lo, hi, 60),
+            *[p for p in extra if p > 0.0],
+            hi + 4 / k,
+            hi + 16 / k,
+            end,
+        }
     )
-    pts = [p for p in pts if p <= xp + 60 / k]
+    pts = [p for p in pts if p <= end]
     scale = sum(
         abs(quad(f, a, b, epsrel=1e-8, limit=200)[0]) for a, b in zip(pts, pts[1:])
     )
@@ -96,7 +117,7 @@ def _quad_x(f, extra=()):
 
 
 def direct_I(c):
-    return _quad_x(lambda x: x**3 * float(qs.shape(x, c)))
+    return _quad_x(lambda x: x**3 * float(qs.shape(WALL, x, c)))
 
 
 def direct_A(dK, log_q, c):
@@ -110,7 +131,14 @@ def direct_energy_excess(dK, log_q, m_a, c):
     A = direct_A(dK, log_q, c)
     y = m_a / Q
     # (1/2pi^2) Q^4 A int x^3 s(x) [sqrt(1 + y^2/x^2) - 1] dx, the bracket as y^2/(x(sqrt(x^2+y^2)+x))
-    g = lambda x: x * x * float(qs.shape(x, c)) * y * y / (sqrt(x * x + y * y) + x)
+    g = (
+        lambda x: x
+        * x
+        * float(qs.shape(WALL, x, c))
+        * y
+        * y
+        / (sqrt(x * x + y * y) + x)
+    )
     return Q**4 * A / (2.0 * pi * pi) * _quad_x(g, extra=(y / 10, y, 10 * y))
 
 
@@ -132,13 +160,19 @@ def direct_n_bar(gens, j, c):
             A = direct_A(dK, lq_g, c)
             r = exp(lq_j - lq_g)
             num += A * _quad_x(
-                lambda x: x**3 * float(qs.shape(x, c)) * float(qs.shape(x * r, c)),
+                lambda x: x**3
+                * float(qs.shape(WALL, x, c))
+                * float(qs.shape(WALL, x * r, c)),
                 extra=(
-                    qs.X_PEAK / r,
-                    *(qs.X_PEAK / r + k / (qs.KAPPA * r) for k in (1, 4, 16, 60)),
+                    qs.spectrum(WALL).x_lo / r,
+                    qs.spectrum(WALL).x_p / r,
+                    *(
+                        (qs.spectrum(WALL).x_hi + k / qs.spectrum(WALL).kappa_hi) / r
+                        for k in (0, 1, 4, 16, 60)
+                    ),
                 ),
             )
-    den = _quad_x(lambda x: x**3 * float(qs.shape(x, c)))
+    den = _quad_x(lambda x: x**3 * float(qs.shape(WALL, x, c)))
     return num / den
 
 
@@ -153,7 +187,7 @@ def direct_n_chi_a3(gens, N_k, c):
                 Q**3
                 * A
                 / (2 * pi * pi)
-                * _quad_x(lambda x: x * x * float(qs.shape(x, c)))
+                * _quad_x(lambda x: x * x * float(qs.shape(WALL, x, c)))
             )
     return total
 
@@ -171,6 +205,24 @@ def probe_slip(rows):
         slips.append(abs(theta(x, b) - theta(a, x)))
         kH.append(exp(x["log_k_ex"]) / x["H_before"])
     return slips, kH
+
+
+def probe_slip_scale(rows):
+    """
+    The larger of the two phases whose difference is each interior row's slip, max(|theta(x, b)|, |theta(a, x)|), as
+    probe_slip forms them: the scale of the slip's rounding, since a difference carries the error of its terms (power-law-wall
+    prompt 07c: at its stored history's smallest slip the two phases cancel to 1 part in 473).
+    """
+    out = []
+    for j in range(1, len(rows) - 1):
+        a, x, b = rows[j - 1], rows[j], rows[j + 1]
+        Q = exp(x["log_k_ex"] + x["N"])
+
+        def theta(p, q):
+            return Q * exp(-0.5 * (p["N"] + q["N"])) * (q["N"] - p["N"]) / p["H_before"]
+
+        out.append(max(abs(theta(x, b)), abs(theta(a, x))))
+    return out
 
 
 def rel(a, b):
@@ -344,7 +396,11 @@ class TestTheMeasuresAgainstQuadrature(_ExportCase):
             out = by_ordinal[g.ordinal]
             A = direct_A(g.delta_K, g.log_q, c)
             self.assertLess(
-                abs(f(out["ln_n_g"]) - log(A * float(qs.shape(qs.X_PEAK, c)))), 1e-6
+                abs(
+                    f(out["ln_n_g"])
+                    - log(A * float(qs.shape(WALL, qs.x_peak(WALL), c)))
+                ),
+                1e-6,
             )
             nb = direct_n_bar(gens, j, c)
             n_bars.append(nb)
@@ -611,7 +667,7 @@ class TestFindingAndTheFiles(_ExportCase):
                 self.root / f"quanta_histories{sfx}.csv",
             ):
                 for row in self.read(path):
-                    self.assertEqual(row["spectrum_model"], qs.SPECTRUM_MODEL)
+                    self.assertEqual(row["spectrum_model"], qs.spectrum_model(WALL))
                     self.assertEqual(float(row["assoc_scale"]), c)
         b = {int(r["ordinal"]): r for r in self.read(d / "quanta_bounces.csv")}
         self.assertEqual(len(b), len(rows))
@@ -805,7 +861,10 @@ class TestAStoredHistory(_DrainStoreCase):
         self.assertLess(rel(float(gen_rows[j]["n_bar"]), direct_n_bar(G, j, c)), 1e-6)
         A = direct_A(G[0][2], G[0][1], c)
         self.assertLess(
-            abs(float(gen_rows[0]["ln_n_g"]) - log(A * float(qs.shape(qs.X_PEAK, c)))),
+            abs(
+                float(gen_rows[0]["ln_n_g"])
+                - log(A * float(qs.shape(WALL, qs.x_peak(WALL), c)))
+            ),
             1e-6,
         )
         K_final = ledger.K(1e9)
@@ -828,7 +887,17 @@ class TestAStoredHistory(_DrainStoreCase):
             if r["source"] == "candidate" and r["log_k_ex_Mp"] != ""
         ]
         slips, _ = probe_slip(assessed)
-        self.assertLess(rel(float(h["phase_slip_min"]), min(slips)), 1e-12)
+        # the slip is a difference of two phases, each formed in another order by the tool (exp of one sum) and the
+        # probe (a product of exps), to a few eps of the exponents (|ln Q| + N + |ln H| ~ 100-200); so the two agree to
+        # 1e-12 of the larger phase, not of the slip itself. Until power-law-wall prompt 07c the test took 1e-12 of the
+        # slip, which held while no slip cancelled much; with the one k_ex this history's smallest cancels to 1 in 473
+        i = min(range(len(slips)), key=lambda k: slips[k])
+        scale = probe_slip_scale(assessed)[i]
+        self.assertLess(
+            abs(float(h["phase_slip_min"]) - slips[i]),
+            1e-12 * scale,
+            (slips[i], scale),
+        )
 
     def test_the_probe_with_the_peak_collapsed(self):
         """The Derive gate's §2.2: the tool's E with s = delta(x - 1), read from the exports, against the probe's

@@ -1,0 +1,166 @@
+== exp: 07 20 histories, 07d-r2 20; matched 20
+  potential     drain model                  a/A        M n beta     07: int, wall s, rows   07d-r2: int, wall s, rows
+  exponential   fixed                          0  0.001Mp 1  1.2                4, 41.2, -                  4, 38.7, -
+  exponential   fixed                          0  0.001Mp 1    2                4, 41.7, -                  4, 39.1, -
+  exponential   fixed                          0  0.001Mp 1  2.9                4, 42.1, -                  4, 39.5, -
+  exponential   fixed                       0.01  4e-31Mp 1  1.2                1, 13.9, -                  1, 15.4, -
+  exponential   fixed                       0.01  4e-31Mp 1    2                1, 14.3, -                  1, 16.0, -
+  exponential   fixed                       0.01  4e-31Mp 1  2.9                1, 14.7, -                  1, 16.7, -
+  exponential   fixed                        0.1  4e-31Mp 1  1.2                 1, 8.1, -                   1, 9.1, -
+  exponential   fixed                        0.1  4e-31Mp 1    2                 1, 8.5, -                   1, 9.6, -
+  exponential   fixed                        0.1  4e-31Mp 1  2.9                 1, 8.9, -                  1, 10.2, -
+  exponential   one-loop-exponential-v2     0.05  4e-31Mp 1  1.2              1, 14.3, 279                1, 16.8, 287
+  exponential   one-loop-exponential-v2     0.05  4e-31Mp 1    2               1, 14.8, 79                 1, 17.1, 77
+  exponential   one-loop-exponential-v2     0.05  4e-31Mp 1  2.9              1, 15.2, 205                1, 17.7, 231
+  exponential   one-loop-exponential-v2        1  1e-15Mp 1    2                1, 7.8, 55                  1, 9.7, 55
+  exponential   one-loop-exponential-v2        1  1e-33Mp 1    2                1, 8.2, 67                  1, 9.1, 93
+  exponential   one-loop-exponential-v2        1  4e-31Mp 1  1.2                1, 7.7, 41                  1, 7.9, 41
+  exponential   one-loop-exponential-v2        1  4e-31Mp 1    2                1, 8.2, 89                  1, 8.4, 91
+  exponential   one-loop-exponential-v2        1  4e-31Mp 1  2.9                1, 8.4, 65                  1, 8.8, 81
+  exponential   one-loop-exponential-v2       10  4e-31Mp 1  1.2                1, 5.0, 11                  1, 3.5, 13
+  exponential   one-loop-exponential-v2       10  4e-31Mp 1    2                2, 5.4, 13                  1, 4.0, 15
+  exponential   one-loop-exponential-v2       10  4e-31Mp 1  2.9                1, 5.7, 13                  1, 4.3, 15
+  total ('all', '', ''): 07 30 integrations, 294.3 s, 917 bounce rows; 07d-r2 29 integrations, 301.7 s, 999 bounce rows
+  total ('exponential', '1', 'fixed'): 07 18 integrations, 193.6 s, 0 bounce rows; 07d-r2 18 integrations, 194.3 s, 0 bounce rows
+  total ('exponential', '1', 'one-loop'): 07 12 integrations, 100.7 s, 917 bounce rows; 07d-r2 11 integrations, 107.4 s, 999 bounce rows
+== pl: 07 40 histories, 07d-r2 40; matched 40
+  potential     drain model                  a/A        M n beta     07: int, wall s, rows   07d-r2: int, wall s, rows
+  inverse-power fixed                          0  0.001Mp 1  1.2           F None, 13.1, -             F None, 12.8, -
+  inverse-power fixed                          0  0.001Mp 1    2           F None, 13.2, -             F None, 12.9, -
+  inverse-power fixed                          0  0.001Mp 1  2.9           F None, 13.3, -             F None, 13.0, -
+  inverse-power fixed                          0  0.001Mp 2  1.2                4, 92.9, -                  4, 91.0, -
+  inverse-power fixed                          0  0.001Mp 2    2                4, 92.4, -                  4, 91.5, -
+  inverse-power fixed                          0  0.001Mp 2  2.9                4, 92.2, -                  4, 91.9, -
+  inverse-power fixed                       0.01  4e-31Mp 1  1.2                1, 12.0, -                  1, 11.7, -
+  inverse-power fixed                       0.01  4e-31Mp 1    2                1, 16.4, -                  1, 15.4, -
+  inverse-power fixed                       0.01  4e-31Mp 1  2.9                1, 13.8, -                  1, 13.3, -
+  inverse-power fixed                       0.01  4e-31Mp 2  1.2                1, 12.7, -                  1, 12.2, -
+  inverse-power fixed                       0.01  4e-31Mp 2    2                1, 17.7, -                  1, 16.4, -
+  inverse-power fixed                       0.01  4e-31Mp 2  2.9                1, 11.7, -                  1, 11.3, -
+  inverse-power fixed                        0.1  4e-31Mp 1  1.2                 1, 9.9, -                   1, 8.3, -
+  inverse-power fixed                        0.1  4e-31Mp 1    2                1, 11.1, -                   1, 9.0, -
+  inverse-power fixed                        0.1  4e-31Mp 1  2.9                 1, 9.7, -                   1, 9.9, -
+  inverse-power fixed                        0.1  4e-31Mp 2  1.2                1, 10.5, -                   1, 9.0, -
+  inverse-power fixed                        0.1  4e-31Mp 2    2                1, 12.3, -                   1, 9.7, -
+  inverse-power fixed                        0.1  4e-31Mp 2  2.9                1, 10.4, -                  1, 10.6, -
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 1  1.2              1, 18.6, 339                1, 17.1, 339
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 1    2               1, 16.2, 69                 1, 15.5, 69
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 1  2.9              1, 21.8, 299                1, 21.6, 299
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 2  1.2              1, 16.8, 303                1, 15.1, 303
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 2    2               1, 16.9, 71                 1, 16.2, 71
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 2  2.9              1, 22.5, 313                1, 22.3, 313
+  inverse-power one-loop-inverse-power-v1      1  1e-15Mp 1    2                1, 8.8, 75                  1, 9.4, 75
+  inverse-power one-loop-inverse-power-v1      1  1e-15Mp 2    2                1, 5.2, 45                  1, 5.0, 45
+  inverse-power one-loop-inverse-power-v1      1  1e-33Mp 1    2                1, 8.2, 61                  1, 8.8, 61
+  inverse-power one-loop-inverse-power-v1      1  1e-33Mp 2    2                1, 9.7, 95                 1, 10.4, 95
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 1  1.2                1, 8.3, 45                  1, 7.3, 45
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 1    2                1, 8.0, 73                  1, 8.1, 73
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 1  2.9              1, 11.5, 123                1, 11.3, 123
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 2  1.2                1, 9.0, 29                  1, 8.2, 29
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 2    2                1, 9.3, 95                  1, 9.3, 95
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 2  2.9              1, 10.6, 107                1, 10.6, 107
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 1  1.2                1, 4.2, 13                  1, 4.6, 13
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 1    2                1, 5.5, 25                  1, 4.9, 25
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 1  2.9                1, 5.6, 25                  1, 5.0, 25
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 2  1.2                1, 4.8, 15                  1, 5.2, 15
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 2    2                1, 4.8, 21                  1, 4.2, 21
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 2  2.9                1, 5.3, 21                  1, 5.8, 21
+  total ('all', '', ''): 07 46 integrations, 696.9 s, 2262 bounce rows; 07d-r2 46 integrations, 675.7 s, 2262 bounce rows
+  total ('inverse-power', '1', 'fixed'): 07 6 integrations, 112.5 s, 0 bounce rows; 07d-r2 6 integrations, 106.3 s, 0 bounce rows
+  total ('inverse-power', '1', 'one-loop'): 07 11 integrations, 116.6 s, 1147 bounce rows; 07d-r2 11 integrations, 113.7 s, 1147 bounce rows
+  total ('inverse-power', '2', 'fixed'): 07 18 integrations, 352.9 s, 0 bounce rows; 07d-r2 18 integrations, 343.5 s, 0 bounce rows
+  total ('inverse-power', '2', 'one-loop'): 07 11 integrations, 114.9 s, 1115 bounce rows; 07d-r2 11 integrations, 112.3 s, 1115 bounce rows
+== pl-resumed: 07 40 histories, 07d-r2 40; matched 40
+  potential     drain model                  a/A        M n beta     07: int, wall s, rows   07d-r2: int, wall s, rows
+  inverse-power fixed                          0  0.001Mp 1  1.2           F None, 13.0, -             F None, 14.2, -
+  inverse-power fixed                          0  0.001Mp 1    2           F None, 13.1, -             F None, 14.3, -
+  inverse-power fixed                          0  0.001Mp 1  2.9           F None, 13.2, -             F None, 14.4, -
+  inverse-power fixed                          0  0.001Mp 2  1.2                4, 91.2, -                  4, 90.5, -
+  inverse-power fixed                          0  0.001Mp 2    2                4, 91.7, -                  4, 90.9, -
+  inverse-power fixed                          0  0.001Mp 2  2.9                4, 92.0, -                  4, 90.3, -
+  inverse-power fixed                       0.01  4e-31Mp 1  1.2                1, 12.0, -                  1, 12.9, -
+  inverse-power fixed                       0.01  4e-31Mp 1    2                1, 15.7, -                  1, 16.6, -
+  inverse-power fixed                       0.01  4e-31Mp 1  2.9                1, 12.6, -                  1, 13.5, -
+  inverse-power fixed                       0.01  4e-31Mp 2  1.2                1, 12.6, -                  1, 13.5, -
+  inverse-power fixed                       0.01  4e-31Mp 2    2                1, 16.6, -                  1, 17.6, -
+  inverse-power fixed                       0.01  4e-31Mp 2  2.9                1, 12.6, -                  1, 14.5, -
+  inverse-power fixed                        0.1  4e-31Mp 1  1.2                 1, 8.5, -                   1, 8.4, -
+  inverse-power fixed                        0.1  4e-31Mp 1    2                1, 10.4, -                   1, 9.5, -
+  inverse-power fixed                        0.1  4e-31Mp 1  2.9                 1, 9.3, -                   1, 9.1, -
+  inverse-power fixed                        0.1  4e-31Mp 2  1.2                 1, 9.1, -                   1, 9.0, -
+  inverse-power fixed                        0.1  4e-31Mp 2    2                 1, 9.7, -                  1, 10.2, -
+  inverse-power fixed                        0.1  4e-31Mp 2  2.9                1, 10.4, -                   1, 9.7, -
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 1  1.2              1, 19.1, 339                1, 21.0, 339
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 1    2               1, 18.1, 69                 1, 19.4, 69
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 1  2.9              1, 23.2, 299                1, 24.2, 299
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 2  1.2              1, 17.7, 303                1, 19.1, 303
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 2    2               1, 18.8, 71                 1, 20.1, 71
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 2  2.9              1, 22.8, 313                1, 24.9, 313
+  inverse-power one-loop-inverse-power-v1      1  1e-15Mp 1    2               1, 10.0, 75                  1, 8.8, 75
+  inverse-power one-loop-inverse-power-v1      1  1e-15Mp 2    2                1, 5.7, 45                  1, 5.5, 45
+  inverse-power one-loop-inverse-power-v1      1  1e-33Mp 1    2                1, 9.1, 61                  1, 9.2, 61
+  inverse-power one-loop-inverse-power-v1      1  1e-33Mp 2    2               1, 11.1, 95                 1, 10.8, 95
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 1  1.2                1, 7.5, 45                  1, 7.3, 45
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 1    2                1, 7.3, 73                  1, 8.0, 73
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 1  2.9              1, 10.4, 123                1, 11.3, 123
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 2  1.2                1, 6.9, 29                  1, 8.0, 29
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 2    2                1, 8.3, 95                  1, 9.1, 95
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 2  2.9              1, 11.4, 107                1, 12.3, 107
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 1  1.2                1, 5.1, 13                  1, 4.5, 13
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 1    2                1, 5.4, 25                  1, 4.6, 25
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 1  2.9                1, 5.8, 25                  1, 5.0, 25
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 2  1.2                1, 4.8, 15                  1, 4.1, 15
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 2    2                1, 4.8, 21                  1, 3.8, 21
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 2  2.9                1, 6.5, 21                  1, 5.7, 21
+  total ('all', '', ''): 07 46 integrations, 693.4 s, 2262 bounce rows; 07d-r2 46 integrations, 705.6 s, 2262 bounce rows
+  total ('inverse-power', '1', 'fixed'): 07 6 integrations, 107.8 s, 0 bounce rows; 07d-r2 6 integrations, 113.0 s, 0 bounce rows
+  total ('inverse-power', '1', 'one-loop'): 07 11 integrations, 121.0 s, 1147 bounce rows; 07d-r2 11 integrations, 123.3 s, 1147 bounce rows
+  total ('inverse-power', '2', 'fixed'): 07 18 integrations, 345.9 s, 0 bounce rows; 07d-r2 18 integrations, 346.1 s, 0 bounce rows
+  total ('inverse-power', '2', 'one-loop'): 07 11 integrations, 118.8 s, 1115 bounce rows; 07d-r2 11 integrations, 123.2 s, 1115 bounce rows
+== mixed: 07 40 histories, 07d-r2 40; matched 40
+  potential     drain model                  a/A        M n beta     07: int, wall s, rows   07d-r2: int, wall s, rows
+  exponential   fixed                          0  0.001Mp 1  1.2                4, 39.3, -                  4, 39.7, -
+  exponential   fixed                          0  0.001Mp 1    2                4, 39.7, -                  4, 40.1, -
+  exponential   fixed                          0  0.001Mp 1  2.9                4, 40.0, -                  4, 40.5, -
+  exponential   fixed                       0.01  4e-31Mp 1  1.2                1, 15.1, -                  1, 14.1, -
+  exponential   fixed                       0.01  4e-31Mp 1    2                1, 15.4, -                  1, 14.4, -
+  exponential   fixed                       0.01  4e-31Mp 1  2.9                1, 15.8, -                  1, 14.8, -
+  exponential   fixed                        0.1  4e-31Mp 1  1.2                 1, 8.3, -                   1, 8.5, -
+  exponential   fixed                        0.1  4e-31Mp 1    2                 1, 8.7, -                   1, 9.0, -
+  exponential   fixed                        0.1  4e-31Mp 1  2.9                 1, 9.1, -                   1, 8.4, -
+  exponential   one-loop-exponential-v2     0.05  4e-31Mp 1  1.2              1, 14.4, 279                1, 16.8, 287
+  exponential   one-loop-exponential-v2     0.05  4e-31Mp 1    2               1, 14.8, 79                 1, 17.3, 77
+  exponential   one-loop-exponential-v2     0.05  4e-31Mp 1  2.9              1, 15.3, 205                1, 17.7, 231
+  exponential   one-loop-exponential-v2        1  1e-15Mp 1    2                1, 8.4, 55                 1, 10.1, 55
+  exponential   one-loop-exponential-v2        1  1e-33Mp 1    2                1, 7.8, 67                  1, 9.5, 93
+  exponential   one-loop-exponential-v2        1  4e-31Mp 1  1.2                1, 7.2, 41                  1, 7.7, 41
+  exponential   one-loop-exponential-v2        1  4e-31Mp 1    2                1, 7.6, 89                  1, 8.2, 91
+  exponential   one-loop-exponential-v2        1  4e-31Mp 1  2.9                1, 7.9, 65                  1, 8.5, 81
+  exponential   one-loop-exponential-v2       10  4e-31Mp 1  1.2                1, 5.2, 11                  1, 3.3, 13
+  exponential   one-loop-exponential-v2       10  4e-31Mp 1    2                2, 5.6, 13                  1, 3.8, 15
+  exponential   one-loop-exponential-v2       10  4e-31Mp 1  2.9                1, 4.8, 13                  1, 4.1, 15
+  inverse-power fixed                          0  0.001Mp 1  1.2           F None, 11.3, -             F None, 11.2, -
+  inverse-power fixed                          0  0.001Mp 1    2           F None, 11.4, -             F None, 11.3, -
+  inverse-power fixed                          0  0.001Mp 1  2.9           F None, 10.5, -             F None, 11.4, -
+  inverse-power fixed                       0.01  4e-31Mp 1  1.2                1, 11.9, -                  1, 12.7, -
+  inverse-power fixed                       0.01  4e-31Mp 1    2                1, 12.2, -                  1, 13.2, -
+  inverse-power fixed                       0.01  4e-31Mp 1  2.9                1, 12.6, -                  1, 13.6, -
+  inverse-power fixed                        0.1  4e-31Mp 1  1.2                 1, 8.1, -                   1, 8.9, -
+  inverse-power fixed                        0.1  4e-31Mp 1    2                 1, 8.4, -                   1, 9.2, -
+  inverse-power fixed                        0.1  4e-31Mp 1  2.9                 1, 8.9, -                   1, 8.7, -
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 1  1.2              1, 19.5, 339                1, 19.4, 339
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 1    2               1, 19.8, 69                 1, 19.8, 69
+  inverse-power one-loop-inverse-power-v1   0.05  4e-31Mp 1  2.9              1, 20.2, 299                1, 20.2, 299
+  inverse-power one-loop-inverse-power-v1      1  1e-15Mp 1    2                1, 7.5, 75                  1, 7.2, 75
+  inverse-power one-loop-inverse-power-v1      1  1e-33Mp 1    2                1, 6.8, 61                  1, 7.6, 61
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 1  1.2               1, 10.4, 45                 1, 10.5, 45
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 1    2               1, 10.7, 73                  1, 9.9, 73
+  inverse-power one-loop-inverse-power-v1      1  4e-31Mp 1  2.9              1, 10.1, 123                1, 10.2, 123
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 1  1.2                1, 4.0, 13                  1, 4.3, 13
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 1    2                1, 4.4, 25                  1, 4.7, 25
+  inverse-power one-loop-inverse-power-v1     10  4e-31Mp 1  2.9                1, 4.8, 25                  1, 5.1, 25
+  total ('all', '', ''): 07 47 integrations, 504.1 s, 2064 bounce rows; 07d-r2 46 integrations, 515.3 s, 2146 bounce rows
+  total ('exponential', '1', 'fixed'): 07 18 integrations, 191.4 s, 0 bounce rows; 07d-r2 18 integrations, 189.4 s, 0 bounce rows
+  total ('exponential', '1', 'one-loop'): 07 12 integrations, 99.1 s, 917 bounce rows; 07d-r2 11 integrations, 107.1 s, 999 bounce rows
+  total ('inverse-power', '1', 'fixed'): 07 6 integrations, 95.3 s, 0 bounce rows; 07d-r2 6 integrations, 100.0 s, 0 bounce rows
+  total ('inverse-power', '1', 'one-loop'): 07 11 integrations, 118.3 s, 1147 bounce rows; 07d-r2 11 integrations, 118.8 s, 1147 bounce rows
