@@ -1,0 +1,25 @@
+bounces/beta=1.2/M=0.00097413eV_n=1                     N=  21  L: min   19.67  median   25.26  max  102.14   ln(T_J/GeV) -18.4..-1.5
+bounces/beta=1.2/M=0.0024353eV_n=1                      N=  20  L: min   20.21  median   26.40  max  102.14   ln(T_J/GeV) -18.2..-1.5
+bounces/beta=1.2/M=2.4353e-05eV_n=1                     N=  22  L: min   20.16  median   25.81  max  102.14   ln(T_J/GeV) -18.3..-1.5
+bounces/beta=1.2/M=2.4353e-06eV_n=1                     N=  16  L: min   24.61  median   31.36  max  102.14   ln(T_J/GeV) -17.2..-1.5
+bounces/beta=1.2/M=2.4353e-09eV_n=1                     N=  18  L: min   21.27  median   26.92  max  102.14   ln(T_J/GeV) -18.1..-1.5
+bounces/beta=1.2/M=2.4353e-13eV_n=1                     N=  16  L: min   20.05  median   27.12  max  102.14   ln(T_J/GeV) -18.3..-1.5
+bounces/beta=1.2/M=2.4353e-15eV_n=1                     N=  14  L: min   20.78  median   28.88  max  102.14   ln(T_J/GeV) -18.0..-1.5
+bounces/beta=10/M=0.00097413eV_n=1                      N=  66  L: min   99.72  median  104.14  max  126.88   ln(T_J/GeV) 0.8..5.6
+bounces/beta=10/M=0.0024353eV_n=1                       N=  64  L: min   99.91  median  104.37  max  126.88   ln(T_J/GeV) 0.8..5.6
+bounces/beta=10/M=2.4353e-05eV_n=1                      N=  72  L: min   99.21  median  103.51  max  126.88   ln(T_J/GeV) 0.7..5.6
+bounces/beta=10/M=2.4353e-06eV_n=1                      N=  75  L: min   98.99  median  103.15  max  126.88   ln(T_J/GeV) 0.6..5.6
+bounces/beta=10/M=2.4353e-09eV_n=1                      N=  86  L: min   98.21  median  102.36  max  126.88   ln(T_J/GeV) 0.4..5.6
+bounces/beta=10/M=2.4353e-13eV_n=1                      N=  96  L: min   97.58  median  101.68  max  126.88   ln(T_J/GeV) 0.2..5.6
+bounces/beta=10/M=2.4353e-15eV_n=1                      N=  97  L: min   97.46  median  101.54  max  126.88   ln(T_J/GeV) 0.2..5.6
+bounces/beta=2/M=0.00097413eV_n=1                       N=  45  L: min   56.97  median   62.73  max  106.04   ln(T_J/GeV) -9.2..-0.3
+bounces/beta=2/M=0.0024353eV_n=1                        N=  44  L: min   56.75  median   62.91  max  106.04   ln(T_J/GeV) -9.2..-0.3
+bounces/beta=2/M=2.4353e-05eV_n=1                       N=  45  L: min   59.84  median   64.12  max  106.04   ln(T_J/GeV) -8.6..-0.3
+bounces/beta=2/M=2.4353e-06eV_n=1                       N=  34  L: min   62.73  median   66.42  max  106.04   ln(T_J/GeV) -7.9..-0.3
+bounces/beta=2/M=2.4353e-09eV_n=1                       N=  51  L: min   56.76  median   62.20  max  106.04   ln(T_J/GeV) -9.3..-0.3
+bounces/beta=2/M=2.4353e-13eV_n=1                       N=  37  L: min   53.87  median   63.53  max  106.04   ln(T_J/GeV) -9.9..-0.3
+bounces/beta=2/M=2.4353e-15eV_n=1                       N=  39  L: min   54.39  median   63.13  max  106.04   ln(T_J/GeV) -9.8..-0.3
+samples/A=0.05/beta=1.0775/M=0.00097413eV_n=1           N= 199  L: min    3.04  median    8.27  max   91.37   ln(T_J/GeV) -22.6..-3.3
+samples/A=1/beta=2/M=0.00097413eV_n=1                   N=  45  L: min   56.97  median   62.73  max  106.04   ln(T_J/GeV) -9.2..-0.3
+samples/A=10/beta=2/M=0.00097413eV_n=1                  N=   7  L: min   90.73  median   97.12  max  106.04   ln(T_J/GeV) -1.2..-0.3
+all: N=1229  L 3.04..126.88
