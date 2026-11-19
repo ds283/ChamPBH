@@ -134,7 +134,7 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 | 07c | `07c-k-ex-in-production.md` | *(Inserted 2026-11-17; as written 2026-11-18 on P99–P110, §6.14.)* As 07b's measurements and U11–U13 rule: the third-derivative hook on every model; k_ex = ½E^{1/2}\|V‴/V″\| in `classical_turning_point` and `one_loop_turnaround`; the exponential's law under `one-loop-exponential-v2`, `one-loop-measured-v1` retired; the spectrum tables and x_* re-measured; every other use of the inventory; the label; tests re-pinned with old and new values | Opus |
 | 07c2 | `07c2-pulse-rate-in-closed-form.md` | *(Inserted 2026-11-19 on the user's ruling (a) of 07d's stop; P125–P134, §6.16.)* |V‴/V″| as a model hook in closed form on both walls ((n + 2)/φ on the power wall), in place of 07c's composition of the log hooks, which overflows below φ ≈ 3 × 10⁻¹⁰³ M_P; the stop reproduced, the range the grid's assessments reach measured, the tool route bitwise but the k_ex columns, the stop's histories built; `VERSION_LABEL` 2026.14.0 | Opus |
 | 07d | `07d-rehearse-again.md` | *(Inserted 2026-11-17; as written 2026-11-18 on P111–P124, §6.15.)* 07's grid rebuilt at the tip in fresh stores, registered, on the isolated cluster; every history whose law reads no ℓ equal to 07's in its integration and BBN, with only the k_ex columns moving; the exponential's one-loop histories under v2 against 07's under v1, measured; the readers on every store | Opus |
-| 08 | `08-close.md` | `.documents/power-law-wall-verification.md`, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the science run (its grid's inputs from 04), the issues and the indexes | Opus |
+| 08 | `08-close.md` | `.documents/power-law-wall-verification.md`, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the science run (its grid's inputs from 04), the issues and the indexes *(As written 2026-11-19 on P135–P148, §6.17: verification §12, both walls for the paper, side by side; §6.13 and the architecture notes, since 01–07d added none; `CLAUDE.md`'s counts and export root; §4.22 with the 2026.11.0 scripts' changes read on `main`, the power law's grid block by block and a labelled projection; three inventories; the per-n roots for `plot_quanta_grid` measured; the merge not a fast-forward.)* | Opus |
 
 Written one at a time, each after the previous one lands and is reviewed. 03 waits for U3–U5, and is dropped if they
 rule the law and spectrum carried over unchanged with `_drain_L` alone, which then moves into 04's first commit by
@@ -1113,6 +1113,64 @@ P125–P134 stand unless the user rules otherwise. None needs a ruling before 07
 - **P134 — the stopped attempt's stores.** Left where they are, named in the board's record, read by nothing: not by
   07d's comparisons, not by 08. Retiring them (`runregistrykit store retire`, after a `store create` for the partial
   `pl`) is the user's.
+
+### 6.17 Proposed with prompt 08, 2026-11-19
+
+Written by the orchestrator at the user's word ("The close-out prompt 08 and its orchestration note now need to be
+written"), after 07d landed on its restart (`b5f863a`, reviewed `69d5d45`), from the logs' hand-ons, the board, the last
+two closes (`one-loop-drain` 08, `electroweak-eos` 03) and a survey of the documents, `CLAUDE.md`, the stores and `main`
+(orchestrator note 08 §0). P135–P148 stand unless the user rules otherwise. None needs a ruling before 08 is dispatched;
+there is no U question.
+
+- **P135 — the form.** 08 is a close in `one-loop-drain` 08's form: no code, no test, one commit, Opus, the gate Close.
+  Its parts are C1 (the two walls for the paper), C2 (the reading guides), C3 (`CLAUDE.md`), C4 (the handover), C5 (the
+  issues) and C6 (the board and the indexes).
+- **P136 — where.** In this worktree. The main checkout is not touched; what 08 needs of `main` (the 2026.11.0 run record,
+  its run script and analyses, `science-runs/README.md`) it reads by `git show main:<path>`, as 06 did (P55). Reason: the
+  branch does not contain `main`'s 15 run-record commits, and the merge is the user's.
+- **P137 — the paper section.** Verification §12, "The two walls as they stand, for the paper": the models, one k_ex, both
+  laws, the spectrum, where each constant was measured and how well, what the sample and rehearsals showed, and what is
+  not measured. Both potentials in one scheme, side by side (R12; no potential privileged). Every formula and constant
+  from the code with its `file:line`. Reason: `one-loop-drain` 08's §8 was the reference its law was quoted from; this
+  campaign replaced that law on the exponential and added a second wall, so the reference is rewritten for both.
+- **P138 — the reading guides.** `numerical-strategies.md` §6.13 and dated notes in `architecture-summary.md` §7.2, §8.4a,
+  §9 and §14, and a dated note at every statement of either that this campaign made false. Reason: 01–07d added no note
+  to either document (note 08 §0), so they still describe one model, `one-loop-measured-v1`, the old k_ex and the old
+  spectrum.
+- **P139 — `CLAUDE.md`.** Descriptions only: the counts (still 06's), the times, the export root `<label>/<model>/` and
+  `--models` in the plot-scripts bullet. No rule.
+- **P140 — the handover.** `review-remediation-verification.md` §4.22, in §4.20's and §4.21's form: what changed for a
+  build; the standard analyses a run of record repeats, for both potentials (P89, R8); the run script's and analyses'
+  changes against 2026.11.0's; what is known of the power law's grid, block by block; what to expect; the stores and the
+  worktree's outputs; what stays open; the merge.
+- **P141 — the 2026.11.0 scripts are read, not edited.** For each of its five analysis scripts and its run script, §4.22
+  says what a tip export needs it to change (the retired `ONE_LOOP` name in three of them; keys without `n` or `model`;
+  the export root). Reason: they are a run's records on `main`, and the next run copies and adapts them
+  (`science-runs/README.md`, "Standard analyses").
+- **P142 — the inventories.** `main.py --inventory`, no Ray: in place on `power-law-wall-07d-r2-exp` (2026.14.0) with its
+  hashes before and after; on scratch copies of `power-law-wall-07-base` (format 7, 2026.11.0) and `power-law-wall-07-exp`
+  (format 8, 2026.12.0). Reason: §4.22 states what the tip does with each older kind of store from a measurement, and the
+  two 07 stores are 2026.11.0's and 2026.12.0's kinds at a tenth of a science store's size.
+- **P143 — the per-n roots.** `quanta_measures` and `plot_quanta_grid` on scratch copies of 07d's power-law export root,
+  whole and split by n. Reason: `[06-plot-quanta-grid-refuses-two-n-at-one-cell]` bears on the standard analysis
+  "Relativistic quanta"; whether a root per n is a working route for the run, with no code change, is measured, not
+  assumed. The issue stays open. *Alternative:* name the route in §4.22 unmeasured.
+- **P144 — the projection.** The power law's build time projected from the 2026.11.0 run's block walls and the measured
+  power/exponential cost per history, labelled as a projection, with its weakest assumption (the M_crit block) named.
+  Nothing is run to refine it.
+- **P145 — the issues.** None closed, none assigned. `[06-plot-quanta-grid-…]` gains P143's measurement; the index is
+  updated in the same commit.
+- **P146 — the merge and the 2026.11.0 record.** §4.22 states the merge facts from commands it runs: `main` is not an
+  ancestor of the branch (its 15 commits since `a7e0978` are all under `science-runs/`), the merge is not a fast-forward,
+  and `git merge-tree` finds no conflict. The 2026.11.0 run record is not on this branch, so 08 does not add the dated
+  note it needs (its one-loop rows are under a retired law, and the tip cannot read its stores); §4.22 names that note as
+  a step after the merge. *Alternative:* the user merges `main` into this branch before 08 is dispatched, and 08 adds the
+  note.
+- **P147 — the board and the indexes.** The board closed in `one-loop-drain`'s form (the status line short, its run-on
+  moved into the history unchanged); `prompts/INDEX.md`'s row complete, its header 0 live and 19 closed;
+  `.documents/OPEN_ISSUES.md` §1.26 closed.
+- **P148 — the counts.** The five suites in full in the worktree, once, before the edits: 26, 809 (226 + 583), 175, 312,
+  79, with the two worktree failures and no other (P14). No file they import changes, so that run is the final one.
 
 ## 7. What this campaign hands to the user
 
