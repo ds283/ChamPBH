@@ -349,6 +349,30 @@ class ExponentialModel(AbstractModel):
             raise ComputationFailureError(msg)
         return value
 
+    def _pulse_rate_hook(self, normalization, phi: FieldLike) -> float:
+        # |V'''/V''| (power-law-wall prompt 07c2; README §6.16 P126; AbstractModel._pulse_rate_hook): with ln V = ln V_0 + u,
+        # u = (M/phi)^n, V''/V = n u [(n + 1) + n u]/phi^2 and V'''/V = -n u [(n + 1)(n + 2) + 3 n (n + 1) u + n^2 u^2]/phi^3,
+        # so the rate is [(n + 1)(n + 2) + 3 n (n + 1) u + n^2 u^2]/([(n + 1) + n u] phi), every term positive, with no
+        # third derivative and no product of large hooks. An overflow, of the power or of the value, raises naming the hook
+        phi_float = GetFieldValue(phi)
+        n = self._n
+        try:
+            u: float = pow(self._M_float / phi_float, n)
+            value = (
+                ((n + 1) * (n + 2) + 3 * n * (n + 1) * u + n * n * u * u)
+                / ((n + 1) + n * u)
+                / phi_float
+            )
+        except (OverflowError, ValueError, ZeroDivisionError) as e:
+            msg = f"!! {type(e).__name__} in ExponentialModel pulse_rate_hook at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV ({e})"
+            print(msg)
+            raise ComputationFailureError(msg) from e
+        if not isfinite(value):
+            msg = f"!! Overflow in ExponentialModel pulse_rate_hook at phi={phi_float / self._units.PlanckMass:.5g} Mp, M={self._M_float / self._units.eV:.5g} eV, |V'''/V''| = {value!r}"
+            print(msg)
+            raise ComputationFailureError(msg)
+        return value
+
     def _log_Omega(self, phi: FieldLike) -> float:
         phi_float = GetFieldValue(phi)
         return self._beta_float * phi_float / self._Mp

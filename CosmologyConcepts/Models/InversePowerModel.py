@@ -289,6 +289,19 @@ class InversePowerModel(AbstractModel):
             )
         return value
 
+    def _pulse_rate_hook(self, normalization, phi: FieldLike) -> float:
+        # |V'''/V''| (power-law-wall prompt 07c2; README §6.16 P126; AbstractModel._pulse_rate_hook): V'' = V_0 n (n + 1)
+        # u/phi^2 and V''' = -V_0 n (n + 1)(n + 2) u/phi^3, u = (M/phi)^n, so the rate is (n + 2)/phi exactly, at every
+        # phi: one division, within float range down to phi ~ 2e-308 in the units' field, below where V'' leaves it
+        # (~1e-154). phi not positive or not finite raises through _log_u, and an overflow raises, each naming the hook
+        phi_float, _ = self._log_u("pulse_rate_hook", phi)
+        value = (self._n + 2) / phi_float
+        if value == float("inf"):
+            raise self._failure(
+                "pulse_rate_hook", phi_float, f"overflow (|V'''/V''| = {value!r})"
+            )
+        return value
+
     def _log_Omega(self, phi: FieldLike) -> float:
         phi_float = GetFieldValue(phi)
         return self._beta_float * phi_float / self._Mp

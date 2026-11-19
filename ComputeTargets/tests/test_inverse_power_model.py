@@ -296,11 +296,6 @@ WALL_MASSES_OVER_MP = (4.0e-31, 1.0e-16, 1.0e-3)
 LOG_ENERGIES = (-180.0, -120.0, -60.0)
 
 
-def _third_in_range(n: int, phi: float) -> bool:
-    """True iff the third derivative of ln V at phi, about n (n + 1)(n + 2)/phi^3 near the wall, is within float range (in logs)."""
-    return log(n * (n + 1) * (n + 2)) - 3.0 * log(phi) < log(sys.float_info.max) - 1.0
-
-
 def _wall_points():
     for n in NS:
         for M_over_Mp in WALL_MASSES_OVER_MP:
@@ -356,25 +351,22 @@ class TestTheWallAgainstClosedForms(unittest.TestCase):
     relative (test_wall_model (2)'s tolerance; the iteration stops at 1e-12 in ell, and phi_ta moves by
     1/(4(n + 2)) of the relative change in ell).
 
-    Since power-law-wall prompt 07c both read the third hook for k_ex. (ln V)''' ~ n(n + 1)(n + 2) s/phi^3 leaves
-    float range below phi ~ 1e-103 M_P: at E/V_0 = e^220 with n = 1, phi_t is 1.3e-126 M_P (M = 4e-31 M_P) and
-    1.3e-112 M_P (M = 1e-16 M_P), where the methods raise ComputationFailureError naming the hook
-    (_third_in_range; issue [07c-the-third-hook-leaves-float-range-below-phi-1e-103-mp]). Those points assert the
-    raise; every other point is compared as before.
+    From power-law-wall prompt 07c to 07c2 both read the third hook for k_ex. (ln V)''' ~ n(n + 1)(n + 2) s/phi^3
+    leaves float range below phi ~ 1e-103 M_P: at E/V_0 = e^220 with n = 1, phi_t is 1.3e-126 M_P (M = 4e-31 M_P) and
+    1.3e-112 M_P (M = 1e-16 M_P), where the methods raised ComputationFailureError naming the hook, and those points
+    asserted the raise (issue [07c-the-third-hook-leaves-float-range-below-phi-1e-103-mp]). Since prompt 07c2 the pulse
+    rate is the model's _pulse_rate_hook, (n + 2)/phi in closed form (README §6.16 P126, P128): those points return a
+    turning point and are compared as every other, and at every point the pulse rate is (n + 2)/phi of the method's own
+    phi, bit for bit.
     """
 
     def test_d_the_classical_turning_point(self):
         worst = 0.0
         for where, n, M, rm, log_E in _wall_points():
             log_phi_t = log(M) - (log_E - WALL_NORMALIZATION) / n
-            if not _third_in_range(n, exp(log_phi_t)):
-                with contextlib.redirect_stdout(io.StringIO()):
-                    with self.assertRaises(ComputationFailureError, msg=where) as ctx:
-                        rm.classical_turning_point(FIELD, log_E)
-                self.assertIn("d3_logV_dphi3", str(ctx.exception), where)
-                continue
             c = rm.classical_turning_point(FIELD, log_E)
             self.assertIsNotNone(c, where)
+            self.assertEqual(c.pulse_rate_t, (n + 2) / c.phi_t, where)
             log_V_t = rm.log_V(c.phi_t)
             dx = (
                 _root_tolerance(log_phi_t)
@@ -418,14 +410,9 @@ class TestTheWallAgainstClosedForms(unittest.TestCase):
         worst = 0.0
         for where, n, M, rm, log_E in _wall_points():
             phi, log_m, lam, log_k, ell = _the_chain(n, M, WALL_NORMALIZATION, log_E)
-            if not _third_in_range(n, phi):
-                with contextlib.redirect_stdout(io.StringIO()):
-                    with self.assertRaises(ComputationFailureError, msg=where) as ctx:
-                        rm.one_loop_turnaround(FIELD, log_E)
-                self.assertIn("d3_logV_dphi3", str(ctx.exception), where)
-                continue
             o = rm.one_loop_turnaround(FIELD, log_E)
             self.assertIsNotNone(o, where)
+            self.assertEqual(o.pulse_rate_ta, (n + 2) / o.phi_ta, where)
             for got, expected in (
                 (o.phi_ta, phi),
                 (o.log_m_ta, log_m),

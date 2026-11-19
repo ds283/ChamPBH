@@ -15,22 +15,31 @@
 
 """
 One k_ex (power-law-wall prompt 07c §1.2, §1.7; README §6.12 R13-R16, §6.14 P102, P103): k_ex = E^{1/2}|V'''/V''|/2 at
-the point the estimate is taken, through the third hook _d3_logV_dphi3.
+the point the estimate is taken: since prompt 07c2 (README §6.16 P126, P128) through each model's pulse-rate hook
+_pulse_rate_hook, in closed form; until then through the third hook _d3_logV_dphi3.
 
 - (a) `TestTheThirdHook`: ExponentialModel's and InversePowerModel's _d3_logV_dphi3 against their closed forms in
   60-digit decimal arithmetic, and phi (ln V)''' against the centred difference in ln phi of _d2_logV_dphi2, at n = 1
   and 2, M = 4e-31 and 1e-3 M_P, phi from 1e-90 M to 10 M_P (the gate Model's range; test_inverse_power_model's
   _phis). Where the closed form is beyond float range the hook raises ComputationFailureError naming the model and the
   hook. AbstractModel's hook raises NotImplementedError naming the class (no generic default); RealizedModel delegates.
+  Since prompt 07c2 the turning points do not read it.
 - (b) `TestThePulseRate`: the classical turning point's and the one-loop turnaround's pulse rate |V'''/V''| against the
   closed forms: (n + 2)/phi exactly on the power wall (README §6.12), and [n^2 u^2 + 3n(n + 1)u + (n + 1)(n + 2)] /
   [phi (n u + n + 1)] on the exponential (u = (M/phi)^n), each at the method's own phi; ln k_ex = ln|V'''/V''| +
   ln E/2 - ln 2 recomputed bit for bit; on the power wall k_ex/omega_t = (n + 2)/(2 sqrt(n(n + 1))) at the classical
-  turning point; R16: phi_t, ln omega_t^2 and ln R read no k_ex. A pulse rate that is zero or not finite raises
-  ComputationFailureError naming the hook; the refusal of a wall that does not repel stays on -d ln V/dphi <= 0.
+  turning point; R16: phi_t, ln omega_t^2 and ln R read no k_ex. A pulse rate that is zero, negative or not finite
+  raises ComputationFailureError naming the hook; the refusal of a wall that does not repel stays on -d ln V/dphi <= 0.
 - (c) `TestTheIterationCap`: ONE_LOOP_MAX_ITERATIONS is 400 (P103), and at 07b's slowest point (the laboratory curve,
   n = 1, L = 1.378072, ln R = 5.003334, where 07b's chain took 195 iterations) production converges in more than 100 and
   at most 400, and with the cap patched to 100 it raises, as 07b's issue measured.
+- (d) `TestThePulseRateHook` (power-law-wall prompt 07c2 §1.2, §1.4): each model's _pulse_rate_hook against the
+  composition of its own hooks (07c's form) wherever that is finite, from 1e-102 to 10 M_P at n = 1 and 2 (on the
+  exponential up to u = 1e3), and against its closed form in 60-digit decimals; finite and equal to (n + 2)/phi bit for
+  bit down to 1e-300 M_P on the power wall, where the composition overflows below about 3e-103 M_P; 07d's stop's inputs
+  returning a turning point whose phi_t, ln omega_t^2 and ln R are bit for bit those of 2026.13.0's code path;
+  AbstractModel's hook raising NotImplementedError naming the class, and a model without it refused at the turning
+  points.
 
 No integration, no store, no Ray. Instant.
 """
@@ -186,9 +195,11 @@ class TestTheThirdHook(unittest.TestCase):
             m._d3_logV_dphi3(NORMALIZATION, 1e-12 * Mp)
         self.assertIn("_NoThird", str(ctx.exception))
         self.assertIn("_d3_logV_dphi3", str(ctx.exception))
-        # the turning points read it, so a model without it is refused there, loudly
-        with self.assertRaises(NotImplementedError):
+        # since power-law-wall prompt 07c2 the turning points read _pulse_rate_hook, not this hook, so a model without
+        # it still has them (until 07c2 it was refused there); a model without _pulse_rate_hook is refused, (d)
+        self.assertIsNotNone(
             m.classical_turning_point(NORMALIZATION, 1.0e-3 * Mp, NORMALIZATION + 30.0)
+        )
 
     def test_a_the_realized_model_delegates(self):
         for name, cls in MODELS:
@@ -220,11 +231,6 @@ WALL_MASSES_OVER_MP = {
 LOG_ENERGIES = (-180.0, -120.0, -60.0)
 
 
-def third_in_range(n: int, phi: float) -> bool:
-    """True iff n (n + 1)(n + 2)/phi^3, the power wall's third derivative of ln V near the wall, is within float range."""
-    return log(n * (n + 1) * (n + 2)) - 3.0 * log(phi) < log(sys.float_info.max) - 1.0
-
-
 def pulse_closed(name: str, n: int, M: float, phi: float) -> float:
     """|V'''/V''| at phi: (n + 2)/phi on the power wall; [n^2 u^2 + 3n(n+1)u + (n+1)(n+2)]/[phi (nu + n + 1)] on the
     exponential, in 60-digit decimals."""
@@ -240,11 +246,14 @@ def pulse_closed(name: str, n: int, M: float, phi: float) -> float:
 class TestThePulseRate(unittest.TestCase):
     """
     (b) Tolerance on the pulse rate against its closed form at the method's own phi: 32 eps (n + 2) (|ln M| + |ln phi| +
-    4) relative, twice the hook's (a): the rate is |(ln V)''' + 3 (ln V)'(ln V)'' + (ln V)'^3| / ((ln V)'' + (ln V)'^2),
-    every term of each sum of one sign on a repulsive convex wall, so no cancellation beyond the hooks' own. On the
-    power wall at n = 1, ln E = -60 and M = 4e-31 or 1e-16 M_P, phi_t is 1e-126 or 1e-112 M_P, where (ln V)''' is
-    beyond float range: the methods raise there, naming the hook (test_inverse_power_model (d) asserts it), and those
-    points are left out here.
+    4) relative, set by prompt 07c, twice the third hook's (a), for the rate as it was then formed,
+    |(ln V)''' + 3 (ln V)'(ln V)'' + (ln V)'^3| / ((ln V)'' + (ln V)'^2), every term of each sum of one sign on a
+    repulsive convex wall. Kept since prompt 07c2, where the rate is the model's _pulse_rate_hook, the closed form itself:
+    (n + 2)/phi, one rounding, on the power wall; on the exponential u = (M/phi)^n to (n + 1) eps and a ratio of sums of
+    positive terms, whose logarithmic derivative in u is at most 1, a few eps more. On the power wall at n = 1,
+    ln E = -60 and M = 4e-31 or 1e-16 M_P, phi_t is 1e-126 or 1e-112 M_P, where (ln V)''' is beyond float range: until
+    prompt 07c2 the methods raised there and those points were left out here; since 07c2 they return and are compared
+    as every other point.
     """
 
     def points(self):
@@ -253,9 +262,6 @@ class TestThePulseRate(unittest.TestCase):
                 for M_over_Mp in WALL_MASSES_OVER_MP[name]:
                     rm = model(cls, n, M_over_Mp).realize(WALL_NORMALIZATION, 0.0)
                     for log_E in LOG_ENERGIES:
-                        phi_t = M_over_Mp * Mp * exp(-(log_E - WALL_NORMALIZATION) / n)
-                        if name == "inverse-power" and not third_in_range(n, phi_t):
-                            continue
                         yield (
                             name,
                             n,
@@ -328,11 +334,14 @@ class TestThePulseRate(unittest.TestCase):
         )
 
     def test_b_R16_phi_t_omega_t_and_R_read_no_k_ex(self):
-        """With the third hook patched to any finite negative value, phi_t, ln omega_t^2 and ln R do not move."""
+        """
+        With the pulse-rate hook patched to any finite positive value (the third hook until power-law-wall prompt 07c2,
+        which the turning points no longer read), phi_t, ln omega_t^2 and ln R do not move.
+        """
         for name, cls in MODELS:
             m = model(cls, 1, 1.0e-16)
             c = m.classical_turning_point(WALL_NORMALIZATION, FIELD, -120.0)
-            with mock.patch.object(cls, "_d3_logV_dphi3", return_value=-1.0e60):
+            with mock.patch.object(cls, "_pulse_rate_hook", return_value=1.0e60):
                 d = m.classical_turning_point(WALL_NORMALIZATION, FIELD, -120.0)
             self.assertEqual(
                 (c.phi_t, c.log_omega_t_squared, c.log_R),
@@ -341,25 +350,23 @@ class TestThePulseRate(unittest.TestCase):
             self.assertNotEqual(c.pulse_rate_t, d.pulse_rate_t)
 
     def test_b_a_pulse_rate_zero_or_not_finite_raises(self):
+        # since power-law-wall prompt 07c2 the rate is the model's _pulse_rate_hook, patched here (until then the third
+        # hook, patched so that the composition was zero or not finite); a negative rate is the hook's error, refused too
         m = model(ExponentialModel, 1, 1.0e-16)
-
-        def q3_zero(self, normalization, phi):
-            # V'''/V = 0 exactly, in the order AbstractModel._pulse_rate forms it
-            d1 = self._d_logV_dphi(normalization, phi)
-            d2 = self._d2_logV_dphi2(normalization, phi)
-            return -(d1 * (3.0 * d2 + d1 * d1))
-
-        for patch, label in (
-            (q3_zero, "zero"),
-            (lambda self, normalization, phi: float("-inf"), "inf"),
-            (lambda self, normalization, phi: float("nan"), "nan"),
+        for value, label in (
+            (0.0, "zero"),
+            (-1.0, "negative"),
+            (float("inf"), "inf"),
+            (float("nan"), "nan"),
         ):
-            with mock.patch.object(ExponentialModel, "_d3_logV_dphi3", patch):
+            with mock.patch.object(
+                ExponentialModel, "_pulse_rate_hook", return_value=value
+            ):
                 for method in ("classical_turning_point", "one_loop_turnaround"):
                     with self.subTest(label=label, method=method):
                         with self.assertRaises(ComputationFailureError) as ctx:
                             getattr(m, method)(WALL_NORMALIZATION, FIELD, -120.0)
-                        self.assertIn("_d3_logV_dphi3", str(ctx.exception))
+                        self.assertIn("_pulse_rate_hook", str(ctx.exception))
                         self.assertIn("pulse rate", str(ctx.exception))
 
     def test_b_a_wall_that_does_not_repel_is_refused_on_the_slope(self):
@@ -407,6 +414,139 @@ class TestTheIterationCap(unittest.TestCase):
             with self.assertRaises(ComputationFailureError) as ctx:
                 self.m.one_loop_turnaround(self.norm, self.phi, self.log_E)
         self.assertIn("did not converge in 100 iterations", str(ctx.exception))
+
+
+# (d) the pulse-rate hook (power-law-wall prompt 07c2 §1.2, §1.4; README §6.16 P126, P128)
+HOOK_MASSES_OVER_MP = (1.0e-33, 4.0e-31, 1.0e-16, 1.0e-3)
+# phi/M_P from 1e-102 to 10, four points a decade; and from 1e-300 to 1e-102 on the power wall
+HOOK_PHIS = tuple(10.0 ** (k / 4.0) for k in range(-408, 5))
+DEEP_PHIS = tuple(10.0 ** (k / 4.0) for k in range(-1200, -407))
+U_MAX = 1.0e3
+
+# 07d's stop (README §6.16; the stopped run pl-a's message): the inputs, and phi_t, ln omega_t^2 and ln R as 2026.13.0's
+# code path computed them (its classical_turning_point with the pulse rate patched to 1, which they do not read, R16)
+STOP_INPUTS = (-276.63072859401797, 4.99999995097258, -110.29491298950512)
+STOP_BASE = (2.308517288913975e-103, 363.05755244347154, 832.0411165630696)
+
+
+def composed_rate(m, phi: float) -> float:
+    """|V'''/V''| as 2026.13.0 formed it from the hooks (AbstractModel._pulse_rate of prompt 07c), in its order."""
+    d1 = m._d_logV_dphi(0.0, phi)
+    d2 = m._d2_logV_dphi2(0.0, phi)
+    d3 = m._d3_logV_dphi3(0.0, phi)
+    return abs((d3 + d1 * (3.0 * d2 + d1 * d1)) / (d2 + d1 * d1))
+
+
+class TestThePulseRateHook(unittest.TestCase):
+    """
+    (d) Tolerances, with their reasons:
+    - the hook against the composition of the model's own hooks: 32 eps relative. Both are formed from the same u (the
+      exponential's pow(M/phi, n), the power wall's s from ln u), whose rounding cancels from the ratio exactly in the
+      algebra, so the two differ only by their own roundings: the composition about a dozen, on sums whose terms have
+      one sign on a repulsive convex wall, beside a bracket in the power wall's (ln V)''' that cancels by at most a
+      factor 19 (n = 2, s -> 1), the hook at most eight; 32 eps covers it.
+    - the hook against its closed form in 60-digit decimals: on the power wall (n + 2)/phi, one correctly rounded
+      division, so bit for bit; on the exponential 16 eps relative: u to (n + 1) eps, entering a ratio whose
+      logarithmic derivative in u is at most 1, and seven roundings of positive terms.
+    """
+
+    def test_d_against_the_composition_and_the_closed_form(self):
+        worst_comp = worst_closed = 0.0
+        compared = beyond = 0
+        for name, cls in MODELS:
+            for n in NS:
+                for M_over_Mp in HOOK_MASSES_OVER_MP:
+                    m = model(cls, n, M_over_Mp)
+                    M = M_over_Mp * Mp
+                    for x in HOOK_PHIS:
+                        if name == "exponential" and (M_over_Mp / x) ** n > U_MAX:
+                            continue
+                        phi = x * Mp
+                        where = (name, n, M_over_Mp, x)
+                        rate = m._pulse_rate_hook(NORMALIZATION, phi)
+                        self.assertTrue(isfinite(rate) and rate > 0.0, where)
+                        closed = pulse_closed(name, n, M, phi)
+                        if name == "inverse-power":
+                            self.assertEqual(rate, closed, where)
+                        else:
+                            r = rel(rate, closed)
+                            worst_closed = max(worst_closed, r)
+                            self.assertLessEqual(r, 16.0 * EPS, where)
+                        try:
+                            with mock.patch("builtins.print"):
+                                composed = composed_rate(m, phi)
+                        except (ComputationFailureError, OverflowError):
+                            composed = float("inf")
+                        if not isfinite(composed):
+                            beyond += 1
+                            continue
+                        r = rel(rate, composed)
+                        worst_comp = max(worst_comp, r)
+                        self.assertLessEqual(r, 32.0 * EPS, where)
+                        compared += 1
+        self.assertGreater(compared, 3000)
+        print(
+            f"\n[test_k_ex (d)] the pulse-rate hook against the composition: {compared} compared, worst "
+            f"{worst_comp / EPS:.3g} eps; {beyond} where the composition is not finite; the exponential's against its "
+            f"closed form worst {worst_closed / EPS:.3g} eps, the power wall's bit for bit"
+        )
+
+    def test_d_finite_down_to_1e_300_on_the_power_wall(self):
+        overflowed = 0
+        for n in NS:
+            for M_over_Mp in HOOK_MASSES_OVER_MP:
+                m = model(InversePowerModel, n, M_over_Mp)
+                for x in DEEP_PHIS:
+                    phi = x * Mp
+                    rate = m._pulse_rate_hook(NORMALIZATION, phi)
+                    self.assertEqual(
+                        rate, float((n + 2) / Decimal(phi)), (n, M_over_Mp, x)
+                    )
+                    try:
+                        with mock.patch("builtins.print"):
+                            composed = composed_rate(m, phi)
+                    except (ComputationFailureError, OverflowError):
+                        composed = float("inf")
+                    overflowed += not isfinite(composed)
+        # the composition is beyond float range over most of this range (below about 3e-103 M_P at n = 1)
+        self.assertGreater(
+            overflowed, 0.9 * len(NS) * len(HOOK_MASSES_OVER_MP) * len(DEEP_PHIS)
+        )
+        # phi not positive or not finite raises, naming the hook
+        m = model(InversePowerModel, 1, 1.0e-3)
+        for phi in (0.0, -1.0e-30 * Mp, float("nan"), float("inf")):
+            with mock.patch("builtins.print"):
+                with self.assertRaises(ComputationFailureError) as ctx:
+                    m._pulse_rate_hook(NORMALIZATION, phi)
+            self.assertIn("pulse_rate_hook", str(ctx.exception))
+
+    def test_d_the_stop_returns(self):
+        """07d's stop: classical_turning_point returns, with 2026.13.0's phi_t, ln omega_t^2 and ln R bit for bit."""
+        m = model(InversePowerModel, 1, 4.0e-31, beta=2.9)
+        norm, phi, log_E = STOP_INPUTS
+        c = m.classical_turning_point(norm, phi * Mp, log_E)
+        self.assertIsNotNone(c)
+        self.assertEqual((c.phi_t, c.log_omega_t_squared, c.log_R), STOP_BASE)
+        self.assertEqual(c.pulse_rate_t, 3.0 / c.phi_t)
+        self.assertTrue(all(isfinite(v) for v in c))
+        o = m.one_loop_turnaround(norm, phi * Mp, log_E)
+        self.assertIsNotNone(o)
+        self.assertEqual(o.pulse_rate_ta, 3.0 / o.phi_ta)
+
+    def test_d_a_model_without_the_hook_is_refused(self):
+        class _NoRate(ExponentialModel):
+            _pulse_rate_hook = AbstractModel._pulse_rate_hook
+
+        m = _NoRate(0, M_value(0, 1e-10 * Mp), 1, beta_value(0, 2.0), _units)
+        with self.assertRaises(NotImplementedError) as ctx:
+            m._pulse_rate_hook(NORMALIZATION, 1e-12 * Mp)
+        self.assertIn("_NoRate", str(ctx.exception))
+        self.assertIn("_pulse_rate_hook", str(ctx.exception))
+        # the turning points read it, so a model without it is refused there, loudly
+        for method in ("classical_turning_point", "one_loop_turnaround"):
+            with self.assertRaises(NotImplementedError, msg=method) as ctx:
+                getattr(m, method)(NORMALIZATION, 1.0e-3 * Mp, NORMALIZATION + 30.0)
+            self.assertIn("_pulse_rate_hook", str(ctx.exception))
 
 
 if __name__ == "__main__":

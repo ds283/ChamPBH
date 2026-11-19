@@ -33,8 +33,11 @@ no model interprets phi_ref, and a model that forgets it cannot break it.
 A model implements hooks that take no phi_ref:
   - `_log_V(normalization, phi)`, `_d_logV_dphi(normalization, phi)`,
     `_d2_logV_dphi2(normalization, phi)`, and `_d3_logV_dphi3(normalization, phi)` (power-law-wall
-    prompt 07c, README §6.14 P102), which the turning points' k_ex reads; the base raises for it, naming
-    the class, with no generic default;
+    prompt 07c, README §6.14 P102), which no production code reads since prompt 07c2 (the tests compare
+    the pulse rate with it); the base raises for it, naming the class, with no generic default;
+  - `_pulse_rate_hook(normalization, phi)` (power-law-wall prompt 07c2, README §6.16 P126), |V'''/V''| in
+    closed form, which the turning points' k_ex reads; the base raises for it, naming the class, with no
+    generic default;
   - `_log_Omega(phi)`, `_d_logOmega_dphi(phi)`, `_d2_logOmega_dphi2(phi)`;
   - optionally `_log_V_floor(normalization)` and the property `reflects_at_origin`, which the
     integrator's elastic reflection reads (defaults: None and False, as on the potentials).
@@ -523,9 +526,11 @@ class AbstractModel(DatastoreObject, ABC):
 
     def _d3_logV_dphi3(self, normalization, phi) -> float:
         """
-        (ln V)''' at phi (power-law-wall prompt 07c; README §6.12 P75, §6.14 P102), which classical_turning_point and
-        one_loop_turnaround read for k_ex = E^{1/2}|V'''/V''|/2, with V'''/V = (ln V)''' + 3 (ln V)'(ln V)'' + (ln V)'^3.
-        RealizedModel.d3_logV_dphi3.
+        (ln V)''' at phi (power-law-wall prompt 07c; README §6.12 P75, §6.14 P102). RealizedModel.d3_logV_dphi3. From
+        prompt 07c to 07c2 classical_turning_point and one_loop_turnaround formed k_ex = E^{1/2}|V'''/V''|/2 from it, with
+        V'''/V = (ln V)''' + 3 (ln V)'(ln V)'' + (ln V)'^3; since prompt 07c2 (README §6.16 P126) they read
+        _pulse_rate_hook, and no production code reads this hook: the tests compare _pulse_rate_hook with that
+        composition.
 
         No generic default, by the user's ruling of 2026-11-05 ("when a new potential is implemented, breakage is
         loud"): this base raises NotImplementedError, naming the class. It is not an abstractmethod, so that a test
@@ -535,6 +540,25 @@ class AbstractModel(DatastoreObject, ABC):
         raise NotImplementedError(
             f"{type(self).__name__} does not implement _d3_logV_dphi3(normalization, phi), the third derivative of "
             f"ln V that k_ex = E^{{1/2}}|V'''/V''|/2 needs"
+        )
+
+    def _pulse_rate_hook(self, normalization, phi) -> float:
+        """
+        |V'''/V''| at phi, the pulse rate of k_ex = E^{1/2}|V'''/V''|/2 (power-law-wall prompt 07c2; README §6.16 P126),
+        which classical_turning_point and one_loop_turnaround read through _pulse_rate. A model gives it in closed form,
+        with no third derivative and no product of large hooks, so that it is within float range wherever V'' is: on the
+        power wall V = V_0 [1 + (M/phi)^n] it is (n + 2)/phi exactly. Until prompt 07c2 _pulse_rate formed it from the
+        three log hooks, V'''/V = (ln V)''' + (ln V)'(3 (ln V)'' + (ln V)'^2) over V''/V = (ln V)'' + (ln V)'^2, whose
+        products overflow on the power wall at n = 1 below phi ~ 3e-103 M_P, which 07's grid reaches (README §6.16).
+
+        No generic default, by the user's ruling of 2026-11-05 ("when a new potential is implemented, breakage is
+        loud"): this base raises NotImplementedError, naming the class. It is not an abstractmethod, so that a test
+        stand-in without it still constructs; every model and every stand-in that implements _d3_logV_dphi3 implements
+        it.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement _pulse_rate_hook(normalization, phi), the pulse rate "
+            f"|V'''/V''| that k_ex = E^{{1/2}}|V'''/V''|/2 needs"
         )
 
     @abstractmethod
@@ -765,21 +789,18 @@ class AbstractModel(DatastoreObject, ABC):
     def _pulse_rate(self, context: str, normalization, p: float, where: str) -> float:
         """
         |V'''/V''| at phi = p, the pulse rate of k_ex = E^{1/2}|V'''/V''|/2 (power-law-wall prompt 07c; README §6.12
-        P75, §6.14 P102), from the hooks in log space: V''/V = (ln V)'' + (ln V)'^2 and V'''/V = (ln V)''' +
-        (ln V)'(3 (ln V)'' + (ln V)'^2). On a repulsive convex wall each sum's terms have one sign. A rate that is zero
-        or not finite (an overflow of the hooks, or V''' = 0) raises ComputationFailureError naming _d3_logV_dphi3;
-        where is the point's name in the message (phi_t, phi_ta).
+        P75, §6.14 P102): the model's _pulse_rate_hook, in closed form (prompt 07c2; README §6.16 P126). From prompt 07c
+        to 07c2 it was formed here from the three log hooks, V'''/V = (ln V)''' + (ln V)'(3 (ln V)'' + (ln V)'^2) over
+        V''/V = (ln V)'' + (ln V)'^2, whose products overflow on the power wall at n = 1 below phi ~ 3e-103 M_P. A rate
+        that is zero, negative or not finite raises ComputationFailureError naming _pulse_rate_hook (the hook returns
+        the absolute value, so a negative one is the hook's error); where is the point's name in the message (phi_t,
+        phi_ta). A ComputationFailureError of the hook (an overflow) propagates.
         """
-        d1 = self._d_logV_dphi(normalization, p)
-        d2 = self._d2_logV_dphi2(normalization, p)
-        d3 = self._d3_logV_dphi3(normalization, p)
-        q2 = d2 + d1 * d1
-        q3 = d3 + d1 * (3.0 * d2 + d1 * d1)
-        rate = abs(q3 / q2)
+        rate = self._pulse_rate_hook(normalization, p)
         if not (rate > 0.0 and isfinite(rate)):
             raise _failure(
-                f"{context}: the pulse rate |V'''/V''| = {rate!r} at {where} = {p!r} is zero or not finite "
-                f"((ln V)' = {d1!r}, (ln V)'' = {d2!r}, (ln V)''' = {d3!r} from _d3_logV_dphi3)"
+                f"{context}: the pulse rate |V'''/V''| = {rate!r} at {where} = {p!r} is zero, negative or not finite "
+                f"(from _pulse_rate_hook)"
             )
         return rate
 

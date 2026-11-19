@@ -107,8 +107,16 @@ def _log_V2(rm, phi: float) -> float:
 
 def _pulse_rate(rm, phi: float) -> float:
     """
+    |V'''/V''| as AbstractModel._pulse_rate takes it since power-law-wall prompt 07c2: the model's _pulse_rate_hook, in
+    closed form (until then _composed_pulse_rate below).
+    """
+    return rm.model._pulse_rate_hook(rm.normalization, phi)
+
+
+def _composed_pulse_rate(rm, phi: float) -> float:
+    """
     |V'''/V''| from the hooks, V'''/V = (ln V)''' + (ln V)'(3 (ln V)'' + (ln V)'^2) over V''/V = (ln V)'' + (ln V)'^2,
-    in the order AbstractModel._pulse_rate takes it (power-law-wall prompt 07c).
+    in the order AbstractModel._pulse_rate took it from power-law-wall prompt 07c to 07c2.
     """
     d1, d2, d3 = rm.d_logV_dphi(phi), rm.d2_logV_dphi2(phi), rm.d3_logV_dphi3(phi)
     return abs((d3 + d1 * (3.0 * d2 + d1 * d1)) / (d2 + d1 * d1))
@@ -120,7 +128,8 @@ class _PowerLawWall(AbstractModel):
     ln A = beta phi/M_P + gamma phi^2/M_P^2, so that (ln A)'' = 2 gamma/M_P^2 != 0 (ruling 6). Its
     hooks are written here, with nothing from ExponentialModel. With s = u/(1 + u), u = (M/phi)^p:
     (ln V)' = -p s/phi, (ln V)'' = [p (p + 1) s - p^2 s^2]/phi^2 and (since power-law-wall prompt 07c)
-    (ln V)''' = -s [p (p + 1)(p + 2) - 3 p^2 (p + 1) s + 2 p^3 s^2]/phi^3, so |V'''/V''| = (p + 2)/phi.
+    (ln V)''' = -s [p (p + 1)(p + 2) - 3 p^2 (p + 1) s + 2 p^3 s^2]/phi^3, so |V'''/V''| = (p + 2)/phi, which (since
+    power-law-wall prompt 07c2) its _pulse_rate_hook returns in that closed form.
     """
 
     def __init__(
@@ -189,6 +198,11 @@ class _PowerLawWall(AbstractModel):
             / (phi * phi * phi)
         )
 
+    def _pulse_rate_hook(self, normalization, phi) -> float:
+        # |V'''/V''| (power-law-wall prompt 07c2), in this wall's closed form: V'' = V_0 p (p + 1) M^p/phi^(p + 2), so
+        # (p + 2)/phi exactly
+        return (self._p + 2.0) / phi
+
     def _log_Omega(self, phi) -> float:
         return self._beta * phi / Mp + self._gamma * phi * phi / (Mp * Mp)
 
@@ -245,6 +259,15 @@ class _BumpWall(_PowerLawWall):
             -24.0 * u + b * ((g - 2.0) * c2 - 2.0 * (2.0 * g - 1.0) / (self.W * self.W))
         ) / (phi * phi * phi)
         return F3 / F - 3.0 * F2 * F1 / (F * F) + 2.0 * (F1 / F) ** 3
+
+    def _pulse_rate_hook(self, normalization, phi) -> float:
+        # |V'''/V''| (power-law-wall prompt 07c2) as the composition of this wall's own hooks, V'''/V = (ln V)''' +
+        # (ln V)'(3 (ln V)'' + (ln V)'^2) over V''/V = (ln V)'' + (ln V)'^2: the bump has no short closed form (and
+        # without this the wall would inherit _PowerLawWall's (p + 2)/phi, which the bump makes wrong)
+        d1 = self._d_logV_dphi(normalization, phi)
+        d2 = self._d2_logV_dphi2(normalization, phi)
+        d3 = self._d3_logV_dphi3(normalization, phi)
+        return abs((d3 + d1 * (3.0 * d2 + d1 * d1)) / (d2 + d1 * d1))
 
 
 def _exponential(M_over_Mp: float, n: int = 1, beta: float = 2.0) -> ExponentialModel:
@@ -457,8 +480,13 @@ class TestTheDefiningEquations(unittest.TestCase):
                 4.0 * EPS * (2.0 * abs(log_V2) + abs(log_E) + abs(log_R) + 3.0),
                 where,
             )
-            # the pulse rate |V'''/V''| from the hooks (power-law-wall prompt 07c), the method's expression
+            # the pulse rate |V'''/V''|: the model's _pulse_rate_hook, the method's expression (power-law-wall prompt
+            # 07c2; until then the composition of the hooks, compared bit for bit), and the composition of the hooks to
+            # 32 eps (test_k_ex (d)'s tolerance, with its reason)
             self.assertEqual(c.pulse_rate_t, _pulse_rate(rm, phi), where)
+            self.assertLessEqual(
+                rel(c.pulse_rate_t, _composed_pulse_rate(rm, phi)), 32.0 * EPS, where
+            )
             log_k = log(_pulse_rate(rm, phi)) + 0.5 * log_E - log(2.0)
             self.assertLessEqual(
                 abs(c.log_k_ex - log_k),
@@ -473,8 +501,8 @@ class TestTheDefiningEquations(unittest.TestCase):
             phi = o.phi_ta
             x = log(phi)
 
-            # V''(phi_ta) = m_ta^2. d ln V''/dx = phi V'''/V'', from the third hook (power-law-wall prompt 07c;
-            # until then a centred difference with h = 1e-3 in ln phi)
+            # V''(phi_ta) = m_ta^2. d ln V''/dx = phi V'''/V'', from the pulse-rate hook (power-law-wall prompt 07c2;
+            # from 07c the third hook, and until then a centred difference with h = 1e-3 in ln phi)
             S = phi * _pulse_rate(rm, phi)
             log_V = rm.log_V(phi)
             d1 = rm.d_logV_dphi(phi)
@@ -501,9 +529,13 @@ class TestTheDefiningEquations(unittest.TestCase):
             )
             self.assertLessEqual(abs(residual), bound, where)
 
-            # k_ex = E^{1/2}|V'''/V''|/2, the pulse rate from the hooks (power-law-wall prompt 07c)
+            # k_ex = E^{1/2}|V'''/V''|/2, the pulse rate the model's _pulse_rate_hook (power-law-wall prompt 07c2; until
+            # then the composition of the hooks), and the composition to 32 eps as above
             rate = _pulse_rate(rm, phi)
             self.assertEqual(o.pulse_rate_ta, rate, where)
+            self.assertLessEqual(
+                rel(o.pulse_rate_ta, _composed_pulse_rate(rm, phi)), 32.0 * EPS, where
+            )
             log_k = log(rate) + 0.5 * log_E - log(2.0)
             self.assertLessEqual(
                 abs(o.log_k_ex - log_k),

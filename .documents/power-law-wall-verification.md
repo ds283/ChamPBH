@@ -2350,3 +2350,179 @@ The integration moves (by construction: the law reads ℓ), as do the samples an
   the measured 3.0000000000000004; the module takes the literal (prompt §1.5, "exactly as … writes them"). x_p then
   differs from the header's at the 16th digit (0.15524989529273064 against …67).
 - The suites' counts and times, before and after, are in the log §3.
+
+## 10. The pulse rate in closed form (prompt 07c2, 2026-11-19)
+
+Prompt 07c2 put P125–P134 (README §6.16) into production in one commit, on top of `7a202b7`, after 07d's first attempt
+stopped in run `pl-a` and the user ruled route (a). The probes and the tool route's outputs are in the session's scratch
+directory, not committed; the log (`prompts/power-law-wall/logs/07c2-pulse-rate-in-closed-form.md`) names the scripts.
+Loads are one-minute loads at the start. Units: Planck units (M_P = 1), as the pipeline's.
+
+### 10.1 The stop, reproduced at the base
+
+At `7a202b7`, before any edit, `classical_turning_point` on `pl-a`'s inputs (`InversePowerModel` at n = 1, β = 2.9,
+M = 4 × 10⁻³¹ M_P; normalization −276.63072859401797, φ = 4.99999995097258 M_P, ln E = −110.29491298950512) raised
+`ComputationFailureError` with `pl-a.log`'s message character for character: the pulse rate `inf` at φ_t =
+2.308517288913975e-103, (ln V)′ = −4.33e102, (ln V)″ = 1.88e205, (ln V)‴ = −1.63e308. (ln V)‴ is finite; 3(ln V)′(ln V)″
+≈ −2.4e308 is not. With the pulse rate patched to 1 (it is read by nothing else, R16), the base's code path gives
+φ_t = 2.308517288913975e-103, ln ω_t² = 363.05755244347154, ln R = 832.0411165630696. `one_loop_turnaround` on the same
+inputs returned at the base (φ_ta = 6.24e-43 M_P, 6 iterations): its point is far outside.
+
+Histories 4 and 5 of the tool route (§10.6) failed at the base as `pl-a`'s did, in the tuning's first integration, with
+the same message and the same inputs. The range probe placed the failing assessment at the step start of accepted step
+47, N = 3.984, where ρ_kin has risen from e^−137.5 (step 1) to e^−110.3 in a kick; the field is still at 5 M_P. So the
+stop's point is a step-start assessment a few e-folds in, not the first step (README §6.16 and the prompt's §0 say "the
+first steps").
+
+### 10.2 The hook (prompt §1.2)
+
+`_pulse_rate_hook(normalization, phi)` on `AbstractModel` (raises `NotImplementedError` naming the class), in closed form
+on both models: (n + 2)/φ on `InversePowerModel`, through `_log_u` for its checks; [(n + 1)(n + 2) + 3n(n + 1)u + n²u²]
+/ ((n + 1) + nu) / φ, u = pow(M/φ, n), on `ExponentialModel`; each raises `ComputationFailureError` naming the hook on an
+overflow. `_pulse_rate` keeps its signature and its check and calls the hook; the check now also refuses a negative rate
+(the hook returns |V‴/V″|, and no `abs` is taken). Test stand-ins: `_PowerLawWall` in its closed form (p + 2)/φ;
+`_BumpWall` and `_MinimalModel` as the composition of their own hooks.
+
+| check | points | tolerance (reason) | worst |
+|---|---|---|---|
+| hook against the composition of the model's own hooks, both models, n = 1, 2, M ∈ {1e-33, 4e-31, 1e-16, 1e-3} M_P, φ from 1e-102 to 10 M_P (four a decade; the exponential to u = 1e3) | 4071 | 32 eps: the same u in both, whose rounding cancels algebraically; the composition's dozen roundings on one-signed sums and the power wall's (ln V)‴ bracket cancelling by at most 19 | 2.85 eps |
+| exponential's hook against its closed form in 60-digit decimals | same points | 16 eps: u to (n + 1) eps, a ratio of positive sums with log-derivative in u at most 1 | 1.79 eps |
+| power wall's hook against (n + 2)/φ in 60-digit decimals | same points, and 1e-300 to 1e-102 M_P (6344 more) | bit for bit (one correctly rounded division) | bitwise everywhere |
+| the composition beyond float range, 1e-300 to 1e-102 M_P | 6344 | — | non-finite at 6328 of them (finite only above 3.22e-103 M_P at n = 1, 5.11e-103 at n = 2), where the hook is finite and exact |
+
+A probe at the base (`hook_vs_comp.py`) found the composition within 2.6 eps of the closed form wherever finite, on the
+same grid. `classical_turning_point` on §10.1's inputs at the tip returns: φ_t, ln ω_t² and ln R bit for bit the base
+path's three values above, `pulse_rate_t` = 3/φ_t bit for bit; `one_loop_turnaround` returns, `pulse_rate_ta` = 3/φ_ta.
+These are `test_k_ex` (d).
+
+### 10.3 The label
+
+`VERSION_LABEL` 2026.13.0 → 2026.14.0, with a dated comment; `FINGERPRINT_FORMAT` 8. No table or column added or renamed.
+
+### 10.4 The tests
+
+`test_inverse_power_model` (d): the points at n = 1, ln E = −60, M = 4e-31 and 1e-16 M_P (φ_t = 1.3e-126 and 1.3e-112 M_P)
+return, compared as every other point; at every point `pulse_rate_t` = (n + 2)/φ_t and `pulse_rate_ta` = (n + 2)/φ_ta bit
+for bit; worst |ln φ_t error| 0 of dx, one-loop against the chain 1.1e-13. `test_k_ex` (b) now includes those points
+(worst 1.1e-4 of the tolerance); (a)'s base-without-the-third-hook now has turning points; (b)'s R16 and refusal tests
+patch `_pulse_rate_hook`; new (d), four tests. `test_wall_model` (3) compares the method's rate with the hook bit for
+bit and with the composition to 32 eps. The label in two `ObjectFactories` tests. Every re-pin is listed in the log.
+No golden moved.
+
+### 10.5 The range the grid's assessments reach (prompt §1.5)
+
+**The new end of the range.** By bisection in ln φ on the hooks (`range_end.py`), V″/V = (ln V)″ + (ln V)′² as the turning
+points form it is finite down to φ = 1.054769e-154 M_P at n = 1 and 1.826913e-154 M_P at n = 2, equal to √(n(n + 1)/
+DBL_MAX) to the printed digits, at M = 1e-33 and 4e-31 M_P alike. 07c's composed pulse rate stopped at 3.219674e-103
+(n = 1) and 5.110914e-103 M_P (n = 2).
+
+**The probe on the tool route** (every `classical_turning_point` and `one_loop_turnaround` call of a history recorded, with
+the integrator's accepted-step count and N), at the tip:
+
+| history | assessments | least φ_t (M_P) | at step, N | ln E there | least φ_ta (M_P) | margin to the end (decades) |
+|---|---|---|---|---|---|---|
+| 2: power wall n = 2, one-loop, β 2, 4e-31 | 8885 | 2.3771836068743027e-66 | 75, 5.0580 | −114.409 | 1.287e-36 (step 460, N 20.352) | 87.9 |
+| 4: power wall n = 1, fixed α 0.1, β 2.9, 4e-31 | 8107 | 1.0748096758163356e-109 | 75, 5.0437 | −95.715 | 8.146e-39 (margins) | 45.0 |
+| 5: the same, one-loop A = 1 | 11522 | 1.0748096758163356e-109 | 75, 5.0437 | −95.715 | 8.146e-39 (step 505, N 23.888) | 45.0 |
+| 6: power wall n = 1, one-loop, β 2, 4e-31 | 7274 | 1.4127504751979579e-101 | 75, 5.0580 | −114.409 | 1.340e-38 (step 460, N 20.352) | 53.1 |
+
+**The start is not where the least φ_t falls.** π_init = 0 in every history, so the first assessment is at accepted step
+1 (N ≈ 0.005–0.008), with ln E ≈ −156 (β 2) or −137 (β 2.9); ρ_kin then rises by a kick to its peak near N ≈ 5.05, where
+φ_t is least, 10–18 decades below the first assessment's (history 4: 1.49e-91 at step 1, 1.07e-109 at step 75).
+
+**07's grid from its stored values.** The prompt's inputs, `phi_0` and `pi_0`, are the field and its velocity at the end
+of each history (`TUNING_OUTPUT_KEYS`), and π_init = 0, so the first assessment cannot be formed from stored values. In
+their place `range_store.py` forms the assessment at every stored sample with π < 0 (ScalarHistoryValue's φ, π and H_E,
+about 0.009 in N apart early on): ln E = ln(H²π²/2 + V − V₀), ln φ_t = ln M − (ln E − ln V₀)/n, the power wall's closed
+form, for all 60 power-wall histories of 07's `pl` and `mixed` stores (read through `sqlite3` `mode=ro`). Checks: near
+N = 3.984 in history 4's stored samples ln E runs −110.46 to −109.18 and φ_t 2.7e-103 to 7.6e-104, bracketing `pl-a`'s
+message (−110.29, 2.31e-103); the least over samples equals the probe's least φ_t to four digits at histories 4–6 and 2
+(1.0748e-109 at N 5.0424, 1.4128e-101 at 5.0555, 2.3772e-66).
+
+| n | M (M_P) | β | first sample's φ_t | least φ_t over samples (N) | margin (decades) |
+|---|---|---|---|---|---|
+| 1 | 1e-33 | 2.0 | 4.25e-86 | 3.53e-104 (5.056) | 50.5 |
+| 1 | 4e-31 | 1.2 | 9.22e-76 | 3.39e-94 (5.071) | 60.5 |
+| 1 | 4e-31 | 2.0 | 1.70e-83 | 1.41e-101 (5.056) | 53.1 |
+| 1 | 4e-31 | 2.9 | 4.29e-91 | 1.07e-109 (5.042) | **45.0** |
+| 1 | 1e-15 | 2.0 | 4.25e-68 | 3.53e-86 (5.056) | 68.5 |
+| 2 | 1e-33 | 2.0 | 6.52e-60 | 5.94e-69 (5.056) | 85.5 |
+| 2 | 4e-31 | 1.2 / 2.0 / 2.9 | 1.92e-53 / 2.61e-57 / 4.14e-61 | 1.16e-62 / 2.38e-66 / 2.07e-70 | 91.8 / 88.1 / 84.1 |
+| 2 | 1e-15 | 2.0 | 6.52e-42 | 5.94e-51 (5.056) | 103.5 |
+| 2 | 1e-3 | 1.2 / 2.0 / 2.9 | 4.49e-26 / 3.76e-29 / 5.13e-34 | 2.94e-35 / 6.02e-39 / 5.26e-43 | 119.2 / 115.5 / 111.5 |
+
+Each row holds every α and A of 07's grid at that point (the least φ_t equal to four digits across them; `pl` and `mixed`
+equal). The six natural-mode histories at n = 1, 1e-3 M_P failed in 07 (R5) and have no samples. **The least margin over
+07's grid is 45.0 decades**, at n = 1, β = 2.9, M = 4e-31 M_P, near N = 5.04; under 07c's composition the same assessments
+were 6.5 decades past its end (3.2e-103). No other hook leaves float range there: every assessment of histories 2 and 4–6
+returned, and their least φ_ta is 8e-39 M_P.
+
+### 10.6 The tool route (prompt §1.1, §1.6)
+
+Six histories by `tools/history_and_bbn.py`, through a scratch wrapper that calls its `main` unchanged and dumps the
+payload and BBN result (every float as its repr) and the range probe's records, at the base `7a202b7` and at the tip, with
+the same commands, one at a time (beside the suites' first ComputeTargets half, at base and at tip alike):
+
+| | history | arguments | base (s, load) | tip (s, load) |
+|---|---|---|---|---|
+| 1 | exponential n = 1, fixed α 0.1, reflecting | `2.0 4e-31 --alpha 0.1` | 18 (4.13) | 18 (3.08) |
+| 2 | power wall n = 2, one-loop A = 1 | `2.0 4e-31 --model inverse-power --n 2 --drain-law one_loop --alpha 1` | 18 (4.67) | 17 (3.13) |
+| 3 | exponential n = 1, one-loop A = 1, laboratory M | `2.0 4e-31 --drain-law one_loop --alpha 1` | 17 (4.79) | 17 (3.18) |
+| 4 | power wall n = 1, fixed α 0.1, β 2.9 | `2.9 4e-31 --model inverse-power --n 1 --alpha 0.1` | 2, **failed** (5.07) | 16 (3.14) |
+| 5 | the same, one-loop A = 1 | `2.9 4e-31 --model inverse-power --n 1 --drain-law one_loop --alpha 1` | 1, **failed** (5.07) | 19 (3.30) |
+| 6 | power wall n = 1, one-loop A = 1, β 2 (07c's history 3) | `2.0 4e-31 --model inverse-power --n 1 --drain-law one_loop --alpha 1` | 16 (5.07) | 16 (3.39) |
+
+**Histories 1, 2 and 6:** 67 088, 70 328 and 69 048 leaves compared; every sample, tuning value, bounce row, ledger value,
+margin, drain record and BBN value equal to the base's bit for bit. One path moves in each: the injections'
+`classical_turning_point.pulse_rate_t`, in 30 of 49, 18 of 48 and 9 of 37 injections, by at most 4.1e-16, 2.8e-16 and
+2.2e-16 relative (one ulp). No other k_ex column moved: a one-ulp change in the rate moves ln k_ex by about 1e-16, below
+half an ulp of ln k_ex (≈ 1e-14 at |ln k_ex| ~ 50), so `log_k_ex`, `ell_t`, ℓ, `log_q`, the margins, `ell_min` and the
+peaks are bitwise.
+
+**History 3** (the exponential's one-loop law at laboratory M, which reads ℓ): measured base against tip, bitwise but for
+`pulse_rate_t` (31 of 46 injections, at most 3.5e-16 relative). ΔN_eff 0.04163249276504718 at T_CMB and
+0.039586361244445985 at 1 MeV, Y_p 0.24719964618966397, D/H 2.470389133689699 (×10⁻⁵), drained share (one-loop)
+0.9998562737519079, parking share 0.00014372624809229034, candidates 46 / 0 / 0 / 0, ℓ_min 19.964334270236222, at base and
+tip alike (07c's tip values, §9.7).
+
+**Histories 4 and 5** succeed at the tip. Beside 07's stored values for the same histories (`pl`, serials 23 and 28):
+
+| | 4: 07's `pl` | 4: tip | 5: 07's `pl` | 5: tip |
+|---|---|---|---|---|
+| ΔN_eff at T_CMB | 0.03843504737508671 | equal | 0.024529199130091498 | equal |
+| ΔN_eff at 1 MeV | 0.037247519498402916 | equal | 0.02364613445286405 | equal |
+| Y_p | 0.24739626176250265 | equal | 0.24713074010549813 | equal |
+| D/H (×10⁵) | 2.4708195030585554 | equal | 2.4657251493105763 | equal |
+| reflections (injections) | 42 | 42 | 62 | 62 |
+| bounce rows | 0 | 0 | 123 | 123 |
+| candidates one-loop / gap / classical / unassessed | — | — | 62 / 0 / 0 / 0 | equal |
+| drained share (one-loop), parking share | — | — | 0.99977, 0.00023 | equal |
+| parking N | 29.69487712918007 | equal | 33.375861349060195 | equal |
+| normalization, φ_ref, tuning integrations | −276.63072859401797, 5.526e-16, 1 | equal | the same | equal |
+| worst birth margin | 34.779 | 35.880 | 34.120 | 35.221 |
+| ℓ_min | — | — | 24.923 | 26.025 |
+
+The k_ex columns move by about ln 3 (+1.10), as 07c moved them on the power wall at n = 1 (§9.7); everything else
+compared is equal. 07d compares them in full.
+
+### 10.7 The breakage record
+
+- The power wall's hook as (n + 1)/φ: 9 failures in `test_k_ex` (b), (d), `test_wall_model` (3) and
+  `test_inverse_power_model` (d).
+- The exponential's hook with the n²u² term dropped: 7 failures and 1 error, in `test_k_ex` (b), (c), (d) and
+  `test_wall_model` (1), (2), (3).
+- Unbroken: 60 tests of those three modules, none failing.
+- History 1's tip sample 2000 with φ_E moved by one ulp (0.9599120208377165 → …167): the comparator reports one differing
+  sample beside the expected `pulse_rate_t` path.
+
+### 10.8 What the work found
+
+- **The issue's measure.** `[07c-the-third-hook-leaves-float-range-below-phi-1e-103-mp]` closes: the rate is finite to
+  where V″/V leaves float range (1.05e-154 M_P at n = 1), which predates 07c, and 07's grid's assessments stay 45.0 decades
+  above it (§10.5).
+- **Where the least φ_t falls.** At the peak of ρ_kin near N ≈ 5.05 (T* = 2e4 GeV), E/V₀ ≈ e^181 at β = 2.9, not at the
+  first assessment nor the first impact; on the power wall at n = 1, φ_t ≈ M V₀/E. A grid at smaller M, or larger β, moves
+  the least φ_t down by the same factor (φ_t ∝ M at fixed E/V₀): scaled so, at β = 2.9 the margin would reach zero near
+  M ≈ 4e-76 M_P, an extrapolation, not a run.
+- **The third hook is still range-limited** (below 2.2e-103 M_P at n = 1) but has no production caller; only the tests
+  read it.

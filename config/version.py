@@ -122,7 +122,16 @@
 # the exponential's one-loop histories change. No table or column changes (FINGERPRINT_FORMAT stays 8). A 2026.12.0
 # store is not extended at 2026.13.0: start a fresh datastore file, and read a 2026.12.0 store with the tree of its own
 # commit (before power-law-wall prompt 07c).
-VERSION_LABEL = "2026.13.0"
+# On 2026-11-19 (power-law-wall prompt 07c2), 2026.14.0: from 2026.14.0 the pulse rate |V'''/V''| of k_ex is each model's
+# hook _pulse_rate_hook in closed form ((n + 2)/phi on the power wall; [(n + 1)(n + 2) + 3n(n + 1)u + n^2 u^2]/([(n + 1)
+# + nu] phi), u = (M/phi)^n, on the exponential; power-law-wall README §6.16 P126), in place of 2026.13.0's composition
+# of the three log hooks, which overflowed on the power wall below phi ~ 3e-103 M_P. k_ex, and what reads it (ell, ell_t,
+# ln q, the peaks, the margins, the one-loop chain), move at round-off where 2026.13.0's rate was finite; the power
+# wall's assessments below phi ~ 3e-103 M_P, which raised at 2026.13.0 (07d's stop: n = 1, beta = 2.9, M = 4e-31 M_P),
+# now return, down to where V'' leaves float range (~1e-154 M_P), as before 2026.13.0. phi_t, ln omega_t^2 and ln R do
+# not change, nor the integration and BBN of any history whose law reads no ell. No table or column changes
+# (FINGERPRINT_FORMAT stays 8). A 2026.13.0 store is not extended at 2026.14.0: start a fresh datastore file.
+VERSION_LABEL = "2026.14.0"
 
 # The reserved payload key of a version-keyed lookup (VERSION_SERIAL_KEY) and its reader
 # (require_version_serial) were defined here until dk-and-rpk-migration prompt 08; they are

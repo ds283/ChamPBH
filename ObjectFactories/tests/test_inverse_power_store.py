@@ -44,8 +44,8 @@ writing the row, its samples and its bounce rows with the datastore's own insert
 - **the inventory**: a store holding a history of each model reads with no problem, each history's `model` parent
   resolved to its own table;
 - **the configuration**: the registry's order and batch size, the sharding, no drop group; the spec, equal to the
-  exponential's; the format guard at 8 beside 1-7; `VERSION_LABEL` 2026.13.0 (2026.12.0 until power-law-wall prompt
-  07c, which changed no table).
+  exponential's; the format guard at 8 beside 1-7; `VERSION_LABEL` 2026.14.0 (2026.12.0 until power-law-wall prompt
+  07c, and 2026.13.0 until prompt 07c2, neither of which changed a table).
 
 No Ray cluster, no persistent datastore, no PRyMordial solve. Cost: the two tunings, each one integration at its
 tracking seed (prompt 04 measured 5.3-6.8 s for these histories, at loads of 9-15), shared by the round-trip tests
@@ -667,7 +667,7 @@ class TestTheConfiguration(unittest.TestCase):
         self.assertEqual(set(eight) - set(seven), {"InversePowerModel"})
         self.assertEqual(set(seven) - set(eight), set())
         self.assertEqual({n for n in seven if seven[n] != eight[n]}, {"ScalarHistory"})
-        self.assertEqual(VERSION_LABEL, "2026.13.0")
+        self.assertEqual(VERSION_LABEL, "2026.14.0")
 
 
 if __name__ == "__main__":
