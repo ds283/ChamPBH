@@ -1,0 +1,27 @@
+$ env PYTHONPATH=. ./venv/bin/python -u plot_by_beta.py --config exponential.yaml --database /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp.db --alpha-values 0 0.01 0.1 --A-values 0.05 1 10 --no-plots --ray-address 127.0.0.1:6380 --shards 16 --phi-init-Mp 5 --output /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/refuse-07-exp
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-19 10:24:00,050	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-19 10:24:00,089	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+Traceback (most recent call last):
+  File "/Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/plot_by_beta.py", line 1118, in <module>
+    with ShardedPool(
+         ~~~~~~~~~~~^
+        version_label=VERSION_LABEL,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+        serial_batch_sizes=serial_batch_sizes,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ) as pool:
+    ^
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/datastorekit/SQL/ShardedPool.py", line 219, in __init__
+    self._open(version_label, drop_tables, read_table_config, read_only)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/datastorekit/SQL/ShardedPool.py", line 235, in _open
+    self._open_read_only(version_label, drop_tables, read_table_config)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/datastorekit/SQL/ShardedPool.py", line 629, in _open_read_only
+    raise ReadOnlyMiss(
+    ...<4 lines>...
+    )
+datastorekit.replication.ReadOnlyMiss: Datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp.db" was opened read-only, and a lookup of "version" matched no row; a read-write store would have inserted one with payload {'label': '2026.14.0'} (the store holds the version label(s) ['2026.12.0']). Nothing was written

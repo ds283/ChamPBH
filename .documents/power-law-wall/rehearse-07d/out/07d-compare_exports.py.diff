@@ -1,0 +1,319 @@
+--- rehearse-07/compare_exports.py	2026-11-16 20:38:40
++++ rehearse-07d/compare_exports.py	2026-11-19 07:44:49
+@@ -1,12 +1,14 @@
+ """
+-power-law-wall prompt 07 §2.2, §2.4 and §2.5 (P65, P67, P68): export roots compared. Adapted from
+-.documents/power-law-wall/export-06/compare_exports.py (R12's rule, mode --base) and from one-loop-drain 06's
+-.documents/one-loop-drain/rehearse-06/compare_exports.py (the file-by-file mode). Stdlib only; it reads the two trees and
+-writes nothing but stdout (prompt 07 sends it to a file under var/power-law-wall/07/). It opens no store.
++power-law-wall prompt 07d §2.3 and §2.4 (P116, P118): export roots compared. Copied from prompt 07's
++(.documents/power-law-wall/rehearse-07/compare_exports.py), which was adapted from
++.documents/power-law-wall/export-06/compare_exports.py and one-loop-drain 06's; 07d adds the mode --across-k-ex (P118),
++described at the end, and changes nothing else. Stdlib only; it reads the two trees and writes nothing but stdout
++(prompt 07d sends it to a file under var/power-law-wall/07d-r2/). It opens no store.
+ 
+-    ./venv/bin/python .documents/power-law-wall/rehearse-07/compare_exports.py ROOT_A ROOT_B
+-    ./venv/bin/python .documents/power-law-wall/rehearse-07/compare_exports.py --base BASE_LABEL_ROOT TIP_MODEL_ROOT
+-    ./venv/bin/python .documents/power-law-wall/rehearse-07/compare_exports.py --n1-subset ROOT_A ROOT_B
++    ./venv/bin/python .documents/power-law-wall/rehearse-07d/compare_exports.py ROOT_A ROOT_B
++    ./venv/bin/python .documents/power-law-wall/rehearse-07d/compare_exports.py --base BASE_LABEL_ROOT TIP_MODEL_ROOT
++    ./venv/bin/python .documents/power-law-wall/rehearse-07d/compare_exports.py --n1-subset ROOT_A ROOT_B
++    ./venv/bin/python .documents/power-law-wall/rehearse-07d/compare_exports.py --across-k-ex ROOT_A ROOT_B
+ 
+ - **File by file** (default; §2.2, §2.4's first item): every regular file under each root, by its path relative to the
+   root; the two lists must be equal, and each pair is compared byte for byte. Where two files differ they are read as
+@@ -34,6 +36,23 @@
+ were left out under each root: prompt 07 runs the quanta tools (R5) on the tip's roots only, so the base rule is taken
+ over the plot scripts' files with `--exclude 'quanta_*'`.
+ 
++**--across-k-ex** (07d, P118): ROOT_A is a root of 07's tree (var/power-law-wall/07/export-<store>/QCD_Cosmology/<model>),
++ROOT_B the same root of 07d's. A path component of A named by 07's drain model is read as 07d's (DIR_MAP:
++`one-loop-measured-pl-v1` -> `one-loop-inverse-power-v1`, U11; `one-loop-measured-v1` -> `one-loop-exponential-v2`,
++R14), and the two path lists must then be equal. Each pair that is not byte-identical is read as CSV, and every column
++with a differing cell is named with its count, its largest change (as numbers, where both cells parse) and its class:
++- **timing** (as above), and **masked label** (a failure reason equal once main.py's label is masked; 07's ruling (a));
++- **mapped** (`drain_model`, equal once A's cell is read through DIR_MAP);
++- **P114** (allowed to move where the law reads no l): in `bounces.csv` the bounce columns of P114's list
++  (KEX_BOUNCE); in `histories.csv` the history columns of P114's list it holds (KEX_HISTORY: the failing shares,
++  unassessed_share and the drain record's candidates, shares, ell_min, unresolvable_assessments and all_* margins);
++- **measured**: any column of a file under a `one-loop-exponential-v2` directory, of a `quanta_*` file, and of a
++  `histories.csv` row whose drain model is `one-loop-exponential-v2` (rows matched by their key: beta, M_Mp, n, model,
++  phi_init_Mp, alpha and the mapped drain_model, each key held once);
++- **DIFFERENCE** otherwise, a stop (prompt 07d §2.4).
++A file whose rows differ in number is measured where the class above says measured, and a DIFFERENCE elsewhere. Exit 0
++when no DIFFERENCE is found and the path lists are equal; 1 otherwise.
++
+ Exit 0 when the mode's rule holds; 1 otherwise.
+ """
+ 
+@@ -328,7 +347,252 @@
+     )
+     print(
+         f"RESULT: {'A is B at n = 1: every file equal (timing and masked-label columns named), the row files B rows at n = 1; B alone holds n = 2' if ok else 'NOT EQUAL (see above)'}"
++    )
++    return 0 if ok else 1
++
++
++# --across-k-ex (P118)
++DIR_MAP = {
++    "one-loop-measured-pl-v1": "one-loop-inverse-power-v1",
++    "one-loop-measured-v1": "one-loop-exponential-v2",
++}
++MEASURED_DIR = "one-loop-exponential-v2"
++REGIMES = ("one_loop", "gap", "classical", "unassessed")
++KINDS = ("birth", "reflection", "tracker")
++KEX_BOUNCE = {
++    "regime",
++    "ell",
++    "log_k_ex_Mp",
++    "log_m_Mp",
++    "log_q_Mp",
++    "birth_margin",
++    "reflection_margin",
++    "reflection_margin_N",
++    "tracker_margin",
++    "tracker_margin_N",
++}
++KEX_HISTORY = (
++    {f"worst_{k}_margin" for k in KINDS}
++    | {f"worst_{k}_margin_N" for k in KINDS}
++    | {f"{k}_failing_share" for k in KINDS}
++    | {"unassessed_share", "ell_min", "unresolvable_assessments"}
++    | {f"candidates_{r}" for r in REGIMES}
++    | {f"drained_share_{r}" for r in REGIMES}
++    | {f"all_worst_{k}_margin" for k in KINDS}
++    | {f"all_worst_{k}_margin_N" for k in KINDS}
++    | {f"all_{k}_failing_share" for k in KINDS}
++)
++HISTORY_KEY = ("beta", "M_Mp", "n", "model", "phi_init_Mp", "alpha", "drain_model")
++
++
++def map_path(rel):
++    return str(Path(*[DIR_MAP.get(part, part) for part in Path(rel).parts]))
++
++
++def num(x):
++    try:
++        return float(x)
++    except (TypeError, ValueError):
++        return None
++
++
++class ColTally:
++    def __init__(self):
++        self.cols = {}
++
++    def add(self, col, cls, u, v):
++        s = self.cols.setdefault(
++            col, {"n": 0, "cls": set(), "big": None, "first": (u, v)}
++        )
++        s["n"] += 1
++        s["cls"].add(cls)
++        x, y = num(u), num(v)
++        if x is not None and y is not None:
++            d = y - x
++            if s["big"] is None or abs(d) > abs(s["big"][0]):
++                s["big"] = (d, u, v)
++
++    def lines(self):
++        out = []
++        for col, s in self.cols.items():
++            big = (
++                f"; largest change {s['big'][0]:+.6g} ({s['big'][1]} -> {s['big'][2]})"
++                if s["big"] is not None
++                else ""
++            )
++            out.append(
++                f"{'/'.join(sorted(s['cls']))}: column {col!r} differs in {s['n']} cell(s){big}; first {s['first'][0]!r} vs {s['first'][1]!r}"
++            )
++        return out
++
++    def classes(self):
++        return (
++            set().union(*(s["cls"] for s in self.cols.values())) if self.cols else set()
++        )
++
++
++def cell_class(col, u, v, allowed, measured):
++    if measured:
++        return "measured"
++    if is_timing(col):
++        return "timing"
++    if col in REASON_COLUMNS and u and v and label_equal(u, v):
++        return "masked label"
++    if col == "drain_model" and DIR_MAP.get(u, u) == v:
++        return "mapped"
++    if col in allowed:
++        return "P114"
++    return "DIFFERENCE"
++
++
++def across_file(rel, a: bytes, b: bytes, summary):
++    name = Path(rel).name
++    under_measured = MEASURED_DIR in Path(rel).parts or name.startswith("quanta_")
++    allowed = (
++        KEX_BOUNCE
++        if name == "bounces.csv"
++        else KEX_HISTORY if name == "histories.csv" else set()
++    )
++    try:
++        ra, rb = rows(a), rows(b)
++    except Exception as e:  # noqa: BLE001
++        return [f"DIFFERENCE: not comparable as CSV ({type(e).__name__})"], {
++            "DIFFERENCE"
++        }
++    if not ra or not rb or ra[0] != rb[0]:
++        return ["DIFFERENCE: headers differ"], {"DIFFERENCE"}
++    head = ra[0]
++    tally = ColTally()
++    out = []
++    if name == "histories.csv":
++        ki = [head.index(k) for k in HISTORY_KEY]
++        dmi = head.index("drain_model")
++
++        def keyed(rs, mapped):
++            d = {}
++            for r in rs[1:]:
++                k = tuple(
++                    DIR_MAP.get(r[i], r[i]) if (mapped and i == dmi) else r[i]
++                    for i in ki
++                )
++                d.setdefault(k, []).append(r)
++            return d
++
++        da, db = keyed(ra, True), keyed(rb, False)
++        dup = [k for k, v in list(da.items()) + list(db.items()) if len(v) != 1]
++        only_a, only_b = [k for k in da if k not in db], [k for k in db if k not in da]
++        order_a = [
++            tuple(DIR_MAP.get(r[i], r[i]) if i == dmi else r[i] for i in ki)
++            for r in ra[1:]
++        ]
++        order_b = [tuple(r[i] for i in ki) for r in rb[1:]]
++        out.append(
++            f"rows A {len(ra) - 1}, B {len(rb) - 1}; keys held twice {len(dup)}; only A {len(only_a)}; only B {len(only_b)}; "
++            f"the same order under the map: {order_a == order_b}"
++        )
++        if dup or only_a or only_b:
++            out.append(
++                f"DIFFERENCE: keys do not match one to one: {dup[:3]} {only_a[:3]} {only_b[:3]}"
++            )
++            return out, {"DIFFERENCE"}
++        nrows_measured = 0
++        for k in da:
++            x, y = da[k][0], db[k][0]
++            meas = y[dmi] == MEASURED_DIR
++            nrows_measured += meas
++            for i, (u, v) in enumerate(zip(x, y)):
++                if u != v:
++                    tally.add(head[i], cell_class(head[i], u, v, allowed, meas), u, v)
++        out.append(
++            f"rows of the drain model {MEASURED_DIR} (measured): {nrows_measured}"
++        )
++    else:
++        if len(ra) != len(rb):
++            cls = "measured" if under_measured else "DIFFERENCE"
++            out.append(f"{cls}: row counts differ: {len(ra) - 1} vs {len(rb) - 1}")
++            summary[cls] += 1
++            return out, {cls}
++        for x, y in zip(ra[1:], rb[1:]):
++            for i, (u, v) in enumerate(zip(x, y)):
++                if u != v:
++                    tally.add(
++                        head[i],
++                        cell_class(head[i], u, v, allowed, under_measured),
++                        u,
++                        v,
++                    )
++    out.extend(tally.lines())
++    cls = tally.classes()
++    if not tally.cols and not out:
++        out.append("DIFFERENCE: bytes differ but every cell is equal")
++        cls = {"DIFFERENCE"}
++    return out, cls
++
++
++def across(ra: Path, rb: Path) -> int:
++    from collections import Counter
++
++    fa, fb = files(ra), files(rb)
++    ma = {map_path(f): f for f in fa}
++    only_a = sorted(set(ma) - set(fb))
++    only_b = sorted(set(fb) - set(ma))
++    pairs = sorted(set(ma) & set(fb))
++    print(
++        f"files: A {len(fa)}, B {len(fb)}, in both under the map {len(pairs)}, only A {len(only_a)}, only B {len(only_b)}"
+     )
++    print(
++        "A's paths read through " + ", ".join(f"{k} -> {v}" for k, v in DIR_MAP.items())
++    )
++    for f in only_a:
++        print(f"  only A (mapped): {f}")
++    for f in only_b:
++        print(f"  only B: {f}")
++    ok = not only_a and not only_b
++    summary = Counter()
++    by_name = {}
++    per_class_cols = {}
++    for f in pairs:
++        a, b = (ra / ma[f]).read_bytes(), (rb / f).read_bytes()
++        t = by_name.setdefault(Path(f).name, Counter())
++        if a == b:
++            t["identical"] += 1
++            summary["identical"] += 1
++            continue
++        lines, cls = across_file(f, a, b, Counter())
++        verdict = (
++            "DIFFERENCE"
++            if "DIFFERENCE" in cls
++            else "measured" if "measured" in cls else "allowed"
++        )
++        t[verdict] += 1
++        summary[verdict] += 1
++        if verdict == "DIFFERENCE":
++            ok = False
++        print(f"  {f}: {verdict}")
++        for line in lines:
++            print(f"     {line}")
++            if ": column " in line:
++                c = line.split(": column ", 1)[1].split(" differs", 1)[0]
++                per_class_cols.setdefault(line.split(":", 1)[0], set()).add(
++                    (Path(f).name, c)
++                )
++    print(
++        "per file name (identical / allowed: timing, masked label, mapped or P114 only / measured / DIFFERENCE):"
++    )
++    for name, t in sorted(by_name.items()):
++        print(
++            f"  {name}: {t['identical']} / {t['allowed']} / {t['measured']} / {t['DIFFERENCE']}"
++        )
++    print("columns that differ, by class (file name, column):")
++    for cls, cols in sorted(per_class_cols.items()):
++        print(f"  {cls}: " + ", ".join(f"{n}:{c}" for n, c in sorted(cols)))
++    print(
++        f"pairs compared: {len(pairs)}; byte-identical {summary['identical']}; allowed only {summary['allowed']}; "
++        f"measured {summary['measured']}; DIFFERENCE {summary['DIFFERENCE']}"
++    )
++    print(
++        f"RESULT: {'no difference outside the timing, masked-label, mapped and P114 columns where the law reads no l; the rest measured' if ok else 'NOT EQUAL (see above)'}"
++    )
+     return 0 if ok else 1
+ 
+ 
+@@ -339,6 +603,7 @@
+     g = p.add_mutually_exclusive_group()
+     g.add_argument("--base", action="store_true")
+     g.add_argument("--n1-subset", action="store_true")
++    g.add_argument("--across-k-ex", action="store_true")
+     p.add_argument("--exclude", nargs="+", default=[], metavar="GLOB")
+     args = p.parse_args(argv)
+     EXCLUDE.extend(args.exclude)
+@@ -347,6 +612,9 @@
+     if args.base:
+         print("mode: --base (06's rule)")
+         return base_rule(args.root_a, args.root_b)
++    if args.across_k_ex:
++        print("mode: --across-k-ex (P118)")
++        return across(args.root_a, args.root_b)
+     if args.n1_subset:
+         print("mode: --n1-subset")
+         return n1_subset(args.root_a, args.root_b)

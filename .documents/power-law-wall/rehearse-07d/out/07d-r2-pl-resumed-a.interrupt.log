@@ -1,0 +1,4 @@
+[2026-11-19T09:45:34+00:00] interrupt_when: waiting for "RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-inverse-power-v1)" in var/power-law-wall/07d-r2/runs/r2-pl-resumed-a.log; then 16 s; then SIGTERM
+[2026-11-19T09:45:34+00:00] interrupt_when: driver pid 51274 (from var/power-law-wall/07d-r2/runs/r2-pl-resumed-a.pid)
+[2026-11-19T09:46:54+00:00] interrupt_when: saw "RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-inverse-power-v1)"; waiting 16 s
+[2026-11-19T09:47:10+00:00] interrupt_when: sent SIGTERM to pid 51274

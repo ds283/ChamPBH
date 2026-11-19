@@ -1,0 +1,307 @@
+A: var/power-law-wall/07/export-mixed/QCD_Cosmology/inverse-power
+B: var/power-law-wall/07d-r2/export-mixed/QCD_Cosmology/inverse-power
+mode: --across-k-ex (P118)
+files: A 59, B 59, in both under the map 59, only A 0, only B 0
+A's paths read through one-loop-measured-pl-v1 -> one-loop-inverse-power-v1, one-loop-measured-v1 -> one-loop-exponential-v2
+  alpha=0.01/csv/M=0.00097413eV_n=1/data.csv: allowed
+     timing: column 'scalar_compute_time' differs in 3 cell(s); largest change +0.857853 (10.046887166099623 -> 10.904740458121523); first '1.173320250120014' vs '1.2598817080724984'
+     timing: column 'BBN_compute_time' differs in 3 cell(s); largest change +0.447807 (8.871090749977157 -> 9.31889741611667); first '7.986992958001792' vs '8.177624791162089'
+     timing: column 'NP_compute_time' differs in 3 cell(s); largest change -0.000136708 (0.0016927500255405903 -> 0.0015560421161353588); first '0.0017497909720987082' vs '0.0017228329088538885'
+  alpha=0.1/csv/M=0.00097413eV_n=1/data.csv: allowed
+     timing: column 'scalar_compute_time' differs in 3 cell(s); largest change +0.197134 (6.149335917085409 -> 6.346469584153965); first '1.633881207788363' vs '1.701756790978834'
+     timing: column 'BBN_compute_time' differs in 3 cell(s); largest change +0.412292 (7.7508667500223964 -> 8.163158667040989); first '7.963909707963467' vs '8.176951125031337'
+     timing: column 'NP_compute_time' differs in 3 cell(s); largest change -0.000189917 (0.0018638342153280973 -> 0.0016739170532673597); first '0.001739791128784418' vs '0.0017038749065250158'
+  histories.csv: allowed
+     rows A 48, B 48; keys held twice 0; only A 0; only B 0; the same order under the map: True
+     rows of the drain model one-loop-exponential-v2 (measured): 0
+     masked label: column 'failure_reasons' differs in 3 cell(s); first 'integrate_scalar_history (power-law-wall-07-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-16T20:22:58): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-05, ' vs 'integrate_scalar_history (power-law-wall-07d-r2-mixed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-19T10:01:39): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-'
+     mapped: column 'drain_model' differs in 24 cell(s); first 'one-loop-measured-pl-v1' vs 'one-loop-inverse-power-v1'
+     P114: column 'ell_min' differs in 11 cell(s); largest change +1.26737 (3.614972272236429 -> 4.882345662379748); first '3.614972272236429' vs '4.882345662379748'
+     P114: column 'all_worst_birth_margin' differs in 11 cell(s); largest change +1.26737 (3.614972272236429 -> 4.882345662379748); first '3.614972272236429' vs '4.882345662379748'
+     P114: column 'all_worst_reflection_margin' differs in 11 cell(s); largest change +1.26691 (3.63552071257854 -> 4.902426137970593); first '3.63552071257854' vs '4.902426137970593'
+     P114: column 'all_worst_tracker_margin' differs in 11 cell(s); largest change +1.19224 (40.118552921509675 -> 41.31079091477362); first '40.118552921509675' vs '41.31079091477362'
+  one-loop-inverse-power-v1/A=0.05/csv/M=0.00097413eV_n=1/data.csv: allowed
+     timing: column 'scalar_compute_time' differs in 3 cell(s); largest change -0.0349772 (4.777646207949147 -> 4.74266895907931); first '14.989633582998067' vs '14.97638054098934'
+     timing: column 'BBN_compute_time' differs in 3 cell(s); largest change -0.194612 (8.82917879219167 -> 8.634566999971867); first '8.005120374960825' vs '7.881415041862056'
+     timing: column 'NP_compute_time' differs in 3 cell(s); largest change +0.000324584 (0.0014285410288721323 -> 0.001753124874085188); first '0.0014629580546170473' vs '0.001671208068728447'
+  one-loop-inverse-power-v1/A=0.05/csv/beta=1.2/M=0.00097413eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 170 cell(s); largest change +1.26737 (3.614972272236429 -> 4.882345662379748); first '41.74518633355932' vs '42.845967634806925'
+     P114: column 'log_k_ex_Mp' differs in 170 cell(s); largest change +1.19224 (-61.559178014873055 -> -60.36694002160911); first '-1.371015048735556' vs '-0.27674059477811663'
+     P114: column 'log_m_Mp' differs in 170 cell(s); largest change -0.0751354 (-65.17415028710948 -> -65.24928568398886); first '-43.116201382294875' vs '-43.122708229585044'
+     P114: column 'log_q_Mp' differs in 170 cell(s); largest change +1.19224 (-24.040021139985242 -> -22.847783146721298); first '16.296836471605573' vs '17.391110925563016'
+     P114: column 'birth_margin' differs in 170 cell(s); largest change +1.26737 (3.614972272236429 -> 4.882345662379748); first '41.74518633355932' vs '42.845967634806925'
+     P114: column 'reflection_margin' differs in 169 cell(s); largest change +1.26691 (3.63552071257854 -> 4.902426137970593); first '42.31252015849209' vs '43.41418643019101'
+     P114: column 'tracker_margin' differs in 170 cell(s); largest change +1.19224 (40.118552921509675 -> 41.31079091477362); first '80.45541053310049' vs '81.54968498705793'
+     P114: column 'reflection_margin_N' differs in 16 cell(s); largest change -0.122184 (35.66278199329338 -> 35.54059762559682); first '35.66278199329338' vs '35.54059762559682'
+  one-loop-inverse-power-v1/A=0.05/csv/beta=1.2/M=0.00097413eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 339 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 170 cell(s); largest change -0.336829 (-20.433101589403485 -> -20.76993086741372); first '-172.67842169953255' vs '-172.62339682031677'
+     measured: column 'k_ex_over_H' differs in 170 cell(s); largest change +2.35934e+37 (1.1873812691430157e+37 -> 3.546725282061326e+37); first '1.1873812691430157e+37' vs '3.546725282061326e+37'
+     measured: column 'n_bar' differs in 169 cell(s); largest change -2.16634e-09 (7.875709073096684e-09 -> 5.709373485398774e-09); first '2.9836518409512727e-76' vs '4.500574616516546e-75'
+     measured: column 'phase_slip' differs in 168 cell(s); largest change +2.81729e+35 (1.4191070176113656e+35 -> 4.2363950778334934e+35); first '1.4191070176113656e+35' vs '4.2363950778334934e+35'
+     measured: column 'backreaction_ratio' differs in 169 cell(s); largest change -0.00486212 (0.038335911430115166 -> 0.0334737928238702); first '7.510486567347866e-21' vs '7.525573744006762e-21'
+  one-loop-inverse-power-v1/A=0.05/csv/beta=1.2/M=0.00097413eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5003 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3085 cell(s); largest change -1.43203e-39 (1.0991291415187249e-38 -> 9.559259082740914e-39); first '1.623314793645504e-75' vs '1.6662119197115637e-75'
+     measured: column 'E_tracker' differs in 3085 cell(s); largest change +2.56186e-39 (9.694613006554406e-38 -> 9.950799322314925e-38); first '9.694613006554406e-38' vs '9.950799322314925e-38'
+     measured: column 'r_chi_E_field' differs in 3085 cell(s); largest change -4.0242e-43 (3.088701872710447e-42 -> 2.6862813763439102e-42); first '6.126842650411978e-79' vs '6.288748364935411e-79'
+     measured: column 'r_chi_E_tracker' differs in 3085 cell(s); largest change +9.66919e-43 (3.6590172577930253e-41 -> 3.755709116451478e-41); first '3.6590172577930253e-41' vs '3.755709116451478e-41'
+  one-loop-inverse-power-v1/A=0.05/csv/beta=2.9/M=0.00097413eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 150 cell(s); largest change +1.10278 (22.22842331367017 -> 23.331208098195933); first '44.631229235643204' vs '45.73187168165361'
+     P114: column 'log_k_ex_Mp' differs in 150 cell(s); largest change +1.09455 (3.2265986665312045 -> 4.321150701359956); first '3.2265986665312045' vs '4.321150701359956'
+     P114: column 'log_m_Mp' differs in 150 cell(s); largest change -0.012105 (-54.63711303386493 -> -54.6492180509467); first '-41.404630569112' vs '-41.410720980293654'
+     P114: column 'log_q_Mp' differs in 150 cell(s); largest change +1.09455 (27.11441861347879 -> 28.20897064830754); first '27.11441861347879' vs '28.20897064830754'
+     P114: column 'birth_margin' differs in 150 cell(s); largest change +1.10278 (22.22842331367017 -> 23.331208098195933); first '44.631229235643204' vs '45.73187168165361'
+     P114: column 'reflection_margin' differs in 149 cell(s); largest change +1.10369 (35.05673286009994 -> 36.160420752531934); first '44.656651059552445' vs '45.75792009208548'
+     P114: column 'tracker_margin' differs in 150 cell(s); largest change +1.09455 (62.646599760469066 -> 63.74115179529782); first '62.646599760469066' vs '63.74115179529782'
+  one-loop-inverse-power-v1/A=0.05/csv/beta=2.9/M=0.00097413eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 299 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 150 cell(s); largest change +0.0694036 (-94.62989323739225 -> -94.56048961212267); first '-184.2212802246668' vs '-184.16736566893627'
+     measured: column 'k_ex_over_H' differs in 150 cell(s); largest change +2.94563e+37 (1.4818200444082254e+37 -> 4.427447030282713e+37); first '1.4818200444082254e+37' vs '4.427447030282713e+37'
+     measured: column 'n_bar' differs in 149 cell(s); largest change +7.64489e-43 (1.3200452146366713e-41 -> 1.3964941036730783e-41); first '8.335368278138575e-81' vs '9.253743764453811e-81'
+     measured: column 'phase_slip' differs in 148 cell(s); largest change +2.55417e+36 (1.285218490403638e+36 -> 3.839384571243694e+36); first '1.285218490403638e+36' vs '3.839384571243694e+36'
+     measured: column 'backreaction_ratio' differs in 149 cell(s); largest change +1.49843e-14 (3.401681780260676e-11 -> 3.403180210397816e-11); first '7.276874598090201e-23' vs '7.297114704720279e-23'
+  one-loop-inverse-power-v1/A=0.05/csv/beta=2.9/M=0.00097413eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5926 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3332 cell(s); largest change +2.09415e-39 (6.273326788004256e-38 -> 6.482742250485152e-38); first '1.0533014499677994e-75' vs '1.0805355722678413e-75'
+     measured: column 'E_tracker' differs in 3332 cell(s); largest change +8.39562e-38 (3.1492339738967486e-36 -> 3.23319016551826e-36); first '1.3318132102375676e-36' vs '1.3662485220369866e-36'
+     measured: column 'r_chi_E_field' differs in 3332 cell(s); largest change +3.9771e-43 (1.1913933884901493e-41 -> 1.2311643434999265e-41); first '5.3087128190695704e-80' vs '5.445974696165402e-80'
+     measured: column 'r_chi_E_tracker' differs in 3332 cell(s); largest change +1.76134e-41 (6.5895531775097494e-40 -> 6.7656867297838904e-40); first '6.712431528514954e-41' vs '6.88598790326771e-41'
+  one-loop-inverse-power-v1/A=0.05/csv/beta=2/M=0.00097413eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 35 cell(s); largest change +1.10657 (15.209779406997185 -> 16.31635182184455); first '43.37346840093173' vs '44.47416910829786'
+     P114: column 'log_k_ex_Mp' differs in 35 cell(s); largest change +1.09444 (1.2227571070559282 -> 2.317192658383094); first '1.2227571070559282' vs '2.317192658383094'
+     P114: column 'log_m_Mp' differs in 35 cell(s); largest change -0.0175573 (-58.73328729640278 -> -58.750844591705004); first '-42.1507112938758' vs '-42.156976449914765'
+     P114: column 'log_q_Mp' differs in 35 cell(s); largest change +1.09444 (21.57485535211689 -> 22.669290903444058); first '21.57485535211689' vs '22.669290903444058'
+     P114: column 'birth_margin' differs in 35 cell(s); largest change +1.10657 (15.209779406997185 -> 16.31635182184455); first '43.37346840093173' vs '44.47416910829786'
+     P114: column 'reflection_margin' differs in 34 cell(s); largest change +1.10826 (22.683839400411777 -> 23.79209655748923); first '43.37731439108953' vs '44.47842241947709'
+     P114: column 'tracker_margin' differs in 35 cell(s); largest change +1.09444 (72.70410332068585 -> 73.79853887201301); first '72.70410332068585' vs '73.79853887201301'
+  one-loop-inverse-power-v1/A=0.05/csv/beta=2/M=0.00097413eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 69 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 35 cell(s); largest change +0.0760622 (-66.57456727521179 -> -66.4985050583468); first '-179.19078656496893' vs '-179.13640607523206'
+     measured: column 'k_ex_over_H' differs in 35 cell(s); largest change +2.62111e+37 (1.3187981190262052e+37 -> 3.9399039989522187e+37); first '1.3187981190262052e+37' vs '3.9399039989522187e+37'
+     measured: column 'n_bar' differs in 34 cell(s); largest change +1.90715e-40 (1.285697298074544e-41 -> 2.035718127804668e-40); first '1.2818321521944325e-78' vs '1.4206089965852687e-78'
+     measured: column 'phase_slip' differs in 33 cell(s); largest change +1.99268e+36 (1.0028779232332123e+36 -> 2.9955571772108716e+36); first '1.0028779232332123e+36' vs '2.9955571772108716e+36'
+     measured: column 'backreaction_ratio' differs in 34 cell(s); largest change -1.48011e-13 (2.8547180204575755e-11 -> 2.8399169152476114e-11); first '2.475467444895746e-22' vs '2.48216936108481e-22'
+  one-loop-inverse-power-v1/A=0.05/csv/beta=2/M=0.00097413eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5437 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3228 cell(s); largest change +3.93675e-44 (1.0560160802549667e-42 -> 1.0953835562932093e-42); first '1.329064464988909e-75' vs '1.3637463762370416e-75'
+     measured: column 'E_tracker' differs in 3228 cell(s); largest change +1.84137e-38 (6.916600240431475e-37 -> 7.100736905310615e-37); first '4.472072120639928e-37' vs '4.588770755257756e-37'
+     measured: column 'r_chi_E_field' differs in 3228 cell(s); largest change +8.36975e-48 (2.245150050836605e-46 -> 2.3288475365862813e-46); first '1.50992360165357e-79' vs '1.5493250285395466e-79'
+     measured: column 'r_chi_E_tracker' differs in 3228 cell(s); largest change +4.6414e-42 (1.7434159885911804e-40 -> 1.7898299484091218e-40); first '5.08063184377404e-41' vs '5.213210832477704e-41'
+  one-loop-inverse-power-v1/A=1/csv/M=0.00097413eV_n=1/data.csv: allowed
+     timing: column 'scalar_compute_time' differs in 3 cell(s); largest change -0.0417753 (2.913190457969904 -> 2.871415124973282); first '2.913190457969904' vs '2.871415124973282'
+     timing: column 'BBN_compute_time' differs in 3 cell(s); largest change +0.138837 (7.883170791901648 -> 8.022007583174855); first '7.883170791901648' vs '8.022007583174855'
+     timing: column 'NP_compute_time' differs in 3 cell(s); largest change +0.000239334 (0.0014698328450322151 -> 0.0017091669142246246); first '0.001613166183233261' vs '0.0018264588434249163'
+  one-loop-inverse-power-v1/A=1/csv/M=2.4353e+12eV_n=1/data.csv: allowed
+     timing: column 'scalar_compute_time' differs in 1 cell(s); largest change +0.00315871 (4.987262875074521 -> 4.990421583876014); first '4.987262875074521' vs '4.990421583876014'
+     timing: column 'BBN_compute_time' differs in 1 cell(s); largest change +0.17713 (8.135461624944583 -> 8.312591457972303); first '8.135461624944583' vs '8.312591457972303'
+     timing: column 'NP_compute_time' differs in 1 cell(s); largest change +6.50829e-05 (0.0015499170403927565 -> 0.001614999957382679); first '0.0015499170403927565' vs '0.001614999957382679'
+  one-loop-inverse-power-v1/A=1/csv/M=2.4353e-06eV_n=1/data.csv: allowed
+     timing: column 'scalar_compute_time' differs in 1 cell(s); largest change -0.0682876 (4.374410124961287 -> 4.306122541194782); first '4.374410124961287' vs '4.306122541194782'
+     timing: column 'BBN_compute_time' differs in 1 cell(s); largest change -0.0287434 (8.568792999954894 -> 8.54004962486215); first '8.568792999954894' vs '8.54004962486215'
+     timing: column 'NP_compute_time' differs in 1 cell(s); largest change +0.000215542 (0.0015284998808056116 -> 0.0017440421506762505); first '0.0015284998808056116' vs '0.0017440421506762505'
+  one-loop-inverse-power-v1/A=1/csv/beta=1.2/M=0.00097413eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 23 cell(s); largest change +1.16347 (6.697585580594783 -> 7.861059938969426); first '41.74518633355932' vs '42.845967634806925'
+     P114: column 'log_k_ex_Mp' differs in 23 cell(s); largest change +1.12343 (-56.86731665313789 -> -55.743885882085635); first '-1.371015048735556' vs '-0.27674059477811663'
+     P114: column 'log_m_Mp' differs in 23 cell(s); largest change -0.0400436 (-63.564902233732674 -> -63.60494582105506); first '-43.116201382294875' vs '-43.122708229585044'
+     P114: column 'log_q_Mp' differs in 23 cell(s); largest change +1.12343 (-21.158670647412556 -> -20.0352398763603); first '16.296836471605573' vs '17.391110925563016'
+     P114: column 'birth_margin' differs in 23 cell(s); largest change +1.16347 (6.697585580594783 -> 7.861059938969426); first '41.74518633355932' vs '42.845967634806925'
+     P114: column 'reflection_margin' differs in 22 cell(s); largest change +1.16113 (6.9498314242094 -> 8.110959627983455); first '42.31505084168999' vs '43.41668418199208'
+     P114: column 'tracker_margin' differs in 23 cell(s); largest change +1.12343 (40.74337038364562 -> 41.866801154697875); first '78.19887750266375' vs '79.29315195662119'
+  one-loop-inverse-power-v1/A=1/csv/beta=1.2/M=0.00097413eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 45 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 23 cell(s); largest change +0.0693034 (-51.72129016560347 -> -51.651986773695015); first '-169.68268942597854' vs '-169.6276645467628'
+     measured: column 'k_ex_over_H' differs in 23 cell(s); largest change +2.35934e+37 (1.1873812691430157e+37 -> 3.546725282061326e+37); first '1.1873812691430157e+37' vs '3.546725282061326e+37'
+     measured: column 'n_bar' differs in 22 cell(s); largest change -3.66442e-15 (6.663030267518572e-14 -> 6.296588023771411e-14); first '5.158876174956128e-75' vs '7.650747662717823e-74'
+     measured: column 'phase_slip' differs in 21 cell(s); largest change +3.00612e+35 (1.5141722859994269e+35 -> 4.520288166892554e+35); first '1.5141722859994269e+35' vs '4.520288166892554e+35'
+     measured: column 'backreaction_ratio' differs in 22 cell(s); largest change -0.000174552 (0.004014375385713147 -> 0.0038398230308916877); first '1.506717029799817e-19' vs '1.5097934640752465e-19'
+  one-loop-inverse-power-v1/A=1/csv/beta=1.2/M=0.00097413eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5003 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3085 cell(s); largest change -4.12336e-42 (2.281562547143708e-40 -> 2.240328995891662e-40); first '1.6231325478327584e-75' vs '1.666024857937284e-75'
+     measured: column 'E_tracker' differs in 3085 cell(s); largest change +2.56143e-39 (9.692977667582772e-38 -> 9.949120768470816e-38); first '9.692977667582772e-38' vs '9.949120768470816e-38'
+     measured: column 'r_chi_E_field' differs in 3085 cell(s); largest change -2.15203e-44 (1.1907748818833728e-42 -> 1.1692545965055928e-42); first '1.2252575256792955e-77' vs '1.2576357352220168e-77'
+     measured: column 'r_chi_E_tracker' differs in 3085 cell(s); largest change +1.93355e-41 (7.316958710060219e-40 -> 7.510313998531856e-40); first '7.316958710060219e-40' vs '7.510313998531856e-40'
+  one-loop-inverse-power-v1/A=1/csv/beta=2.9/M=0.00097413eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 62 cell(s); largest change +1.10227 (24.922562907600973 -> 26.024829544811052); first '44.631229235643204' vs '45.73187168165361'
+     P114: column 'log_k_ex_Mp' differs in 62 cell(s); largest change +1.09455 (3.2265986665312045 -> 4.321150701359956); first '3.2265986665312045' vs '4.321150701359956'
+     P114: column 'log_m_Mp' differs in 62 cell(s); largest change -0.0108194 (-53.05500355940996 -> -53.065822942101995); first '-41.404630569112' vs '-41.410720980293654'
+     P114: column 'log_q_Mp' differs in 62 cell(s); largest change +1.09455 (27.11441861347879 -> 28.20897064830754); first '27.11441861347879' vs '28.20897064830754'
+     P114: column 'birth_margin' differs in 62 cell(s); largest change +1.10227 (24.922562907600973 -> 26.024829544811052); first '44.631229235643204' vs '45.73187168165361'
+     P114: column 'reflection_margin' differs in 61 cell(s); largest change +1.10289 (33.73696406082259 -> 34.839851052307694); first '44.67748830860769' vs '45.77838322553468'
+     P114: column 'tracker_margin' differs in 62 cell(s); largest change +1.09455 (58.60648268132374 -> 59.70103471615249); first '58.60648268132374' vs '59.70103471615249'
+  one-loop-inverse-power-v1/A=1/csv/beta=2.9/M=0.00097413eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 123 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 62 cell(s); largest change +0.0663337 (-102.4063396730349 -> -102.34000599606154); first '-181.22554795111282' vs '-181.1716333953823'
+     measured: column 'k_ex_over_H' differs in 62 cell(s); largest change +2.94563e+37 (1.4818200444082254e+37 -> 4.427447030282713e+37); first '1.4818200444082254e+37' vs '4.427447030282713e+37'
+     measured: column 'n_bar' differs in 61 cell(s); largest change +2.92373e-46 (5.5203199213819085e-45 -> 5.812693261963407e-45); first '1.6633572742728067e-79' vs '1.8483908437005136e-79'
+     measured: column 'phase_slip' differs in 60 cell(s); largest change +2.38552e+36 (1.2003562351256279e+36 -> 3.585873567064482e+36); first '1.2003562351256279e+36' vs '3.585873567064482e+36'
+     measured: column 'backreaction_ratio' differs in 61 cell(s); largest change +3.04838e-14 (2.6920888207221353e-11 -> 2.6951372033924982e-11); first '1.5056858950474326e-21' vs '1.5098747391967857e-21'
+  one-loop-inverse-power-v1/A=1/csv/beta=2.9/M=0.00097413eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5926 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3332 cell(s); largest change +2.62874e-38 (8.223957345089423e-37 -> 8.486831088511015e-37); first '1.0530850757744906e-75' vs '1.0803136035116055e-75'
+     measured: column 'E_tracker' differs in 3332 cell(s); largest change +1.09155e-37 (4.085004494673795e-36 -> 4.194159572906557e-36); first '1.3314028441119501e-36' vs '1.3658275455004059e-36'
+     measured: column 'r_chi_E_field' differs in 3332 cell(s); largest change +9.90623e-41 (3.099145685793899e-39 -> 3.1982079734065617e-39); first '1.0615330682097312e-78' vs '1.0889800269185099e-78'
+     measured: column 'r_chi_E_tracker' differs in 3332 cell(s); largest change +4.21349e-40 (1.5730444646037302e-38 -> 1.6151793987903405e-38); first '1.342083539731004e-39' vs '1.3767844007798758e-39'
+  one-loop-inverse-power-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 37 cell(s); largest change +1.10299 (21.411426078604315 -> 22.514413485540693); first '43.37346840093173' vs '44.47416910829786'
+     P114: column 'log_k_ex_Mp' differs in 37 cell(s); largest change +1.09444 (1.2227571070559282 -> 2.317192658383094); first '1.2227571070559282' vs '2.317192658383094'
+     P114: column 'log_m_Mp' differs in 37 cell(s); largest change -0.0125577 (-55.11604622050661 -> -55.12860396926316); first '-42.1507112938758' vs '-42.156976449914765'
+     P114: column 'log_q_Mp' differs in 37 cell(s); largest change +1.09444 (21.57485535211689 -> 22.669290903444058); first '21.57485535211689' vs '22.669290903444058'
+     P114: column 'birth_margin' differs in 37 cell(s); largest change +1.10299 (21.411426078604315 -> 22.514413485540693); first '43.37346840093173' vs '44.47416910829786'
+     P114: column 'reflection_margin' differs in 36 cell(s); largest change +1.10319 (22.28445338788557 -> 23.387639842407815); first '43.39935585654919' vs '44.5004627211779'
+     P114: column 'tracker_margin' differs in 37 cell(s); largest change +1.09444 (64.2628932041199 -> 65.35732875544707); first '64.2628932041199' vs '65.35732875544707'
+  one-loop-inverse-power-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 73 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 37 cell(s); largest change +0.0704041 (-88.3677299037403 -> -88.29732584141406); first '-176.19505429141495' vs '-176.14067380167808'
+     measured: column 'k_ex_over_H' differs in 37 cell(s); largest change +2.62111e+37 (1.3187981190262052e+37 -> 3.9399039989522187e+37); first '1.3187981190262052e+37' vs '3.9399039989522187e+37'
+     measured: column 'n_bar' differs in 36 cell(s); largest change +2.24747e-41 (3.036580488783783e-40 -> 3.261327249536552e-40); first '2.5550324197473662e-77' vs '2.835812183011046e-77'
+     measured: column 'phase_slip' differs in 35 cell(s); largest change +1.84632e+36 (9.292185682473058e+35 -> 2.7755398260605644e+36); first '9.292185682473058e+35' vs '2.7755398260605644e+36'
+     measured: column 'backreaction_ratio' differs in 36 cell(s); largest change -7.60696e-14 (5.447325902397059e-10 -> 5.446565206865442e-10); first '5.140123416242015e-21' vs '5.154040182117856e-21'
+  one-loop-inverse-power-v1/A=1/csv/beta=2/M=0.00097413eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5437 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3228 cell(s); largest change +6.43833e-42 (1.9010230043412205e-40 -> 1.965406269909246e-40); first '1.329018103109911e-75' vs '1.3636988045457174e-75'
+     measured: column 'E_tracker' differs in 3228 cell(s); largest change +1.98964e-38 (7.474169805194212e-37 -> 7.673133524305814e-37); first '4.4718379113939816e-37' vs '4.588530434326114e-37'
+     measured: column 'r_chi_E_field' differs in 3228 cell(s); largest change +2.67123e-44 (7.887244463287512e-43 -> 8.1543672459788e-43); first '3.0197536081069915e-78' vs '3.098554019514026e-78'
+     measured: column 'r_chi_E_tracker' differs in 3228 cell(s); largest change +9.67476e-41 (3.634371180595065e-39 -> 3.731118782746235e-39); first '1.0160771050599321e-39' vs '1.0425916172655098e-39'
+  one-loop-inverse-power-v1/A=1/csv/beta=2/M=2.4353e+12eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 38 cell(s); largest change +1.10595 (12.02293951206012 -> 13.12888499349669); first '31.52853313960594' vs '32.630007042995906'
+     P114: column 'log_k_ex_Mp' differs in 38 cell(s); largest change +1.09289 (-10.542439476530673 -> -9.44955041730631); first '-10.542439476530673' vs '-9.44955041730631'
+     P114: column 'log_m_Mp' differs in 38 cell(s); largest change -0.0219996 (-53.48510584301667 -> -53.50710542132209); first '-42.070972616136615' vs '-42.07955746030222'
+     P114: column 'log_q_Mp' differs in 38 cell(s); largest change +1.09289 (9.809658768551008 -> 10.90254782777537); first '9.809658768551008' vs '10.90254782777537'
+     P114: column 'birth_margin' differs in 38 cell(s); largest change +1.10595 (12.02293951206012 -> 13.12888499349669); first '31.52853313960594' vs '32.630007042995906'
+     P114: column 'reflection_margin' differs in 37 cell(s); largest change +1.10728 (23.829237227930633 -> 24.936519459487954); first '31.555880716522573' vs '32.65786727358769'
+     P114: column 'tracker_margin' differs in 38 cell(s); largest change +1.09289 (55.843378515871876 -> 56.93626757509624); first '55.843378515871876' vs '56.93626757509624'
+  one-loop-inverse-power-v1/A=1/csv/beta=2/M=2.4353e+12eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 75 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 38 cell(s); largest change +0.0963391 (-50.847820773866594 -> -50.75148169134566); first '-128.82277717943828' vs '-128.76221072129016'
+     measured: column 'k_ex_over_H' differs in 38 cell(s); largest change +2.03196e+32 (1.0247511682664532e+32 -> 3.0567090998400735e+32); first '1.0247511682664532e+32' vs '3.0567090998400735e+32'
+     measured: column 'n_bar' differs in 37 cell(s); largest change +6.49204e-24 (7.557435396089684e-23 -> 8.20663892649081e-23); first '9.564873463568596e-57' vs '1.068407079821106e-56'
+     measured: column 'phase_slip' differs in 36 cell(s); largest change +1.39022e+31 (7.014732023985729e+30 -> 2.0916949318816737e+31); first '7.014732023985729e+30' vs '2.0916949318816737e+31'
+     measured: column 'backreaction_ratio' differs in 37 cell(s); largest change -8.29597e-08 (2.166254402694749e-05 -> 2.15795843317966e-05); first '9.97060254029028e-16' vs '9.987432293620966e-16'
+  one-loop-inverse-power-v1/A=1/csv/beta=2/M=2.4353e+12eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5437 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3228 cell(s); largest change +6.2785e-36 (1.352062924392431e-34 -> 1.4148479502651937e-34); first '2.2011253189558483e-65' vs '2.265560157299615e-65'
+     measured: column 'E_tracker' differs in 3228 cell(s); largest change +7.71236e-36 (2.5464771930758677e-34 -> 2.6236007886459763e-34); first '1.4812453258491758e-34' vs '1.5246066930083285e-34'
+     measured: column 'r_chi_E_field' differs in 3228 cell(s); largest change +3.77468e-38 (8.128691056910885e-37 -> 8.506158753948125e-37); first '6.829122287641408e-68' vs '7.029035208021029e-68'
+     measured: column 'r_chi_E_tracker' differs in 3228 cell(s); largest change +5.10449e-38 (1.6854063859457323e-36 -> 1.7364512572033264e-36); first '4.595651770077236e-37' vs '4.730182992056748e-37'
+  one-loop-inverse-power-v1/A=1/csv/beta=2/M=2.4353e-06eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 31 cell(s); largest change +1.11299 (23.374841974959583 -> 24.487828015323576); first '45.37437976708866' vs '46.474991106591375'
+     P114: column 'log_k_ex_Mp' differs in 31 cell(s); largest change +1.10136 (-31.781583362414334 -> -30.68022628796869); first '3.2123935491017495' vs '4.307013208904012'
+     P114: column 'log_m_Mp' differs in 31 cell(s); largest change -0.011629 (-55.15642533737392 -> -55.168054303292266); first '-42.161986217986914' vs '-42.167977897687365'
+     P114: column 'log_q_Mp' differs in 31 cell(s); largest change +1.10136 (-0.7678694944848026 -> 0.3334875799608419); first '23.564491794162713' vs '24.659111453964975'
+     P114: column 'birth_margin' differs in 31 cell(s); largest change +1.11299 (23.374841974959583 -> 24.487828015323576); first '45.37437976708866' vs '46.474991106591375'
+     P114: column 'reflection_margin' differs in 30 cell(s); largest change +1.1096 (24.901821822636954 -> 26.011417109927343); first '45.39991984649032' vs '46.5009016344918'
+     P114: column 'tracker_margin' differs in 31 cell(s); largest change +1.10136 (41.168305789859446 -> 42.26966286430509); first '65.50066707850696' vs '66.59528673830923'
+  one-loop-inverse-power-v1/A=1/csv/beta=2/M=2.4353e-06eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 61 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 31 cell(s); largest change +0.0588313 (-126.40021081804476 -> -126.34137950984008); first '-184.19784037504056' vs '-184.14419631920407'
+     measured: column 'k_ex_over_H' differs in 31 cell(s); largest change +1.91731e+38 (9.64420530042215e+37 -> 2.8817329005897544e+38); first '9.64420530042215e+37' vs '2.8817329005897544e+38'
+     measured: column 'n_bar' differs in 30 cell(s); largest change +1.38268e-45 (1.6722264987065453e-44 -> 1.8104945759015448e-44); first '8.547879016452916e-81' vs '9.480010849459491e-81'
+     measured: column 'phase_slip' differs in 29 cell(s); largest change +1.35511e+37 (6.817956050354179e+36 -> 2.036907564617556e+37); first '6.817956050354179e+36' vs '2.036907564617556e+37'
+     measured: column 'backreaction_ratio' differs in 30 cell(s); largest change -1.47213e-13 (4.638421893453133e-11 -> 4.623700632888477e-11); first '6.6344915180934515e-22' vs '6.653204460523328e-22'
+  one-loop-inverse-power-v1/A=1/csv/beta=2/M=2.4353e-06eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5437 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3228 cell(s); largest change +2.03264e-43 (1.3430836451746012e-41 -> 1.3634100611925594e-41); first '2.485166112015891e-77' vs '2.549077686716978e-77'
+     measured: column 'E_tracker' differs in 3228 cell(s); largest change +7.3149e-39 (2.793043576685297e-37 -> 2.866192585530893e-37); first '1.6724037859833124e-37' vs '1.7154133695204358e-37'
+     measured: column 'r_chi_E_field' differs in 3228 cell(s); largest change +8.11176e-46 (5.359907269406075e-44 -> 5.441024856808059e-44); first '5.4023493139556726e-80' vs '5.5412827438261484e-80'
+     measured: column 'r_chi_E_tracker' differs in 3228 cell(s); largest change +3.40621e-41 (1.3005908924774744e-39 -> 1.3346529942980419e-39); first '3.635535428468793e-40' vs '3.729031309082914e-40'
+  one-loop-inverse-power-v1/A=10/csv/M=0.00097413eV_n=1/data.csv: allowed
+     timing: column 'scalar_compute_time' differs in 3 cell(s); largest change +0.0526581 (2.0633061667904258 -> 2.115964291151613); first '1.4301829158794135' vs '1.4471214998047799'
+     timing: column 'BBN_compute_time' differs in 3 cell(s); largest change +0.569673 (7.702178375096992 -> 8.271851000143215); first '7.976561208022758' vs '8.25551633303985'
+     timing: column 'NP_compute_time' differs in 3 cell(s); largest change +0.000271666 (0.0015637921169400215 -> 0.001835457980632782); first '0.0014042500406503677' vs '0.001585083082318306'
+  one-loop-inverse-power-v1/A=10/csv/beta=1.2/M=0.00097413eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 7 cell(s); largest change +1.10179 (28.44165781511703 -> 29.54344939912094); first '41.74518633355932' vs '42.845967634806925'
+     P114: column 'log_k_ex_Mp' differs in 7 cell(s); largest change +1.09427 (-1.371015048735556 -> -0.27674059477811663); first '-1.371015048735556' vs '-0.27674059477811663'
+     P114: column 'log_m_Mp' differs in 7 cell(s); largest change -0.00950179 (-50.98319253583708 -> -50.992694322294604); first '-43.116201382294875' vs '-43.122708229585044'
+     P114: column 'log_q_Mp' differs in 7 cell(s); largest change +1.09427 (16.296836471605573 -> 17.391110925563016); first '16.296836471605573' vs '17.391110925563016'
+     P114: column 'birth_margin' differs in 7 cell(s); largest change +1.10179 (28.44165781511703 -> 29.54344939912094); first '41.74518633355932' vs '42.845967634806925'
+     P114: column 'reflection_margin' differs in 6 cell(s); largest change +1.10234 (31.422463727532705 -> 32.52480803802959); first '42.33289014919963' vs '43.43417069919331'
+     P114: column 'tracker_margin' differs in 7 cell(s); largest change +1.09427 (55.29856663673326 -> 56.39284109069071); first '55.29856663673326' vs '56.39284109069071'
+  one-loop-inverse-power-v1/A=10/csv/beta=1.2/M=0.00097413eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 13 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 7 cell(s); largest change +0.0629635 (-114.17571775938627 -> -114.11275425452627); first '-167.3801043329845' vs '-167.32507945376875'
+     measured: column 'k_ex_over_H' differs in 7 cell(s); largest change +2.35934e+37 (1.1873812691430157e+37 -> 3.546725282061326e+37); first '1.1873812691430157e+37' vs '3.546725282061326e+37'
+     measured: column 'n_bar' differs in 6 cell(s); largest change +1.0356e-55 (1.3668045216479449e-55 -> 2.402399719288182e-55); first '4.566192212973855e-74' vs '1.5648775126227466e-73'
+     measured: column 'phase_slip' differs in 5 cell(s); largest change +7.18624e+35 (3.6184095727138076e+35 -> 1.0804647341864822e+36); first '3.6184095727138076e+35' vs '1.0804647341864822e+36'
+     measured: column 'backreaction_ratio' differs in 6 cell(s); largest change +7.63533e-17 (9.18492065693265e-14 -> 9.192555986780946e-14); first '1.512435301712801e-18' vs '1.5160581679243046e-18'
+  one-loop-inverse-power-v1/A=10/csv/beta=1.2/M=0.00097413eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5003 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3085 cell(s); largest change +7.96989e-42 (2.6129478510141395e-40 -> 2.692646781431697e-40); first '1.6210599993780075e-75' vs '1.6638975410711995e-75'
+     measured: column 'E_tracker' differs in 3085 cell(s); largest change +2.55653e-39 (9.674421085424303e-38 -> 9.930073816824357e-38); first '9.674421085424303e-38' vs '9.930073816824357e-38'
+     measured: column 'r_chi_E_field' differs in 3085 cell(s); largest change +4.58247e-43 (1.5023721929706385e-41 -> 1.5481968567971162e-41); first '1.2239963345040563e-76' vs '1.2563412162676862e-76'
+     measured: column 'r_chi_E_tracker' differs in 3085 cell(s); largest change +1.93033e-40 (7.304761052367961e-39 -> 7.49779400997575e-39); first '7.304761052367961e-39' vs '7.49779400997575e-39'
+  one-loop-inverse-power-v1/A=10/csv/beta=2.9/M=0.00097413eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 13 cell(s); largest change +1.10103 (37.48212372623066 -> 38.58314898240925); first '44.631229235643204' vs '45.73187168165361'
+     P114: column 'log_k_ex_Mp' differs in 13 cell(s); largest change +1.09455 (3.2265986665312045 -> 4.321150701359956); first '3.2265986665312045' vs '4.321150701359956'
+     P114: column 'log_m_Mp' differs in 13 cell(s); largest change -0.00723788 (-45.641722771086314 -> -45.648960647988424); first '-41.404630569112' vs '-41.410720980293654'
+     P114: column 'log_q_Mp' differs in 13 cell(s); largest change +1.09455 (27.11441861347879 -> 28.20897064830754); first '27.11441861347879' vs '28.20897064830754'
+     P114: column 'birth_margin' differs in 13 cell(s); largest change +1.10103 (37.48212372623066 -> 38.58314898240925); first '44.631229235643204' vs '45.73187168165361'
+     P114: column 'reflection_margin' differs in 12 cell(s); largest change +1.10107 (38.100965037486176 -> 39.20203939686159); first '44.82981322135147' vs '45.93070140453939'
+     P114: column 'tracker_margin' differs in 13 cell(s); largest change +1.09455 (42.895827896981004 -> 43.990379931809755); first '42.895827896981004' vs '43.990379931809755'
+  one-loop-inverse-power-v1/A=10/csv/beta=2.9/M=0.00097413eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 25 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 13 cell(s); largest change +0.0569732 (-150.33018410983092 -> -150.2732109318913); first '-178.92296285811878' vs '-178.86904830238825'
+     measured: column 'k_ex_over_H' differs in 13 cell(s); largest change +2.94563e+37 (1.4818200444082254e+37 -> 4.427447030282713e+37); first '1.4818200444082254e+37' vs '4.427447030282713e+37'
+     measured: column 'n_bar' differs in 12 cell(s); largest change +4.55544e-68 (8.596929221560652e-67 -> 9.05247282146007e-67); first '1.6027108542429788e-78' vs '1.808510712812708e-78'
+     measured: column 'phase_slip' differs in 11 cell(s); largest change +6.0314e+35 (3.0348901821356766e+35 -> 9.066292997814929e+35); first '3.0348901821356766e+35' vs '9.066292997814929e+35'
+     measured: column 'backreaction_ratio' differs in 12 cell(s); largest change +2.23447e-18 (9.796770302206842e-16 -> 9.819114970660201e-16); first '2.3753614301405973e-20' vs '2.3819857662565522e-20'
+  one-loop-inverse-power-v1/A=10/csv/beta=2.9/M=0.00097413eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5926 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3332 cell(s); largest change +6.695e-36 (2.4593430126054577e-34 -> 2.526292970971822e-34); first '1.050666581824159e-75' vs '1.0778325770735165e-75'
+     measured: column 'E_tracker' differs in 3332 cell(s); largest change +6.695e-36 (2.4593430126054577e-34 -> 2.526292970971822e-34); first '1.3268139850093463e-36' vs '1.3611200370310687e-36'
+     measured: column 'r_chi_E_field' differs in 3332 cell(s); largest change +1.06132e-37 (3.898643960400384e-36 -> 4.004775577460813e-36); first '1.0591908599992898e-77' vs '1.0865772586615052e-77'
+     measured: column 'r_chi_E_tracker' differs in 3332 cell(s); largest change +1.06132e-37 (3.898643960400384e-36 -> 4.004775577460813e-36); first '1.337578704940989e-38' vs '1.3721630891525636e-38'
+  one-loop-inverse-power-v1/A=10/csv/beta=2/M=0.00097413eV_n=1/bounces.csv: allowed
+     P114: column 'ell' differs in 13 cell(s); largest change +1.10111 (36.14328573036163 -> 37.24439946432988); first '43.37346840093173' vs '44.47416910829786'
+     P114: column 'log_k_ex_Mp' differs in 13 cell(s); largest change +1.09444 (1.2227571070559282 -> 2.317192658383094); first '1.2227571070559282' vs '2.317192658383094'
+     P114: column 'log_m_Mp' differs in 13 cell(s); largest change -0.0075026 (-46.43411354956522 -> -46.44161614601942); first '-42.1507112938758' vs '-42.156976449914765'
+     P114: column 'log_q_Mp' differs in 13 cell(s); largest change +1.09444 (21.57485535211689 -> 22.669290903444058); first '21.57485535211689' vs '22.669290903444058'
+     P114: column 'birth_margin' differs in 13 cell(s); largest change +1.10111 (36.14328573036163 -> 37.24439946432988); first '43.37346840093173' vs '44.47416910829786'
+     P114: column 'reflection_margin' differs in 12 cell(s); largest change +1.10117 (36.79844124574194 -> 37.899610699115414); first '43.56958496091035' vs '44.67055146555151'
+     P114: column 'tracker_margin' differs in 13 cell(s); largest change +1.09444 (43.26258808348102 -> 44.357023634808186); first '43.26258808348102' vs '44.357023634808186'
+  one-loop-inverse-power-v1/A=10/csv/beta=2/M=0.00097413eV_n=1/quanta_bounces.csv: measured
+     measured: column 'spectrum_model' differs in 25 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'ln_n_g' differs in 13 cell(s); largest change +0.0576781 (-144.97568343466503 -> -144.91800528967568); first '-173.8924691984209' vs '-173.83808870868404'
+     measured: column 'k_ex_over_H' differs in 13 cell(s); largest change +2.62111e+37 (1.3187981190262052e+37 -> 3.9399039989522187e+37); first '1.3187981190262052e+37' vs '3.9399039989522187e+37'
+     measured: column 'n_bar' differs in 12 cell(s); largest change +9.05676e-66 (1.6646599440544177e-64 -> 1.755227527471908e-64); first '2.4201411492535627e-76' vs '2.746756800527514e-76'
+     measured: column 'phase_slip' differs in 11 cell(s); largest change +4.04493e+35 (2.0357287454381523e+35 -> 6.08065395123326e+35); first '2.0357287454381523e+35' vs '6.08065395123326e+35'
+     measured: column 'backreaction_ratio' differs in 12 cell(s); largest change +9.73805e-18 (4.54067025769492e-15 -> 4.550408302699839e-15); first '8.546933841425203e-20' vs '8.57009802321074e-20'
+  one-loop-inverse-power-v1/A=10/csv/beta=2/M=0.00097413eV_n=1/quanta_samples.csv: measured
+     measured: column 'spectrum_model' differs in 5437 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'E_field' differs in 3228 cell(s); largest change +3.05493e-36 (1.108282252236092e-34 -> 1.1388315555154356e-34); first '1.328496298144051e-75' vs '1.3631633830894673e-75'
+     measured: column 'E_tracker' differs in 3228 cell(s); largest change +3.05493e-36 (1.108282252236092e-34 -> 1.1388315555154356e-34); first '4.469201512212748e-37' vs '4.585825238359752e-37'
+     measured: column 'r_chi_E_field' differs in 3228 cell(s); largest change +9.45609e-38 (3.430526165180165e-36 -> 3.5250870805213295e-36); first '3.0187000505563102e-77' vs '3.097472969399642e-77'
+     measured: column 'r_chi_E_tracker' differs in 3228 cell(s); largest change +9.45609e-38 (3.430526165180165e-36 -> 3.5250870805213295e-36); first '1.0155225008688802e-38' vs '1.0420225406889274e-38'
+  quanta_histories.csv: measured
+     measured: column 'spectrum_model' differs in 11 cell(s); first 'R8-power-n1-v1' vs 'R8-power-n1-v2'
+     measured: column 'drain_model' differs in 11 cell(s); first 'one-loop-measured-pl-v1' vs 'one-loop-inverse-power-v1'
+     measured: column 'delta_stim' differs in 11 cell(s); largest change -6.89202e-12 (2.7308825076645445e-11 -> 2.0416804258885397e-11); first '2.7308825076645445e-11' vs '2.0416804258885397e-11'
+     measured: column 'n_bar_max' differs in 11 cell(s); largest change -2.16634e-09 (7.875709073096684e-09 -> 5.709373485398774e-09); first '7.875709073096684e-09' vs '5.709373485398774e-09'
+     measured: column 'ln_n_g_max' differs in 11 cell(s); largest change -0.336829 (-20.433101589403485 -> -20.76993086741372); first '-20.433101589403485' vs '-20.76993086741372'
+     measured: column 'ln_n_g_median' differs in 11 cell(s); largest change -0.170044 (-26.63334477271578 -> -26.803389074667493); first '-26.63334477271578' vs '-26.803389074667493'
+     measured: column 'E_field_max' differs in 11 cell(s); largest change +6.695e-36 (2.4593430126054577e-34 -> 2.526292970971822e-34); first '1.0991291415187249e-38' vs '9.559259082740914e-39'
+     measured: column 'E_field_today' differs in 11 cell(s); largest change -7.34434e-49 (5.637008927027416e-48 -> 4.902574843090941e-48); first '5.637008927027416e-48' vs '4.902574843090941e-48'
+     measured: column 'r_chi_E_field_max' differs in 11 cell(s); largest change +1.06132e-37 (3.898643960400384e-36 -> 4.004775577460813e-36); first '3.088701872710447e-42' vs '2.6862813763439102e-42'
+     measured: column 'E_tracker_max' differs in 11 cell(s); largest change +7.71236e-36 (2.5464771930758677e-34 -> 2.6236007886459763e-34); first '9.694613006554406e-38' vs '9.950799322314925e-38'
+     measured: column 'E_tracker_today' differs in 11 cell(s); largest change -7.34434e-49 (5.637008927027416e-48 -> 4.902574843090941e-48); first '5.637008927027416e-48' vs '4.902574843090941e-48'
+     measured: column 'r_chi_E_tracker_max' differs in 11 cell(s); largest change +1.06132e-37 (3.898643960400384e-36 -> 4.004775577460813e-36); first '3.6590172577930253e-41' vs '3.755709116451478e-41'
+     measured: column 'phase_slip_min_producing' differs in 11 cell(s); largest change +6.90187e+32 (3.480975115721982e+32 -> 1.0382845615504484e+33); first '3.066015795413602e+23' vs '1.0096097476830266e+24'
+     measured: column 'phase_slip_min' differs in 11 cell(s); largest change +6.90187e+32 (3.480975115721982e+32 -> 1.0382845615504484e+33); first '3.066015795413602e+23' vs '1.0096097476830266e+24'
+     measured: column 'k_ex_over_H_min' differs in 11 cell(s); largest change +9.55866e+33 (4.8140867257621483e+33 -> 1.4372745416588675e+34); first '9.349195144406513e+27' vs '3.0800417714517934e+28'
+     measured: column 'backreaction_max' differs in 11 cell(s); largest change -0.00486212 (0.038335911430115166 -> 0.0334737928238702); first '0.038335911430115166' vs '0.0334737928238702'
+per file name (identical / allowed: timing, masked label, mapped or P114 only / measured / DIFFERENCE):
+  bounces.csv: 0 / 11 / 0 / 0
+  data.csv: 0 / 7 / 0 / 0
+  fields.csv: 17 / 0 / 0 / 0
+  histories.csv: 0 / 1 / 0 / 0
+  quanta_bounces.csv: 0 / 0 / 11 / 0
+  quanta_histories.csv: 0 / 0 / 1 / 0
+  quanta_samples.csv: 0 / 0 / 11 / 0
+columns that differ, by class (file name, column):
+  P114: bounces.csv:'birth_margin', bounces.csv:'ell', bounces.csv:'log_k_ex_Mp', bounces.csv:'log_m_Mp', bounces.csv:'log_q_Mp', bounces.csv:'reflection_margin', bounces.csv:'reflection_margin_N', bounces.csv:'tracker_margin', histories.csv:'all_worst_birth_margin', histories.csv:'all_worst_reflection_margin', histories.csv:'all_worst_tracker_margin', histories.csv:'ell_min'
+  mapped: histories.csv:'drain_model'
+  masked label: histories.csv:'failure_reasons'
+  measured: quanta_bounces.csv:'backreaction_ratio', quanta_bounces.csv:'k_ex_over_H', quanta_bounces.csv:'ln_n_g', quanta_bounces.csv:'n_bar', quanta_bounces.csv:'phase_slip', quanta_bounces.csv:'spectrum_model', quanta_histories.csv:'E_field_max', quanta_histories.csv:'E_field_today', quanta_histories.csv:'E_tracker_max', quanta_histories.csv:'E_tracker_today', quanta_histories.csv:'backreaction_max', quanta_histories.csv:'delta_stim', quanta_histories.csv:'drain_model', quanta_histories.csv:'k_ex_over_H_min', quanta_histories.csv:'ln_n_g_max', quanta_histories.csv:'ln_n_g_median', quanta_histories.csv:'n_bar_max', quanta_histories.csv:'phase_slip_min', quanta_histories.csv:'phase_slip_min_producing', quanta_histories.csv:'r_chi_E_field_max', quanta_histories.csv:'r_chi_E_tracker_max', quanta_histories.csv:'spectrum_model', quanta_samples.csv:'E_field', quanta_samples.csv:'E_tracker', quanta_samples.csv:'r_chi_E_field', quanta_samples.csv:'r_chi_E_tracker', quanta_samples.csv:'spectrum_model'
+  timing: data.csv:'BBN_compute_time', data.csv:'NP_compute_time', data.csv:'scalar_compute_time'
+pairs compared: 59; byte-identical 17; allowed only 19; measured 23; DIFFERENCE 0
+RESULT: no difference outside the timing, masked-label, mapped and P114 columns where the law reads no l; the rest measured

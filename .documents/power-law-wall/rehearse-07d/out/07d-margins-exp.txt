@@ -1,0 +1,53 @@
+A store (07): /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp
+B store (07d): /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp
+A's drain models read through one-loop-measured-pl-v1 -> one-loop-inverse-power-v1, one-loop-measured-v1 -> one-loop-exponential-v2
+A 20 histories, B 20
+
+history                                                                    birth_failing_share            reflection_failing_share               tracker_failing_share                    unassessed_share                  worst_birth_margin             worst_reflection_margin                worst_tracker_margin
+exponential n=1 fixed a=0 M=0.001 b=1.2                                           NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL
+exponential n=1 fixed a=0 M=0.001 b=2                                             NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL
+exponential n=1 fixed a=0 M=0.001 b=2.9                                           NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL
+exponential n=1 fixed a=0.01 M=4e-31 b=1.2                                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000350378 -> 0.000350378 (+0)         21.8445 -> 22.0228 (+0.178)          23.084 -> 23.2508 (+0.167)           50.5137 -> 50.69 (+0.176)
+exponential n=1 fixed a=0.01 M=4e-31 b=2                                           0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)           0.001246 -> 0.001246 (+0)         28.1832 -> 28.3089 (+0.126)         29.1567 -> 29.2777 (+0.121)         46.6073 -> 46.7319 (+0.125)
+exponential n=1 fixed a=0.01 M=4e-31 b=2.9                                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)         0.0012065 -> 0.0012065 (+0)          20.8716 -> 21.0614 (+0.19)          20.8896 -> 21.0794 (+0.19)          48.4385 -> 48.626 (+0.188)
+exponential n=1 fixed a=0.1 M=4e-31 b=1.2                                          0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     9.47669e-05 -> 9.47669e-05 (+0)          20.951 -> 21.1398 (+0.189)          21.8721 -> 22.0524 (+0.18)         51.6666 -> 51.8531 (+0.187)
+exponential n=1 fixed a=0.1 M=4e-31 b=2                                            0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000117947 -> 0.000117947 (+0)          21.6794 -> 21.8596 (+0.18)          21.7102 -> 21.8904 (+0.18)         38.1897 -> 38.3678 (+0.178)
+exponential n=1 fixed a=0.1 M=4e-31 b=2.9                                          0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     6.39152e-05 -> 6.39152e-05 (+0)         27.6177 -> 27.7469 (+0.129)         27.6621 -> 27.7913 (+0.129)         37.7312 -> 37.8593 (+0.128)
+exponential n=1 one-loop-exponential-v2 a=0.05 M=4e-31 b=1.2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)  0.00238044 -> 0.00255092 (+0.00017)         21.8134 -> 21.9908 (+0.177)         22.9028 -> 23.0718 (+0.169)          59.315 -> 59.5825 (+0.267)
+exponential n=1 one-loop-exponential-v2 a=0.05 M=4e-31 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)  0.000349736 -> 0.000590098 (+0.00024)         20.9908 -> 21.1463 (+0.155)         21.0047 -> 21.1615 (+0.157)         47.9516 -> 48.4125 (+0.461)
+exponential n=1 one-loop-exponential-v2 a=0.05 M=4e-31 b=2.9                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)  0.00203579 -> 0.00365817 (+0.00162)          27.3704 -> 27.4903 (+0.12)         27.8946 -> 28.0892 (+0.195)            46.7925 -> 45.697 (-1.1)
+exponential n=1 one-loop-exponential-v2 a=1 M=1e-33 b=2                            0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)  0.000142414 -> 0.000158032 (+1.56e-05)         33.0119 -> 33.1431 (+0.131)         33.9855 -> 33.8824 (-0.103)          44.9408 -> 46.0574 (+1.12)
+exponential n=1 one-loop-exponential-v2 a=1 M=4e-31 b=1.2                          0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)  6.49206e-05 -> 7.79873e-05 (+1.31e-05)         9.34391 -> 9.86029 (+0.516)         9.40952 -> 9.92443 (+0.515)         43.8482 -> 44.3619 (+0.514)
+exponential n=1 one-loop-exponential-v2 a=1 M=4e-31 b=2                            0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)  0.000132577 -> 0.000143726 (+1.11e-05)         21.3859 -> 22.0876 (+0.702)         21.4242 -> 22.1179 (+0.694)         36.9943 -> 36.7703 (-0.224)
+exponential n=1 one-loop-exponential-v2 a=1 M=4e-31 b=2.9                          0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)  4.88862e-05 -> 0.000168547 (+0.00012)         27.2421 -> 27.3998 (+0.158)         27.3083 -> 27.4733 (+0.165)         38.9653 -> 39.6669 (+0.702)
+exponential n=1 one-loop-exponential-v2 a=1 M=1e-15 b=2          0.00797462 -> 0.00797462 (+0)       0.00797462 -> 0.00797462 (+0)                         0 -> 0 (+0)           0.991104 -> 0.991104 (+0)    -0.702882 -> -0.664496 (+0.0384)    -0.143621 -> -0.105235 (+0.0384)        34.7039 -> 34.7423 (+0.0384)
+exponential n=1 one-loop-exponential-v2 a=10 M=4e-31 b=1.2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)  1.63533e-07 -> 1.18704e-07 (-4.48e-08)         29.8231 -> 28.8765 (-0.947)          30.4149 -> 29.3875 (-1.03)         35.9581 -> 35.0528 (-0.905)
+exponential n=1 one-loop-exponential-v2 a=10 M=4e-31 b=2                           0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)  9.46639e-07 -> 1.34879e-06 (+4.02e-07)         30.8876 -> 30.5852 (-0.302)         31.3712 -> 31.0092 (-0.362)         34.2791 -> 33.8226 (-0.456)
+exponential n=1 one-loop-exponential-v2 a=10 M=4e-31 b=2.9                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)  2.97679e-06 -> 3.33986e-06 (+3.63e-07)         31.2549 -> 31.4841 (+0.229)         31.7226 -> 31.8789 (+0.156)          33.252 -> 33.7907 (+0.539)
+
+Per group (potential, n, B's drain model): rose / fell / held / NULL on one side / NULL on both
+  [exponential 1 fixed]
+    birth_failing_share        rose 0, fell 0, held 6, NULL 0, NULL both 3
+    reflection_failing_share   rose 0, fell 0, held 6, NULL 0, NULL both 3
+    tracker_failing_share      rose 0, fell 0, held 6, NULL 0, NULL both 3
+    unassessed_share           rose 0, fell 0, held 6, NULL 0, NULL both 3
+    worst_birth_margin         rose 6, fell 0, held 0, NULL 0, NULL both 3; largest rise +0.1898 (exponential n=1 fixed a=0.01 M=4e-31 b=2.9)
+    worst_reflection_margin    rose 6, fell 0, held 0, NULL 0, NULL both 3; largest rise +0.1898 (exponential n=1 fixed a=0.01 M=4e-31 b=2.9)
+    worst_tracker_margin       rose 6, fell 0, held 0, NULL 0, NULL both 3; largest rise +0.1875 (exponential n=1 fixed a=0.01 M=4e-31 b=2.9)
+  [exponential 1 one-loop-exponential-v2]
+    birth_failing_share        rose 0, fell 0, held 11, NULL 0, NULL both 0
+    reflection_failing_share   rose 0, fell 0, held 11, NULL 0, NULL both 0
+    tracker_failing_share      rose 0, fell 0, held 11, NULL 0, NULL both 0
+    unassessed_share           rose 9, fell 1, held 1, NULL 0, NULL both 0; largest rise +0.001622 (exponential n=1 one-loop-exponential-v2 a=0.05 M=4e-31 b=2.9); largest fall -4.483e-08 (exponential n=1 one-loop-exponential-v2 a=10 M=4e-31 b=1.2)
+    worst_birth_margin         rose 9, fell 2, held 0, NULL 0, NULL both 0; largest rise +0.7017 (exponential n=1 one-loop-exponential-v2 a=1 M=4e-31 b=2); largest fall -0.9467 (exponential n=1 one-loop-exponential-v2 a=10 M=4e-31 b=1.2)
+    worst_reflection_margin    rose 8, fell 3, held 0, NULL 0, NULL both 0; largest rise +0.6937 (exponential n=1 one-loop-exponential-v2 a=1 M=4e-31 b=2); largest fall -1.027 (exponential n=1 one-loop-exponential-v2 a=10 M=4e-31 b=1.2)
+    worst_tracker_margin       rose 7, fell 4, held 0, NULL 0, NULL both 0; largest rise +1.117 (exponential n=1 one-loop-exponential-v2 a=1 M=1e-33 b=2); largest fall -1.095 (exponential n=1 one-loop-exponential-v2 a=0.05 M=4e-31 b=2.9)
+  [all]
+    birth_failing_share        rose 0, fell 0, held 17, NULL 0, NULL both 3
+    reflection_failing_share   rose 0, fell 0, held 17, NULL 0, NULL both 3
+    tracker_failing_share      rose 0, fell 0, held 17, NULL 0, NULL both 3
+    unassessed_share           rose 9, fell 1, held 7, NULL 0, NULL both 3; largest rise +0.001622 (exponential n=1 one-loop-exponential-v2 a=0.05 M=4e-31 b=2.9); largest fall -4.483e-08 (exponential n=1 one-loop-exponential-v2 a=10 M=4e-31 b=1.2)
+    worst_birth_margin         rose 15, fell 2, held 0, NULL 0, NULL both 3; largest rise +0.7017 (exponential n=1 one-loop-exponential-v2 a=1 M=4e-31 b=2); largest fall -0.9467 (exponential n=1 one-loop-exponential-v2 a=10 M=4e-31 b=1.2)
+    worst_reflection_margin    rose 14, fell 3, held 0, NULL 0, NULL both 3; largest rise +0.6937 (exponential n=1 one-loop-exponential-v2 a=1 M=4e-31 b=2); largest fall -1.027 (exponential n=1 one-loop-exponential-v2 a=10 M=4e-31 b=1.2)
+    worst_tracker_margin       rose 13, fell 4, held 0, NULL 0, NULL both 3; largest rise +1.117 (exponential n=1 one-loop-exponential-v2 a=1 M=1e-33 b=2); largest fall -1.095 (exponential n=1 one-loop-exponential-v2 a=0.05 M=4e-31 b=2.9)
+RESULT: every history matched once each way; measured

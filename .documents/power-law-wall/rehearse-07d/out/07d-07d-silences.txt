@@ -1,0 +1,338 @@
+=== var/power-law-wall/07d-r2/runs/r2-exp-a.beats
+  records: 99 log lines, 21 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-exp-a.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:30:03+00:00 running; final status: hb 2026-11-19 09:33:06+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 32 s, from hb 09:30:03 (running, stage: Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db" with 16 shards) to hb 09:30:35 (running, stage: BUILDING GRID OF MODELS TO SAMPLE)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 31.756 s, 09:30:03.881 -> 09:30:35.637
+         after: >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.502 s, 09:30:35.637 -> 09:30:36.139
+         after: (Datastore pid=48783) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+         before: 
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 20.156 s, 09:31:32.165 -> 09:31:52.321
+         after: ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+         before:    -- ALL WORK ITEMS COMPLETE in time 20s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.009 s, 09:31:52.321 -> 09:31:53.330
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.961s
+      CALCULATE BBN DATA: 24.691 s, 09:32:42.285 -> 09:33:06.976
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: (Datastore pid=48883) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:30:35.637, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 19.148 s (09:30:36.139 -> 09:30:55.287; line: -- ALL WORK ITEMS COMPLETE in time 19.4s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.005 s (09:30:55.287 -> 09:30:56.292; line: -- ALL WORK ITEMS COMPLETE in time 1s)
+      CALCULATE BBN DATA: 11.603 s (09:30:56.292 -> 09:31:07.895; line: -- ALL WORK ITEMS COMPLETE in time 11.7s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-exp-b.beats
+  records: 33 log lines, 8 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-exp-b.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:33:19+00:00 running; final status: hb 2026-11-19 09:34:49+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 42 s, from hb 09:33:32 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 09:34:14 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.581 s, 09:33:22.240 -> 09:33:32.821
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 09:33:32.821 -> 09:33:32.821
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 41.822 s, 09:33:32.821 -> 09:34:14.643
+         after: (Datastore pid=49308) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+         before:    -- ALL WORK ITEMS COMPLETE in time 42s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.010 s, 09:34:14.643 -> 09:34:15.653
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.751s
+      CALCULATE BBN DATA: 24.694 s, 09:34:25.740 -> 09:34:50.434
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:33:32.821, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 41.822 s (09:33:32.821 -> 09:34:14.643; line: -- ALL WORK ITEMS COMPLETE in time 42s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.010 s (09:34:14.643 -> 09:34:15.653; line: -- ALL WORK ITEMS COMPLETE in time 0.751s)
+      CALCULATE BBN DATA: 10.086 s (09:34:15.653 -> 09:34:25.739; line: -- ALL WORK ITEMS COMPLETE in time 10.4s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-exp-c.beats
+  records: 36 log lines, 8 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-exp-c.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:35:00+00:00 running; final status: hb 2026-11-19 09:35:58+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 24 s, from hb 09:35:34 (running, stage: CALCULATE BBN DATA, all work items complete) to hb 09:35:58 (done, stage: CALCULATE BBN DATA, all work items complete)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.584 s, 09:35:02.712 -> 09:35:13.296
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 09:35:13.297 -> 09:35:13.297
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 6.545 s, 09:35:13.297 -> 09:35:19.842
+         after: (Datastore pid=49555) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+         before: (compute_scalar_history pid=49576) !! tune_history (power-law-wall-07d-r2-exp-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-19T09:35:13): dis
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.008 s, 09:35:24.368 -> 09:35:25.376
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.823s
+      CALCULATE BBN DATA: 24.197 s, 09:35:34.950 -> 09:35:59.147
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:35:13.297, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 11.071 s (09:35:13.297 -> 09:35:24.368; line: -- ALL WORK ITEMS COMPLETE in time 10.9s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.008 s (09:35:24.368 -> 09:35:25.376; line: -- ALL WORK ITEMS COMPLETE in time 0.823s)
+      CALCULATE BBN DATA: 9.573 s (09:35:25.377 -> 09:35:34.950; line: -- ALL WORK ITEMS COMPLETE in time 9.74s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-mixed-a.beats
+  records: 180 log lines, 35 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-mixed-a.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:55:26+00:00 running; final status: hb 2026-11-19 10:00:20+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 29 s, from hb 09:55:27 (running, stage: Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db" with 16 shards) to hb 09:55:56 (running, stage: BUILDING GRID OF MODELS TO SAMPLE)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 29.753 s, 09:55:27.292 -> 09:55:57.045
+         after: >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.503 s, 09:55:57.046 -> 09:55:57.549
+         after:    -- total number of models to integrate = 6 (exponential 3, inverse-power 3)
+         before: (Datastore pid=52871) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 22.665 s, 09:58:42.898 -> 09:59:05.563
+         after: ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+         before:    -- ALL WORK ITEMS COMPLETE in time 22.4s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.009 s, 09:57:28.804 -> 09:57:29.813
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.78s
+      CALCULATE BBN DATA: 25.347 s, 09:59:55.074 -> 10:00:20.421
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: (Datastore pid=52940) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:55:57.046, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 16.627 s (09:55:57.550 -> 09:56:14.177; line: -- ALL WORK ITEMS COMPLETE in time 16.7s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.008 s (09:56:14.177 -> 09:56:15.185; line: -- ALL WORK ITEMS COMPLETE in time 0.798s)
+      CALCULATE BBN DATA: 10.577 s (09:56:15.185 -> 09:56:25.762; line: -- ALL WORK ITEMS COMPLETE in time 10.6s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-mixed-b.beats
+  records: 67 log lines, 11 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-mixed-b.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 10:00:30+00:00 running; final status: hb 2026-11-19 10:02:15+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 42 s, from hb 10:00:45 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 10:01:27 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 11.606 s, 10:00:33.351 -> 10:00:44.957
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.514 s, 10:00:44.960 -> 10:00:45.474
+         after:    -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+         before:    -- populated M sample grid with 1 value = [ 0.001 Mp ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 42.317 s, 10:00:45.475 -> 10:01:27.792
+         after: (Datastore pid=53758) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+         before:    -- ALL WORK ITEMS COMPLETE in time 42.4s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.503 s, 10:01:27.792 -> 10:01:28.295
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.748s
+      CALCULATE BBN DATA: 24.174 s, 10:01:51.477 -> 10:02:15.651
+         after: -- BBNData: 3 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 10:00:44.959, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 42.317 s (10:00:45.475 -> 10:01:27.792; line: -- ALL WORK ITEMS COMPLETE in time 42.4s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.503 s (10:01:27.792 -> 10:01:28.295; line: -- ALL WORK ITEMS COMPLETE in time 0.748s)
+      CALCULATE BBN DATA: 10.578 s (10:01:28.295 -> 10:01:38.873; line: -- ALL WORK ITEMS COMPLETE in time 10.5s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-mixed-c.beats
+  records: 53 log lines, 11 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-mixed-c.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 10:02:25+00:00 running; final status: hb 2026-11-19 10:03:43+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 24 s, from hb 10:03:19 (running, stage: CALCULATE BBN DATA, all work items complete) to hb 10:03:43 (done, stage: CALCULATE BBN DATA, all work items complete)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.081 s, 10:02:28.538 -> 10:02:38.619
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 10:02:38.619 -> 10:02:38.619
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 9.057 s, 10:03:00.776 -> 10:03:09.833
+         after: ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+         before:    -- ALL WORK ITEMS COMPLETE in time 9.12s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.007 s, 10:02:49.702 -> 10:02:50.709
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.906s
+      CALCULATE BBN DATA: 24.685 s, 10:03:19.903 -> 10:03:44.588
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 10:02:38.619, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 11.083 s (10:02:38.619 -> 10:02:49.702; line: -- ALL WORK ITEMS COMPLETE in time 11.2s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.007 s (10:02:49.702 -> 10:02:50.709; line: -- ALL WORK ITEMS COMPLETE in time 0.906s)
+      CALCULATE BBN DATA: 10.067 s (10:02:50.709 -> 10:03:00.776; line: -- ALL WORK ITEMS COMPLETE in time 10s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-pl-a.beats
+  records: 99 log lines, 20 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-pl-a.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:37:11+00:00 running; final status: hb 2026-11-19 09:40:20+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 28 s, from hb 09:37:12 (running, stage: Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db" with 16 shards) to hb 09:37:40 (running, stage: BUILDING GRID OF MODELS TO SAMPLE)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 28.240 s, 09:37:12.464 -> 09:37:40.704
+         after: >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.501 s, 09:37:40.704 -> 09:37:41.205
+         after:    -- total number of models to integrate = 6
+         before: (Datastore pid=49971) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 24.182 s, 09:38:35.133 -> 09:38:59.315
+         after: ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+         before:    -- ALL WORK ITEMS COMPLETE in time 24.2s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.515 s, 09:38:24.038 -> 09:38:25.553
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.18s
+      CALCULATE BBN DATA: 24.187 s, 09:39:56.846 -> 09:40:21.033
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: (Datastore pid=50042) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:37:40.704, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 17.629 s (09:37:41.206 -> 09:37:58.835; line: -- ALL WORK ITEMS COMPLETE in time 17.7s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.007 s (09:37:58.835 -> 09:37:59.842; line: -- ALL WORK ITEMS COMPLETE in time 1.06s)
+      CALCULATE BBN DATA: 11.090 s (09:37:59.842 -> 09:38:10.932; line: -- ALL WORK ITEMS COMPLETE in time 11.2s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-pl-b.beats
+  records: 58 log lines, 9 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-pl-b.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:40:37+00:00 running; final status: hb 2026-11-19 09:43:00+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 54 s, from hb 09:41:30 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 09:42:24 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.581 s, 09:40:40.156 -> 09:40:50.737
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 09:40:50.737 -> 09:40:50.737
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model InversePowerModel, V = V0 [1 + (M/phi)^n], with n = [ 1, 2 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 53.918 s, 09:41:31.072 -> 09:42:24.990
+         after: (compute_scalar_history pid=50636) !! phi is not positive in InversePowerModel log_V at phi=-2.2062e-05 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=
+         before:    -- ALL WORK ITEMS COMPLETE in time 1m 34.6s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.004 s, 09:42:24.991 -> 09:42:25.995
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.827s
+      CALCULATE BBN DATA: 24.696 s, 09:42:36.571 -> 09:43:01.267
+         after: -- BBNData: 3 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:40:50.737, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 94.253 s (09:40:50.737 -> 09:42:24.990; line: -- ALL WORK ITEMS COMPLETE in time 1m 34.6s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.004 s (09:42:24.991 -> 09:42:25.995; line: -- ALL WORK ITEMS COMPLETE in time 0.827s)
+      CALCULATE BBN DATA: 10.576 s (09:42:25.995 -> 09:42:36.571; line: -- ALL WORK ITEMS COMPLETE in time 10.5s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-pl-c.beats
+  records: 34 log lines, 9 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-pl-c.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:43:13+00:00 running; final status: hb 2026-11-19 09:44:26+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 24 s, from hb 09:44:02 (running, stage: CALCULATE BBN DATA, all work items complete) to hb 09:44:26 (done, stage: CALCULATE BBN DATA, all work items complete)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 11.087 s, 09:43:16.702 -> 09:43:27.789
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.503 s, 09:43:27.789 -> 09:43:28.292
+         after:    -- total number of models to integrate = 4
+         before: 
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 14.112 s, 09:43:28.292 -> 09:43:42.404
+         after: (Datastore pid=51014) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+         before:    -- ALL WORK ITEMS COMPLETE in time 14.2s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.514 s, 09:43:42.404 -> 09:43:43.918
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.69s
+      CALCULATE BBN DATA: 25.250 s, 09:44:02.048 -> 09:44:27.298
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:43:27.789, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 14.112 s (09:43:28.292 -> 09:43:42.404; line: -- ALL WORK ITEMS COMPLETE in time 14.2s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.514 s (09:43:42.404 -> 09:43:43.918; line: -- ALL WORK ITEMS COMPLETE in time 1.69s)
+      CALCULATE BBN DATA: 18.129 s (09:43:43.919 -> 09:44:02.048; line: -- ALL WORK ITEMS COMPLETE in time 18.3s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-pl-resumed-a.beats
+  records: 57 log lines, 12 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-pl-resumed-a.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:45:27+00:00 running; final status: hb 2026-11-19 09:47:36+00:00 killed (CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID)
+  (a) longest heartbeat silence: 30 s, from hb 09:45:28 (running, stage: Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db" with 16 shards) to hb 09:45:58 (running, stage: BUILDING GRID OF MODELS TO SAMPLE)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 29.945 s, 09:45:28.533 -> 09:45:58.478
+         after: >> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.506 s, 09:45:58.478 -> 09:45:58.984
+         after:    -- total number of models to integrate = 6
+         before: (Datastore pid=51289) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 25.355 s, 09:47:11.511 -> 09:47:36.866
+         after: ** SIGTERM: main.py ended with SystemExit(1); recording killed, exit code 143
+         before: (Datastore pid=51348) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.011 s, 09:46:17.765 -> 09:46:18.776
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.04s
+      CALCULATE BBN DATA: 11.146 s, 09:46:18.776 -> 09:46:29.922
+         after: ** CALCULATE BBN DATA
+         before:    -- ALL WORK ITEMS COMPLETE in time 11s
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:45:58.478, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 18.781 s (09:45:58.984 -> 09:46:17.765; line: -- ALL WORK ITEMS COMPLETE in time 19.1s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.011 s (09:46:17.765 -> 09:46:18.776; line: -- ALL WORK ITEMS COMPLETE in time 1.04s)
+      CALCULATE BBN DATA: 11.146 s (09:46:18.776 -> 09:46:29.922; line: -- ALL WORK ITEMS COMPLETE in time 11s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-pl-resumed-a2.beats
+  records: 118 log lines, 15 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-pl-resumed-a2.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:48:28+00:00 running; final status: hb 2026-11-19 09:50:31+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 27 s, from hb 09:48:44 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 09:49:11 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 10.142 s, 09:48:33.545 -> 09:48:43.687
+         after: (Datastore pid=51701)      ** Note: these values have been pruned from the datastore.
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 09:48:43.687 -> 09:48:43.687
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model InversePowerModel, V = V0 [1 + (M/phi)^n], with n = [ 1, 2 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 27.354 s, 09:48:44.195 -> 09:49:11.549
+         after: ** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+         before:    -- ALL WORK ITEMS COMPLETE in time 27.2s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.015 s, 09:49:11.550 -> 09:49:12.565
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.15s
+      CALCULATE BBN DATA: 24.696 s, 09:50:07.086 -> 09:50:31.782
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:48:43.687, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 0.000 s (09:48:43.687 -> 09:48:43.687; line: -- ALL WORK ITEMS COMPLETE in time 0.0202s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.508 s (09:48:43.687 -> 09:48:44.195; line: -- ALL WORK ITEMS COMPLETE in time 0.225s)
+      CALCULATE BBN DATA: 0.000 s (09:48:44.195 -> 09:48:44.195; line: -- ALL WORK ITEMS COMPLETE in time 0.043s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-pl-resumed-b.beats
+  records: 58 log lines, 9 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-pl-resumed-b.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:50:51+00:00 running; final status: hb 2026-11-19 09:53:17+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 53 s, from hb 09:51:47 (running, stage: CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID) to hb 09:52:40 (running, stage: CALCULATE ADIABATIC TRANSGRESSION PARAMETERS)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 12.603 s, 09:50:54.397 -> 09:51:07.000
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.000 s, 09:51:07.000 -> 09:51:07.000
+         after: ** BUILDING GRID OF MODELS TO SAMPLE
+         before:    -- using model InversePowerModel, V = V0 [1 + (M/phi)^n], with n = [ 1, 2 ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 52.923 s, 09:51:47.796 -> 09:52:40.719
+         after: (compute_scalar_history pid=52105) !! phi is not positive in InversePowerModel log_V at phi=-2.2062e-05 Mp, M=2.4353e+24 eV, n=2 (InversePowerModel(M=0.001Mp,n=
+         before:    -- ALL WORK ITEMS COMPLETE in time 1m 33.5s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.503 s, 09:52:40.720 -> 09:52:41.223
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 0.799s
+      CALCULATE BBN DATA: 26.211 s, 09:52:52.301 -> 09:53:18.512
+         after: -- BBNData: 3 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:51:07.000, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 93.719 s (09:51:07.000 -> 09:52:40.719; line: -- ALL WORK ITEMS COMPLETE in time 1m 33.5s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 0.503 s (09:52:40.720 -> 09:52:41.223; line: -- ALL WORK ITEMS COMPLETE in time 0.799s)
+      CALCULATE BBN DATA: 11.078 s (09:52:41.223 -> 09:52:52.301; line: -- ALL WORK ITEMS COMPLETE in time 11.1s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):
+=== var/power-law-wall/07d-r2/runs/r2-pl-resumed-c.beats
+  records: 34 log lines, 9 status changes; first X: recorder started: log /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/runs/r2-pl-resumed-c.log, runs /Users/ds283/Documents/Code/ChamPBH/var/runs, poll 0.5 s; last X: exit: the launcher's line was seen; status.json read once more
+  first status: hb 2026-11-19 09:53:30+00:00 running; final status: hb 2026-11-19 09:54:46+00:00 done (CALCULATE BBN DATA, all work items complete)
+  (a) longest heartbeat silence: 27 s, from hb 09:54:19 (running, stage: CALCULATE BBN DATA, all work items complete) to hb 09:54:46 (done, stage: CALCULATE BBN DATA, all work items complete)
+  (b) longest gap between log lines, per stage (the stage in force at the earlier line):
+      start: 11.588 s, 09:53:33.537 -> 09:53:45.125
+         after: >> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db" with 16 shards
+         before: 
+      BUILDING GRID OF MODELS TO SAMPLE: 0.502 s, 09:53:45.125 -> 09:53:45.627
+         after:    -- populated beta sample grid with 1 value = [ 2 ]
+         before:    -- populated M sample grid with 2 values = [ 2.4353e-06 eV, 2435.3 GeV ]
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 14.118 s, 09:53:45.627 -> 09:53:59.745
+         after: (Datastore pid=52292) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038)
+         before:    -- ALL WORK ITEMS COMPLETE in time 14.4s
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.513 s, 09:53:59.745 -> 09:54:01.258
+         after: ** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+         before:    -- ALL WORK ITEMS COMPLETE in time 1.63s
+      CALCULATE BBN DATA: 26.707 s, 09:54:19.896 -> 09:54:46.603
+         after: -- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+         before: ** driver exit status 0
+  (c) stage times (banner's arrival -> its ALL WORK ITEMS COMPLETE line's):
+      BUILDING GRID OF MODELS TO SAMPLE: banner at 09:53:45.125, no completion line
+      CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID: 14.118 s (09:53:45.627 -> 09:53:59.745; line: -- ALL WORK ITEMS COMPLETE in time 14.4s)
+      CALCULATE ADIABATIC TRANSGRESSION PARAMETERS: 1.513 s (09:53:59.745 -> 09:54:01.258; line: -- ALL WORK ITEMS COMPLETE in time 1.63s)
+      CALCULATE BBN DATA: 18.637 s (09:54:01.258 -> 09:54:19.895; line: -- ALL WORK ITEMS COMPLETE in time 18.6s)
+  (d) per history (tune lines; sum of wall=; last tune line after the scalar banner):

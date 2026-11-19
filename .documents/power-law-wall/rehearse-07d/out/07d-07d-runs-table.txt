@@ -1,0 +1,17 @@
+tip main.py (git show 00fb718:main.py) sha256 2705636433a750115d1c2628e040dcee25c576ed94fec006c273b648a8d6fb87
+| Run id | Slug | Store | pid | State | Exit | Launched -> ended (UTC) | Wall | Load at launch | git_head | git_dirty | script_sha256 | Fingerprint at finish (format, digest, taken) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `power-law-wall-07d-r2-exp-a-20261119T093002` | `r2-exp-a` | exp | 48835 | `done` | 0 | 09:30:01 -> 09:33:07 | 3 min 6 s | 8.72 | `00fb718` | true | `27056364…fb87` | 8, `2a04e031…f8f5`, 09:32:42 |
+| `power-law-wall-07d-r2-exp-b-20261119T093319` | `r2-exp-b` | exp | 49263 | `done` | 0 | 09:33:18 -> 09:34:50 | 1 min 32 s | 11.38 | `00fb718` | true | `27056364…fb87` | 8, `95149df6…be3b`, 09:34:25 |
+| `power-law-wall-07d-r2-exp-c-20261119T093500` | `r2-exp-c` | exp | 49473 | `done` | 0 | 09:34:59 -> 09:35:58 | 0 min 60 s | 7.06 | `00fb718` | true | `27056364…fb87` | 8, `17b288e7…c14c`, 09:35:34 |
+| `power-law-wall-07d-r2-pl-a-20261119T093711` | `r2-pl-a` | pl | 49906 | `done` | 0 | 09:37:10 -> 09:40:21 | 3 min 11 s | 3.52 | `00fb718` | true | `27056364…fb87` | 8, `6a1fab35…e2f9`, 09:39:57 |
+| `power-law-wall-07d-r2-pl-b-20261119T094037` | `r2-pl-b` | pl | 50508 | `done` | 0 | 09:40:35 -> 09:43:01 | 2 min 26 s | 6.55 | `00fb718` | true | `27056364…fb87` | 8, `372a5306…f365`, 09:42:36 |
+| `power-law-wall-07d-r2-pl-c-20261119T094313` | `r2-pl-c` | pl | 50924 | `done` | 0 | 09:43:11 -> 09:44:27 | 1 min 16 s | 16.75 | `00fb718` | true | `27056364…fb87` | 8, `152f04f7…50be`, 09:44:02 |
+| `power-law-wall-07d-r2-pl-resumed-a-20261119T094527` | `r2-pl-resumed-a` | pl-resumed | 51274 | `killed` | 143 | 09:45:23 -> 09:47:37 | 2 min 14 s | 24.62 | `00fb718` | true | `27056364…fb87` | 8, `e38e4a3c…2bd0`, 09:47:11 |
+| `power-law-wall-07d-r2-pl-resumed-a2-20261119T094827` | `r2-pl-resumed-a2` | pl-resumed | 51683 | `done` | 0 | 09:48:23 -> 09:50:31 | 2 min 9 s | 30.53 | `00fb718` | true | `27056364…fb87` | 8, `6a1fab35…e2f9`, 09:50:07 |
+| `power-law-wall-07d-r2-pl-resumed-b-20261119T095051` | `r2-pl-resumed-b` | pl-resumed | 52005 | `done` | 0 | 09:50:47 -> 09:53:18 | 2 min 31 s | 15.76 | `00fb718` | true | `27056364…fb87` | 8, `372a5306…f365`, 09:52:53 |
+| `power-law-wall-07d-r2-pl-resumed-c-20261119T095330` | `r2-pl-resumed-c` | pl-resumed | 52220 | `done` | 0 | 09:53:29 -> 09:54:46 | 1 min 18 s | 6.93 | `00fb718` | true | `27056364…fb87` | 8, `152f04f7…50be`, 09:54:20 |
+| `power-law-wall-07d-r2-mixed-a-20261119T095526` | `r2-mixed-a` | mixed | 52857 | `done` | 0 | 09:55:25 -> 10:00:20 | 4 min 56 s | 11.24 | `00fb718` | true | `27056364…fb87` | 8, `d7afbadf…3934`, 09:59:54 |
+| `power-law-wall-07d-r2-mixed-b-20261119T100030` | `r2-mixed-b` | mixed | 53684 | `done` | 0 | 10:00:29 -> 10:02:15 | 1 min 47 s | 24.88 | `00fb718` | true | `27056364…fb87` | 8, `4f2d8767…f8ad`, 10:01:51 |
+| `power-law-wall-07d-r2-mixed-c-20261119T100225` | `r2-mixed-c` | mixed | 53969 | `done` | 0 | 10:02:24 -> 10:03:44 | 1 min 20 s | 10.24 | `00fb718` | true | `27056364…fb87` | 8, `477755a5…b8b8`, 10:03:19 |
+manifests whose git_head or script hash is not the tip's: 0

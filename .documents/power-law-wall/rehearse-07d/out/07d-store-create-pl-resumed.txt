@@ -1,0 +1,19 @@
+>> create: /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.manifest.json
+{
+  "created": "2026-11-19T09:54:57+00:00",
+  "datastore": "power-law-wall-07d-r2-pl-resumed.db",
+  "history": [
+    {
+      "from": null,
+      "git_dirty": true,
+      "git_head": "00fb7188e54d6175537e2158b17827a3eed81788",
+      "operation": "create",
+      "to": "var/datastores/power-law-wall-07d-r2-pl-resumed.db",
+      "when": "2026-11-19T09:54:57+00:00"
+    }
+  ],
+  "name": "power-law-wall-07d-r2-pl-resumed",
+  "purpose": "power-law-wall 07d R2 (restart): the power law at n 1 2 at the tip, one k_ex, 07's pl grid built interrupted and resumed (runs a killed, a2, b, c; 40 histories)",
+  "sidecar_format": 1,
+  "store_id": "2a9064f9cc1b4fc38ed0a6ace6f6553a"
+}

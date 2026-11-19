@@ -1,0 +1,15 @@
+--- rehearse-07/wait_for_line.py	2026-11-16 18:52:58
++++ rehearse-07d/wait_for_line.py	2026-11-19 07:44:49
+@@ -1,8 +1,9 @@
+ """
+-power-law-wall prompt 07: copied from one-loop-drain 06's (.documents/one-loop-drain/rehearse-06/wait_for_line.py), with
++power-law-wall prompt 07d: copied from power-law-wall 07's .documents/power-law-wall/rehearse-07/wait_for_line.py, with only
++its paths (rehearse-07d/, var/power-law-wall/07d-r2/) and this sentence changed; 07's was copied from one-loop-drain 06's (.documents/one-loop-drain/rehearse-06/wait_for_line.py), with
+ this paragraph replacing 06's. Run from this worktree's root as
+-`./venv/bin/python .documents/power-law-wall/rehearse-07/wait_for_line.py LOG TEXT --timeout S`, LOG under
+-var/power-law-wall/07/runs/; it reads LOG only and writes nothing but stdout.
++`./venv/bin/python .documents/power-law-wall/rehearse-07d/wait_for_line.py LOG TEXT --timeout S`, LOG under
++var/power-law-wall/07d-r2/runs/; it reads LOG only and writes nothing but stdout.
+ 
+ Wait until LOG holds a line containing TEXT (rrk-adoption prompt 04, the orchestrator's note for
+ 04, section 0 ruling 3). Reads LOG only: no pgrep, no kill -0, no Ray, and nothing started.

@@ -1,0 +1,89 @@
+A store (07): /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-pl
+B store (07d): /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl
+A's drain models read through one-loop-measured-pl-v1 -> one-loop-inverse-power-v1, one-loop-measured-v1 -> one-loop-exponential-v2
+A 40 histories, B 40
+
+history                                                                    birth_failing_share            reflection_failing_share               tracker_failing_share                    unassessed_share                  worst_birth_margin             worst_reflection_margin                worst_tracker_margin
+inverse-power n=1 fixed a=0 M=0.001 b=1.2                   failure A True B True
+inverse-power n=1 fixed a=0 M=0.001 b=2                     failure A True B True
+inverse-power n=1 fixed a=0 M=0.001 b=2.9                   failure A True B True
+inverse-power n=1 fixed a=0.01 M=4e-31 b=1.2                                       0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000350378 -> 0.000350378 (+0)           26.4035 -> 27.5056 (+1.1)           28.1182 -> 29.2206 (+1.1)          55.0254 -> 56.1172 (+1.09)
+inverse-power n=1 fixed a=0.01 M=4e-31 b=2                                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)           0.001246 -> 0.001246 (+0)           35.6155 -> 36.7167 (+1.1)           36.6706 -> 37.7743 (+1.1)          53.9805 -> 55.0741 (+1.09)
+inverse-power n=1 fixed a=0.01 M=4e-31 b=2.9                                       0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)         0.0012065 -> 0.0012065 (+0)           25.0272 -> 26.1294 (+1.1)            25.045 -> 26.1473 (+1.1)          52.5486 -> 53.6401 (+1.09)
+inverse-power n=1 fixed a=0.1 M=4e-31 b=1.2                                        0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     9.47669e-05 -> 9.47669e-05 (+0)            25.139 -> 26.2412 (+1.1)            26.365 -> 27.4675 (+1.1)          55.8091 -> 56.9006 (+1.09)
+inverse-power n=1 fixed a=0.1 M=4e-31 b=2                                          0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000117947 -> 0.000117947 (+0)           26.1692 -> 27.2713 (+1.1)           26.1998 -> 27.3019 (+1.1)          42.6288 -> 43.7206 (+1.09)
+inverse-power n=1 fixed a=0.1 M=4e-31 b=2.9                                        0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     6.39152e-05 -> 6.39152e-05 (+0)           34.7791 -> 35.8803 (+1.1)           34.8234 -> 35.9246 (+1.1)           43.181 -> 44.2744 (+1.09)
+inverse-power n=1 one-loop-inverse-power-v1 a=0.05 M=4e-31 b=1.2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)       0.00341543 -> 0.00341543 (+0)           26.3485 -> 27.4506 (+1.1)          27.2833 -> 28.4075 (+1.12)          64.2983 -> 65.3901 (+1.09)
+inverse-power n=1 one-loop-inverse-power-v1 a=0.05 M=4e-31 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)       0.00283363 -> 0.00283363 (+0)           24.5605 -> 25.6628 (+1.1)           24.5937 -> 25.6962 (+1.1)          52.5188 -> 53.6102 (+1.09)
+inverse-power n=1 one-loop-inverse-power-v1 a=0.05 M=4e-31 b=2.9                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)       0.00509026 -> 0.00509026 (+0)           34.3176 -> 35.4188 (+1.1)           35.0567 -> 36.1604 (+1.1)          51.4924 -> 52.5857 (+1.09)
+inverse-power n=1 one-loop-inverse-power-v1 a=1 M=1e-33 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000204728 -> 0.000204728 (+0)           26.6697 -> 27.7746 (+1.1)           26.7195 -> 27.8245 (+1.1)          45.4409 -> 46.5356 (+1.09)
+inverse-power n=1 one-loop-inverse-power-v1 a=1 M=4e-31 b=1.2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000109028 -> 0.000109028 (+0)          8.84892 -> 9.98119 (+1.13)          8.90938 -> 10.0426 (+1.13)           43.6777 -> 44.7799 (+1.1)
+inverse-power n=1 one-loop-inverse-power-v1 a=1 M=4e-31 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000133767 -> 0.000133767 (+0)            24.922 -> 26.0243 (+1.1)           24.9622 -> 26.0646 (+1.1)          44.4454 -> 45.5369 (+1.09)
+inverse-power n=1 one-loop-inverse-power-v1 a=1 M=4e-31 b=2.9                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000230055 -> 0.000230055 (+0)           34.1201 -> 35.2214 (+1.1)           34.2874 -> 35.3889 (+1.1)          47.0242 -> 48.1175 (+1.09)
+inverse-power n=1 one-loop-inverse-power-v1 a=1 M=1e-15 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)       0.00011565 -> 0.00011565 (+0)           14.5989 -> 15.7036 (+1.1)           14.6375 -> 15.7425 (+1.1)          37.5533 -> 38.6397 (+1.09)
+inverse-power n=1 one-loop-inverse-power-v1 a=10 M=4e-31 b=1.2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     3.25526e-06 -> 3.25526e-06 (+0)           35.1031 -> 36.2043 (+1.1)           35.5784 -> 36.6799 (+1.1)           47.354 -> 48.4475 (+1.09)
+inverse-power n=1 one-loop-inverse-power-v1 a=10 M=4e-31 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)       8.9869e-06 -> 8.9869e-06 (+0)           38.1858 -> 39.2868 (+1.1)           38.4128 -> 39.5139 (+1.1)          36.6297 -> 37.7236 (+1.09)
+inverse-power n=1 one-loop-inverse-power-v1 a=10 M=4e-31 b=2.9                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     1.44573e-05 -> 1.44573e-05 (+0)           39.4239 -> 40.5248 (+1.1)           39.6383 -> 40.7392 (+1.1)          36.2703 -> 37.3643 (+1.09)
+inverse-power n=2 fixed a=0 M=0.001 b=1.2                                         NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL
+inverse-power n=2 fixed a=0 M=0.001 b=2                                           NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL
+inverse-power n=2 fixed a=0 M=0.001 b=2.9                                         NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL                        NULL -> NULL
+inverse-power n=2 fixed a=0.01 M=4e-31 b=1.2                                       0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000350378 -> 0.000350378 (+0)         24.1792 -> 24.8759 (+0.697)         25.7374 -> 26.4343 (+0.697)          50.8562 -> 51.5458 (+0.69)
+inverse-power n=2 fixed a=0.01 M=4e-31 b=2                                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)           0.001246 -> 0.001246 (+0)         32.4844 -> 33.1802 (+0.696)         33.5405 -> 34.2381 (+0.698)          50.4023 -> 51.0928 (+0.69)
+inverse-power n=2 fixed a=0.01 M=4e-31 b=2.9                                       0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)         0.0012065 -> 0.0012065 (+0)         22.9379 -> 23.6348 (+0.697)         22.9558 -> 23.6527 (+0.697)          48.5026 -> 49.192 (+0.689)
+inverse-power n=2 fixed a=0.1 M=4e-31 b=1.2                                        0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     9.47669e-05 -> 9.47669e-05 (+0)         23.0388 -> 23.7356 (+0.697)         24.1623 -> 24.8593 (+0.697)         51.2664 -> 51.9558 (+0.689)
+inverse-power n=2 fixed a=0.1 M=4e-31 b=2                                          0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000117947 -> 0.000117947 (+0)         23.9679 -> 24.6646 (+0.697)         23.9984 -> 24.6952 (+0.697)          40.1516 -> 40.8411 (+0.69)
+inverse-power n=2 fixed a=0.1 M=4e-31 b=2.9                                        0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     6.39152e-05 -> 6.39152e-05 (+0)         31.7305 -> 32.4264 (+0.696)         31.7747 -> 32.4706 (+0.696)          41.3091 -> 41.9995 (+0.69)
+inverse-power n=2 one-loop-inverse-power-v1 a=0.05 M=4e-31 b=1.2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)       0.00300394 -> 0.00300394 (+0)         24.1328 -> 24.8295 (+0.697)         25.1162 -> 25.8269 (+0.711)          58.0883 -> 58.7779 (+0.69)
+inverse-power n=2 one-loop-inverse-power-v1 a=0.05 M=4e-31 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)       0.00232644 -> 0.00232644 (+0)         22.6417 -> 23.3386 (+0.697)         22.6669 -> 23.3639 (+0.697)         43.5751 -> 44.2645 (+0.689)
+inverse-power n=2 one-loop-inverse-power-v1 a=0.05 M=4e-31 b=2.9                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)       0.00433545 -> 0.00433545 (+0)          31.344 -> 32.0398 (+0.696)         32.1142 -> 32.8118 (+0.698)          47.8967 -> 48.5871 (+0.69)
+inverse-power n=2 one-loop-inverse-power-v1 a=1 M=1e-33 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000198237 -> 0.000198237 (+0)         26.4284 -> 27.1249 (+0.697)         26.4591 -> 27.1557 (+0.697)          40.6364 -> 41.3264 (+0.69)
+inverse-power n=2 one-loop-inverse-power-v1 a=1 M=4e-31 b=1.2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000108424 -> 0.000108424 (+0)         23.4048 -> 24.1016 (+0.697)         24.3632 -> 25.0665 (+0.703)         54.0327 -> 54.7222 (+0.689)
+inverse-power n=2 one-loop-inverse-power-v1 a=1 M=4e-31 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000164016 -> 0.000164016 (+0)          24.933 -> 25.6295 (+0.697)         24.9506 -> 25.6472 (+0.697)           39.2813 -> 39.971 (+0.69)
+inverse-power n=2 one-loop-inverse-power-v1 a=1 M=4e-31 b=2.9                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     0.000193808 -> 0.000193808 (+0)         30.8282 -> 31.5241 (+0.696)         31.0002 -> 31.6962 (+0.696)          43.5599 -> 44.2502 (+0.69)
+inverse-power n=2 one-loop-inverse-power-v1 a=1 M=1e-15 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     5.61208e-05 -> 5.61208e-05 (+0)         6.82227 -> 7.52772 (+0.705)         6.90609 -> 7.61249 (+0.706)         32.1048 -> 32.7857 (+0.681)
+inverse-power n=2 one-loop-inverse-power-v1 a=10 M=4e-31 b=1.2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     1.91818e-06 -> 1.91818e-06 (+0)         32.5456 -> 33.2414 (+0.696)         32.9267 -> 33.6226 (+0.696)          39.0475 -> 39.738 (+0.691)
+inverse-power n=2 one-loop-inverse-power-v1 a=10 M=4e-31 b=2                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     3.47268e-06 -> 3.47268e-06 (+0)         34.9452 -> 35.6408 (+0.696)         35.2356 -> 35.9313 (+0.696)          35.612 -> 36.3027 (+0.691)
+inverse-power n=2 one-loop-inverse-power-v1 a=10 M=4e-31 b=2.9                         0 -> 0 (+0)                         0 -> 0 (+0)                         0 -> 0 (+0)     6.13585e-06 -> 6.13585e-06 (+0)         36.0906 -> 36.7862 (+0.696)         36.3649 -> 37.0605 (+0.696)          35.467 -> 36.1578 (+0.691)
+
+Per group (potential, n, B's drain model): rose / fell / held / NULL on one side / NULL on both
+  [inverse-power 1 fixed]
+    birth_failing_share        rose 0, fell 0, held 6, NULL 0, NULL both 3
+    reflection_failing_share   rose 0, fell 0, held 6, NULL 0, NULL both 3
+    tracker_failing_share      rose 0, fell 0, held 6, NULL 0, NULL both 3
+    unassessed_share           rose 0, fell 0, held 6, NULL 0, NULL both 3
+    worst_birth_margin         rose 6, fell 0, held 0, NULL 0, NULL both 3; largest rise +1.102 (inverse-power n=1 fixed a=0.01 M=4e-31 b=2.9)
+    worst_reflection_margin    rose 6, fell 0, held 0, NULL 0, NULL both 3; largest rise +1.104 (inverse-power n=1 fixed a=0.01 M=4e-31 b=2)
+    worst_tracker_margin       rose 6, fell 0, held 0, NULL 0, NULL both 3; largest rise +1.094 (inverse-power n=1 fixed a=0.01 M=4e-31 b=2)
+  [inverse-power 1 one-loop-inverse-power-v1]
+    birth_failing_share        rose 0, fell 0, held 11, NULL 0, NULL both 0
+    reflection_failing_share   rose 0, fell 0, held 11, NULL 0, NULL both 0
+    tracker_failing_share      rose 0, fell 0, held 11, NULL 0, NULL both 0
+    unassessed_share           rose 0, fell 0, held 11, NULL 0, NULL both 0
+    worst_birth_margin         rose 11, fell 0, held 0, NULL 0, NULL both 0; largest rise +1.132 (inverse-power n=1 one-loop-inverse-power-v1 a=1 M=4e-31 b=1.2)
+    worst_reflection_margin    rose 11, fell 0, held 0, NULL 0, NULL both 0; largest rise +1.133 (inverse-power n=1 one-loop-inverse-power-v1 a=1 M=4e-31 b=1.2)
+    worst_tracker_margin       rose 11, fell 0, held 0, NULL 0, NULL both 0; largest rise +1.102 (inverse-power n=1 one-loop-inverse-power-v1 a=1 M=4e-31 b=1.2)
+  [inverse-power 2 fixed]
+    birth_failing_share        rose 0, fell 0, held 6, NULL 0, NULL both 3
+    reflection_failing_share   rose 0, fell 0, held 6, NULL 0, NULL both 3
+    tracker_failing_share      rose 0, fell 0, held 6, NULL 0, NULL both 3
+    unassessed_share           rose 0, fell 0, held 6, NULL 0, NULL both 3
+    worst_birth_margin         rose 6, fell 0, held 0, NULL 0, NULL both 3; largest rise +0.6969 (inverse-power n=2 fixed a=0.01 M=4e-31 b=2.9)
+    worst_reflection_margin    rose 6, fell 0, held 0, NULL 0, NULL both 3; largest rise +0.6976 (inverse-power n=2 fixed a=0.01 M=4e-31 b=2)
+    worst_tracker_margin       rose 6, fell 0, held 0, NULL 0, NULL both 3; largest rise +0.6905 (inverse-power n=2 fixed a=0.01 M=4e-31 b=2)
+  [inverse-power 2 one-loop-inverse-power-v1]
+    birth_failing_share        rose 0, fell 0, held 11, NULL 0, NULL both 0
+    reflection_failing_share   rose 0, fell 0, held 11, NULL 0, NULL both 0
+    tracker_failing_share      rose 0, fell 0, held 11, NULL 0, NULL both 0
+    unassessed_share           rose 0, fell 0, held 11, NULL 0, NULL both 0
+    worst_birth_margin         rose 11, fell 0, held 0, NULL 0, NULL both 0; largest rise +0.7054 (inverse-power n=2 one-loop-inverse-power-v1 a=1 M=1e-15 b=2)
+    worst_reflection_margin    rose 11, fell 0, held 0, NULL 0, NULL both 0; largest rise +0.7107 (inverse-power n=2 one-loop-inverse-power-v1 a=0.05 M=4e-31 b=1.2)
+    worst_tracker_margin       rose 11, fell 0, held 0, NULL 0, NULL both 0; largest rise +0.6908 (inverse-power n=2 one-loop-inverse-power-v1 a=10 M=4e-31 b=2.9)
+  [all]
+    birth_failing_share        rose 0, fell 0, held 34, NULL 0, NULL both 6
+    reflection_failing_share   rose 0, fell 0, held 34, NULL 0, NULL both 6
+    tracker_failing_share      rose 0, fell 0, held 34, NULL 0, NULL both 6
+    unassessed_share           rose 0, fell 0, held 34, NULL 0, NULL both 6
+    worst_birth_margin         rose 34, fell 0, held 0, NULL 0, NULL both 6; largest rise +1.132 (inverse-power n=1 one-loop-inverse-power-v1 a=1 M=4e-31 b=1.2)
+    worst_reflection_margin    rose 34, fell 0, held 0, NULL 0, NULL both 6; largest rise +1.133 (inverse-power n=1 one-loop-inverse-power-v1 a=1 M=4e-31 b=1.2)
+    worst_tracker_margin       rose 34, fell 0, held 0, NULL 0, NULL both 6; largest rise +1.102 (inverse-power n=1 one-loop-inverse-power-v1 a=1 M=4e-31 b=1.2)
+RESULT: every history matched once each way; measured

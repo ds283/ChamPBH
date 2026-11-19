@@ -1,0 +1,544 @@
+## R1-inventory-exp (power-law-wall-07d-r2-exp) before
+7387ad3a75a5229d54b814098345d9141b14197d9d0efb25e34b7cd338e0d895  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db
+da9b566d7e258c58a5ab8793527c1d1e456842dcf8d09d6de07abef166dfe535  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0000.db
+929fd0e2b7a6f4b40d2cdf082b7b84f1a71958e2b874ce4eda914f77371ae0a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0001.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0002.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0003.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0004.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0005.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0006.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0007.db
+5611a2351920163fec05cdb7b2b6debc6e6ecaf5dab94cd62df08253e1fa6b8e  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0008.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0009.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0010.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0011.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0012.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0013.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0014.db
+566029adcfbaff3861692a276413c7c9a1a32ef7baaaa74712f1f18f71664e5b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0015.db
+e12c3760054658ba03531f34d2c484c52cda8673e577c5232c5833c37ad1711f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.manifest.json
+## R1-inventory-exp (power-law-wall-07d-r2-exp) after: unchanged
+## R1-inventory-pl (power-law-wall-07d-r2-pl) before
+0e1717b022dba42b5f1eecc0037a5d1ab2aa57c8c3f7c8914343ae018c1814a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db
+d411717167dcae8133e0d8b81c2ae1fc8a160d8b64e01f647bc9d5f0326e8165  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0000.db
+c43930c8062cd84a2f150201f650c72146a5f77af506bb265ef4d1c2a04c1e87  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0001.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0002.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0003.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0004.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0005.db
+ffd5794aeb8911beac51a87902118702c07e8aa5758dca239549ff8df2415849  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0006.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0007.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0008.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0009.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0010.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0011.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0012.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0013.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0014.db
+62d5110d07b10d311d6c6018c711ed53a22081e50fd23d8412b8dd69ddf849cc  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0015.db
+8b85ca922fbddfb10e21e508e2c5dbe22ce264872b799f571be89275a1f84d56  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.manifest.json
+## R1-inventory-pl (power-law-wall-07d-r2-pl) after: unchanged
+## R1-inventory-pl-resumed (power-law-wall-07d-r2-pl-resumed) before
+93de7e9917624f31b803461f974c2350a69804b3064756564d94352fa9899ad4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db
+ded2d5ba9e309d7cd7ecf8651bf1e1bb3511176f7b9d6c0bf6f88dfc03fb520f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0000.db
+b5f4e0ce6fb91a4ee40bab3d7fc2071120e6010a16e3d6b6e0be56477c7a3e54  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0001.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0002.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0003.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0004.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0005.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0006.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0007.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0008.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0009.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0010.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0011.db
+1cd59cec1ff7cbf7a00777d54f19993079125a095efc7ae598e5a0f4a3f5799a  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0012.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0013.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0014.db
+2469b6be5270e9b0eebadb067a30fc46cd1a3088120de68db8b2a4e05f27ab97  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0015.db
+aa3ad7daa067464f712a2cf3fa1dacf89d9d70962db0908c884fa9037f38e9da  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.manifest.json
+## R1-inventory-pl-resumed (power-law-wall-07d-r2-pl-resumed) after: unchanged
+## R1-inventory-mixed (power-law-wall-07d-r2-mixed) before
+f0e9cd1c1f8da84b1d273de1951b4d202628a9956c0eebccfbe612c08b760093  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db
+bcd32e38ce63f38406687090ca199c8a378528d0de76723eb8c47396c01f26c3  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0000.db
+adfc15808c2a16d5f5a7edf9fdf7a705ee0309397750e6c55f895f59ac3c587c  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0001.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0002.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0003.db
+92bab8c610b5be8fc6328278008ea0fc28d0cc80db73b774e6527b4bdcf4b145  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0004.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0005.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0006.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0007.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0008.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0009.db
+09a55cbc1284762ad5d892003558c2385ce7558ebfa83601b61e9defc71efce6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0010.db
+92bab8c610b5be8fc6328278008ea0fc28d0cc80db73b774e6527b4bdcf4b145  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0011.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0012.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0013.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0014.db
+fe3a77bdbee1d9a91f3de112c83b887285867c5c739c0f705ab58568c555c252  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0015.db
+585f55ff2b43299ce26df6df28da917edca4c7acdc5ec6e17fd95223ab97b394  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.manifest.json
+## R1-inventory-mixed (power-law-wall-07d-r2-mixed) after: unchanged
+## R2-plot_by_beta-exp (power-law-wall-07d-r2-exp) before
+7387ad3a75a5229d54b814098345d9141b14197d9d0efb25e34b7cd338e0d895  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db
+da9b566d7e258c58a5ab8793527c1d1e456842dcf8d09d6de07abef166dfe535  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0000.db
+929fd0e2b7a6f4b40d2cdf082b7b84f1a71958e2b874ce4eda914f77371ae0a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0001.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0002.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0003.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0004.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0005.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0006.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0007.db
+5611a2351920163fec05cdb7b2b6debc6e6ecaf5dab94cd62df08253e1fa6b8e  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0008.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0009.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0010.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0011.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0012.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0013.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0014.db
+566029adcfbaff3861692a276413c7c9a1a32ef7baaaa74712f1f18f71664e5b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0015.db
+e12c3760054658ba03531f34d2c484c52cda8673e577c5232c5833c37ad1711f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.manifest.json
+## R2-plot_by_beta-exp (power-law-wall-07d-r2-exp) after: unchanged
+## R2-plot_by_beta-pl (power-law-wall-07d-r2-pl) before
+0e1717b022dba42b5f1eecc0037a5d1ab2aa57c8c3f7c8914343ae018c1814a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db
+d411717167dcae8133e0d8b81c2ae1fc8a160d8b64e01f647bc9d5f0326e8165  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0000.db
+c43930c8062cd84a2f150201f650c72146a5f77af506bb265ef4d1c2a04c1e87  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0001.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0002.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0003.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0004.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0005.db
+ffd5794aeb8911beac51a87902118702c07e8aa5758dca239549ff8df2415849  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0006.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0007.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0008.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0009.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0010.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0011.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0012.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0013.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0014.db
+62d5110d07b10d311d6c6018c711ed53a22081e50fd23d8412b8dd69ddf849cc  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0015.db
+8b85ca922fbddfb10e21e508e2c5dbe22ce264872b799f571be89275a1f84d56  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.manifest.json
+## R2-plot_by_beta-pl (power-law-wall-07d-r2-pl) after: unchanged
+## R2-plot_by_beta-pl-resumed (power-law-wall-07d-r2-pl-resumed) before
+93de7e9917624f31b803461f974c2350a69804b3064756564d94352fa9899ad4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db
+ded2d5ba9e309d7cd7ecf8651bf1e1bb3511176f7b9d6c0bf6f88dfc03fb520f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0000.db
+b5f4e0ce6fb91a4ee40bab3d7fc2071120e6010a16e3d6b6e0be56477c7a3e54  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0001.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0002.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0003.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0004.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0005.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0006.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0007.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0008.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0009.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0010.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0011.db
+1cd59cec1ff7cbf7a00777d54f19993079125a095efc7ae598e5a0f4a3f5799a  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0012.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0013.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0014.db
+2469b6be5270e9b0eebadb067a30fc46cd1a3088120de68db8b2a4e05f27ab97  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0015.db
+aa3ad7daa067464f712a2cf3fa1dacf89d9d70962db0908c884fa9037f38e9da  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.manifest.json
+## R2-plot_by_beta-pl-resumed (power-law-wall-07d-r2-pl-resumed) after: unchanged
+## R2-plot_by_beta-mixed (power-law-wall-07d-r2-mixed) before
+f0e9cd1c1f8da84b1d273de1951b4d202628a9956c0eebccfbe612c08b760093  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db
+bcd32e38ce63f38406687090ca199c8a378528d0de76723eb8c47396c01f26c3  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0000.db
+adfc15808c2a16d5f5a7edf9fdf7a705ee0309397750e6c55f895f59ac3c587c  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0001.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0002.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0003.db
+92bab8c610b5be8fc6328278008ea0fc28d0cc80db73b774e6527b4bdcf4b145  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0004.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0005.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0006.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0007.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0008.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0009.db
+09a55cbc1284762ad5d892003558c2385ce7558ebfa83601b61e9defc71efce6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0010.db
+92bab8c610b5be8fc6328278008ea0fc28d0cc80db73b774e6527b4bdcf4b145  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0011.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0012.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0013.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0014.db
+fe3a77bdbee1d9a91f3de112c83b887285867c5c739c0f705ab58568c555c252  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0015.db
+585f55ff2b43299ce26df6df28da917edca4c7acdc5ec6e17fd95223ab97b394  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.manifest.json
+## R2-plot_by_beta-mixed (power-law-wall-07d-r2-mixed) after: unchanged
+## R2-plot_ScalarHistory-exp (power-law-wall-07d-r2-exp) before
+7387ad3a75a5229d54b814098345d9141b14197d9d0efb25e34b7cd338e0d895  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db
+da9b566d7e258c58a5ab8793527c1d1e456842dcf8d09d6de07abef166dfe535  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0000.db
+929fd0e2b7a6f4b40d2cdf082b7b84f1a71958e2b874ce4eda914f77371ae0a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0001.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0002.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0003.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0004.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0005.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0006.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0007.db
+5611a2351920163fec05cdb7b2b6debc6e6ecaf5dab94cd62df08253e1fa6b8e  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0008.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0009.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0010.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0011.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0012.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0013.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0014.db
+566029adcfbaff3861692a276413c7c9a1a32ef7baaaa74712f1f18f71664e5b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0015.db
+e12c3760054658ba03531f34d2c484c52cda8673e577c5232c5833c37ad1711f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.manifest.json
+## R2-plot_ScalarHistory-exp (power-law-wall-07d-r2-exp) after: unchanged
+## R2-plot_ScalarHistory-pl (power-law-wall-07d-r2-pl) before
+0e1717b022dba42b5f1eecc0037a5d1ab2aa57c8c3f7c8914343ae018c1814a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db
+d411717167dcae8133e0d8b81c2ae1fc8a160d8b64e01f647bc9d5f0326e8165  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0000.db
+c43930c8062cd84a2f150201f650c72146a5f77af506bb265ef4d1c2a04c1e87  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0001.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0002.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0003.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0004.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0005.db
+ffd5794aeb8911beac51a87902118702c07e8aa5758dca239549ff8df2415849  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0006.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0007.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0008.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0009.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0010.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0011.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0012.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0013.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0014.db
+62d5110d07b10d311d6c6018c711ed53a22081e50fd23d8412b8dd69ddf849cc  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0015.db
+8b85ca922fbddfb10e21e508e2c5dbe22ce264872b799f571be89275a1f84d56  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.manifest.json
+## R2-plot_ScalarHistory-pl (power-law-wall-07d-r2-pl) after: unchanged
+## R2-plot_ScalarHistory-pl-resumed (power-law-wall-07d-r2-pl-resumed) before
+93de7e9917624f31b803461f974c2350a69804b3064756564d94352fa9899ad4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db
+ded2d5ba9e309d7cd7ecf8651bf1e1bb3511176f7b9d6c0bf6f88dfc03fb520f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0000.db
+b5f4e0ce6fb91a4ee40bab3d7fc2071120e6010a16e3d6b6e0be56477c7a3e54  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0001.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0002.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0003.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0004.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0005.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0006.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0007.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0008.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0009.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0010.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0011.db
+1cd59cec1ff7cbf7a00777d54f19993079125a095efc7ae598e5a0f4a3f5799a  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0012.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0013.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0014.db
+2469b6be5270e9b0eebadb067a30fc46cd1a3088120de68db8b2a4e05f27ab97  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0015.db
+aa3ad7daa067464f712a2cf3fa1dacf89d9d70962db0908c884fa9037f38e9da  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.manifest.json
+## R2-plot_ScalarHistory-pl-resumed (power-law-wall-07d-r2-pl-resumed) after: unchanged
+## R2-plot_ScalarHistory-mixed (power-law-wall-07d-r2-mixed) before
+f0e9cd1c1f8da84b1d273de1951b4d202628a9956c0eebccfbe612c08b760093  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db
+bcd32e38ce63f38406687090ca199c8a378528d0de76723eb8c47396c01f26c3  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0000.db
+adfc15808c2a16d5f5a7edf9fdf7a705ee0309397750e6c55f895f59ac3c587c  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0001.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0002.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0003.db
+92bab8c610b5be8fc6328278008ea0fc28d0cc80db73b774e6527b4bdcf4b145  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0004.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0005.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0006.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0007.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0008.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0009.db
+09a55cbc1284762ad5d892003558c2385ce7558ebfa83601b61e9defc71efce6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0010.db
+92bab8c610b5be8fc6328278008ea0fc28d0cc80db73b774e6527b4bdcf4b145  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0011.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0012.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0013.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0014.db
+fe3a77bdbee1d9a91f3de112c83b887285867c5c739c0f705ab58568c555c252  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0015.db
+585f55ff2b43299ce26df6df28da917edca4c7acdc5ec6e17fd95223ab97b394  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.manifest.json
+## R2-plot_ScalarHistory-mixed (power-law-wall-07d-r2-mixed) after: unchanged
+## R3-plot_by_beta-exp (power-law-wall-07d-r2-exp) before
+7387ad3a75a5229d54b814098345d9141b14197d9d0efb25e34b7cd338e0d895  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db
+da9b566d7e258c58a5ab8793527c1d1e456842dcf8d09d6de07abef166dfe535  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0000.db
+929fd0e2b7a6f4b40d2cdf082b7b84f1a71958e2b874ce4eda914f77371ae0a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0001.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0002.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0003.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0004.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0005.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0006.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0007.db
+5611a2351920163fec05cdb7b2b6debc6e6ecaf5dab94cd62df08253e1fa6b8e  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0008.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0009.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0010.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0011.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0012.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0013.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0014.db
+566029adcfbaff3861692a276413c7c9a1a32ef7baaaa74712f1f18f71664e5b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0015.db
+e12c3760054658ba03531f34d2c484c52cda8673e577c5232c5833c37ad1711f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.manifest.json
+## R3-plot_by_beta-exp (power-law-wall-07d-r2-exp) after: unchanged
+## R3-plot_ScalarHistory-exp (power-law-wall-07d-r2-exp) before
+7387ad3a75a5229d54b814098345d9141b14197d9d0efb25e34b7cd338e0d895  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db
+da9b566d7e258c58a5ab8793527c1d1e456842dcf8d09d6de07abef166dfe535  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0000.db
+929fd0e2b7a6f4b40d2cdf082b7b84f1a71958e2b874ce4eda914f77371ae0a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0001.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0002.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0003.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0004.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0005.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0006.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0007.db
+5611a2351920163fec05cdb7b2b6debc6e6ecaf5dab94cd62df08253e1fa6b8e  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0008.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0009.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0010.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0011.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0012.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0013.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0014.db
+566029adcfbaff3861692a276413c7c9a1a32ef7baaaa74712f1f18f71664e5b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0015.db
+e12c3760054658ba03531f34d2c484c52cda8673e577c5232c5833c37ad1711f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.manifest.json
+## R3-plot_ScalarHistory-exp (power-law-wall-07d-r2-exp) after: unchanged
+## R4-models-exp (power-law-wall-07d-r2-exp) before
+7387ad3a75a5229d54b814098345d9141b14197d9d0efb25e34b7cd338e0d895  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db
+da9b566d7e258c58a5ab8793527c1d1e456842dcf8d09d6de07abef166dfe535  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0000.db
+929fd0e2b7a6f4b40d2cdf082b7b84f1a71958e2b874ce4eda914f77371ae0a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0001.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0002.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0003.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0004.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0005.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0006.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0007.db
+5611a2351920163fec05cdb7b2b6debc6e6ecaf5dab94cd62df08253e1fa6b8e  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0008.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0009.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0010.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0011.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0012.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0013.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0014.db
+566029adcfbaff3861692a276413c7c9a1a32ef7baaaa74712f1f18f71664e5b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0015.db
+e12c3760054658ba03531f34d2c484c52cda8673e577c5232c5833c37ad1711f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.manifest.json
+## R4-models-exp (power-law-wall-07d-r2-exp) after: unchanged
+## R4-models-exp-fixed (power-law-wall-07d-r2-exp) before
+7387ad3a75a5229d54b814098345d9141b14197d9d0efb25e34b7cd338e0d895  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db
+da9b566d7e258c58a5ab8793527c1d1e456842dcf8d09d6de07abef166dfe535  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0000.db
+929fd0e2b7a6f4b40d2cdf082b7b84f1a71958e2b874ce4eda914f77371ae0a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0001.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0002.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0003.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0004.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0005.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0006.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0007.db
+5611a2351920163fec05cdb7b2b6debc6e6ecaf5dab94cd62df08253e1fa6b8e  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0008.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0009.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0010.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0011.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0012.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0013.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0014.db
+566029adcfbaff3861692a276413c7c9a1a32ef7baaaa74712f1f18f71664e5b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0015.db
+e12c3760054658ba03531f34d2c484c52cda8673e577c5232c5833c37ad1711f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.manifest.json
+## R4-models-exp-fixed (power-law-wall-07d-r2-exp) after: unchanged
+## R4-A-pl (power-law-wall-07d-r2-pl) before
+0e1717b022dba42b5f1eecc0037a5d1ab2aa57c8c3f7c8914343ae018c1814a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db
+d411717167dcae8133e0d8b81c2ae1fc8a160d8b64e01f647bc9d5f0326e8165  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0000.db
+c43930c8062cd84a2f150201f650c72146a5f77af506bb265ef4d1c2a04c1e87  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0001.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0002.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0003.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0004.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0005.db
+ffd5794aeb8911beac51a87902118702c07e8aa5758dca239549ff8df2415849  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0006.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0007.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0008.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0009.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0010.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0011.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0012.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0013.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0014.db
+62d5110d07b10d311d6c6018c711ed53a22081e50fd23d8412b8dd69ddf849cc  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0015.db
+8b85ca922fbddfb10e21e508e2c5dbe22ce264872b799f571be89275a1f84d56  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.manifest.json
+## R4-A-pl (power-law-wall-07d-r2-pl) after: unchanged
+## R4-n3-inverse-power (none) before
+
+## R4-n3-inverse-power (none) after: unchanged
+## R4-n3-exponential (none) before
+
+## R4-n3-exponential (none) after: unchanged
+## R7-histories-exp (power-law-wall-07d-r2-exp) before
+7387ad3a75a5229d54b814098345d9141b14197d9d0efb25e34b7cd338e0d895  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db
+da9b566d7e258c58a5ab8793527c1d1e456842dcf8d09d6de07abef166dfe535  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0000.db
+929fd0e2b7a6f4b40d2cdf082b7b84f1a71958e2b874ce4eda914f77371ae0a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0001.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0002.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0003.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0004.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0005.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0006.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0007.db
+5611a2351920163fec05cdb7b2b6debc6e6ecaf5dab94cd62df08253e1fa6b8e  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0008.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0009.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0010.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0011.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0012.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0013.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0014.db
+566029adcfbaff3861692a276413c7c9a1a32ef7baaaa74712f1f18f71664e5b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0015.db
+e12c3760054658ba03531f34d2c484c52cda8673e577c5232c5833c37ad1711f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.manifest.json
+## R7-histories-exp (power-law-wall-07d-r2-exp) after: unchanged
+## R7-histories-pl (power-law-wall-07d-r2-pl) before
+0e1717b022dba42b5f1eecc0037a5d1ab2aa57c8c3f7c8914343ae018c1814a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db
+d411717167dcae8133e0d8b81c2ae1fc8a160d8b64e01f647bc9d5f0326e8165  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0000.db
+c43930c8062cd84a2f150201f650c72146a5f77af506bb265ef4d1c2a04c1e87  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0001.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0002.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0003.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0004.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0005.db
+ffd5794aeb8911beac51a87902118702c07e8aa5758dca239549ff8df2415849  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0006.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0007.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0008.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0009.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0010.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0011.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0012.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0013.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0014.db
+62d5110d07b10d311d6c6018c711ed53a22081e50fd23d8412b8dd69ddf849cc  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0015.db
+8b85ca922fbddfb10e21e508e2c5dbe22ce264872b799f571be89275a1f84d56  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.manifest.json
+## R7-histories-pl (power-law-wall-07d-r2-pl) after: unchanged
+## R7-histories-pl-resumed (power-law-wall-07d-r2-pl-resumed) before
+93de7e9917624f31b803461f974c2350a69804b3064756564d94352fa9899ad4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.db
+ded2d5ba9e309d7cd7ecf8651bf1e1bb3511176f7b9d6c0bf6f88dfc03fb520f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0000.db
+b5f4e0ce6fb91a4ee40bab3d7fc2071120e6010a16e3d6b6e0be56477c7a3e54  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0001.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0002.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0003.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0004.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0005.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0006.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0007.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0008.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0009.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0010.db
+51b201c0902a2b7af72fb40e3a5dbd46dc7b4b84cc481d70cda39a2e4b7d1395  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0011.db
+1cd59cec1ff7cbf7a00777d54f19993079125a095efc7ae598e5a0f4a3f5799a  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0012.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0013.db
+bf406fbf36e3459165bf7dcd56585982e82829d5211339d6bbd87ffb9b1ef54f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0014.db
+2469b6be5270e9b0eebadb067a30fc46cd1a3088120de68db8b2a4e05f27ab97  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed-shard0015.db
+aa3ad7daa067464f712a2cf3fa1dacf89d9d70962db0908c884fa9037f38e9da  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-resumed.manifest.json
+## R7-histories-pl-resumed (power-law-wall-07d-r2-pl-resumed) after: unchanged
+## R7-histories-mixed (power-law-wall-07d-r2-mixed) before
+f0e9cd1c1f8da84b1d273de1951b4d202628a9956c0eebccfbe612c08b760093  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.db
+bcd32e38ce63f38406687090ca199c8a378528d0de76723eb8c47396c01f26c3  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0000.db
+adfc15808c2a16d5f5a7edf9fdf7a705ee0309397750e6c55f895f59ac3c587c  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0001.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0002.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0003.db
+92bab8c610b5be8fc6328278008ea0fc28d0cc80db73b774e6527b4bdcf4b145  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0004.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0005.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0006.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0007.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0008.db
+543f72ab2b4050ee13e8ab0eb068abcb35d830d009b2f8cd99a528276c94fb11  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0009.db
+09a55cbc1284762ad5d892003558c2385ce7558ebfa83601b61e9defc71efce6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0010.db
+92bab8c610b5be8fc6328278008ea0fc28d0cc80db73b774e6527b4bdcf4b145  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0011.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0012.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0013.db
+b2e111f13ac6006a285ac9fa5f108bb3ffbecf3d34beaa2a0bb8c01646231939  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0014.db
+fe3a77bdbee1d9a91f3de112c83b887285867c5c739c0f705ab58568c555c252  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed-shard0015.db
+585f55ff2b43299ce26df6df28da917edca4c7acdc5ec6e17fd95223ab97b394  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-mixed.manifest.json
+## R7-histories-mixed (power-law-wall-07d-r2-mixed) after: unchanged
+## R5-quanta-exp-exponential (none) before
+
+## R5-quanta-exp-exponential (none) after: unchanged
+## R5-quanta-pl-inverse-power (none) before
+
+## R5-quanta-pl-inverse-power (none) after: unchanged
+## R5-quanta-pl-resumed-inverse-power (none) before
+
+## R5-quanta-pl-resumed-inverse-power (none) after: unchanged
+## R5-quanta-mixed-exponential (none) before
+
+## R5-quanta-mixed-exponential (none) after: unchanged
+## R5-quanta-mixed-inverse-power (none) before
+
+## R5-quanta-mixed-inverse-power (none) after: unchanged
+## R5-plot-quanta-grid-pl (none) before
+
+## R5-plot-quanta-grid-pl (none) after: unchanged
+## R6-bbn-exp-fixed (power-law-wall-07d-r2-exp) before
+7387ad3a75a5229d54b814098345d9141b14197d9d0efb25e34b7cd338e0d895  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db
+da9b566d7e258c58a5ab8793527c1d1e456842dcf8d09d6de07abef166dfe535  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0000.db
+929fd0e2b7a6f4b40d2cdf082b7b84f1a71958e2b874ce4eda914f77371ae0a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0001.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0002.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0003.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0004.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0005.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0006.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0007.db
+5611a2351920163fec05cdb7b2b6debc6e6ecaf5dab94cd62df08253e1fa6b8e  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0008.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0009.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0010.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0011.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0012.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0013.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0014.db
+566029adcfbaff3861692a276413c7c9a1a32ef7baaaa74712f1f18f71664e5b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0015.db
+e12c3760054658ba03531f34d2c484c52cda8673e577c5232c5833c37ad1711f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.manifest.json
+## R6-bbn-exp-fixed (power-law-wall-07d-r2-exp) after: unchanged
+## R6-bbn-exp-oneloop (power-law-wall-07d-r2-exp) before
+7387ad3a75a5229d54b814098345d9141b14197d9d0efb25e34b7cd338e0d895  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db
+da9b566d7e258c58a5ab8793527c1d1e456842dcf8d09d6de07abef166dfe535  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0000.db
+929fd0e2b7a6f4b40d2cdf082b7b84f1a71958e2b874ce4eda914f77371ae0a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0001.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0002.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0003.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0004.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0005.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0006.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0007.db
+5611a2351920163fec05cdb7b2b6debc6e6ecaf5dab94cd62df08253e1fa6b8e  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0008.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0009.db
+9975cd1e0bb652bd22cf4da0903153601cb94bfc525803745eb17293fd9a39f7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0010.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0011.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0012.db
+835fb54c31327c590cf8f3c985445529b7d07077432280f73208b903f85dc936  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0013.db
+d09fe5966429d5d0113af038167008c43230a8684996fa863f28313ca7fbc0a6  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0014.db
+566029adcfbaff3861692a276413c7c9a1a32ef7baaaa74712f1f18f71664e5b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp-shard0015.db
+e12c3760054658ba03531f34d2c484c52cda8673e577c5232c5833c37ad1711f  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.manifest.json
+## R6-bbn-exp-oneloop (power-law-wall-07d-r2-exp) after: unchanged
+## R6-bbn-pl-n1 (power-law-wall-07d-r2-pl) before
+0e1717b022dba42b5f1eecc0037a5d1ab2aa57c8c3f7c8914343ae018c1814a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db
+d411717167dcae8133e0d8b81c2ae1fc8a160d8b64e01f647bc9d5f0326e8165  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0000.db
+c43930c8062cd84a2f150201f650c72146a5f77af506bb265ef4d1c2a04c1e87  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0001.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0002.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0003.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0004.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0005.db
+ffd5794aeb8911beac51a87902118702c07e8aa5758dca239549ff8df2415849  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0006.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0007.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0008.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0009.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0010.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0011.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0012.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0013.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0014.db
+62d5110d07b10d311d6c6018c711ed53a22081e50fd23d8412b8dd69ddf849cc  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0015.db
+8b85ca922fbddfb10e21e508e2c5dbe22ce264872b799f571be89275a1f84d56  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.manifest.json
+## R6-bbn-pl-n1 (power-law-wall-07d-r2-pl) after: unchanged
+## R6-bbn-pl-n2 (power-law-wall-07d-r2-pl) before
+0e1717b022dba42b5f1eecc0037a5d1ab2aa57c8c3f7c8914343ae018c1814a4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.db
+d411717167dcae8133e0d8b81c2ae1fc8a160d8b64e01f647bc9d5f0326e8165  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0000.db
+c43930c8062cd84a2f150201f650c72146a5f77af506bb265ef4d1c2a04c1e87  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0001.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0002.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0003.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0004.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0005.db
+ffd5794aeb8911beac51a87902118702c07e8aa5758dca239549ff8df2415849  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0006.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0007.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0008.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0009.db
+426a3ecd3b0d624f82e72a97d2157e24483bb8d7328ed890abd4cf92a3ec3fe7  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0010.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0011.db
+37b9e8a6663a14922e257514d98e508ae3d960322ade5f5c6a0fd3e4b03d0d71  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0012.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0013.db
+49c587de9c7beb84955b64d1f87192621edcaf11ab1796490d5d702cf9aa9fc2  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0014.db
+62d5110d07b10d311d6c6018c711ed53a22081e50fd23d8412b8dd69ddf849cc  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl-shard0015.db
+8b85ca922fbddfb10e21e508e2c5dbe22ce264872b799f571be89275a1f84d56  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-pl.manifest.json
+## R6-bbn-pl-n2 (power-law-wall-07d-r2-pl) after: unchanged
+## R8-guard-07-exp (power-law-wall-07-exp) before
+3201aed7350b30842280d0eb47f7cabe243b85e76eec74e31b3ca66c2e8f8bb4  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp.db
+e8794694fb0313727791aae5f223851df3695ebd6bcc34bb80e9196674d648c8  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0000.db
+6e8284b3b12a2dc86639de128e9067cb17979349a0d5057b0974e185fe68b803  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0001.db
+ccd1e70d6c8c7a1f6a02e5986ec46413862a198fdcfa90b98d2ebcd8eec5a657  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0002.db
+3965739ecae8014937eb0f5c892f593e62ab2242c7df2fb5f6664586af820b66  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0003.db
+ccd1e70d6c8c7a1f6a02e5986ec46413862a198fdcfa90b98d2ebcd8eec5a657  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0004.db
+ccd1e70d6c8c7a1f6a02e5986ec46413862a198fdcfa90b98d2ebcd8eec5a657  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0005.db
+3965739ecae8014937eb0f5c892f593e62ab2242c7df2fb5f6664586af820b66  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0006.db
+3965739ecae8014937eb0f5c892f593e62ab2242c7df2fb5f6664586af820b66  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0007.db
+ccd1e70d6c8c7a1f6a02e5986ec46413862a198fdcfa90b98d2ebcd8eec5a657  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0008.db
+ccd1e70d6c8c7a1f6a02e5986ec46413862a198fdcfa90b98d2ebcd8eec5a657  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0009.db
+3965739ecae8014937eb0f5c892f593e62ab2242c7df2fb5f6664586af820b66  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0010.db
+ccd1e70d6c8c7a1f6a02e5986ec46413862a198fdcfa90b98d2ebcd8eec5a657  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0011.db
+3965739ecae8014937eb0f5c892f593e62ab2242c7df2fb5f6664586af820b66  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0012.db
+3965739ecae8014937eb0f5c892f593e62ab2242c7df2fb5f6664586af820b66  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0013.db
+ccd1e70d6c8c7a1f6a02e5986ec46413862a198fdcfa90b98d2ebcd8eec5a657  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0014.db
+46c656afc6b18d972cfd36e0b0eed1d9bd187015f055aaa0d1c3d4d34d48fc8b  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp-shard0015.db
+c61260453059030cd38a1a801acd0c2e09e6ffa7b51af6d7adf4ea69d5a409d0  /Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07-exp.manifest.json
+## R8-guard-07-exp (power-law-wall-07-exp) after: unchanged

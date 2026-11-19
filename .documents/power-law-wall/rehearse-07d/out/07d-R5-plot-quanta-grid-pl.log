@@ -1,0 +1,6 @@
+$ env PYTHONPATH=. ./venv/bin/python tools/plot_quanta_grid.py /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/export-pl/QCD_Cosmology/inverse-power --output /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/quanta-grid-pl
+plot_quanta_grid: histories.csv rows: fixed 48, marker 26, failed 0, drawn 22
+REFUSED one-loop-inverse-power-v1 A=0.05: two rows in one cell: one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=1 beta=1.2 and one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=2 beta=1.2
+REFUSED one-loop-inverse-power-v1 A=1: two rows in one cell: one-loop-inverse-power-v1 A=1.0 M_Mp=1e-33 n=1 beta=2.0 and one-loop-inverse-power-v1 A=1.0 M_Mp=1e-33 n=2 beta=2.0
+REFUSED one-loop-inverse-power-v1 A=10: two rows in one cell: one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=1 beta=1.2 and one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=2 beta=1.2
+plot_quanta_grid (R8-power-n1-v2, R8-power-n2-v2, assoc scale 1): figures written 0, refused 3, A with no drawn or failed row 0; skipped as fixed-law 48, marker rows 26; wall 0.0 s

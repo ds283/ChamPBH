@@ -1,0 +1,15 @@
+--- rehearse-07/ray_state.py	2026-11-16 18:52:58
++++ rehearse-07d/ray_state.py	2026-11-19 07:44:49
+@@ -1,9 +1,10 @@
+ """Summarise the isolated cluster's jobs, workers and actors (rrk-adoption 04, ruling 9).
+ Read-only: it runs `ray list` with --address 127.0.0.1:6380 and prints one line per item.
+ 
+-power-law-wall prompt 07: copied from one-loop-drain 06's (.documents/one-loop-drain/rehearse-06/ray_state.py), with this
++power-law-wall prompt 07d: copied from power-law-wall 07's .documents/power-law-wall/rehearse-07/ray_state.py, with only
++its paths (rehearse-07d/, var/power-law-wall/07d-r2/) and this sentence changed; 07's was copied from one-loop-drain 06's (.documents/one-loop-drain/rehearse-06/ray_state.py), with this
+ paragraph replacing 06's. Run from this worktree's root (or the base worktree's), with that tree's cluster up, as
+-`RAY_AUTH_MODE=token ./venv/bin/python .documents/power-law-wall/rehearse-07/ray_state.py`; it starts nothing, opens no
++`RAY_AUTH_MODE=token ./venv/bin/python .documents/power-law-wall/rehearse-07d/ray_state.py`; it starts nothing, opens no
+ store and writes nothing but stdout."""
+ 
+ import json, subprocess, sys

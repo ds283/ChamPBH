@@ -1,0 +1,36 @@
+** registered_run: registered as power-law-wall-07d-r2-exp-c-20261119T093500
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/power-law-wall-07d-r2-exp-c-20261119T093500/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-19 09:35:00,821	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-19 09:35:00,867	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at http://127.0.0.1:8267 
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/power-law-wall-07d-r2-exp.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 1 value = [ 2 ]
+   -- populated M sample grid with 2 values = [ 2.4353e-06 eV, 2435.3 GeV ]
+   -- no alpha grid (--no-alpha-values): no fixed-law row is built
+   -- populated A grid with 1 value = [ 1 ] (one-loop-exponential-v2)
+   -- total number of models to integrate = 2
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-exponential-v2)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+(Datastore pid=49555) @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+(compute_scalar_history pid=49576) !! tune_history (power-law-wall-07d-r2-exp-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-19T09:35:13): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6645 < ln 10 at N = 21.40767202 (generation 1); the generations below ln 10 carry 0.007975 of K
+(compute_scalar_history pid=49576) !! tune_history (power-law-wall-07d-r2-exp-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-19T09:35:13): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.1052 < ln 10 at N = 21.93611759 (generation 1); the generations below ln 10 carry 0.007975 of K
+   -- ALL WORK ITEMS COMPLETE in time 10.9s
+      Queue summary: 2 lookup (avg 10.99/min), 2 compute (avg 10.99/min), 2 store (avg 10.99/min), 2 validation (avg 10.99/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.823s
+      Queue summary: 2 lookup (avg 145.8/min), 2 compute (avg 145.8/min), 2 store (avg 145.8/min), 2 validation (avg 145.8/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.74s
+      Queue summary: 2 lookup (avg 12.31/min), 2 compute (avg 12.31/min), 2 store (avg 12.31/min), 2 validation (avg 12.31/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0
+** launcher saw exit status 0

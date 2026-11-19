@@ -1,0 +1,26 @@
+--- rehearse-07/check.sh	2026-11-16 18:47:05
++++ rehearse-07d/check.sh	2026-11-19 07:44:49
+@@ -1,11 +1,12 @@
+ #!/bin/sh
+-# power-law-wall 07 (adapted from one-loop-drain 06's check.sh): the one check after a launch (as
++# power-law-wall 07d (copied from power-law-wall 07's rehearse-07/check.sh, with only its paths changed; 07's was
++# adapted from one-loop-drain 06's check.sh): the one check after a launch (as
+ # jordan-normalization 09; the orchestrator's note for 09, ruling 4). Run from this worktree's root, for a base run too
+-# (its log is under this worktree's var/power-law-wall/07/runs/ and names its manifest by an absolute path).
++# (its log is under this worktree's var/power-law-wall/07d-r2/runs/ and names its manifest by an absolute path).
+ # Reads the launch log, the run's manifest.json and status.json, the pid file, and `list`.
+-# Starts nothing and signals nothing. Appends to var/power-law-wall/07/runs/07-checks.txt, and writes nothing else.
+-#   sh .documents/power-law-wall/rehearse-07/check.sh SLUG
+-L=var/power-law-wall/07/runs
++# Starts nothing and signals nothing. Appends to var/power-law-wall/07d-r2/runs/07d-checks.txt, and writes nothing else.
++#   sh .documents/power-law-wall/rehearse-07d/check.sh SLUG
++L=var/power-law-wall/07d-r2/runs
+ slug=$1
+ log=$L/$slug.log
+ {
+@@ -31,4 +32,4 @@
+     echo '$ head of log'
+     head -4 "$log" | grep -n ''
+     echo
+-} >> $L/07-checks.txt 2>&1
++} >> $L/07d-checks.txt 2>&1

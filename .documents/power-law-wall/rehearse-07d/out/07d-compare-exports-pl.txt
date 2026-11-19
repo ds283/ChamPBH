@@ -1,0 +1,76 @@
+A: var/power-law-wall/07d-r2/export-pl/QCD_Cosmology
+B: var/power-law-wall/07d-r2/export-pl-resumed/QCD_Cosmology
+mode: file by file
+files: A 120, B 120, in both 120, only A 0, only B 0
+  inverse-power/alpha=0.01/csv/M=0.00097413eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.1541224580723792' vs '1.2562540001235902'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.82824608287774' vs '8.719430166995153'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0020774169825017452' vs '0.001975333783775568'
+  inverse-power/alpha=0.01/csv/M=0.00097413eV_n=2/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.174674415960908' vs '1.2703961660154164'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.897785000037402' vs '8.731617958983406'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0017645410262048244' vs '0.0017280841711908579'
+  inverse-power/alpha=0.1/csv/M=0.00097413eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.7285867079626769' vs '1.6132442499510944'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.254761958029121' vs '8.169883749913424'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0018824168946594' vs '0.0017398339696228504'
+  inverse-power/alpha=0.1/csv/M=0.00097413eV_n=2/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.6934482499491423' vs '1.62952920794487'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.013876625103876' vs '8.135421707993373'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0019244998693466187' vs '0.0018411669880151749'
+  inverse-power/alpha=0/csv/M=2.4353e+24eV_n=2/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '8.933914500055835' vs '9.161210291087627'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.787417500047013' vs '9.3684895420447'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0017244580667465925' vs '0.0015723751857876778'
+  inverse-power/histories.csv:
+     label (equal once main.py's label is masked, to the shorter cut; ruling (a)): column 'failure_reasons' differs in 3 row(s); first 'integrate_scalar_history (power-law-wall-07d-r2-pl-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-19T09:40:51): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4355e-05,' vs 'integrate_scalar_history (power-law-wall-07d-r2-pl-resumed-b-ScalarHistory-InversePowerModel(M=0.001Mp,n=1,beta=1.2)-2026-11-19T09:51:07): reflection requested inside the wall: W/(pi^2/2) = 1.6097 at N=35.9874939, phi_E=8.8224e-13, pi_E=-0.0089421 (W = 6.4'
+  inverse-power/one-loop-inverse-power-v1/A=0.05/csv/M=0.00097413eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '15.643841875018552' vs '15.682790334103629'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '10.332750750007108' vs '9.043865957995877'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.002842624904587865' vs '0.0019763330928981304'
+  inverse-power/one-loop-inverse-power-v1/A=0.05/csv/M=0.00097413eV_n=2/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '13.47296804212965' vs '14.095996167045087'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '10.081259500002488' vs '9.030667250044644'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0027459589764475822' vs '0.0020594580564647913'
+  inverse-power/one-loop-inverse-power-v1/A=1/csv/M=0.00097413eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '3.1937215412035584' vs '2.8740640410687774'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.314289084170014' vs '8.530762332957238'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0019912919960916042' vs '0.0017458340153098106'
+  inverse-power/one-loop-inverse-power-v1/A=1/csv/M=0.00097413eV_n=2/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '2.390076959040016' vs '2.146308584138751'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.514271624851972' vs '8.638865625020117'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0022576660849153996' vs '0.001938625006005168'
+  inverse-power/one-loop-inverse-power-v1/A=1/csv/M=2.4353e+12eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 1 row(s); first '5.020004500169307' vs '5.249857416143641'
+     timing: column 'BBN_compute_time' differs in 1 row(s); first '9.137537791160867' vs '9.321354540996253'
+     timing: column 'NP_compute_time' differs in 1 row(s); first '0.0016712499782443047' vs '0.0020120840054005384'
+  inverse-power/one-loop-inverse-power-v1/A=1/csv/M=2.4353e+12eV_n=2/data.csv:
+     timing: column 'scalar_compute_time' differs in 1 row(s); first '3.367561709135771' vs '3.4099243748933077'
+     timing: column 'BBN_compute_time' differs in 1 row(s); first '7.917011542012915' vs '8.107959875138476'
+     timing: column 'NP_compute_time' differs in 1 row(s); first '0.0014879170339554548' vs '0.0015649590641260147'
+  inverse-power/one-loop-inverse-power-v1/A=1/csv/M=2.4353e-06eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 1 row(s); first '4.371348374988884' vs '4.3972174159716815'
+     timing: column 'BBN_compute_time' differs in 1 row(s); first '9.559486917220056' vs '9.696911750128493'
+     timing: column 'NP_compute_time' differs in 1 row(s); first '0.0017809169366955757' vs '0.00194312515668571'
+  inverse-power/one-loop-inverse-power-v1/A=1/csv/M=2.4353e-06eV_n=2/data.csv:
+     timing: column 'scalar_compute_time' differs in 1 row(s); first '6.23321070894599' vs '6.495317124994472'
+     timing: column 'BBN_compute_time' differs in 1 row(s); first '9.575785875087604' vs '9.56228758301586'
+     timing: column 'NP_compute_time' differs in 1 row(s); first '0.0017900830134749413' vs '0.0017448330763727427'
+  inverse-power/one-loop-inverse-power-v1/A=10/csv/M=0.00097413eV_n=1/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.4790312501136214' vs '1.3890561249572784'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.352208332857117' vs '7.98537708283402'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0021683748345822096' vs '0.0020985419396311045'
+  inverse-power/one-loop-inverse-power-v1/A=10/csv/M=0.00097413eV_n=2/data.csv:
+     timing: column 'scalar_compute_time' differs in 3 row(s); first '1.5534462919458747' vs '1.5246842079795897'
+     timing: column 'BBN_compute_time' differs in 3 row(s); first '8.266344500007108' vs '7.964217708911747'
+     timing: column 'NP_compute_time' differs in 3 row(s); first '0.0019301672000437975' vs '0.0017901251558214426'
+per file name (identical / timing only / different):
+  bounces.csv: 22 / 0 / 0
+  data.csv: 0 / 15 / 0
+  fields.csv: 37 / 0 / 0
+  histories.csv: 0 / 1 / 0
+  quanta_bounces.csv: 22 / 0 / 0
+  quanta_histories.csv: 1 / 0 / 0
+  quanta_samples.csv: 22 / 0 / 0
+pairs compared: 120; byte-identical 104; differ only in timing columns 16; differ 0
+RESULT: every pair byte-identical or differing only in timing columns, no file in one only

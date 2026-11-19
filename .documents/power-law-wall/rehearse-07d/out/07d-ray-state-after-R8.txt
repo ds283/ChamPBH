@@ -1,0 +1,18 @@
+$ ./venv/bin/ray list jobs --address 127.0.0.1:6380 --limit 1000 --format json
+  job 01000000 SUCCEEDED driver pid 93403: t /Users/ds283/Documents/Code/ChamPBH/.claude/worktrees/power-law-wall/var/power-law-wall/07d-r2/refuse-07-exp
+$ ./venv/bin/ray list workers --address 127.0.0.1:6380 --limit 1000 --format json
+  workers: 11 recorded, 10 alive
+    alive WORKER pid 93409 worker 000800564afa
+    alive WORKER pid 93416 worker 37c8a950ce25
+    alive WORKER pid 93414 worker 37fe905b8e0c
+    alive WORKER pid 93411 worker 5dba4396afc5
+    alive WORKER pid 93407 worker 60b935a87ac5
+    alive WORKER pid 93410 worker 73a63c09b803
+    alive WORKER pid 93413 worker 9dce2bd39ca3
+    alive WORKER pid 93408 worker a6fd880869e3
+    alive WORKER pid 93412 worker a8bc456238d7
+    alive WORKER pid 93415 worker ac5abd806b9b
+$ ./venv/bin/ray list actors --address 127.0.0.1:6380 --limit 1000 --format json
+No resource in the cluster
+ 
+  actors: 0 recorded, 0 ALIVE; by (job, class, state): {}
