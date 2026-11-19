@@ -233,6 +233,24 @@ recorded nowhere.
 **Stores live under `var/datastores/`.** Since `var/` is ignored, **never run `git clean` with `-x`
 or `-X`**, which deletes ignored files, the stores among them.
 
+**Fingerprints and retirement.** *(Agreed 2026-11-19.)* Every registered run fingerprints its
+store when it finishes. `Run.finish` always writes that fingerprint into the run's
+`status.json`, but writes it into the store's sidecar only if a sidecar exists at that moment.
+`store retire` needs both a fingerprint in the sidecar and a fresh read-only fingerprint matching
+it. The fresh one is taken by the current tree, which cannot read a store of an earlier format.
+
+- **A sidecar made after its store's last run is fingerprinted at once.** A `store create` made
+  once every run that writes the store has finished leaves the sidecar with no fingerprint (the
+  run records still hold one). Follow it straight away with `./venv/bin/python -m runregistrykit
+  store fingerprint <primary> --write`, and check that the digest written equals the one in the
+  `status.json` of the store's last run to finish. If they differ, stop and ask.
+- **Rehearsal stores are retired at their campaign's close, while the tip still reads them.** A
+  store that outlives a change of format can be retired only with `--without-fingerprint`, which
+  does not check what is deleted. So a campaign's close prompt lists every store the campaign
+  built, with the result of `store retire --dry-run` at its tip, and names those its plan keeps
+  and why. The user retires the rest (retiring is a person's act) before a later campaign changes
+  the format. Science-run stores are not covered: they are kept while a comparison needs them.
+
 **What stays.** Production pipeline runs (`main.py` with a datastore) are the user's and are made
 on another machine; no campaign prompt starts one except a rehearsal the campaign's plan names.
 Nothing a prompt runs should take longer than a few PRyMordial solves.
