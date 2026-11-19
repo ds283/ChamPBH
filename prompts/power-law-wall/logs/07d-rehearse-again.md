@@ -4,7 +4,7 @@
 interrupted on purpose and resumed; every history whose law reads no ℓ compared with 07's, only P114's k_ex columns
 moving; the exponential's one-loop histories under `one-loop-exponential-v2` measured against 07's under v1; the readers
 on every store, U12's guard on a 07 store last (P111–P124, as P133 amends them for the restart).
-**Commit:** this commit, on branch `power-law-wall`, on top of `00fb718`
+**Commit:** `b5f863a`, on branch `power-law-wall`, on top of `00fb718`
 **Date:** 2026-11-19, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`); the restart of
 the first attempt of 2026-11-18 (README §6.16, P133, P134)
 **Result:** **COMPLETE.** The gate R2 holds (§4), with the user's ruling (a) on the stop at the suites before (D1).

@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-19 · **Status: LIVE — 12 of 13 prompts landed (07d landed 2026-11-19 on its restart, the gate R2 holds, no issue opened or closed: 07's grid rebuilt at 2026.14.0 in `power-law-wall-07d-r2-*`, thirteen registered runs, one interrupted and resumed; every history whose law reads no ℓ equal to 07's but P114's k_ex columns, the first attempt's five histories among them; the exponential's eleven one-loop histories under v2 measured, ΔN_eff today −0.4% to −6.7%; the readers on every store, U12's guard on 07's exp store; a stop at the suites before (a timing test across the machine's sleep) ruled (a) by the user; 07c2 landed 2026-11-19, the gate Range holds, one issue closed and none opened: the pulse rate |V‴/V″| as each model's hook in closed form, (n + 2)/φ on the power wall; the stop's histories build; the least margin of 07's grid's assessments 45.0 decades; the label 2026.14.0; 07c2 inserted and written 2026-11-19 on the user's ruling (a) of 07d's stop, on P125–P134, README §6.16; 07d dispatched 2026-11-18 and stopped in run `pl-a`, five power-wall histories at n = 1, β = 2.9, M = 4 × 10⁻³¹ M_P that 07 built failing at the tip, the pulse rate overflowing at φ_t = 2.3 × 10⁻¹⁰³ M_P; nothing committed by it; it restarts after 07c2 in fresh stores, `power-law-wall-07d-r2-*`; 07d written 2026-11-18 with its orchestrator note, on P111–P124, README §6.15; 07c landed 2026-11-18, the gate Consistent holds, one issue closed and one opened: one k_ex, ½E^{1/2}|V‴/V″|, at every use; the exponential's law `one-loop-exponential-v2` in `ExponentialModel`; the power wall's renamed `one-loop-inverse-power-v1`; the label 2026.13.0; 07b2 landed 2026-11-18, the gate Form holds, no issue opened: the min(rise, fall) form and its variants measured; U13 ruled 2026-11-18, the joint fit (fall shared, rise per n) on ln(V₀/M⁴) ≤ 10, README §6.13, P91–P98; 07b landed 2026-11-17, the gate Remeasure holds, one issue opened); re-planned 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|, on every potential and at every use; the exponential's one-loop law refitted under `one-loop-exponential-v2`; README §6.12, P73–P90; U11–U12 ruled as proposed, U13 ruled after 07b2), with 07b–07d inserted before 08 (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07c2 reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
+**Last updated:** 2026-11-19 · **Status: LIVE — 12 of 13 prompts landed (07d landed 2026-11-19 on its restart (`b5f863a`, reviewed), the gate R2 holds, no issue opened or closed by it and one opened by its review (a reader refuses a store of an older label by a traceback, not exit 2): 07's grid rebuilt at 2026.14.0 in `power-law-wall-07d-r2-*`, thirteen registered runs, one interrupted and resumed; every history whose law reads no ℓ equal to 07's but P114's k_ex columns, the first attempt's five histories among them; the exponential's eleven one-loop histories under v2 measured, ΔN_eff today −0.4% to −6.7%; the readers on every store, U12's guard on 07's exp store; a stop at the suites before (a timing test across the machine's sleep) ruled (a) by the user; 07c2 landed 2026-11-19, the gate Range holds, one issue closed and none opened: the pulse rate |V‴/V″| as each model's hook in closed form, (n + 2)/φ on the power wall; the stop's histories build; the least margin of 07's grid's assessments 45.0 decades; the label 2026.14.0; 07c2 inserted and written 2026-11-19 on the user's ruling (a) of 07d's stop, on P125–P134, README §6.16; 07d dispatched 2026-11-18 and stopped in run `pl-a`, five power-wall histories at n = 1, β = 2.9, M = 4 × 10⁻³¹ M_P that 07 built failing at the tip, the pulse rate overflowing at φ_t = 2.3 × 10⁻¹⁰³ M_P; nothing committed by it; it restarts after 07c2 in fresh stores, `power-law-wall-07d-r2-*`; 07d written 2026-11-18 with its orchestrator note, on P111–P124, README §6.15; 07c landed 2026-11-18, the gate Consistent holds, one issue closed and one opened: one k_ex, ½E^{1/2}|V‴/V″|, at every use; the exponential's law `one-loop-exponential-v2` in `ExponentialModel`; the power wall's renamed `one-loop-inverse-power-v1`; the label 2026.13.0; 07b2 landed 2026-11-18, the gate Form holds, no issue opened: the min(rise, fall) form and its variants measured; U13 ruled 2026-11-18, the joint fit (fall shared, rise per n) on ln(V₀/M⁴) ≤ 10, README §6.13, P91–P98; 07b landed 2026-11-17, the gate Remeasure holds, one issue opened); re-planned 2026-11-17 on R13–R17 (one k_ex, ½E^{1/2}|V‴/V″|, on every potential and at every use; the exponential's one-loop law refitted under `one-loop-exponential-v2`; README §6.12, P73–P90; U11–U12 ruled as proposed, U13 ruled after 07b2), with 07b–07d inserted before 08 (01, the gate Model holds; 02, the gate Wall holds; 03, the gate Law holds; 04, the gate Sample holds; 05, the gate Store holds, after its ruling-4 stop was ruled (a) by the user; 06, the gate Export holds, one issue opened; 07, the gate R holds, after its §2.2 stop was ruled (a) by the user, one issue opened); 01–07d reviewed; 06 landed on R12 (the potentials treated symmetrically: every export under `<output>/<label>/<model>/` with a `model` column, `--models` a list) and P45–P58 (README §6.10); 07 landed on P59–P72 (README §6.11); R11 (the surfing thresholds at n = 1 recorded as measured) ruled after 04 (README §6.8); P33–P44 stand as proposed (README §6.9); P24–P32 ruled as proposed; D12 left as it is by the user; R4–R5 ruled on 01's measurements (README §6.4); R6–R8 (U4 S = S_n; U3 the law f_n(ln R); U5 the three-region spectrum, the exponential's too) ruled on 02's (README §6.5); R9–R10 (U8 table in x, U9 associated piece) ruled with 03 (README §6.6); R1–R3 and U1–U7 ruled (README §6).**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -32,7 +32,7 @@ at n = 1 and 2 can follow, under the one-loop law with the fixed α beside it.
 | 07b2 | Measure the min(rise, fall) form | research in `source/kex/`: the exponential's law as min(rise in ln R, fall A/(ℓ − ℓ₀) in the new ℓ) and its variants at n = 1, 2, on three selections like for like beside v1 and 07b's (i)–(iv); errors, leave-one-set-out; new points predicted before they are fitted; the crossing, the cap, the edges; the paths; the reference implementation (P91–P98); then U13 | Opus | ✍️ | ✅ | `2f638e0` | [`logs/07b2-measure-the-min-form.md`](logs/07b2-measure-the-min-form.md) |
 | 07c | k_ex in production | the V‴ hook, one k_ex at every use, the law as U13 rules (in `ExponentialModel`, P99), the drain-model names, the tables and x_*, the iteration cap, the label (U11–U12; P99–P110, U14) | Opus | ✍️ | ✅ | `c8461ab` | [`logs/07c-k-ex-in-production.md`](logs/07c-k-ex-in-production.md) |
 | 07c2 | The pulse rate in closed form | |V‴/V″| as a model hook in closed form on both walls, in place of 07c's composition, which overflows below φ ≈ 3 × 10⁻¹⁰³ M_P; the stop reproduced, the range measured, the label 2026.14.0 (P125–P134, README §6.16) | Opus | ✍️ | ✅ | `bd8d648` | [`logs/07c2-pulse-rate-in-closed-form.md`](logs/07c2-pulse-rate-in-closed-form.md) |
-| 07d | Rehearse again | 07's grid at the tip; histories whose law reads no ℓ equal to 07's but the k_ex columns; the exponential's one-loop histories measured against 07's (P111–P124, README §6.15; orchestrator note 07d). *First attempt stopped 2026-11-18 in run `pl-a`, ruled (a); restarted after 07c2 in `power-law-wall-07d-r2-*` (P133)* | Opus | ✍️ | ✅ | this commit | [`logs/07d-rehearse-again.md`](logs/07d-rehearse-again.md) |
+| 07d | Rehearse again | 07's grid at the tip; histories whose law reads no ℓ equal to 07's but the k_ex columns; the exponential's one-loop histories measured against 07's (P111–P124, README §6.15; orchestrator note 07d). *First attempt stopped 2026-11-18 in run `pl-a`, ruled (a); restarted after 07c2 in `power-law-wall-07d-r2-*` (P133)* | Opus | ✍️ | ✅ | `b5f863a` | [`logs/07d-rehearse-again.md`](logs/07d-rehearse-again.md) |
 | 08 | Close | the documents, the handover, the issues, the indexes | Opus | ⬜ | ⬜ | — | — |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
@@ -795,6 +795,112 @@ correction (35 open: 07c's closed, dated 2026-11-19).
 β = 2.9, an extrapolation for a science grid's planning. Choices to look over: `_pulse_rate` refuses a negative rate
 rather than taking its absolute value (D5), and `RealizedModel` has no delegate for the new hook (D8).
 
+**Orchestrator review of prompt 07d (2026-11-19).** All seven checks of note 07d §3 pass, with the user's ruling (a) on
+the agent's stop at the suites before. The re-runs below were made by the orchestrator at `b5f863a`, from 10:48 GMT, at
+one-minute loads of 4–10, from scratch scripts in the session scratchpad (read-only `sqlite3` with `mode=ro`, none
+committed), one at a time.
+- **The gate at dispatch** (2026-11-19, 07:32–07:36 GMT). `HEAD` was `00fb718`, with `bd8d648` and `00fb718` its
+  ancestors; `VERSION_LABEL` 2026.14.0; `?? venv` only; the main checkout at `9df9e13`. The registry held 83 runs, all
+  finished; the lock and the four ports free; 07's four stores gave the note's digests by `store fingerprint` without
+  `--write`; none of the restart's paths existed. The load was 24.7 at 07:32 and 4.6 at 07:36.
+- **The stop.** The agent's `tools/tests` before ran across the machine's sleep (lid closed 07:57:16, full wake 09:04:57
+  by `pmset -g log`), 312 tests, and failed `test_outward_step_scan … test_a_task_past_its_limit_is_a_timeout` (a 3 s
+  timeout race, `'timeout' != 'done'`) beside the expected `test_roots_and_distributions`. I confirmed both failures and
+  the count from its output, and read the test (`tools/tests/test_outward_step_scan.py:442`) before putting it to the
+  user, who ruled: "This test is of no importance anyway, and has nothing to do with the science code. Please just do
+  (a)." Relayed in those words, with the user's note on the sleep; the test passed in the agent's suites after and in
+  mine.
+1. *Scope.* `b5f863a`'s parent is `00fb718`. Its 194 files are prompt §7's as the dated block amends it: the
+   verification document (+488, −0: §11 appended after line 2528), the log, the board (+33 −3), and `rehearse-07d/` (13
+   scripts and 178 small text files under `out/`, 4.0 MB, no PDF or PNG). No code, test, config, `CLAUDE.md`,
+   `.gitignore`, `PRyM/` or README change; `rehearse-07/` unchanged; nothing under `var/` tracked;
+   `.documents/OPEN_ISSUES.md` untouched. The worktree holds `?? venv` only, `git worktree list` the two trees, the
+   branch has no upstream. Against my listings at the Gate, `$MAIN/var` gained only `datastores/power-law-wall-07d-r2-*`
+   (four stores, 16 shards and a sidecar each) and `runs/power-law-wall-07d-r2-*` (13). The 125 files of 07's stores
+   and the first attempt's are byte-identical to my Gate `shasum`s, and 07's four give the Gate's digests again by my
+   own `store fingerprint`.
+2. *The counts,* by discovery, mine, from 10:51 GMT at loads of 5.9–9.7: 26, 226 + 583, 175, 312, 79, with the two
+   worktree failures (`test_roots_and_distributions`, `test_the_script_is_main_py_with_its_hash_and_this_repositorys_head`)
+   and no other.
+3. *The cluster, the registry and the tree.*
+   - `ray_cluster.sh status` exit 0 and the lock's `status`: free, no process, the four ports free; none of the 13 pids
+     recorded under `$L` answers `kill -0`.
+   - `runregistrykit list`: 96 runs, all finished; this prompt's 13 are 12 `done` and `r2-pl-resumed-a` `killed`.
+   - Every manifest, read by me: `git_head` `00fb718`, `git_dirty` True (the untracked `rehearse-07d/`), script hash
+     `2705636433a7…6fb87`, my own SHA-256 of `git show 00fb718:main.py`.
+   - The probe as committed: the driver, a task and an actor import this worktree's modules from its root as working
+     directory, at 2026.14.0 and format 8, and read `Xav_EOS_data.csv` `690090c8…119d` and `PRyMrates/` (84 files)
+     `49b4cea2…9224`, 07's hashes.
+   - The four sidecars format 8; `store fingerprint` by me: exp `17b288e7…c14c`, pl and pl-resumed `152f04f7…50be`, mixed
+     `477755a5…b8b8`, each matching its recorded fingerprint, `problems: none`.
+4. *No ℓ, no change, independently.* My script (sanity-tested first on 07's `pl` against 07's `pl-resumed`: 40 matched,
+   no difference, three reasons equal under the mask) matches histories by (model table, M, n, β, α, drain model under
+   the map, the three tolerances, φ, π, T, solver, cosmology), and compares by `float.hex` every column of
+   `ScalarHistory` (and `extra_data` key by key), `ScalarHistoryBounce` (by ordinal), `ScalarHistoryValue`,
+   `AdiabaticHistory`/`Value` and `BBNData`/`Value` (by redshift), serials, labels, timestamps and timing columns aside,
+   `failure_reason` under 07's mask; on the power wall the drained-share sum, and any candidate newly `unassessed`.
+   - pl and pl-resumed: 40 matched each way, 5 537 980 values each; exp (`fixed` only): 9, 1 330 655; mixed (the power
+     wall and the exponential's `fixed`): 29, 3 878 488. No difference outside P114's list in any; 37 and 17 drained-
+     share sums bitwise; no candidate newly unassessed; three reasons equal only under the mask in pl, pl-resumed and
+     mixed.
+   - P114's columns that moved, my counts and largest changes, equal to the agent's in every group: on the power wall's
+     one-loop law the bounce `ell` and `birth_margin` 579 (n = 1, 1.2674) and 563 (n = 2, 0.8017), `log_k_ex_Mp`,
+     `log_q_Mp`, `tracker_margin` 1.1922 and 0.7552, `log_m_Mp` 0.0751 and 0.0466, `reflection_margin` 568 and 552,
+     `reflection_margin_N` 16 and 13; `ell_min` and the `all_worst_*` margins 11 of 11 at each n; the worst margins 34 of
+     34 power-wall histories with values (up to 1.1323 / 1.1332 / 1.1022 at n = 1); on the exponential's fixed law the
+     three worst margins 6 of 9, up to 0.1898. Nothing else of P114's list moved. My value counts sit a few thousand
+     below the agent's (16 291 536 in all), as in 07's review: I skip the key tables, which the agent resolves.
+   - The first attempt's five histories (power wall, n = 1, β 2.9, 4e-31 M_P; α 0.01, 0.1; A 0.05, 1, 10) succeed in
+     07's and in 07d's `pl`, `pl-resumed` and `mixed`, with 299, 123 and 25 bounce rows under the one-loop law, each
+     equal to 07's outside P114's columns.
+5. *The tip's identities and the exponential under v2.* `tools/compare_stores.py` on 07d's `pl` and `pl-resumed`, run by
+   me: exit 1, `problems: none`, its output equal to the agent's but for the timing lines, the only differences the
+   three failure rows and their tags, whose reasons carry the run label (07's ruling (a)); `InversePowerModel` (16) and
+   `ScalarHistoryBounce` (2262) matched. Both `store fingerprint`s `152f04f7…`. P115 re-read by me from 07's and 07d's
+   `exp` at 4e-31 M_P: A = 0.05, β 2.9 (ΔN_eff today 0.0021126653 → 0.0019868061, Y_p 0.246970 → 0.246889, D/H 2.45971
+   → 2.45843, the one-loop share 0.997964 → 0.996342, `ell_min` 18.277 → 18.871, 103 → 116 candidates); A = 1, β 2
+   (0.0446240 → 0.04163249276504718, the tool route's value; 45 → 46); A = 10, β 1.2 (0.532988 → 0.505446; 6 → 7):
+   each equal to the agent's §11.5 table to its digits.
+6. *The readers and the exports.*
+   - 07's `export-pl` against 07d's by my own `cmp` under the directory map: the same 120 files, 37 byte-identical. By
+     my own CSV diff, the others differ only in the timing columns (`data.csv`, 15 fixed-law and 22 one-loop), P114's
+     columns (`bounces.csv`; `histories.csv`'s `ell_min` and `all_worst_*`), the three label-carrying `failure_reasons`,
+     and the quanta files (`spectrum_model` v1 → v2 and what the spectrum feeds, measured); every `fields.csv` identical.
+   - `tools/quanta_measures.py --assoc-scale 1` re-run by me on a copy of 07d's `export-exp` in the scratchpad, its
+     quanta files removed first: exit 0, measured 11, its 23 files byte-identical to the agent's, its summary equal but
+     for the wall; every one of 60 982 rows `R8-exponential-v2`.
+   - R4's five logs: the three plot refusals exit 2 with `!! plot:` lines naming the option and value, the two `main.py`
+     refusals at parse naming the drain law (U14 for the exponential at n = 3); no `refuse-*` output exists, and no
+     `power-law-wall-07d-r2-nonexistent*` file was created. R6's four `prod` lines equal the stored Y_p and D/H, which I
+     read myself, to the ten digits printed. The 90 store files of the agent's `shasum` record (07d's four stores and
+     07's `exp`) are unchanged today.
+   - R8 (U12's guard on 07's `exp`): no `refuse-07-exp` output, the store's files unchanged; but the reader exits 1 on an
+     uncaught `datastorekit.replication.ReadOnlyMiss` from the `ShardedPool` at `plot_by_beta.py:1118`, naming both labels
+     and "Nothing was written", not 2 with a `!! plot:` line. The guard holds by R8's own terms (no export, store
+     unchanged), as the agent counted it (D5); the form of the refusal is opened as
+     `[07d-a-reader-refuses-an-older-label-by-a-traceback]` (§3), cosmetic.
+   - `plot-exp`'s `M=0.00097413eV_n=1/Delta_N_eff.png`, looked at: both panels show α 0.01, 0.1 and A 0.05, 1, 10
+     (`one-loop-exponential-v2`) over β 1.2, 2, 2.9, A = 10 falling 0.505 → 0.145 → 0.062 and A = 1 0.053 → 0.042 →
+     0.032, as §11.5; the legend covers A = 10's point at β 2.9, as in 07.
+7. *The records.*
+   - The log has §5.1's seven parts. It records rulings 1–9 of the note with their classes and D1–D11, D1 the stop with
+     the user's words; three UNINTENDED DRIFT, all of the agent's own scripts or records (the first attempt's
+     `reflections` key, a `domain.py` overflow fixed before use, R1's empty start times, doubled file prefixes). Its §7
+     gives 08 the stores, the exports, the gate, what moved and the costs.
+   - The verification document loses no line; §11 is appended, its commands verbatim in §11.12.
+   - The board has row 07d, the gate R2 in §2, the baselines and the history line; the token grep over the commit's
+     files finds nothing; `black --check` passes on its 11 Python files.
+
+Corrected here: "this commit" replaced by `b5f863a` in the board's row and change log and in the log's header; the
+status line's "01–07c2 reviewed" and its issue count. Opened here: `[07d-a-reader-refuses-an-older-label-by-a-traceback]`
+(§3), with `.documents/OPEN_ISSUES.md` (36 open). Note 07d's header is marked used for the restart.
+
+**For the user.** 07d's four stores are the ones 08 reads (P124). 07's four and the first attempt's two
+(`power-law-wall-07d-exp`, complete; `power-law-wall-07d-pl`, runs a and b, no sidecar) stay in `$MAIN/var/datastores`
+for the user to retire. On the exponential, the history at 10⁻³³ M_P has 47 candidates with ln(V₀/M⁴) > 10 (up to 27.3),
+outside v2's fitted domain; every other one-loop candidate of the grid is at or below 3.345. The least φ_t over the
+grid's candidates sits 74.9 (n = 1) and 97.7 (n = 2) decades above where V″ leaves float range on the power wall.
+
 ## 2. The gates
 
 As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Remeasure (07b), Form (07b2), Consistent (07c), Range (07c2, added 2026-11-19), R2 (07d), Close (08). The last is
@@ -998,6 +1104,20 @@ not yet met.
     first missing value is named.
   - *Next step:* for a later prompt: gather the lookups' outcomes before refusing (and name every missing value), or
     retrieve the remaining refs before raising.
+
+- **`[07d-a-reader-refuses-an-older-label-by-a-traceback]`** (opened by the orchestrator's review of prompt 07d,
+  2026-11-19, from the agent's observation, log 07d §6 and D5; this board, "Orchestrator review of prompt 07d", check 6).
+  - *What:* the tip's `plot_by_beta.py --no-plots` on 07's 2026.12.0 `exp` store (R8, U12's guard) exits 1 with an
+    uncaught `datastorekit.replication.ReadOnlyMiss` traceback from the `ShardedPool` opened at `plot_by_beta.py:1118`
+    (a lookup of `version` matched no row; the message names the store's 2026.12.0 and the tip's 2026.14.0 and says
+    nothing was written), not with a `!! plot:` line and exit 2 as its other refusals do. `plot_ScalarHistory.py` opens
+    its pool the same way (`:1594`) and was not run on an older store.
+  - *Impact:* cosmetic. The guard holds: nothing is written, the store's files are unchanged, and the message names both
+    labels. But a refusal of a store of another label reads like a crash, and its exit status is not the plot scripts'
+    refusal status.
+  - *Next step:* for a later prompt: catch `ReadOnlyMiss` on the `version` lookup when the plot scripts open a store
+    read-only, and refuse with a `!! plot:` line naming both labels and exit 2; a test on a temporary store of another
+    label. The package raises the miss as it should, so the fix is ChamPBH's, not DatastoreKit's.
 
 ### 3.1 Assigned to this campaign
 
@@ -1259,7 +1379,10 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   checks of its §5 pass. 07d's restart is dispatched only at the user's word.
 - 2026-11-19: prompt 07d's restart dispatched at `00fb718`; stopped at the suites before (a timing test of `tools/tests`
   failing across the machine's sleep), ruled (a) by the user ("This test is of no importance anyway, and has nothing to do
-  with the science code. Please just do (a)."); then landed (this commit): the gate R2 holds. No issue opened or closed.
+  with the science code. Please just do (a)."); then landed (`b5f863a`): the gate R2 holds. No issue opened or closed.
   Thirteen registered runs in `power-law-wall-07d-r2-{exp,pl,pl-resumed,mixed}`; every history whose law reads no ℓ equal
   to 07's but P114's k_ex columns, the first attempt's five among them; the exponential's one-loop histories under v2
   measured; the readers on every store and U12's guard on 07's exp store.
+- 2026-11-19: prompt 07d reviewed by the orchestrator (this board, "Orchestrator review of prompt 07d"); all seven checks
+  of note 07d §3 pass. One issue opened by the review (§3, `[07d-a-reader-refuses-an-older-label-by-a-traceback]`). 08 is
+  written only when the user asks for it.

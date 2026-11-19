@@ -13,6 +13,11 @@ review in §3 check 2. The planner's §0 stays as it was written; its third-hook
 Gate below is the first attempt's; the restart's is re-measured by the orchestrator at dispatch. 07c2 landed `bd8d648`,
 reviewed 2026-11-19: the restart's suites are 26, 809 (226 + 583), 175, 312, 79.
 
+**Used for 07d's restart**, dispatched 2026-11-19 at about 07:37 GMT on the Gate as measured again by the orchestrator at
+`00fb718`. It stopped once, at the suites before (a timing test of `tools/tests` failing across the machine's sleep),
+ruled (a) by the user; it landed `b5f863a`, and the orchestrator's review (board, "Orchestrator review of prompt 07d")
+found all seven checks of §3 passing, with 07c2's counts in check 2.
+
 Read [`../README.md`](../README.md) first: §2.1 (the gate R2), §5, §6.12 (P87–P89), §6.14 (P109) and §6.15 (P111–P124).
 Then read the prompt. This note binds 07d only, and governs where it differs from the prompt. The conventions of earlier
 notes bind here as well: a tolerance is a number with its reason, timing is taken under load, and the suites run serially.
