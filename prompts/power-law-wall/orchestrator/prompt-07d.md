@@ -4,6 +4,14 @@
 now." Not dispatched. P111–P124 (README §6.15) stand unless the user rules otherwise; none needs a ruling first. 07d is
 dispatched at the user's word.
 
+**Used for 07d's first attempt**, dispatched 2026-11-18 at 19:04 on the Gate as measured again by the orchestrator;
+it stopped in run `pl-a` (README §6.16) and was ruled (a) by the user. **Amended 2026-11-19 for the restart** (P133):
+the prompt's dated block governs the Gate, the names and the section, and this note's rulings and conventions bind
+the restart as they bound the first attempt, with `power-law-wall-07d-r2-*`, `var/runs/power-law-wall-07d-r2-*` and
+`$L = var/power-law-wall/07d-r2` in place of the first attempt's names wherever they appear, and the counts of 07c2's
+review in §3 check 2. The planner's §0 stays as it was written; its third-hook paragraph is superseded by §6.16. The
+Gate below is the first attempt's; the restart's is re-measured by the orchestrator at dispatch.
+
 Read [`../README.md`](../README.md) first: §2.1 (the gate R2), §5, §6.12 (P87–P89), §6.14 (P109) and §6.15 (P111–P124).
 Then read the prompt. This note binds 07d only, and governs where it differs from the prompt. The conventions of earlier
 notes bind here as well: a tolerance is a number with its reason, timing is taken under load, and the suites run serially.

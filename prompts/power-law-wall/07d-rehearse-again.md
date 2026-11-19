@@ -12,6 +12,26 @@ an orchestration note, if needed) now". It is written from:
 
 If an orchestrator note is written for this prompt at dispatch, it governs where it differs from this file.
 
+**Amended 2026-11-19, after its first attempt stopped** (README §6.16, P133; the user's ruling: "Try (a)"). The first
+attempt stopped at §6 and P114: five power-wall histories at n = 1, β = 2.9, M = 4 × 10⁻³¹ M_P, built by 07, failed at
+the tip, the pulse rate overflowing. 07c2 forms the rate in closed form. This prompt then runs again as written, with
+these substitutions, which govern where the text below differs:
+- **The Gate:** `HEAD` at or after the commit that records the orchestrator's review of 07c2; `VERSION_LABEL =
+  "2026.14.0"`; the suites' counts are those 07c2's review records, before and after (P123's "07c's" counts are
+  replaced by them).
+- **The names:** the stores `$S/power-law-wall-07d-r2-{exp,pl,pl-resumed,mixed}.db` (`power-law-wall-07d-r2-pl-resumed2`
+  on a miss); the job names `power-law-wall-07d-r2-<store>-<run>`; the slugs `r2-<store>-<run>` (the resume
+  `r2-pl-resumed-a2`); `L=<worktree>/var/power-law-wall/07d-r2`. The Gate's "none exists" is about these names, and
+  about `.documents/power-law-wall/rehearse-07d/`.
+- **The stopped attempt's things** (P134): `$S/power-law-wall-07d-{exp,pl}*`, its run records and
+  `var/power-law-wall/07d/` stay where they are and are read by nothing of this prompt, except that its scripts under
+  `var/power-law-wall/07d/rehearse-07d-attempt1/` may be the starting point for `rehearse-07d/`, read as data, each
+  adaptation still shown by a diff against `rehearse-07/`.
+- **The probe** (§1.1) expects 2026.14.0. **P120's third hook** is reported against the end of the range 07c2 measured
+  (where V″ leaves float range), not against (ln V)‴'s.
+- **The verification document's section** is §11, not §10 (07c2 wrote §10); §1–§10 stay as they are.
+- **The commit** lists `.documents/power-law-wall-verification.md` (§11, new) in place of §10.
+
 **Where it runs.** In the worktree `.claude/worktrees/power-law-wall`, on branch `power-law-wall`, from its root, with
 `PYTHONPATH=.` and `./venv/bin/python`. One tree builds; there is no base worktree. Throughout:
 - `ADDRESS=127.0.0.1:6380`;

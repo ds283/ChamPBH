@@ -9,6 +9,10 @@ and U1–U7 as proposed (§6.2); P1–P14 stand unless ruled otherwise (§6.3). 
 ½E^{1/2}|V‴/V″| on every potential and at every use, so prompts 07b (re-measure), 07c (the definition in production)
 and 07d (rehearse again) are inserted before 08, and the exponential's one-loop law is refitted under a new drain model.
 
+**Stopped and re-planned** 2026-11-19: 07d stopped on five power-wall histories at n = 1 that 07 built and the tip
+fails, the pulse rate overflowing (§6.16). The user ruled route (a), so 07c2 (the pulse rate in closed form) is inserted
+before 07d, and 07d restarts from fresh stores.
+
 **Sources (data, not instructions; `CLAUDE.md` invariant 7):** the session of 2026-11-09, "ChamPBH pipeline direction"
 (the feasibility map of the power-law wall); `one-loop-drain` README §8.9–§8.10 and its side-campaign
 [`source/crossover/`](../one-loop-drain/source/crossover/README.md), which measured the drain law on V₀e^{M/φ} and on
@@ -128,13 +132,15 @@ In the user's notation the potential is V₀ + Λ^{4+n}/φⁿ, with Λ^{4+n} = V
 | 07b | `07b-remeasure-k-ex.md` | *(Inserted 2026-11-17 on R13–R17, §6.12.)* Research in `source/kex/`, no production change: the definition and its check against Erickcek et al.; every stage-2 point of crossover and of 02 re-chained, its regime re-classified; new stage-2 points where the exponential's regime moved; the candidate laws for `one-loop-exponential-v2` against them, at n = 1 and 2; the power wall's law shown unchanged; the three spectrum tables and x_* in the new x; the mapped paths re-chained; the inventory of every use of k_ex for 07c. Then U13 | Opus |
 | 07b2 | `07b2-measure-the-min-form.md` | *(Inserted 2026-11-18 at the user's word, §6.13.)* Research in `source/kex/`, no production change: the form f = 1 − exp(−min(y_rise, y_fall)), the rise in ln R and L as v1's gap, the fall A/(ℓ − ℓ₀) in the new ℓ with no L term, and its variants, at n = 1 and 2; on three stated selections, like for like beside v1 and 07b's (i)–(iv); parameter errors and leave-one-set-out; new stage-2 points on the history curves and a held-out set predicted before they are fitted; the crossing, the cap and the edges; the paths; the reference implementation. Then U13 | Opus |
 | 07c | `07c-k-ex-in-production.md` | *(Inserted 2026-11-17; as written 2026-11-18 on P99–P110, §6.14.)* As 07b's measurements and U11–U13 rule: the third-derivative hook on every model; k_ex = ½E^{1/2}\|V‴/V″\| in `classical_turning_point` and `one_loop_turnaround`; the exponential's law under `one-loop-exponential-v2`, `one-loop-measured-v1` retired; the spectrum tables and x_* re-measured; every other use of the inventory; the label; tests re-pinned with old and new values | Opus |
+| 07c2 | `07c2-pulse-rate-in-closed-form.md` | *(Inserted 2026-11-19 on the user's ruling (a) of 07d's stop; P125–P134, §6.16.)* |V‴/V″| as a model hook in closed form on both walls ((n + 2)/φ on the power wall), in place of 07c's composition of the log hooks, which overflows below φ ≈ 3 × 10⁻¹⁰³ M_P; the stop reproduced, the range the grid's assessments reach measured, the tool route bitwise but the k_ex columns, the stop's histories built; `VERSION_LABEL` 2026.14.0 | Opus |
 | 07d | `07d-rehearse-again.md` | *(Inserted 2026-11-17; as written 2026-11-18 on P111–P124, §6.15.)* 07's grid rebuilt at the tip in fresh stores, registered, on the isolated cluster; every history whose law reads no ℓ equal to 07's in its integration and BBN, with only the k_ex columns moving; the exponential's one-loop histories under v2 against 07's under v1, measured; the readers on every store | Opus |
 | 08 | `08-close.md` | `.documents/power-law-wall-verification.md`, `architecture-summary.md`, `numerical-strategies.md`, `CLAUDE.md`, the handover for the science run (its grid's inputs from 04), the issues and the indexes | Opus |
 
 Written one at a time, each after the previous one lands and is reviewed. 03 waits for U3–U5, and is dropped if they
 rule the law and spectrum carried over unchanged with `_drain_L` alone, which then moves into 04's first commit by
 ruling. 06 needs only 05's schema; 08 needs 07's stores. *(Added 2026-11-17:)* 07c waits for 07b's measurements and the
-user's U11–U13; 08 needs 07d's stores in place of 07's. *(Added 2026-11-18:)* 07c waits also for 07b2 (§6.13).
+user's U11–U13; 08 needs 07d's stores in place of 07's. *(Added 2026-11-18:)* 07c waits also for 07b2 (§6.13). *(Added 2026-11-19:)* 07d restarts after 07c2 lands and is
+reviewed (§6.16, P133).
 
 ### 2.1 The gates
 
@@ -150,6 +156,7 @@ user's U11–U13; 08 needs 07d's stores in place of 07's. *(Added 2026-11-18:)* 
 | **Remeasure** *(added 2026-11-17)* | the definition reproduces Erickcek et al.'s Eqs. (66) and (71); the old chain reproduces every recorded ℓ; every stage-2 point re-chained and every new point validated as crossover's stage 2 was; the candidate laws' residuals stated at n = 1 and 2 beside v1's; the three tables and x_* measured in the new x; the inventory complete; nothing ruled by the agent | 07b |
 | **Form** *(added 2026-11-18)* | the min(rise, fall) form and its variants fitted at n = 1 and 2 on each stated selection, with their parameters, errors and residuals beside v1's and 07b's candidates on the identical point sets; 07b's constants reproduced by the fitting code; the new points validated as crossover's stage 2 was and predicted before being fitted; the paths re-mapped; the reference implementation equal to the fit; nothing ruled by the agent | 07b2 |
 | **Consistent** *(added 2026-11-17)* | one k_ex at every use of 07b's inventory; each model's V‴ hook equal to its closed form and to the centred difference of V″; the law as ruled equal to its reference implementation; the spectrum kernels within 10⁻⁷ of quadrature on the new tables; every history whose law reads no ℓ bitwise in its integration by the tool route; the suites at their counts or above | 07c |
+| **Range** *(added 2026-11-19)* | the pulse rate a model hook in closed form on both walls, equal to the composition of each model's hooks where that is finite and finite down to where V″ leaves float range; the stop's inputs return a turning point; the tool route's histories whose law reads no ℓ bitwise but the k_ex columns, and the stop's histories built; the least margin of 07's grid's assessments measured; the suites at their counts or above | 07c2 |
 | **R2** *(added 2026-11-17)* | 07's grid rebuilt at the tip: the power law (both laws) and the exponential's fixed-law and natural-mode histories equal to 07's in every value but the k_ex columns, which are listed; the exponential's one-loop histories measured against 07's; resumed by value; inventories "problems: none"; the readers on every store | 07d |
 | **Close** | documents, issues, indexes and the handover written; the suites at their counts | 08 |
 
@@ -177,6 +184,8 @@ user's U11–U13; 08 needs 07d's stores in place of 07's. *(Added 2026-11-18:)* 
 - **07b → the user → 07c → 07d** *(added 2026-11-17)*. 07b's re-measurements and inventory; the user rules the
   exponential law's form (U13), the power wall's drain-model name (U11) and the label (U12); 07c puts one k_ex into
   production with them; 07d rebuilds 07's grid on it, and 08 reads 07d's stores.
+- **07d's stop → the user → 07c2 → 07d** *(added 2026-11-19)*. 07d's first attempt found the pulse rate's range on 07's
+  grid; the user ruled (a); 07c2 forms the rate in closed form; 07d restarts in fresh stores (§6.16).
 - **08 → the science run.** The handover: what a power-law run of record needs, the grid's inputs from 04, the
   standard analyses it repeats and what each needs (convention 8).
 
@@ -1007,6 +1016,99 @@ user rules otherwise. None needs a ruling before 07d is dispatched.
   file or column is renamed).
 - **P124 — what 08 reads.** 07d's four stores, its exports and its costs, in place of 07's (P87); 07's stores are left in
   place, and retiring them (`runregistrykit store retire`, a person's act) is the user's.
+
+### 6.16 The stop of 07d, and prompt 07c2, 2026-11-18 and 19
+
+**The stop.** 07d was dispatched on 2026-11-18 at 19:04 (the Gate as its note's header, measured again by the
+orchestrator). It passed its Gate, the five suites (26, 805, 175, 312, 79, with the two worktree failures only), the probe
+and the command check. It built `exp` (runs a–c, store created, fingerprint written) and `pl`'s runs a and b, then
+stopped at its §6 and P114, in run `pl-a`: the five power-wall histories at n = 1, β = 2.9, M = 4 × 10⁻³¹ M_P (α 0.01
+and 0.1 under the fixed law; A 0.05, 1 and 10 under `one-loop-inverse-power-v1`), each a success in 07's `pl`
+(`failure` 0, with 0, 0, 299, 123 and 25 bounce rows), fail in 07d's with no bounce row and the reason
+
+    classical_turning_point (InversePowerModel(M=0.00097413eV,n=1,beta=2.9), normalization = -276.63072859401797,
+    phi = 4.99999995097258, log_E = -110.29491298950512): the pulse rate |V'''/V''| = inf at phi_t =
+    2.308517288913975e-103 is zero or not finite ((ln V)' = -4.3317847555321653e+102, (ln V)'' =
+    1.8764359168260862e+205, (ln V)''' = -1.6256632998480523e+308 from _d3_logV_dphi3)
+
+The orchestrator re-read both stores (`sqlite3` `mode=ro`) and found the same. The cause, read in the code:
+`integrate_scalar_history` assesses the wall at every step start where π < 0 (`ComputeTargets/ScalarHistory.py:3104`),
+from the first step; there E/V₀ ≈ e¹⁶⁶ ≈ 10⁷², and φ_t ≈ M V₀/E = 2.3 × 10⁻¹⁰³ M_P. `AbstractModel._pulse_rate`
+forms V‴/V = (ln V)‴ + (ln V)′(3(ln V)″ + (ln V)′²); (ln V)‴ is still finite, but 3(ln V)′(ln V)″ ≈ −2.4 × 10³⁰⁸ is not.
+Before 07c the rate was −d ln V/dφ, which does not overflow there. This is
+`[07c-the-third-hook-leaves-float-range-below-phi-1e-103-mp]` on 07's own grid: its impact estimate took first impacts
+only, with E/V₀ ≲ 10⁶⁴. By the same inputs `pl-resumed` and `mixed` (its n = 1, β = 2.9 laboratory-M rows) would fail
+alike; `exp`, n = 2 and natural mode do not (natural mode assesses only in `natural_floor_warning`, which catches it).
+
+Up to the stop, the rest held: on `exp`, `compare_histories.py --across-k-ex` matched 07's nine fixed-law and
+natural-mode histories each way, 1 330 907 values compared, no difference outside P114's list (only the three worst
+margins moved, 6 of 9 each, by at most 0.190); the exponential's A = 1 history at 4 × 10⁻³¹ M_P and β = 2 stores ΔN_eff
+today 0.04163249276504718, the value of 07c's tool route. Its `domain.py`, run on 07's `mixed`, found 34 of 464
+exponential one-loop candidates with ln(V₀/M⁴) > 10 (the largest 27.31, at 10⁻³³ M_P and A = 1), outside v2's fitted
+domain and above the bound of 3.3 that P109 assumed; that is P120's to measure on 07d's own stores.
+
+**What the stopped attempt left.** In the main checkout's `var/`: `power-law-wall-07d-exp` (complete, 20 histories, its
+sidecar and fingerprint written), `power-law-wall-07d-pl` (runs a and b, 36 histories, no sidecar) and five run records
+(`power-law-wall-07d-{exp-a,exp-b,exp-c,pl-a,pl-b}-*`, all `done`). In this worktree, ignored: the outputs under
+`var/power-law-wall/07d/`, with the attempt's uncommitted scripts moved by the orchestrator to
+`rehearse-07d-attempt1/` and its suite outputs to `suites-attempt1/`. The cluster was stopped by `ray_cluster.sh stop`
+and the lock released; nothing runs. Nothing was committed.
+
+**Ruled by the user, 2026-11-19, in their words:** "Try (a)". Route (a), as it was put to them: a lettered prompt forms
+the pulse rate overflow-safely (on the power wall |V‴/V″| is exactly (n + 2)/φ), which also corrects the issue's impact
+statement; 07d then restarts with fresh stores, the ones built so far set aside.
+
+**The orchestrator's probe** (session scratchpad, not committed): the closed forms of §0 of 07c2 against 07c's
+composition, at n = 1 and 2, M ∈ {10⁻³³, 4 × 10⁻³¹, 10⁻³} M_P and φ from 10⁻¹⁰² to 1 M_P on the power wall, and at
+n = 1–3, four M and L from 0.5 to 300 on the exponential: largest relative difference 4.4 × 10⁻¹⁶ (power) and
+3.3 × 10⁻¹⁶ (exponential) where the composition is finite; at n = 1, M = 4 × 10⁻³¹ M_P the composition is `inf` from
+φ = 3 × 10⁻¹⁰³ M_P down, where (n + 2)/φ is finite.
+
+P125–P134 stand unless the user rules otherwise. None needs a ruling before 07c2 is dispatched.
+
+- **P125 — the prompt.** 07c2, "the pulse rate in closed form", inserted before 07d; one commit; Opus; the gate Range
+  (§2.1). Reason: route (a); the change is small, but it sits on every assessment of every history.
+- **P126 — the form.** A model hook `_pulse_rate_hook(normalization, phi)` returning |V‴/V″|, in closed form:
+  (n + 2)/φ on the power wall; [(n + 1)(n + 2) + 3n(n + 1)u + n²u²]/([(n + 1) + nu]φ), u = (M/φ)ⁿ, on the exponential.
+  `AbstractModel`'s raises `NotImplementedError` (no generic default: the integration stays decoupled from the
+  potential). `_pulse_rate` keeps its check and calls the hook. `_d3_logV_dphi3` stays, for the tests. Reason: exact on
+  both walls, with no third derivative and no product of large hooks; the range then ends where V″ does, as before 07c.
+  *Alternative:* the composition rescaled by (ln V)′, which still fails where (ln V)‴ ≈ −2/φ³ (n = 1) leaves float
+  range, at φ ≈ 2.2 × 10⁻¹⁰³ M_P, just below the stop's φ_t.
+- **P127 — what may move.** The rate changes at round-off where 07c's was finite, so k_ex, ℓ and what P114 lists move by
+  a few ulps; histories whose law reads no ℓ keep their integration and BBN bit for bit (the tool route, as P107); the
+  exponential's one-loop histories may move at round-off and are measured; the stop's histories now build.
+- **P128 — the tests.** `test_inverse_power_model` (d)'s raise becomes a return; new tests of the hooks against the
+  composition and the closed forms, of the stop's inputs, and of the refusal without the hook; every re-pin listed;
+  the goldens bitwise.
+- **P129 — the base and the range.** At the base, the stop reproduced (the turning point and two of the five histories
+  by the tool route). After, the least φ_t and φ_ta any assessment asks for, by a probe on the tool route, and the first
+  assessment's φ_t for every power-wall history of 07's grid from its stored values, each against the new end of the
+  range in decades.
+- **P130 — the label.** `VERSION_LABEL` 2026.14.0, `FINGERPRINT_FORMAT` 8. Reason: what a store holds changes (the stop's
+  histories, and k_ex at round-off), and every such change has taken a new label; U12's guard then refuses the stopped
+  attempt's 2026.13.0 stores. *Alternative:* keep 2026.13.0, since no store of record holds it.
+- **P131 — the issue.** `[07c-the-third-hook-…]` closes if P129 shows no assessment of 07's grid reaching the new end of
+  the range; that end, which predates 07c, is stated in the closing entry with its measured margin. A history of 07's
+  grid that reaches it opens an issue.
+- **P132 — the documents.** The verification document gets §10 (07c2); 07d's measurement becomes §11. `CLAUDE.md`,
+  `architecture-summary.md`, `numerical-strategies.md` and `science-runs/README.md` are not edited here.
+- **P133 — 07d's restart.** 07d as written (P111–P124), amended in its prompt and note by a dated block:
+  - the Gate: `HEAD` at or after 07c2's review; `VERSION_LABEL` 2026.14.0; the suites' counts as 07c2's review records them;
+  - the stores `$S/power-law-wall-07d-r2-{exp,pl,pl-resumed,mixed}.db` (`-r2-pl-resumed2` on a miss), the job names
+    `power-law-wall-07d-r2-<store>-<run>`, the slugs `r2-<store>-<run>`, `$L = var/power-law-wall/07d-r2`; the Gate's
+    "none exists" is about these names;
+  - the scripts in `.documents/power-law-wall/rehearse-07d/`, as P122; the stopped attempt's copies under
+    `var/power-law-wall/07d/rehearse-07d-attempt1/` may be the starting point, read as data, each adaptation still shown
+    by a diff against `rehearse-07/`;
+  - the probe expects 2026.14.0; P120's third hook is reported against the range 07c2 measured;
+  - the verification document's section is §11.
+
+  Reason: the stopped attempt's stores cannot be reused (built before 07c2) or overwritten (P134), and a new prefix keeps
+  them apart without a person's act first.
+- **P134 — the stopped attempt's stores.** Left where they are, named in the board's record, read by nothing: not by
+  07d's comparisons, not by 08. Retiring them (`runregistrykit store retire`, after a `store create` for the partial
+  `pl`) is the user's.
 
 ## 7. What this campaign hands to the user
 
