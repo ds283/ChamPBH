@@ -66,7 +66,8 @@ campaign closed the same day, 4 of 4 prompts landed, with these three open; §1.
 (planned 2026-11-13, with none opened or assigned; prompts 01–05 opened none; prompt 06 opened one, 2026-11-16; prompt 07
 opened one, 2026-11-16, from its stop at the gate R, ruled (a) by the user, and its review one; prompt 07b opened one,
 2026-11-17; prompt 07c closed 07b's and opened one, 2026-11-18, which 07d's stop narrowed, 2026-11-19, and prompt 07c2
-closed, 2026-11-19; prompt 07d's review opened one, 2026-11-19; §1.26).
+closed, 2026-11-19; prompt 07d's review opened one, 2026-11-19; prompt 08 opened and closed none, and the campaign closed
+2026-11-19, 13 of 13 prompts landed, with these four open; §1.26).
 
 This file exists so that an issue opened by one campaign is not lost when that campaign closes.
 It is an **index, not a record**: one line per issue, pointing at the campaign status board that
@@ -424,12 +425,13 @@ prompt 02, one by prompt 03; none assigned.
 
 ### 1.26 `power-law-wall` — [board §3](../prompts/power-law-wall/IMPLEMENTATION_STATE.md)
 
-Planned 2026-11-13; live. One opened by prompt 06, two by prompt 07 (one by its review), one by prompt 07b (closed by
-prompt 07c), one by prompt 07c (closed by prompt 07c2), one by prompt 07d's review; none assigned.
+Planned 2026-11-13; closed 2026-11-19 by prompt 08, 13 of 13 prompts landed. One opened by prompt 06, two by prompt 07
+(one by its review), one by prompt 07b (closed by prompt 07c), one by prompt 07c (closed by prompt 07c2), one by prompt
+07d's review; none by prompt 08; none assigned.
 
 - `[06-plot-quanta-grid-refuses-two-n-at-one-cell]` — `tools/plot_quanta_grid.py` groups a root's rows by (drain model,
   A) and refuses two rows in one (β, M) cell, so a power-law root with n = 1 and 2 at one (β, M) has every grid figure
-  refused. *(`power-law-wall`; prompt 06)*
+  refused; a root per n draws them (measured by prompt 08). *(`power-law-wall`; prompt 06)*
 - `[07-failure-reason-carries-the-run-label]` — a stored `ScalarHistory.failure_reason` embeds main.py's history label
   (job name and time), which `compare_stores.py` does not mask, and production's 256-character cut makes how much of the
   reason survives depend on the job name's length. *(`power-law-wall`; prompt 07)*

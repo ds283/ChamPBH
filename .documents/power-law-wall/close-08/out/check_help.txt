@@ -1,0 +1,86 @@
+# the commands, each with --help
+ok   ./venv/bin/python main.py --help: exit 0
+ok   ./venv/bin/python plot_by_beta.py --help: exit 0
+ok   ./venv/bin/python plot_ScalarHistory.py --help: exit 0
+ok   ./venv/bin/python RunDrivers/registered_run.py --help: exit 0
+ok   ./venv/bin/python tools/quanta_measures.py --help: exit 0
+ok   ./venv/bin/python tools/plot_quanta_grid.py --help: exit 0
+ok   ./venv/bin/python tools/plot_quanta_history.py --help: exit 0
+ok   ./venv/bin/python tools/bbn_from_store.py --help: exit 0
+ok   ./venv/bin/python tools/history_and_bbn.py --help: exit 0
+ok   ./venv/bin/python tools/surfing_scan.py --help: exit 0
+ok   ./venv/bin/python tools/compare_stores.py --help: exit 0
+ok   ./venv/bin/python -m runregistrykit list --help: exit 0
+ok   ./venv/bin/python -m runregistrykit store create --help: exit 0
+
+# the options §4.22 names (30), each in its command's --help
+ok   --A-values in main --help
+ok   --A-values in plot_by_beta --help
+ok   --A-values in plot_ScalarHistory --help
+ok   --M-values-Mp in main --help
+ok   --alpha-values in main --help
+ok   --alpha-values in plot_by_beta --help
+ok   --alpha-values in plot_ScalarHistory --help
+ok   --assoc-scale in quanta_measures --help
+ok   --assoc-scale in plot_quanta_grid --help
+ok   --assoc-scale in plot_quanta_history --help
+ok   --bbn-wall-clock-limit in main --help
+ok   --beta-values in main --help
+ok   --campaign in registered_run --help
+ok   --config in main --help
+ok   --config in plot_by_beta --help
+ok   --config in plot_ScalarHistory --help
+ok   --database in main --help
+ok   --database in plot_by_beta --help
+ok   --database in plot_ScalarHistory --help
+ok   --help in main --help
+ok   --help in plot_by_beta --help
+ok   --help in plot_ScalarHistory --help
+ok   --help in registered_run --help
+ok   --help in quanta_measures --help
+ok   --help in plot_quanta_grid --help
+ok   --help in plot_quanta_history --help
+ok   --help in bbn_from_store --help
+ok   --help in history_and_bbn --help
+ok   --help in surfing_scan --help
+ok   --help in compare_stores --help
+ok   --help in runregistrykit_list --help
+ok   --help in runregistrykit_store_create --help
+ok   --inventory in main --help
+ok   --is-ancestor: git merge-base --is-ancestor main power-law-wall runs as written, exit 1
+ok   --job-name in main --help
+ok   --model in history_and_bbn --help
+ok   --model in surfing_scan --help
+ok   --model in bbn_from_store --help
+ok   --models in main --help
+ok   --models in plot_by_beta --help
+ok   --models in plot_ScalarHistory --help
+ok   --n in history_and_bbn --help
+ok   --n in surfing_scan --help
+ok   --n in bbn_from_store --help
+ok   --n-values in main --help
+ok   --n-values in plot_by_beta --help
+ok   --n-values in plot_ScalarHistory --help
+ok   --name-only: git diff --name-only a7e0978 main runs as written, exit 0
+ok   --output in plot_by_beta --help
+ok   --output in plot_ScalarHistory --help
+ok   --phi-init-Mp in main --help
+ok   --phi-init-Mp in plot_by_beta --help
+ok   --phi-init-Mp in plot_ScalarHistory --help
+ok   --potential-type: a key of REMOVED_OPTIONS in config/argument_parser.py, quoted by §4.22 point 7, not an option of any command
+ok   --prompt in registered_run --help
+ok   --purpose in registered_run --help
+ok   --ray-address in main --help
+ok   --ray-address in plot_by_beta --help
+ok   --ray-address in plot_ScalarHistory --help
+ok   --register in registered_run --help
+ok   --retry-failed-scalar in main --help
+ok   --shards in main --help
+ok   --shards in plot_by_beta --help
+ok   --shards in plot_ScalarHistory --help
+ok   --stale-after in runregistrykit_list --help
+ok   --tuning-max-integrations in main --help
+ok   --write-tree: git merge-tree --write-tree main power-law-wall runs as written, exit 0
+
+# options of the table that §4.22 does not name: none
+# failures: 0

@@ -2017,6 +2017,82 @@ Not of this campaign: the two statements in code that §6.11.3 lists ("elastic r
 the verbose line) were corrected in `4fefdf8` (2026-11-01, housekeeping after `inelastic-reflection`'s close); the comment at
 `:91`–`:93` now says the count is elastic at α = 0 and drains at α > 0.
 
+### 6.13 Added 2026-11-19 (`power-law-wall` prompt 08): the power wall and one k_ex as they stand
+
+A reading guide, not a restatement. Since `power-law-wall` a history has one of two potentials, the exponential
+V₀ exp((M/φ)ⁿ) (`ExponentialModel`) and the power wall V₀[1 + (M/φ)ⁿ] (`InversePowerModel`), and runs every step of
+§6.11.1 and §6.12.1 under either; what differs between them is read through the model's hooks, and nothing of either
+potential is in `ComputeTargets/ScalarHistory.py`. This section reads a history in order and gives each step its code
+at the dispatch commit `278c58d` (lines are in `ComputeTargets/ScalarHistory.py` unless a file is named). The two walls,
+their laws, their spectra and every constant's source, written for quotation, are
+[`power-law-wall-verification.md`](power-law-wall-verification.md) §12; the campaign's plan is
+[`prompts/power-law-wall/README.md`](../prompts/power-law-wall/README.md) §6. §6.1–§6.12 are records, and nothing in them is
+edited. The campaign added no other dated note to this file.
+
+#### 6.13.1 What a history does, in order, on either wall
+
+0. **Entry.** The key's `alpha_value` names `"fixed"`, or the model's own one-loop drain model: `"one-loop-exponential-v2"`
+   (`ExponentialModel.one_loop_drain_model`, `CosmologyConcepts/Models/ExponentialModel.py:258`) or
+   `"one-loop-inverse-power-v1"` (`InversePowerModel.py:170`), each at n = 1 and 2 only. A key naming another is refused
+   when the `ScalarHistory` is constructed (`check_key_drain_model`, `:1811`), and under the one-loop law a model without
+   its own fraction, or at another n, is refused before any integration (`check_drain_law_model`, `:1777`). A retired name
+   (`"one-loop-measured-v1"`, `"one-loop-measured-pl-v1"`) is refused wherever a drain model is read (`law_of`,
+   `CosmologyConcepts/drain_model.py:108`). Verification §12.3.
+1. **The seed and the tuning**, §3.7.4, with the model's own seed: on the power wall the tracking or static analytic minimum
+   at every n (`InversePowerModel.seed`, `:398`); on the exponential at n = 1 only, plain otherwise
+   (`ExponentialModel.seed`, `:443`). Verification §1.3, §12.1.
+2. **The assessment at each step start with π < 0** (`:3101`–`:3104`), as §6.4 and §6.12.1 step 1 have it. The turning
+   points are `AbstractModel.classical_turning_point` (`CosmologyConcepts/Models/AbstractModel.py:807`) and
+   `one_loop_turnaround` (`:891`), generic, on the model's hooks. **k_ex is one quantity**, ½E^{1/2}|V‴/V″|, at φ_t and at
+   φ_ta (`:877`–`:878`, `:959`–`:960`), with the pulse rate |V‴/V″| the model's `_pulse_rate_hook` in closed form
+   (`ExponentialModel.py:352`; `InversePowerModel.py:292`, (n + 2)/φ). φ_t, ω_t and ln R read no k_ex (R16). The fixed
+   point runs at most `ONE_LOOP_MAX_ITERATIONS` = 400 times (`AbstractModel.py:127`). On the power wall the turning points
+   are finite down to φ ≈ 10⁻¹⁵⁴ M_P, where V″ leaves float range; 07's grid stays 45.0 decades above that. Verification
+   §12.2, §7.1, §10.5.
+3. **The regime and f** (`drain_regime`, `:1833`; `drain_law_inputs`, `:1863`): the regimes as §6.12.1 step 2, and f the
+   model's own fraction (`drain_alpha_effective`, `:1881`, calling `model.drain_fraction` at `:1906`):
+   `ExponentialModel._drain_fraction` (`:266`), v2's f = 1 − exp(−min(y_rise, y_fall)) above R·S(L), or
+   `InversePowerModel._drain_fraction` (`:190`), f_n(ln R) above R·S_n, which reads no ℓ. L is the exponential's
+   (`_drain_L`, `:238`) and recorded per candidate; the power wall has none. Verification §12.3.
+4. **The gate and the cap**, as §6.12.1 step 3: α_eff = min(0.99, A f) · w_gate (`:1907`; `DRAIN_ALPHA_CAP`, `:194`);
+   under the fixed law α · w_gate (`:2331`), on both walls.
+5. **The drain into the ledger, parking and the release**, as §6.11.1 steps 1, 4 and 5 and §6.12.1 steps 4 and 5,
+   unchanged and generic. On 04's sample every α > 0 power-wall history parks at its last candidate and none is released
+   (verification §4.5).
+6. **The instrumentation**, as §6.12.1 step 6, after the integration: the bounce rows, the drain record and the
+   all-generation margins carry the one k_ex (ℓ, ln k_ex, ln q, the birth, reflection and tracker margins); the power
+   wall's rows carry L as NULL. Verification §11.4 lists every column that moved with the one k_ex.
+7. **What is stored, and what is derived afterwards.** A history is stored under its model's table, `ExponentialModel` or
+   `InversePowerModel` (`model_type` 1 or 2), at `FINGERPRINT_FORMAT` 8 and `VERSION_LABEL` 2026.14.0
+   (`config/fingerprint.py:100`, `config/version.py:134`). The exports go under `<output>/<label>/<model>/`, with a `model`
+   column after `n` in `histories.csv` (`extract_common.export_root`, `extract_common.py:131`). The quanta tools take each
+   row's spectrum from its `model` and `n` (`spectrum_wall`; `tools/quanta_measures.py:251`): `R8-exponential-v2` for the
+   exponential at every n, `R8-power-n1-v2` and `R8-power-n2-v2` for the power wall (`ComputeTargets/quanta_spectrum.py:155`),
+   each in x = k/k_ex with the one k_ex and x_* = 0.005615853347600149. Verification §12.4.
+
+#### 6.13.2 Statements of §3–§6.12 that this campaign superseded
+
+By statement, not by edit; the lines are this file's at `278c58d`. Each statement below was checked against the code at
+that commit. Those not listed hold on both walls.
+
+| Statement | Where | Now | Where it is said |
+|---|---|---|---|
+| "`ExponentialModel` is the one model that declares" `reflects_at_origin`; "`ExponentialModel(…)` … is the one model" | §3.5.3's note of 2026-10-26 (`:473`); §3.7.1 (`:738`–`:739`) | `InversePowerModel` (type id 2) declares it too; the drivers take `--models` | verification §12.1; step 1 |
+| the grids are of (M, n, β), one `ExponentialModel` each | §1's note of 2026-10-26 (`:17`–`:18`) | one model per potential of `--models`, per (M, n, β), each in its own table | step 7 |
+| "`ExponentialModel` gives L = ln(1 + E/V₀) at every n" | §3.5.3's note of 2026-11-05 (`:375`) | it does, but its one-loop law is defined at n = 1 and 2 only (U14); the power wall has no L | step 3 |
+| v1's f: d = ℓ + 0.9691 − 0.41 ln L, the plateau 0.9 below ℓ = 1, the cap 0.95, the gap's 0.0198, 1.5601, 1.5472, 0.841 | §3.5.3's note of 2026-11-05 (`:361`–`:383`) | the exponential's law is v2 (no plateau, no cap; the rise per n, the fall A_f/(ℓ − ℓ₀)); v1 is retired and refused | verification §12.3; step 3 |
+| `drain_fraction`, `drain_S_of_L` and the law's constants in `ScalarHistory.py` | §3.5.3's note of 2026-11-05 (`:362`, `:380`); §6.12.1 step 2 (`:1970`) | each potential's law, constants and tables are its model class's; S(L) is `ExponentialModel.drain_S_of_L` (`:138`) | step 3 |
+| the spectrum `U4-U17-v1`: x_p = 0.62, κ = 3.96578, x_* = 0.0058, s_dir = x² to x_p; I = 0.0930072, J = 1.05604 | §3.5.3's note of 2026-11-06 (`:421`–`:436`) | the measured tables by wall (`R8-<wall>-v2`), x_* = 0.005615853347600149; on the exponential x_p = 0.619424, κ_hi = 4.342684 | verification §12.4 |
+| the kernels' grids: ln y ∈ [ln 10⁻³, ln 50], u ∈ [0, 4] | §3.5.3's note of 2026-11-06 (`:437`–`:444`) | `G_Y_MIN` 5 × 10⁻⁴, `OMEGA_U_MAX` 9 | verification §9.4, §12.4 |
+| k_ex in the margins' and peaks' definitions, ln q = ln k_ex + N_turn, birth b_j = ℓ_t or ℓ | §6.8 (`:1685`–`:1689`) | the same definitions; k_ex is ½E^{1/2}\|V‴/V″\|, so every stored value of them moved (by up to 1.267 in ℓ on the power wall, 0.190 in the exponential's fixed-law margins) | verification §11.4; step 2 |
+| "Under the drain model `one-loop-measured-v1` a history at A > 0 …"; §6.12.1 as a whole | §6.12 (`:1946`–`:1996`) | the same steps under `one-loop-exponential-v2` or `one-loop-inverse-power-v1`, with f the model's own | this section |
+| "under `FINGERPRINT_FORMAT` 7 and `VERSION_LABEL` 2026.10.0"; `alpha_value` the pair (A, `"one-loop-measured-v1"`) | §6.12.1 step 8 (`:1992`–`:1993`) | format 8, label 2026.14.0; the pair names the model's own drain model | step 7 |
+
+Not of this campaign, and not changed by it: the fixed law's account (§6.11) holds on both walls, bitwise for every history
+whose law reads no ℓ in its integration and BBN (verification §11.4); only the k_ex columns of its instrumentation moved.
+The briefing notes and the writeup (`eq:kex-over-wt`, which writes k_ex with −d ln V/dφ) are the user's and were not
+changed (README §1, "Out of scope").
+
 ---
 
 ## 7. From scalar history to BBN via PRyMordial (`ComputeTargets/BBNData.py`)

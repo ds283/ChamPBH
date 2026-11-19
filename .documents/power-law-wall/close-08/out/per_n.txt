@@ -1,0 +1,110 @@
+# power-law-wall prompt 08, §2 item 5 (P143; orchestrator note 08, ruling 7): the per-n roots for plot_quanta_grid.
+# <scratch> is this prompt's directory of the session scratchpad (agent-08). No store is opened and no Ray is started; no figure is committed.
+# all: cp -Rp var/power-law-wall/07d-r2/export-pl/QCD_Cosmology/inverse-power <scratch>/split/all (diff -r against the source: no difference).
+# n1, n2: close-08/split_by_n.py from <scratch>/split/all (split-n1.txt, split-n2.txt); their quanta files removed by it before quanta_measures runs.
+# A first pass, at 13:22:15-13:22:25, passed '--assoc-scale 1' to quanta_measures as one argument (a quoting error of the agent's shell loop): each quanta_measures exited 2 on usage and wrote nothing; plot_quanta_grid then read 07d's quanta files on all (refused 3) and found none on n1 and n2 (refused, nothing written). The pass below replaces it.
+
+## all: quanta_measures
+$ PYTHONPATH=. ./venv/bin/python -u tools/quanta_measures.py <scratch>/split/all --assoc-scale 1
+# start 2026-11-19 13:22:37 GMT 13:22  up 19 days, 15:43, 1 user, load averages: 44.06 46.39 40.65
+# exit 0
+# wall 9 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=1 beta=1.2: generations 170; drains without spectrum 0; leftover after the last candidate; K bitwise 169/169; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 1.532 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=1 beta=2.0: generations 35; drains without spectrum 0; leftover after the last candidate; K bitwise 34/34; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.141 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=1 beta=2.9: generations 150; drains without spectrum 0; leftover after the last candidate; K bitwise 149/149; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.165 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=2 beta=1.2: generations 152; drains without spectrum 0; leftover after the last candidate; K bitwise 151/151; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 1.518 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=2 beta=2.0: generations 36; drains without spectrum 0; leftover after the last candidate; K bitwise 35/35; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.133 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=2 beta=2.9: generations 157; drains without spectrum 0; leftover after the last candidate; K bitwise 156/156; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.159 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=1e-33 n=1 beta=2.0: generations 31; drains without spectrum 0; leftover after the last candidate; K bitwise 30/30; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.142 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=1e-33 n=2 beta=2.0: generations 48; drains without spectrum 0; leftover after the last candidate; K bitwise 47/47; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.134 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=1 beta=1.2: generations 23; drains without spectrum 0; leftover after the last candidate; K bitwise 22/22; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.139 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=1 beta=2.0: generations 37; drains without spectrum 0; leftover after the last candidate; K bitwise 36/36; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.150 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=1 beta=2.9: generations 62; drains without spectrum 0; leftover after the last candidate; K bitwise 61/61; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.162 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=2 beta=1.2: generations 15; drains without spectrum 0; leftover after the last candidate; K bitwise 14/14; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.125 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=2 beta=2.0: generations 48; drains without spectrum 0; leftover after the last candidate; K bitwise 47/47; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.174 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=2 beta=2.9: generations 54; drains without spectrum 0; leftover after the last candidate; K bitwise 53/53; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.151 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=1e-15 n=1 beta=2.0: generations 38; drains without spectrum 0; leftover after the last candidate; K bitwise 37/37; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.145 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=1e-15 n=2 beta=2.0: generations 23; drains without spectrum 0; leftover after the last candidate; K bitwise 22/22; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.137 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=1 beta=1.2: generations 7; drains without spectrum 0; leftover after the last candidate; K bitwise 6/6; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.131 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=1 beta=2.0: generations 13; drains without spectrum 0; leftover after the last candidate; K bitwise 12/12; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.131 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=1 beta=2.9: generations 13; drains without spectrum 0; leftover after the last candidate; K bitwise 12/12; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.152 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=2 beta=1.2: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.123 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=2 beta=2.0: generations 11; drains without spectrum 0; leftover after the last candidate; K bitwise 10/10; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.136 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=2 beta=2.9: generations 11; drains without spectrum 0; leftover after the last candidate; K bitwise 10/10; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.147 s
+quanta_measures (R8-power-n1-v2, R8-power-n2-v2, assoc scale 1): measured 22, skipped as fixed-law 48, failed histories 26, missing files 0, refused 0, failed the K check 0; wall 6.8 s
+
+## all: plot_quanta_grid
+$ PYTHONPATH=. ./venv/bin/python -u tools/plot_quanta_grid.py <scratch>/split/all
+# start 2026-11-19 13:22:46 GMT 13:22  up 19 days, 15:43, 1 user, load averages: 43.34 46.20 40.61
+# exit 1
+# wall 2 s
+plot_quanta_grid: histories.csv rows: fixed 48, marker 26, failed 0, drawn 22
+REFUSED one-loop-inverse-power-v1 A=0.05: two rows in one cell: one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=1 beta=1.2 and one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=2 beta=1.2
+REFUSED one-loop-inverse-power-v1 A=1: two rows in one cell: one-loop-inverse-power-v1 A=1.0 M_Mp=1e-33 n=1 beta=2.0 and one-loop-inverse-power-v1 A=1.0 M_Mp=1e-33 n=2 beta=2.0
+REFUSED one-loop-inverse-power-v1 A=10: two rows in one cell: one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=1 beta=1.2 and one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=2 beta=1.2
+plot_quanta_grid (R8-power-n1-v2, R8-power-n2-v2, assoc scale 1): figures written 0, refused 3, A with no drawn or failed row 0; skipped as fixed-law 48, marker rows 26; wall 0.0 s
+## figures written under <scratch>/split/all: 0 PDF, 0 PNG
+
+## n1: quanta_measures
+$ PYTHONPATH=. ./venv/bin/python -u tools/quanta_measures.py <scratch>/split/n1 --assoc-scale 1
+# start 2026-11-19 13:22:48 GMT 13:22  up 19 days, 15:43, 1 user, load averages: 43.63 46.21 40.65
+# exit 0
+# wall 5 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=1 beta=1.2: generations 170; drains without spectrum 0; leftover after the last candidate; K bitwise 169/169; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 1.564 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=1 beta=2.0: generations 35; drains without spectrum 0; leftover after the last candidate; K bitwise 34/34; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.151 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=1 beta=2.9: generations 150; drains without spectrum 0; leftover after the last candidate; K bitwise 149/149; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.162 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=1e-33 n=1 beta=2.0: generations 31; drains without spectrum 0; leftover after the last candidate; K bitwise 30/30; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.136 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=1 beta=1.2: generations 23; drains without spectrum 0; leftover after the last candidate; K bitwise 22/22; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.140 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=1 beta=2.0: generations 37; drains without spectrum 0; leftover after the last candidate; K bitwise 36/36; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.141 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=1 beta=2.9: generations 62; drains without spectrum 0; leftover after the last candidate; K bitwise 61/61; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.144 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=1e-15 n=1 beta=2.0: generations 38; drains without spectrum 0; leftover after the last candidate; K bitwise 37/37; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.145 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=1 beta=1.2: generations 7; drains without spectrum 0; leftover after the last candidate; K bitwise 6/6; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.124 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=1 beta=2.0: generations 13; drains without spectrum 0; leftover after the last candidate; K bitwise 12/12; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.138 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=1 beta=2.9: generations 13; drains without spectrum 0; leftover after the last candidate; K bitwise 12/12; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.149 s
+quanta_measures (R8-power-n1-v2, assoc scale 1): measured 11, skipped as fixed-law 24, failed histories 13, missing files 0, refused 0, failed the K check 0; wall 3.4 s
+
+## n1: plot_quanta_grid
+$ PYTHONPATH=. ./venv/bin/python -u tools/plot_quanta_grid.py <scratch>/split/n1
+# start 2026-11-19 13:22:53 GMT 13:22  up 19 days, 15:43, 1 user, load averages: 43.50 46.14 40.66
+# exit 0
+# wall 6 s
+plot_quanta_grid: histories.csv rows: fixed 24, marker 13, failed 0, drawn 11
+one-loop-inverse-power-v1 A=0.05: drawn 3, failed 0, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 3, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote <scratch>/split/n1/one-loop-inverse-power-v1/A=0.05/plots/quanta_grid.pdf <scratch>/split/n1/one-loop-inverse-power-v1/A=0.05/plots/quanta_grid.png; wall 1.41 s
+one-loop-inverse-power-v1 A=1: drawn 5, failed 0, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 5, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote <scratch>/split/n1/one-loop-inverse-power-v1/A=1/plots/quanta_grid.pdf <scratch>/split/n1/one-loop-inverse-power-v1/A=1/plots/quanta_grid.png; wall 1.29 s
+one-loop-inverse-power-v1 A=10: drawn 3, failed 0, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 3, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote <scratch>/split/n1/one-loop-inverse-power-v1/A=10/plots/quanta_grid.pdf <scratch>/split/n1/one-loop-inverse-power-v1/A=10/plots/quanta_grid.png; wall 1.14 s
+plot_quanta_grid (R8-power-n1-v2, assoc scale 1): figures written 3, refused 0, A with no drawn or failed row 0; skipped as fixed-law 24, marker rows 13; wall 3.8 s
+## figures written under <scratch>/split/n1: 3 PDF, 3 PNG
+
+## n2: quanta_measures
+$ PYTHONPATH=. ./venv/bin/python -u tools/quanta_measures.py <scratch>/split/n2 --assoc-scale 1
+# start 2026-11-19 13:22:59 GMT 13:22  up 19 days, 15:43, 1 user, load averages: 44.74 46.35 40.76
+# exit 0
+# wall 5 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=2 beta=1.2: generations 152; drains without spectrum 0; leftover after the last candidate; K bitwise 151/151; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 1.565 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=2 beta=2.0: generations 36; drains without spectrum 0; leftover after the last candidate; K bitwise 35/35; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.148 s
+one-loop-inverse-power-v1 A=0.05 M_Mp=4e-31 n=2 beta=2.9: generations 157; drains without spectrum 0; leftover after the last candidate; K bitwise 156/156; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.156 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=1e-33 n=2 beta=2.0: generations 48; drains without spectrum 0; leftover after the last candidate; K bitwise 47/47; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.145 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=2 beta=1.2: generations 15; drains without spectrum 0; leftover after the last candidate; K bitwise 14/14; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.125 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=2 beta=2.0: generations 48; drains without spectrum 0; leftover after the last candidate; K bitwise 47/47; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.145 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=4e-31 n=2 beta=2.9: generations 54; drains without spectrum 0; leftover after the last candidate; K bitwise 53/53; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.152 s
+one-loop-inverse-power-v1 A=1.0 M_Mp=1e-15 n=2 beta=2.0: generations 23; drains without spectrum 0; leftover after the last candidate; K bitwise 22/22; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.137 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=2 beta=1.2: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.135 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=2 beta=2.0: generations 11; drains without spectrum 0; leftover after the last candidate; K bitwise 10/10; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.140 s
+one-loop-inverse-power-v1 A=10.0 M_Mp=4e-31 n=2 beta=2.9: generations 11; drains without spectrum 0; leftover after the last candidate; K bitwise 10/10; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.142 s
+quanta_measures (R8-power-n2-v2, assoc scale 1): measured 11, skipped as fixed-law 24, failed histories 13, missing files 0, refused 0, failed the K check 0; wall 3.4 s
+
+## n2: plot_quanta_grid
+$ PYTHONPATH=. ./venv/bin/python -u tools/plot_quanta_grid.py <scratch>/split/n2
+# start 2026-11-19 13:23:04 GMT 13:23  up 19 days, 15:43, 1 user, load averages: 45.08 46.40 40.81
+# exit 0
+# wall 6 s
+plot_quanta_grid: histories.csv rows: fixed 24, marker 13, failed 0, drawn 11
+one-loop-inverse-power-v1 A=0.05: drawn 3, failed 0, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 3, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote <scratch>/split/n2/one-loop-inverse-power-v1/A=0.05/plots/quanta_grid.pdf <scratch>/split/n2/one-loop-inverse-power-v1/A=0.05/plots/quanta_grid.png; wall 1.33 s
+one-loop-inverse-power-v1 A=1: drawn 5, failed 0, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 5, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote <scratch>/split/n2/one-loop-inverse-power-v1/A=1/plots/quanta_grid.pdf <scratch>/split/n2/one-loop-inverse-power-v1/A=1/plots/quanta_grid.png; wall 1.20 s
+one-loop-inverse-power-v1 A=10: drawn 3, failed 0, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 3, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote <scratch>/split/n2/one-loop-inverse-power-v1/A=10/plots/quanta_grid.pdf <scratch>/split/n2/one-loop-inverse-power-v1/A=10/plots/quanta_grid.png; wall 1.17 s
+plot_quanta_grid (R8-power-n2-v2, assoc scale 1): figures written 3, refused 0, A with no drawn or failed row 0; skipped as fixed-law 24, marker rows 13; wall 3.7 s
+## figures written under <scratch>/split/n2: 3 PDF, 3 PNG
+
+## checks
+- <scratch>/split/all after quanta_measures, against var/power-law-wall/07d-r2/export-pl/QCD_Cosmology/inverse-power (diff -rq): no difference (the tool rewrote 07d's quanta files byte for byte).
+- n1 and n2: quanta_histories.csv's header and rows equal all's rows of that n, in order (11 and 11); every per-history quanta_bounces.csv and quanta_samples.csv equal all's (diff -rq: only the two root CSVs differ, and the plots/ directories exist only in n1 and n2).

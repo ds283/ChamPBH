@@ -1,0 +1,49 @@
+$ PYTHONPATH=. ./venv/bin/python tools/surfing_scan.py --help
+# exit 0
+usage: surfing_scan.py [-h] [--beta-min BETA_MIN] [--beta-max BETA_MAX]
+                       [--beta-step BETA_STEP]
+                       [--beta-values BETA_VALUES [BETA_VALUES ...]]
+                       [--phi-init-Mp PHI_INIT_MP] [--M M]
+                       [--T-window-low-GeV T_WINDOW_LOW_GEV]
+                       [--tuning-tolerance TUNING_TOLERANCE]
+                       [--tuning-max-integrations TUNING_MAX_INTEGRATIONS]
+                       [--model {exponential,inverse-power}] [--n N] --out OUT
+
+Tune one scalar history per beta to T_CMB and write one CSV row each, holding
+the Jordan-frame temperatures a surfing trajectory reaches before its first
+bounce inside an analysis window, with no Ray cluster, no datastore and no
+BBN.
+
+options:
+  -h, --help            show this help message and exit
+  --beta-min BETA_MIN
+  --beta-max BETA_MAX
+  --beta-step BETA_STEP
+  --beta-values BETA_VALUES [BETA_VALUES ...]
+                        explicit beta values, in place of --beta-min/--beta-
+                        max/--beta-step
+  --phi-init-Mp PHI_INIT_MP
+                        initial value of the scalar field in units of M_P
+                        (default 5, as main.py)
+  --M M                 the potential's M, in units of M_P (default 1e-3)
+  --T-window-low-GeV T_WINDOW_LOW_GEV
+                        the lower edge of the analysis window on each history
+                        tuned to T_CMB, in GeV: turning points and the first
+                        bounce are kept up to the history's first crossing of
+                        this Jordan-frame temperature (default 0.001, where
+                        the integration stopped before jordan-normalization
+                        prompt 08)
+  --tuning-tolerance TUNING_TOLERANCE
+                        the tuning's tolerance on both residuals,
+                        |H_J(T_CMB)/H0 - 1| and |phi_ref/phi_min - 1| (default
+                        1e-05, as main.py)
+  --tuning-max-integrations TUNING_MAX_INTEGRATIONS
+                        the cap on the tuning's integrations, the seed's
+                        included (default 30, as main.py)
+  --model {exponential,inverse-power}
+                        the model (default exponential): exponential, V_0
+                        exp((M/phi)^n); inverse-power, V_0 [1 + (M/phi)^n]
+                        (power-law-wall prompt 01). Away from the defaults the
+                        console names the model and n
+  --n N                 the model's index n, an integer >= 1 (default 1)
+  --out OUT             the CSV path

@@ -3014,3 +3014,426 @@ grep -r -F -l -f ~/.ray/auth_token <each committed path>
   move between locations, and when that happens the lid has to be closed. That's just life."
 - **The shard warning** in every plot script's log (`… (=16) does not match specified number of shards (=10)`), as in 07.
 - **The `Delta_N_eff` legend** covers A = 10's point at β = 2.9 (upper panel), as in 07.
+
+## 12. The two walls as they stand, for the paper (prompt 08, 2026-11-19)
+
+**Tree:** branch `power-law-wall` at `278c58d` (the dispatch commit of prompt 08; its code is 07c2's, `bd8d648`, unchanged
+since), `VERSION_LABEL` 2026.14.0, `FINGERPRINT_FORMAT` 8. Every `file:line` below is at `278c58d`. §1–§11 above are
+records of their trees and are unchanged; where a number of theirs was superseded later in the campaign, this section
+says which section holds the current one. It replaces nothing in `one-loop-drain-verification.md` §8, which stays the
+record of the exponential's law v1 and its measures; for the exponential's one-loop law as it now stands, this section
+is the reference.
+
+Both potentials are written in one scheme: each item gives the exponential and the power wall side by side, or says why
+one has nothing there. Formulas are the code's. Every number is a measurement from the section cited beside it; none is
+a bound.
+
+### 12.1 The two models, as coded
+
+| | exponential | power wall |
+|---|---|---|
+| class | `ExponentialModel` (`CosmologyConcepts/Models/ExponentialModel.py:197`) | `InversePowerModel` (`CosmologyConcepts/Models/InversePowerModel.py:117`) |
+| V(φ) | V₀ exp((M/φ)ⁿ) (`:19`) | V₀ [1 + (M/φ)ⁿ] (`:19`); in the user's notation V₀ + Λ^{4+n}/φⁿ, Λ^{4+n} = V₀Mⁿ (`:21`) |
+| A(φ) | exp(β(φ − φ_ref)/M_P) (`_log_Omega`, `:376`) | the same, written in the class (`_log_Omega`, `:305`) |
+| n | any integer n ≥ 0 at construction (`:205`) | any integer n ≥ 1 (`:125`) |
+| normalization | ln V₀, its own coordinate; `renormalize` = ln V₀ + ln V_target − ln V(φ) (`:386`) | the same (`:315`, `:327`) |
+| ln V | normalization + u, u = (M/φ)ⁿ by `pow` (`_log_V`, `:287`) | normalization + ln(1 + u) from ln u = n ln(M/φ): ln u + log1p(e^{−ln u}) for ln u > 0, log1p(e^{ln u}) otherwise (`_log_V`, `:251`; `_log1p_exp`, `:110`) |
+| (ln V)′, (ln V)″ | −n u/φ; n(n + 1)u/φ² (`:302`, `:318`) | −n s/φ; [n(n + 1)s − n²s²]/φ/φ, s = u/(1 + u) from ln u (`:255`, `:259`; `_s`, `:245`) |
+| (ln V)‴ | −n(n + 1)(n + 2)u/φ³ (`_d3_logV_dphi3`, `:334`) | −s[n(n + 1)(n + 2) − 3n²(n + 1)s + 2n³s²]/φ³ (`:271`) |
+| `_log_V_floor` | the normalization, ln V₀ (`:234`) | the same (`:155`) |
+| `reflects_at_origin` | True (`:229`) | True (`:150`) |
+| φ ≤ 0 | not guarded by the class | `ComputationFailureError` naming the model, the hook and φ (`_log_u`, `:230`–`:242`); R4: "Keep φ ≤ 0 as a failure" |
+| the seed | the tracking analytic minimum, else the static, else plain, **for n = 1**; plain for n ≠ 1 (`seed`, `:443`–`:447`) | the tracking analytic minimum, else the static, else plain, **at every n** (P3; `seed`, `:398`; `_analytic_seed`, `:334`: the fixed point ln φ ← [ln C(φ) − ln(1 + u)]/(n + 1), at most 200 iterations to 1e-14) |
+| type id | `EXPONENTIAL_MODEL = 1` (`CosmologyConcepts/Models/model_ids.py:20`) | `INVERSE_POWER_MODEL = 2` (`model_ids.py:24`) |
+| table, keyed (M, n, β) | `ExponentialModel` (`ObjectFactories/ExponentialModel.py`) | `InversePowerModel` (`ObjectFactories/InversePowerModel.py`); its serials repeat the other table's (§5.2) |
+| option value | `exponential` (`CosmologyConcepts/Models/model_options.py:42`) | `inverse-power` (`model_options.py:43`) |
+
+The two models agree for φ ≫ M to O((M/φ)^{2n}) (`InversePowerModel.py:26`), so today's minimum, the tuning of V₀ to H₀
+and the meaning of M are shared; at laboratory M under the fixed law both n give the exponential's first bounce,
+reflections and ΔN_eff (§1.5, §4.2).
+
+### 12.2 k_ex, one definition (R13–R16)
+
+**The definition** (`CosmologyConcepts/Models/AbstractModel.py:807`, `:891`):
+
+    k_ex = ½ E^{1/2} |V‴/V″|,    ln k_ex = ln|V‴/V″| + ½ ln E − ln 2,
+
+with E the Einstein-frame kinetic energy at the assessment, measured from the floor. It is taken at φ_t for the classical
+turning point (`classical_turning_point`, `:877`–`:878`) and at φ_ta for the one-loop turnaround (`one_loop_turnaround`,
+`:959`–`:960`). The pulse rate |V‴/V″| is each model's `_pulse_rate_hook`, read through `_pulse_rate` (`:789`), which
+raises where it is zero, negative or not finite; the base hook raises `NotImplementedError` (`:545`):
+
+| | exponential (`ExponentialModel.py:352`) | power wall (`InversePowerModel.py:292`) |
+|---|---|---|
+| \|V‴/V″\| | [(n + 1)(n + 2) + 3n(n + 1)u + n²u²] / ([(n + 1) + nu] φ), u = (M/φ)ⁿ | (n + 2)/φ exactly |
+| against the old rate −d ln V/dφ | [n²u² + 3n(n + 1)u + (n + 1)(n + 2)]/[nu(nu + n + 1)] = 1 + 2(n + 1)/(nu) + O(u⁻²) (§7.1) | (n + 2)(1 + u)/(nu): 3 and 2 at large u (§7.1) |
+| k_ex/ω_t at the scale-free reference | 0.5163952511757223 at L = 90, n = 1 (§7.7) | (n + 2)/(2√(n(n + 1))), at every E/V₀: 1.0606601717798214, 0.816496580927726 (§7.7) |
+
+**The quantities the code forms from it:**
+- **φ_t** is the root of V(φ_t) − V_floor = E, searched inwards from the field in ln φ (`:862`); it reads no V′ (R16). On
+  the power wall φ_t = M(V₀/E)^{1/n}.
+- **ω_t² = V″(φ_t)**, V″ = V[(ln V)″ + (ln V)′²] (`:865`, `:876`); **ln R = 2 ln ω_t² − ln 8π² − ln E**, R = ω_t⁴/(8π²E)
+  (`:882`); **ℓ_t = ln k_ex − ½ ln ω_t² = ln(k_ex/ω_t)** (`:885`). φ_t, ω_t and ln R read no k_ex.
+- **The turnaround:** m_ta⁴ ℓ = 32π²E (`:943`), V″(φ_ta) = m_ta², **ℓ = ln(k_ex/m_ta)** at φ_ta (`:961`), iterated from
+  ℓ = 32 (`ONE_LOOP_ELL_START`, `:125`) until |Δℓ| ≤ 10⁻¹² ℓ (`:126`, `:968`), at most **`ONE_LOOP_MAX_ITERATIONS` = 400**
+  (`:127`); ℓ ≤ 0 at an iterate, or no convergence within 400, raises (`:963`–`:967`, `:984`).
+- **L** = ln(1 + E/V₀) on the exponential (`_drain_L`, `ExponentialModel.py:238`), its wall exponent (M/φ_t)ⁿ; the power
+  wall has none (`InversePowerModel.py:159`–`:161`). Where defined, L is recorded per candidate.
+
+**The check against Erickcek et al.** (arXiv:1310.5149; §7.1): their Eq. (64) with the code's dressing V_D ∝ (V″)² reduces
+to ½E^{1/2}|V‴/V″|; evaluated numerically at twelve chain points it agrees to 4.0 × 10⁻⁹. Holding ℓ fixed leaves out a
+factor (1 − 1/(4ℓ))^{1/2} (0.987 at ℓ = 10, 0.866 at ℓ = 1), measured to 3.4 × 10⁻⁹. Their Eq. (71) on the power wall: to
+4.4 × 10⁻¹⁶ at six points. On the exponential the new/old ratio equals its closed form to 2.2 × 10⁻¹⁶ and their Eq. (66)
+is its leading term exactly.
+
+**The range.** The turning points need V″/V = (ln V)″ + (ln V)′² finite. On the power wall it leaves float range at
+φ = 1.054769 × 10⁻¹⁵⁴ M_P (n = 1) and 1.826913 × 10⁻¹⁵⁴ M_P (n = 2), √(n(n + 1)/DBL_MAX), at every M (§10.5); the pulse
+rate (n + 2)/φ is finite and exact below that (§10.2). The least margin over 07's grid's assessments (every step start
+with π < 0, not only the drain candidates) is **45.0 decades**, at n = 1, β = 2.9, M = 4 × 10⁻³¹ M_P, near N = 5.04, at
+the peak of ρ_kin (§10.5). Over the drain candidates of 07d's grid alone, the least margin is 74.92 decades (n = 1) and
+97.71 (n = 2) on the power wall and 58.54 on the exponential, where the end at 10⁻³³ M_P is 10^−93.56 M_P (§11.11). Over
+every assessment of the exponential's histories, the margin was not measured. `_d3_logV_dphi3` itself leaves float range
+below 2.2 × 10⁻¹⁰³ M_P at n = 1 and has no production caller (§10.8).
+
+**The fixed point's cap.** Over the 333 stage-2 points of 07b and 07b2 whose new chain has a solution (both walls), every
+one converges within 400; the slowest takes **195** iterations, at 07b's laboratory point on the exponential (n = 1,
+L = 1.378072, ln R = 5.003334, ℓ = 0.119971), then 107 (L-M8e-18) (§9.2). §9.2 does not give the power wall's slowest
+separately.
+
+### 12.3 The laws, as coded
+
+**The fixed law** (`ComputeTargets/ScalarHistory.py:2318`–`:2332`): α_eff = α · w_gate at every candidate, 0 ≤ α < 1
+(`check_drain_law`, `CosmologyConcepts/drain_model.py:145`); w_gate = A_k²/(A_k² + A_0²), A_0 = `NONADIABATICITY_SCALE` = 1
+(`ScalarHistory.py:128`), at a resolved candidate and 1 at an unresolved one (`:2330`). α = 0 is natural mode. It reads no
+k_ex, on either wall.
+
+**The one-loop law** (`drain_alpha_effective`, `ScalarHistory.py:1881`): α carries A, finite and > 0 (`drain_model.py:161`),
+and
+
+    α_eff = min(α_cap, A f) · w_gate,   α_cap = DRAIN_ALPHA_CAP = 0.99 (ScalarHistory.py:194),
+
+with f = `model.drain_fraction(regime, ℓ, ln E, ln R)` (`:1906`–`:1907`), the model's own fraction (`_drain_fraction`), on
+every potential; `ScalarHistory.py` holds no potential's law (P99). An unassessed candidate drains 0 (`:1900`). The model
+must define `_drain_fraction` and name its one-loop drain model, or the law is refused at entry (`check_drain_law_model`,
+`:1777`); the key's drain model is checked against the model's when a `ScalarHistory` is constructed
+(`check_key_drain_model`, `:1811`).
+
+**The regimes** (`drain_regime`, `:1833`; `_assessed_peak`, `:4127`), from the assessment a candidate is judged on:
+- **unassessed:** no assessment;
+- **classical:** ln R ≤ 0 (`:4139`);
+- **one-loop:** ln R > 0, and `one_loop_turnaround` returns a solution with ℓ > 0;
+- **gap:** ln R > 0, and the turnaround raises, returns None, or has ℓ ≤ 0.
+
+What each regime selects:
+
+| regime | fixed law | power wall, `one-loop-inverse-power-v1` | exponential, `one-loop-exponential-v2` |
+|---|---|---|---|
+| unassessed | α · w_gate | 0 | 0 |
+| classical | α · w_gate | R S_n | R S(L) |
+| one-loop | α · w_gate | f_n(ln R), the same as gap | 1 − exp(−min(y_rise, y_fall)) |
+| gap | α · w_gate | f_n(ln R) | 1 − exp(−y_rise) (y_fall = +∞) |
+
+Under v2 the label one-loop or gap selects only whether the fall exists; on the power wall it selects nothing.
+
+**f on the power wall** (`InversePowerModel._drain_fraction`, `InversePowerModel.py:190`–`:218`), at n = 1 and 2:
+
+    f = exp(ln R) S_n                                at ln R ≤ 0, or the classical regime (:212–:213),
+    f = 1 − exp(−y),  y = G_n (ln R − R0_n)^{P_n}    for 0 < ln R < ln R_×,n (:214–:215),
+                      y = A_n/(ln R − c_n)          for ln R ≥ ln R_×,n (:216–:217),
+
+and 0 unassessed (`:206`). It reads neither ℓ, ln E nor the normalization (R7). The constants (`:97`–`:103`):
+
+| n | S_n | G_n | R0_n | P_n | A_n | c_n | ln R_×,n |
+|---|---|---|---|---|---|---|---|
+| 1 | 1.02620e-2 | 2.86769e-3 | −1.27414 | 2.22126 | 27.9671 | 14.9835 | 23.08943252571177 |
+| 2 | 5.21615e-3 | 2.85913e-3 | −1.10903 | 2.45613 | 19.6100 | 10.9039 | 16.710187997698853 |
+
+S_n is the classical branch R·S_n (R6, "yes, just use the constants"), constant in E/V₀; the switch is the root of
+y_rise = y_fall at these literals, where f peaks at 0.9683 | 0.9659 (§3.1).
+
+**f on the exponential** (`ExponentialModel._drain_fraction`, `:266`, calling `one_loop_fraction`, `:150`–`:194`), at
+n = 1 and 2, with L = ln(1 + E/V₀):
+
+    f = exp(ln R) S(L)                          at ln R ≤ 0, or the classical regime (:178–:179),
+    f = 1 − exp(−min(y_rise, y_fall))            above (:180–:194), with
+      y_rise = G_n (ln R − R0_n)^{P_n} (1 + Q_n ln L),   0 where ln R ≤ R0_n or 1 + Q_n ln L ≤ 0 (:181–:186),
+      y_fall = A_f/(ℓ − ℓ_0)  at a one-loop candidate with ℓ > ℓ_0, +∞ otherwise (:188–:192),
+
+and 0 unassessed (`:172`). So f = 0 exactly for 0 < ln R ≤ R0_n, and wherever 1 + Q_n ln L ≤ 0 at a gap candidate. There
+is no plateau and no cap (U13). The constants (`:74`–`:79`), at the precision the code holds:
+
+| | value |
+|---|---|
+| A_f (shared by n = 1, 2) | 2.5143466540073995 |
+| ℓ_0 (shared) | 1.1859055953178366 |
+| n = 1: G, R0, P, Q | 0.020236734836939167, 1.7292636698176154, 1.4945632951339265, 1.0354234565531648 |
+| n = 2: G, R0, P, Q | 0.014077566206585982, 1.2044868612303559, 1.7311233766914242, 0.9084029819604703 |
+
+The classical branch's **S(L)** is a table of 21 points from L = 0.3 to 134 (`DRAIN_EXP_S_TABLE_L`, `_S`, `:88`–`:133`;
+crossover's stage 1a, `prompts/one-loop-drain/source/crossover/out/stage1a_S_of_L.txt`), interpolated linearly in
+(ln L, ln S) by `np.interp`, held at S(0.3) below L = 0.3 and continued as S(134)(134/L)² above L = 134 (`drain_S_of_L`,
+`:138`–`:147`). It reads no k_ex (R16) and is unchanged from v1 (moved from `ScalarHistory.py` by 07c, P99).
+
+**The domain.** Both one-loop laws are defined at n = 1 and 2 only: `one_loop_drain_model` and `_drain_fraction` raise
+`ValueError` naming the class, the hook and the ruling at any other n (power wall R7, `InversePowerModel.py:174`–`:175`,
+`:204`–`:205`; exponential U14, `ExponentialModel.py:262`–`:263`, `:273`–`:274`), so `check_drain_law_model` refuses the
+model and the drivers refuse `--A-values` at parse, exit 2, before Ray (§11.8, R4). The fixed law and natural mode run
+both models at every n. v2 was fitted on ln(V₀/M⁴) ≤ 10 (U13), stated in the docstring and not checked (P109); 07d found
+47 of the 505 exponential one-loop candidates of its grid above it, all in the history at 10⁻³³ M_P, β = 2, A = 1, up to
+27.31; every other exponential one-loop candidate there has ln(V₀/M⁴) ≤ 3.345 (§11.11). The power wall's law reads no ℓ,
+so the one k_ex moved none of its values (§7.6, §11.4).
+
+**The drain models and the key** (`CosmologyConcepts/drain_model.py`). `alpha_value` is the pair (value, `drain_model`),
+a key of every history:
+
+| `drain_model` | law | value | defined by | line |
+|---|---|---|---|---|
+| `"fixed"` | fixed | α | — | `:65` |
+| `"one-loop-exponential-v2"` | one-loop | A | `ExponentialModel` (`one_loop_drain_model`, `ExponentialModel.py:258`) | `:66` |
+| `"one-loop-inverse-power-v1"` | one-loop | A | `InversePowerModel` (`one_loop_drain_model`, `InversePowerModel.py:170`) | `:67` |
+| `"one-loop-measured-v1"` (retired, R13) | — | — | the exponential's v1, in the old k_ex | `:77`, `:80`–`:84` |
+| `"one-loop-measured-pl-v1"` (retired, U11) | — | — | the power wall's law under its first name | `:78`, `:85`–`:88` |
+
+`law_of` (`:108`) is the one mapping from a drain model to its law; it refuses a retired name with a `ValueError` naming
+why and its successor (`:115`–`:122`), so `check_drain_model`, `alpha_value` and its factory, `alpha_label`, the drivers,
+the plot scripts and the store tools all refuse it (§9.4).
+
+### 12.4 The spectrum, as coded (R8–R10, P104)
+
+`ComputeTargets/quanta_spectrum.py`; read only by the post-processing, never by the integration. Each wall's spectrum is
+named by `SPECTRUM_MODELS` (`:155`–`:159`), carried in every quanta output's `spectrum_model` column. Which wall a row
+reads is its model's `spectrum_wall`, from the export's `model` and `n`: the exponential's table at every n
+(`ExponentialModel.py:282`), the power wall's at n = 1 and 2 and a `ValueError` otherwise (`InversePowerModel.py:179`).
+
+The shape (`:39`–`:61`): s(x) = s_dir(x) + c_a s_assoc(x), x = k/k_ex with the one k_ex;
+s_dir = x² for x ≤ x_lo, exp(P(ln x)) on the table (P the not-a-knot spline in (ln x, ln s)), s_dir(x_hi) e^{−κ_hi(x − x_hi)}
+above, κ_hi from the spline's end slope (`:777`); s_assoc = C₁/x for x ≤ x_p and (C₁/x) s_dir(x)/s_dir(x_p) above, with
+C₁ = 49 x_* s_dir(x_*) (`:190`, `:790`), so that s(x_*) = 50 s_dir(x_*) at c_a = 1.
+
+| | exponential | power n = 1 | power n = 2 |
+|---|---|---|---|
+| `SPECTRUM_MODELS` | `R8-exponential-v2` | `R8-power-n1-v2` | `R8-power-n2-v2` |
+| reference (`_TABLES`, `:724`–`:746`) | WallN(90, 1) | PowerWall(1e40, 1) | PowerWall(1e40, 2) |
+| k_ex/ω_t | 0.5163952511757223 | 1.0606601717798214 | 0.816496580927726 |
+| x_lo (= 10⁻³ ω_t/k_ex) | 0.0019365011543448797 | 0.0009428090415820634 | 0.001224744871391589 |
+| x_hi | 3.5 | 3.0 | 3.0 |
+| nodes | 151 | 163 | 158 |
+| x_p (k_peak/ω_t) | 0.619424 (0.31987) | 0.155250 (0.16467) | 0.253372 (0.20688) |
+| κ_hi | 4.342684 | 6.545990 | 5.467311 |
+| the tail's share of x³s_dir | 7.4e-4 | 8.0e-6 | 1.4e-4 |
+| the associated piece's share of I at c_a = 1 | 6.1e-5 | 1.57e-2 | 1.64e-3 |
+
+(x_p, κ_hi and the shares are §7.7's and §9.4's measurements; the table literals are the module's.)
+
+- **Below the table, k²** on every wall (R8). On the power wall at n = 1 the measured local power at x_lo is 1.6649, tending
+  to 2 as k² ln²(1/k) would; the logarithm is neglected by the user's ruling (R8; §3.3, §7.7).
+- **x_* = `X_STAR` = 0.005615853347600149** (`:188`) on every wall: the 2PI run's probe q = 0.0029 ω_t over the exponential
+  reference's k_ex/ω_t. **On the power wall it and the associated piece are unmeasured**, carried over in x from the
+  exponential's 2PI run (U5, R10); in k/ω_t it would be 0.002734 (n = 1) and 0.003552 (n = 2) (§7.7).
+- **The grids' ends:** `G_Y_MIN` = 5e-4 (`:204`; below power-n1's x_lo, as the asymptote's derivation needs) and
+  `OMEGA_U_MAX` = 9 (`:207`), re-derived on their docstrings' criteria; the kernels G and Ω against quadrature at 270
+  evaluations, worst 4.3 × 10⁻¹² (G) and 2.2 × 10⁻¹⁰ (Ω) relative (§9.4).
+- On the power wall the table holds at every E/V₀: R9's error near the floor, a factor 1/s_t in x in the old k_ex, is
+  gone, to 3.4 × 10⁻⁷ in ln|β|² down to the laboratory R = 1 (§7.7).
+
+### 12.5 Where each constant was measured, and how well
+
+| constant | value | measured in | file at full precision | fit or check, as recorded there |
+|---|---|---|---|---|
+| S₁, S₂ | 1.02620e-2, 5.21615e-3 | §2.4 (02, stage 1a) | `.documents/power-law-wall/wall-02/stage1a_S_n.txt` (1.0262017e-2, 5.2161510e-3; the code holds the ruled five figures) | constant in x to every printed digit at x = 10⁻³–10³ and 10¹⁰; quadratures agree to 3e-7 / 7e-7; stage 2 with the loop off gives 1.0262021e-2 and 5.216159e-3 |
+| G_n, R0_n, P_n (power wall) | §12.3 | §3.1 (03, `fit_fn.py`) | `.documents/power-law-wall/law-03/fit_fn.txt`; the six-figure literals are the law | n = 1: G 2.86769e-3 ± 3.3e-3, R₀ −1.27414 ± 1.64, P 2.22126 ± 0.34; n = 2: 2.85913e-3 ± 3.8e-3, −1.10903 ± 1.45, 2.45613 ± 0.42 (G, R₀, P strongly correlated) |
+| A_n, c_n (power wall) | §12.3 | §3.1 | the same | n = 1: A 27.9671 ± 0.14, c 14.9835 ± 0.14; n = 2: 19.6100 ± 0.057, 10.9039 ± 0.096 |
+| f_n's residuals (law − stage 2) | — | §3.1 | the same | every non-classical point back out: 0.0541 / 0.0191 / −0.0004 (62, n = 1), 0.0557 / 0.0215 / −0.0016 (60, n = 2) max / rms / mean; the mapped histories' points 0.0042 and 0.0030; gap 0.0541 and 0.0557 |
+| ln R_×,n | 23.08943252571177, 16.710187997698853 | §3.1 | `InversePowerModel.py:103` | the root of y_rise = y_fall at the literals; f's step there 1.1e-16 and 0 |
+| A_f, ℓ_0 (exponential, shared) | §12.3 | §8.4 (07b2, (v-J) on S3 with the new points) | `.documents/power-law-wall/kex-07b2/minform.json`, `with_new`, `n12/S3/v-J` | A_f 2.514 ± 0.052, ℓ₀ 1.186 ± 0.047; on 07b's points (§8.3) (v-J) misses by 0.084 / rms 0.020 (n = 1, S3) and 0.056 / 0.020 (n = 2), the fall 0.015 |
+| G_n, R0_n, P_n, Q_n (exponential) | §12.3 | §8.4 | the same | §8 records standard errors for the rise from the per-n fit (v) with the new points: n = 1 G 0.0202 ± 0.0029, R₀ 1.729 ± 0.133, P 1.495 ± 0.053, Q 1.035 ± 0.072; n = 2 G 0.0141 ± 0.0040, R₀ 1.205 ± 0.265, P 1.731 ± 0.104, Q 0.908 ± 0.091 |
+| v2's prediction of held-out points | — | §8.4 | `kex-07b2/prediction.json`, `prediction_scored.txt` | 36 new points predicted by (v)'s S3 fit before they ran: 0.071 / 0.024 / +0.005; the fall points 0.025 (n = 1) and 0.023 (n = 2); with the new points every A and ℓ₀ moved by less than one standard error |
+| v2 against its reference | — | §9.3 | `minform.json` | `one_loop_fraction` equals `minform.fraction` bit for bit at the 146 fitted points and 28 synthetic inputs |
+| S(L) | 21 values | `one-loop-drain` crossover stage 1a | `prompts/one-loop-drain/source/crossover/out/stage1a_S_of_L.txt` | the code's comment: 0.1% high from its quadrature (crossover V2q) |
+| the three tables, k_ex/ω_t, x_lo, x_hi, x_p, κ_hi | §12.4 | §7.7 (07b) | `.documents/power-law-wall/kex-07b/spectrum_tables.txt` | the spline within 2.5e-6 / 4.1e-6 / 2.5e-6 of the midpoints; the bounce in k/ω_t equal to the old tables' within 2.8e-6; k_ex/ω_t equal to the closed form to 2.2e-16 |
+| x_* | 0.005615853347600149 | §7.7 (the 2PI probe 0.0029 ω_t, `kb_partB_report.tex`) | `quanta_spectrum.py:188` | unmeasured on the power wall |
+| `G_Y_MIN`, `OMEGA_U_MAX` | 5e-4, 9 | §9.4 (07c) | `quanta_spectrum.py:204`, `:207` | the left-out terms below 4e-10 (G) and 7.9e-16 of M₅ (Ω) on every wall |
+
+### 12.6 What the sample and the rehearsals showed
+
+- **04's forty** (§4.1–§4.9; by the tool route, at 2026.11.0, before the one k_ex): 37 of 40 succeed; the three failures are
+  n = 1 in natural mode at 10⁻³ M_P, at the integrator's guard G2, recorded as R5 rules. Every α > 0 candidate (1632) is an
+  unresolved one-loop reflection, every α > 0 history parks at its last candidate and none is released (§4.1, §4.5). R9's
+  share of K below E/V₀ = 10³ is 0 (the least ln(E/V₀) 11.464; §4.4). The surfing edges at 10⁻³ M_P: n = 2 as the
+  exponential's, QCD onset (1.116, 1.117], last QCD capture 2.975, EW from (3.002, 3.003]; n = 1 recorded as measured
+  (R11): 74 of 79 coarse β fail, the onset only in (1.10, 1.30], no EW edge (§4.6). **M_crit on the power wall:** the first
+  impact is one-loop at every M ≤ M_P on both n (first-impact estimates 1.4 × 10³ to 7.0 × 10²⁸ M_P), against the
+  exponential's ≈ 10⁻¹⁵ M_P; the late cascade's classical turn is estimated per history at about 10⁻²⁷ M_P to above M_P
+  (§4.5 item 5, an estimate).
+- **The power wall beside the exponential at the same (M, β)** (§4.2, against the 2026.11.0 export's v1 histories): under
+  the fixed law at laboratory M both n equal the exponential in injections, first bounce, parking and ΔN_eff; under the
+  one-loop law ΔN_eff at 1 MeV is 0.668–0.986 (n = 1) and 0.776–0.988 (n = 2) of the exponential's at laboratory M,
+  0.753 | 0.845 at 10⁻³³ M_P, and 6.8 × 10⁵ | 1.0 × 10⁶ times it at 10⁻¹⁵ M_P, where the exponential drains classically.
+  The power wall's integration has not moved since (§11.4); the exponential's one-loop histories have (next item), and the
+  ratio against v2 was not measured.
+- **v2 against v1 on the exponential** (§11.5, eleven one-loop histories of 07's grid): ΔN_eff today falls in 10 by 0.36%
+  to 6.70% and holds in one (10⁻¹⁵ M_P, all gap or classical); Y_p rises in 4 and falls in 6; D/H rises in 3 and falls in
+  7; the candidates rise in 8. At 4 × 10⁻³¹ M_P, β = 2, A = 1: ΔN_eff today 0.044624 → 0.04163249276504718 (§9.7, §11.5).
+- **The margins** (§11.4, 07d's P119): with the one k_ex the power wall's worst margins rise by up to 1.13 and ℓ by up to
+  1.267 (n = 1, A = 0.05, β = 1.2); the exponential's fixed-law worst margins by up to 0.190; no failing share moved and no
+  candidate's regime moved.
+- **The costs** per history: by the tool route 11–32 s at α > 0 and 48–97 s in natural mode at n = 2, BBN included (§4.1,
+  §4.7); under Ray, the tuning's wall at laboratory M 3.5–17.7 s on the exponential and within 2.6 s of 07's 4.2–22.5 s on
+  the power wall, natural mode at 10⁻³ M_P 38.7–39.5 s (exponential) and 91.0–91.9 s (n = 2), the n = 1 failure in about
+  13 s (§6.9, §11.10; `rehearse-07d/out/07d-07d-costs.txt`).
+
+### 12.7 What is not measured, and what is not modelled
+
+- **x_* and the associated piece on the power wall:** carried over from the exponential's 2PI run, unmeasured (U5, R10);
+  on power-n1 the piece carries 1.57% of I at c_a = 1 (§9.4). No open issue.
+- **The k² ln²k term at n = 1** below the table: neglected by the user's ruling (R8). No open issue.
+- **n ≥ 3 on both walls:** no one-loop law (R7, U14) and no spectrum on the power wall; the fixed law and natural mode run.
+  No open issue.
+- **v2 outside its fitted domain:** the exponential at 10⁻³³ M_P has 47 candidates with ln(V₀/M⁴) up to 27.31 (§11.11);
+  its ΔN_eff moves by −5.1% under v2, inside the in-domain histories' range (§11.13). The grid's 10⁻³⁶–10⁻⁴² M_P were not
+  measured. No open issue.
+- **The surfing edges at n = 1** at 10⁻³ M_P: no EW edge, the onset only in (1.10, 1.30] (R11, recorded as measured). No
+  open issue.
+- **Natural mode at n = 1 and large M** fails at G2 at 10⁻³ M_P (R5, noted and not chased); 0.1 and 0.5 M_P were not
+  sampled. No open issue.
+- **The exponential's one-loop law at n = 2** was refitted with its own rise (U13, §8.4), but no history of this
+  campaign's grids ran it: 07's and 07d's exponential is at n = 1 only.
+
+**Against `one-loop-drain-verification.md` §8.6's "not modelled"** (stimulated emission and rescattering, the backreaction
+n_χ m(φ), production at R < 1 in the 1/φ tail, the gap's physics, parking at physical M and the parking leftover's
+spectrum): this campaign changed none of them, on either wall. It changed the classical tail's description on the power
+wall only in that its classical branch is the constant S_n (R6), and its gap is f_n(ln R), not a separate fit; and on the
+exponential the gap is v2's rise. The open issues named there stay as they are (`.documents/OPEN_ISSUES.md` §1.23).
+
+## 13. Prompt 08 — the close (2026-11-19)
+
+**Tree:** branch `power-law-wall` at `278c58d`, the dispatch commit (a commit of the user's on top of `f36ef59`, which adds
+prompt 08 and its note; it adds only `.documents/trans-planckian-k-ex-2026-11-19/`); no code changed, so the tree that ran
+every check below is the tree this prompt's commit leaves. §1–§11 are unchanged; §12 is this prompt's. **Scripts:**
+[`power-law-wall/close-08/`](power-law-wall/close-08/): `check_help.py` (§13.4) and `split_by_n.py` (§13.5), both
+`black`-formatted. **Committed outputs:** [`power-law-wall/close-08/out/`](power-law-wall/close-08/out/): the three
+inventories with their hashes, the two splits and the per-n measurement, `check_help.txt` and each command's
+`help-<name>.txt`; the session scratchpad's directory is written `<scratch>` and the main checkout `<main>`. Orchestrator
+note 08's rulings 1–14 governed. No Ray was started, no store was built, and no build, plot script or registered run was
+run. Log: [`08-close.md`](../prompts/power-law-wall/logs/08-close.md).
+
+### 13.1 The Gate
+
+Re-checked at 12:51 GMT: `power-law-wall` at `278c58d`, `b5f863a` an ancestor; `git status --porcelain` `?? venv` only;
+`VERSION_LABEL = "2026.14.0"` (`config/version.py:134`), `FINGERPRINT_FORMAT = 8` (`config/fingerprint.py:100`);
+`tools/ray_cluster.sh status`: the lock free, no Ray process of `/tmp/ray-cpbh`, ports 6380, 6381, 8267 and 52367 free;
+`runregistrykit list`: 96 runs, all finished; in `<main>/var/datastores/`, `power-law-wall-07d-r2-{exp,pl,pl-resumed,mixed}`,
+`power-law-wall-07-{base,exp,pl,pl-resumed,mixed}` and `power-law-wall-07d-exp` 16 shards, the primary and a manifest each,
+`power-law-wall-07d-pl` 16 shards and the primary; this document 3016 lines, ending with §11.13 and no §12;
+`.documents/OPEN_ISSUES.md` 36 open, §1.26 the board's four, none assigned (board §3.1 "None"). Load 9.48 / 10.63 / 10.00;
+76 GB free (92% used).
+
+### 13.2 The suites
+
+Once, before the edits, serially, in the worktree, with `CLAUDE.md`'s commands; the `test_[g-z]` half and `tools/tests` as
+background calls. `unittest`'s time, the wall, and the one-minute load at the start:
+
+| suite | tests | result | `unittest` | wall | load at start |
+|---|---|---|---|---|---|
+| CosmologyModels | 26 | OK | 68.0 s | 70 s | 7.50 |
+| ComputeTargets `test_[a-f]*` | 226 | OK | 150.4 s | 154 s | 8.49 |
+| ComputeTargets `test_[g-z]*` | 583 | OK | 559.7 s | 563 s | 3.89 |
+| ObjectFactories | 175 | OK | 155.8 s | 159 s | 55.09 |
+| tools | 312 | 1 failure: `test_roots_and_distributions` | 376.2 s | 378 s | 46.66 |
+| RunDrivers | 79 | 1 failure: `test_the_script_is_main_py_with_its_hash_and_this_repositorys_head` | 81.4 s | 85 s | 45.41 |
+
+The counts are 07d's, 26, 809 (226 + 583), 175, 312 and 79, and the two failures are the worktree failures of the board's §5;
+no other failed. The load rose from 3.9 to 68.7 during the `test_[g-z]` half, from processes outside ChamPBH. No file the suites
+import changed after them (P148).
+
+### 13.3 The inventories (prompt §2 item 4; ruling 5)
+
+`main.py --config exponential.yaml --database <store>.db --shards 16 --phi-init-Mp 5 --inventory`, from the worktree's root, no
+Ray. Each store's or copy's 18 files hashed with `shasum -a 256` before and after; below, the SHA-256 of each list of
+(hash, file name):
+
+| store | label, format | exit, wall | what it reported | hashes before → after |
+|---|---|---|---|---|
+| `power-law-wall-07d-r2-exp`, in place | 2026.14.0, 8 | 0, 27 s | "read-only; 16 shards …; 75,097 records in 17 classes", "problems: none", `version` 2026.14.0, 20 `ScalarHistory`, `AdiabaticHistory` and `BBNData` each, all validated; stderr empty | `4e09e63d75aed0ad…` → the same |
+| a copy of `power-law-wall-07-exp` | 2026.12.0, 8 | 0, 26 s | "problems: none", `version` 2026.12.0, 20 histories of each kind validated, `InversePowerModel` 0 records; the `alpha_value` rows listed as stored, `A=… (one-loop-measured-v1)` among them; stderr empty | copy = original, `b16661285bbf9207…` → the same |
+| a copy of `power-law-wall-07-base` | 2026.11.0, 7 | 1, 2 s | stderr: "!! --inventory: Cannot read sharded datastore "<scratch>/copy-07-base/power-law-wall-07-base.db": shard #0 "…-shard0000.db" differs from the tables this code declares (it lacks the table(s) "InversePowerModel"), so nothing was read" | copy = original, `09f3baeda61fc60a…` → the same |
+
+The copies were `cp -p` of the 18 files into `<scratch>/copy-07-base/` and `<scratch>/copy-07-exp/`; the two originals, hashed
+again at the end, were unchanged, and no file appeared beside any of the three stores. So the tip reads a store of its own
+label and of 2026.12.0's (format 8) for the inventory, and refuses one of format 7 at the schema, as P41 found for a store
+lacking `InversePowerModel`. The full outputs: `close-08/out/inventory-07d-r2-exp.txt`, `inventory-07-exp-copy.txt`,
+`inventory-07-base-copy.txt`.
+
+### 13.4 The commands of §4.22 (prompt §2 item 3; ruling 6)
+
+`check_help.py`, run on §4.22's final text: thirteen commands each with `--help`, every one exit 0 (`main.py`, the two plot
+scripts, `RunDrivers/registered_run.py`, `tools/quanta_measures.py`, `plot_quanta_grid.py`, `plot_quanta_history.py`,
+`bbn_from_store.py`, `history_and_bbn.py`, `surfing_scan.py`, `compare_stores.py`, `runregistrykit list` and `runregistrykit
+store create`); the 30 tokens `--name` of §4.22, each in its command's help (26 options), or a read-only git command run as
+written (`git merge-base --is-ancestor main power-law-wall` exit 1, `git merge-tree --write-tree main power-law-wall` exit 0,
+`git diff --name-only a7e0978 main` exit 0), or the removed option §4.22 point 7 quotes (`--potential-type`, a key of
+`REMOVED_OPTIONS`); **0 failures** (`close-08/out/check_help.txt`). §4.22's one command with values (point 3) has every option
+checked so; it was not run against a store.
+
+### 13.5 The per-n roots for `plot_quanta_grid` (prompt §2 item 5; ruling 7; P143)
+
+A copy of 07d's `var/power-law-wall/07d-r2/export-pl/QCD_Cosmology/inverse-power/` (`cp -Rp`, equal by `diff -r`) as
+`<scratch>/split/all`, and from it `<scratch>/split/n1` and `n2` by `split_by_n.py`: each keeps the files under its n's
+`M=…eV_n=<n>` directories (57 at n = 1, 61 at n = 2) and its records of `histories.csv` (48 of 96) and
+`quanta_histories.csv` (11 of 22), and removes the quanta files before they are measured again (`split-n1.txt`,
+`split-n2.txt`). Then `tools/quanta_measures.py <root> --assoc-scale 1` and `tools/plot_quanta_grid.py <root>` on each
+(`per_n.txt`):
+
+| root | `quanta_measures` | `plot_quanta_grid` | figures |
+|---|---|---|---|
+| `all` | exit 0, 9 s: measured 22, skipped as fixed-law 48, failed histories 26, K check failed 0 (`R8-power-n1-v2`, `R8-power-n2-v2`) | exit 1, 2 s: "figures written 0, refused 3", each "two rows in one cell" of n = 1 and n = 2 at one (β, M) | none |
+| `n1` | exit 0, 5 s: measured 11, skipped 24, failed 13 (`R8-power-n1-v2`) | exit 0, 6 s: "figures written 3, refused 0", A = 0.05, 1, 10 | 3 PDF, 3 PNG |
+| `n2` | exit 0, 5 s: measured 11, skipped 24, failed 13 (`R8-power-n2-v2`) | exit 0, 6 s: "figures written 3, refused 0" | 3 PDF, 3 PNG |
+
+`all`'s quanta files after the measure equal 07d's byte for byte (`diff -rq` against the export root); each split root's
+`quanta_histories.csv` equals `all`'s rows of its n, in order, and its per-history quanta files equal `all`'s. As
+`[06-plot-quanta-grid-refuses-two-n-at-one-cell]` expected: the unsplit root is refused and each n's root is drawn. No figure is
+committed. A first pass of the agent's shell loop passed `--assoc-scale 1` as one argument (exit 2 on usage, nothing written);
+the pass above replaced it (`per_n.txt` says so).
+
+### 13.6 Twenty numbers checked against their sources
+
+Ten of §12 and ten of §4.22, each read at its source (`file:line` at this commit; this document's lines are its own):
+
+| # | number | where it is written | its source |
+|---|---|---|---|
+| 1 | S₁ = 1.02620e-2 | §12.3, §12.5 | `InversePowerModel.py:97`; §2.4 (`:342`) |
+| 2 | ln R_×,1 = 23.08943252571177 | §12.3 | `InversePowerModel.py:103`; §3.1 (`:522`) |
+| 3 | A_f = 2.5143466540073995 | §12.3 | `ExponentialModel.py:74`; README §6.14 P100 (`prompts/power-law-wall/README.md:884`) |
+| 4 | A_f 2.514 ± 0.052, ℓ₀ 1.186 ± 0.047 | §12.5 | §8.4 (`:2078`) |
+| 5 | x_* = 0.005615853347600149 | §12.4 | `quanta_spectrum.py:188`; §7.7 (`:1873`) |
+| 6 | k_ex/ω_t = 1.0606601717798214 (power, n = 1) | §12.2, §12.4 | `quanta_spectrum.py:736`; §7.7 (`:1847`) |
+| 7 | the least margin, 45.0 decades | §12.2 | §10.5 (`:2455`) |
+| 8 | the slowest fixed point, 195 iterations | §12.2 | §9.2 (`:2218`) |
+| 9 | 47 candidates with ln(V₀/M⁴) > 10, up to 27.31 | §12.3, §12.7 | §11.11 (`:2914`) |
+| 10 | f_n's residual 0.0541 / 0.0191 / −0.0004 (62) | §12.5 | §3.1 (`:533`) |
+| 11 | block A, 4 h 00 min | §4.22 point 4 | the 2026.11.0 run record, "The registered runs" (`git show main:science-runs/2026-11-13-science-2026.11.0/README.md`, `:76`) |
+| 12 | 2292 histories in block A | §4.22 point 4 | `run_science_2026.11.0.sh` on `main`, `:140` |
+| 13 | the exponential's laboratory-M sum, 165.5 s | §4.22 point 4 | the fifteen 07d-r2 walls at 4 × 10⁻³¹ M_P in `rehearse-07d/out/07d-07d-costs.txt` (`:6`–`:14`, `:17`–`:22`), summed |
+| 14 | the exponential store's total, 301.7 s (07: 294.3 s) | §4.22 point 4 | `07d-07d-costs.txt:23` |
+| 15 | the longest heartbeat silence, 54 s | §4.22 point 5 | §11.2 (`:2631`) |
+| 16 | `store_id` `9e8f48d02581410784a0d457a772d48d` | §4.22 point 6 | `<main>/var/datastores/power-law-wall-07d-r2-exp.manifest.json:218` |
+| 17 | ΔN_eff today −0.36% to −6.70% in 10 of 11 | §4.22 point 1 | §11.5 (`:2732`) |
+| 18 | 16 291 536 compared values | §4.22 point 1 | §11.4's table (`:2671`–`:2674`): 1 330 907 + 5 540 349 + 5 540 349 + 3 879 931 |
+| 19 | 75,097 records in 17 classes | §4.22 point 1 | `close-08/out/inventory-07d-r2-exp.txt:32` |
+| 20 | 12 h 28 min, 2026.11.0's build | §4.22 point 4 | the run record, "Timings against the plan" (`:90`) |
+
+Each equals its source.
+
+### 13.7 The board and the indexes agree
+
+The board's §3 holds four open issues and §3.1 "None"; `.documents/OPEN_ISSUES.md` gives 36 open, its header's clause for this
+board four open with the campaign closed, and §1.26 the same four rows; `prompts/INDEX.md`'s row says **complete**, 13 of 13,
+"§1.26; 4 open …; 36 open in the whole index", and its header 19 campaigns, 0 planned, 0 live, 19 closed.
+
+### 13.8 What moved
+
+`git diff --stat 278c58d` touches exactly the files of prompt §4: this document (§12, §13), `numerical-strategies.md` (§6.13),
+`architecture-summary.md` (six dated notes), `review-remediation-verification.md` (§4.22), `CLAUDE.md`, the board,
+`prompts/INDEX.md`, `.documents/OPEN_ISSUES.md`, the log and `.documents/power-law-wall/close-08/`. In the four documents no
+existing line was deleted or reworded (`git diff` shows insertions only). No Python file changed outside `close-08/`.
