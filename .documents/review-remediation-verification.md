@@ -2956,7 +2956,7 @@ code now says about the table is in `architecture-summary.md` §8.5's note of th
 
 ### 4.22 Addendum 2026-11-19 — the `power-law-wall` campaign
 
-Added by `power-law-wall` prompt 08 (this commit), written on `278c58d`. Nothing above this heading has been changed;
+Added by `power-law-wall` prompt 08 (`8f7a77e`), written on `278c58d`. Nothing above this heading has been changed;
 where it is superseded, this section says so by statement. The campaign added a second potential, the inverse power law
 V = V₀[1 + (M/φ)ⁿ], beside the exponential, took it through the pipeline, and on the way gave k_ex one definition on every
 potential, which refitted the exponential's one-loop law. It started no production run: it built small rehearsal stores
@@ -2983,7 +2983,7 @@ under `var/`. It did, in order:
   ruled), formed the pulse rate in closed form after 07d's first attempt stopped on it and the user ruled (a) (07c2,
   `bd8d648`: "Range"), and rehearsed again on the tip (07d, `b5f863a`: "R2"), after a stop at its suites that the user
   ruled (a);
-- and prompt 08 wrote the documents and this handover (this commit: "Close").
+- and prompt 08 wrote the documents and this handover (`8f7a77e`: "Close").
 
 Its board is [`prompts/power-law-wall/IMPLEMENTATION_STATE.md`](../prompts/power-law-wall/IMPLEMENTATION_STATE.md); its plan is
 its [`README.md`](../prompts/power-law-wall/README.md) (§6 the decisions, R1–R17, U1–U14, P1–P148); the measurements are in
@@ -3209,8 +3209,8 @@ The branch `power-law-wall` **is not merged into `main` when this is written** (
    | `power-law-wall-07d-r2-pl` | `00fb718` | 2026.14.0, 8 | `460a62f94a7f442d9bb4061d3c0f590a` | 16 | 154 880 | no |
    | `power-law-wall-07d-r2-pl-resumed` | `00fb718` | 2026.14.0, 8 | `2a9064f9cc1b4fc38ed0a6ace6f6553a` | 16 | 153 148 | no |
    | `power-law-wall-07d-r2-mixed` | `00fb718` | 2026.14.0, 8 | `cabc80c14eb24023a69731227321ec24` | 16 | 153 964 | no |
-   | `power-law-wall-07-base` | `a7e0978` | 2026.11.0, 7 | `60fc081b15c74c57968f9bd739bc30ba` | 16 | 121 520 | a copy, by the inventory |
-   | `power-law-wall-07-exp` | `945bf5d` | 2026.12.0, 8 | `63364222c77e45febdb266f188c347ce` | 16 | 123 768 | a copy, by the inventory |
+   | `power-law-wall-07-base` | `a7e0978` | 2026.11.0, 7 | `60fc081b15c74c57968f9bd739bc30ba` | 16 | 119 104 | a copy, by the inventory |
+   | `power-law-wall-07-exp` | `945bf5d` | 2026.12.0, 8 | `63364222c77e45febdb266f188c347ce` | 16 | 119 412 | a copy, by the inventory |
    | `power-law-wall-07-pl` | `945bf5d` | 2026.12.0, 8 | `fd4e59b1f5eb4977b4a5128cd7d86b78` | 16 | 155 756 | no |
    | `power-law-wall-07-pl-resumed` | `945bf5d` | 2026.12.0, 8 | `92eadd6a69a74e69b8a9c95cb2ba50f3` | 16 | 155 428 | no |
    | `power-law-wall-07-mixed` | `945bf5d` | 2026.12.0, 8 | `e48589b6f2d0437b86b2f4782c8dcc29` | 16 | 153 740 | no |

@@ -3398,7 +3398,7 @@ the pass above replaced it (`per_n.txt` says so).
 
 ### 13.6 Twenty numbers checked against their sources
 
-Ten of §12 and ten of §4.22, each read at its source (`file:line` at this commit; this document's lines are its own):
+Ten of §12 and ten of §4.22, each read at its source (`file:line` at `8f7a77e`; this document's lines are its own):
 
 | # | number | where it is written | its source |
 |---|---|---|---|

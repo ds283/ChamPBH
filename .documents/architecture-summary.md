@@ -1659,6 +1659,13 @@ SampleValues = namedtuple("SampleValues", [
 > - **The store** (`ObjectFactories/ScalarHistory.py:528`–`:546`): a `ScalarHistory`'s `model` is the polymorphic pair
 >   (`model_type`, `model_serial`), `model_type` 1 for `ExponentialModel` and 2 for `InversePowerModel`; the two tables'
 >   serials repeat each other, so every lookup and every raw join matches `model_type` (§14's note of this date).
+> - **The spectrum** (`ComputeTargets/quanta_spectrum.py`, read only by the post-processing). `SPECTRUM_MODEL =
+>   "U4-U17-v1"` and its fitted constants (`X_PEAK`, `KAPPA`, `KAPPA_FIT_L`, `BETA2_MAX_BY_L`), named by item 7 of the
+>   2026-11-07 note above and by `one-loop-drain` 05's note in §14, are of the tree before `power-law-wall` 07c. The module
+>   now holds `SPECTRUM_MODELS` (`:155`–`:159`), one measured table per wall in x = k/k_ex with the one k_ex
+>   (`R8-exponential-v2`, `R8-power-n1-v2`, `R8-power-n2-v2`; `_TABLES`, `:724`), and `X_STAR` = 0.005615853347600149
+>   (`:188`). Each quanta row reads the wall that its model's `spectrum_wall` names, from the export's `model` and `n`.
+>   Verification §12.4. *(Added by the orchestrator's review of prompt 08.)*
 
 ### 7.3 `AdiabaticHistory` (`ComputeTargets/AdiabaticHistory.py`)
 

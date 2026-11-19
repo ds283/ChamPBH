@@ -3,7 +3,7 @@
 **Subject:** Close the `power-law-wall` campaign: the two walls as they stand, for the paper; the reading guides; `CLAUDE.md`'s
 descriptions; the handover for a science run of record of both potentials; the issues and the indexes (P135–P148, README
 §6.17; orchestrator note 08).
-**Commit:** this commit, on branch `power-law-wall`, on top of `278c58d`
+**Commit:** `8f7a77e`, on branch `power-law-wall`, on top of `278c58d`
 **Date:** 2026-11-19, by Claude Opus 5.5 (one agent, in the worktree `.claude/worktrees/power-law-wall`)
 **Result:** **COMPLETE.** C1–C6 shipped; no stop condition was met; no code changed. Opened none, closed none.
 - `power-law-wall-verification.md`: §12 (seven subsections) and §13; `numerical-strategies.md`: §6.13 (two subsections);

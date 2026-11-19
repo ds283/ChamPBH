@@ -1,6 +1,6 @@
 # power-law-wall campaign — implementation state
 
-**Last updated:** 2026-11-19 · **Status: CLOSED 2026-11-19 — 13 of 13 prompts landed (08, the close, this commit); every gate holds, Close included; four issues open, none assigned; the merge into `main` is the user's (not a fast-forward: `main` has run-record commits under `science-runs/` only; `review-remediation-verification.md` §4.22 point 8). The two walls for the paper are `.documents/power-law-wall-verification.md` §12, and the handover to the science run of both potentials is `.documents/review-remediation-verification.md` §4.22.**
+**Last updated:** 2026-11-19 · **Status: CLOSED 2026-11-19 — 13 of 13 prompts landed (08, the close, `8f7a77e`); every gate holds, Close included; four issues open, none assigned; the merge into `main` is the user's (not a fast-forward: `main` has run-record commits under `science-runs/` only; `review-remediation-verification.md` §4.22 point 8). The two walls for the paper are `.documents/power-law-wall-verification.md` §12, and the handover to the science run of both potentials is `.documents/review-remediation-verification.md` §4.22.**
 
 The campaign adds the inverse-power-law model V = V₀[1 + (M/φ)ⁿ] beside the exponential, defines the one-loop drain
 law on its wall from measurements, and takes it through the store, the drivers and a rehearsal, so that a science run
@@ -44,7 +44,7 @@ a7e0978 278c58d -- '*.py' '*.yaml'`, which also names:)* `ComputeTargets/ScalarH
 | 07c | k_ex in production | the V‴ hook, one k_ex at every use, the law as U13 rules (in `ExponentialModel`, P99), the drain-model names, the tables and x_*, the iteration cap, the label (U11–U12; P99–P110, U14) | Opus | ✍️ | ✅ | `c8461ab` | [`logs/07c-k-ex-in-production.md`](logs/07c-k-ex-in-production.md) |
 | 07c2 | The pulse rate in closed form | |V‴/V″| as a model hook in closed form on both walls, in place of 07c's composition, which overflows below φ ≈ 3 × 10⁻¹⁰³ M_P; the stop reproduced, the range measured, the label 2026.14.0 (P125–P134, README §6.16) | Opus | ✍️ | ✅ | `bd8d648` | [`logs/07c2-pulse-rate-in-closed-form.md`](logs/07c2-pulse-rate-in-closed-form.md) |
 | 07d | Rehearse again | 07's grid at the tip; histories whose law reads no ℓ equal to 07's but the k_ex columns; the exponential's one-loop histories measured against 07's (P111–P124, README §6.15; orchestrator note 07d). *First attempt stopped 2026-11-18 in run `pl-a`, ruled (a); restarted after 07c2 in `power-law-wall-07d-r2-*` (P133)* | Opus | ✍️ | ✅ | `b5f863a` | [`logs/07d-rehearse-again.md`](logs/07d-rehearse-again.md) |
-| 08 | Close | the documents, the handover, the issues, the indexes; verification §12 (both walls for the paper), §6.13 and the architecture notes, `CLAUDE.md`'s counts, §4.22 (P135–P148, README §6.17; orchestrator note 08) | Opus | ✍️ | ✅ | this commit | [`logs/08-close.md`](logs/08-close.md) |
+| 08 | Close | the documents, the handover, the issues, the indexes; verification §12 (both walls for the paper), §6.13 and the architecture notes, `CLAUDE.md`'s counts, §4.22 (P135–P148, README §6.17; orchestrator note 08) | Opus | ✍️ | ✅ | `8f7a77e` | [`logs/08-close.md`](logs/08-close.md) |
 
 **Legend.** ✍️ written · ⏸ held, with what it waits on · ⬜ not yet · ✅ landed.
 
@@ -53,7 +53,7 @@ a time, in `orchestrator/`: [`prompt-01.md`](orchestrator/prompt-01.md), written
 01 (dispatched 2026-11-14 at `75ac6fb`); [`prompt-02.md`](orchestrator/prompt-02.md), written 2026-11-14 with prompt 02, used for
 02 (dispatched 2026-11-14 at `35f6359`); [`prompt-03.md`](orchestrator/prompt-03.md), written 2026-11-15 with prompt 03,
 used for 03 (dispatched 2026-11-15 at `7c60226`, after U8 and U9 were ruled as proposed, R9 and R10), and its §0 holds the f_n(ln R) fit the user ruled R7 on and the
-spectrum probes R8 was ruled on; [`prompt-04.md`](orchestrator/prompt-04.md), written 2026-11-15 with prompt 04, not dispatched, and its §0 holds the planner's probe at `99cc79b` (surfing at 10⁻³ M_P, one-loop histories at 10⁻¹⁵ and 10⁻³³ M_P, the M_crit estimate); [`prompt-07.md`](orchestrator/prompt-07.md), written 2026-11-16 with prompt 07, not dispatched, and its §0 holds the planner's survey at `c7ba5ca` (the registry's roots in the main checkout, the data files equal at `a7e0978` and the tip, 04's costs and print formats). [`prompt-07d.md`](orchestrator/prompt-07d.md), written 2026-11-18 with prompt 07d, used for its first attempt (dispatched 2026-11-18 at `e6e50b0`, stopped in run `pl-a`, README §6.16) and amended 2026-11-19 for its restart (P133). [`prompt-08.md`](orchestrator/prompt-08.md), written 2026-11-19 with prompt 08, not dispatched, and its §0 holds the planner's survey at `69d5d45` (no dated note of this campaign in the two reference documents, `CLAUDE.md` behind the counts, the 2026.11.0 analyses naming the retired `one-loop-measured-v1`, the merge not a fast-forward). [`prompt-07b.md`](orchestrator/prompt-07b.md), written 2026-11-17 with prompt 07b, used for 07b (dispatched 2026-11-17 at `e4ae58b`; landed `0223d50`), and its §0 holds the planner's reading of Erickcek et al. §V B, the size of the change on each wall, crossover's stage-2 rows re-chained at `c798d02` (20 move from gap to one-loop; v1's form misses by 0.19 in the new ℓ) and the inventory as far as the planner took it. Note 02's §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
+spectrum probes R8 was ruled on; [`prompt-04.md`](orchestrator/prompt-04.md), written 2026-11-15 with prompt 04, not dispatched, and its §0 holds the planner's probe at `99cc79b` (surfing at 10⁻³ M_P, one-loop histories at 10⁻¹⁵ and 10⁻³³ M_P, the M_crit estimate); [`prompt-07.md`](orchestrator/prompt-07.md), written 2026-11-16 with prompt 07, not dispatched, and its §0 holds the planner's survey at `c7ba5ca` (the registry's roots in the main checkout, the data files equal at `a7e0978` and the tip, 04's costs and print formats). [`prompt-07d.md`](orchestrator/prompt-07d.md), written 2026-11-18 with prompt 07d, used for its first attempt (dispatched 2026-11-18 at `e6e50b0`, stopped in run `pl-a`, README §6.16) and amended 2026-11-19 for its restart (P133). [`prompt-08.md`](orchestrator/prompt-08.md), written 2026-11-19 with prompt 08, used for 08 (dispatched 2026-11-19 at `278c58d`; landed `8f7a77e`), and its §0 holds the planner's survey at `69d5d45` (no dated note of this campaign in the two reference documents, `CLAUDE.md` behind the counts, the 2026.11.0 analyses naming the retired `one-loop-measured-v1`, the merge not a fast-forward). [`prompt-07b.md`](orchestrator/prompt-07b.md), written 2026-11-17 with prompt 07b, used for 07b (dispatched 2026-11-17 at `e4ae58b`; landed `0223d50`), and its §0 holds the planner's reading of Erickcek et al. §V B, the size of the change on each wall, crossover's stage-2 rows re-chained at `c798d02` (20 move from gap to one-loop; v1's form misses by 0.19 in the new ℓ) and the inventory as far as the planner took it. Note 02's §0 holds the planner's probe: the path formula, the power wall's scale invariance above V₀, and the
 crossover scripts' absolute tolerances failing at large E/V₀.
 
 **Planner's probe for 01 (2026-11-13, at `c540caa`, not committed).** A scratch power-law model through
@@ -912,6 +912,86 @@ for the user to retire. On the exponential, the history at 10⁻³³ M_P has 47 
 outside v2's fitted domain; every other one-loop candidate of the grid is at or below 3.345. The least φ_t over the
 grid's candidates sits 74.9 (n = 1) and 97.7 (n = 2) decades above where V″ leaves float range on the power wall.
 
+**Orchestrator review of prompt 08 (2026-11-19).** All nine checks of note 08 §3 pass. The re-runs below were made by
+the orchestrator at `8f7a77e`, from 13:35 GMT, at one-minute loads of 6.8–47.8, from scratch copies in the session
+scratchpad (none committed), one at a time.
+- **The gate at dispatch.** At 12:48 GMT one item failed: the worktree also held the untracked
+  `.documents/trans-planckian-k-ex-2026-11-19/`, the user's notes of a discussion that day, outside any campaign. Put to
+  the user as a stop, with the options; the user committed it (`278c58d`, "Record the notes on k_ex at the
+  inverse-power wall and its Planck scale", that folder only). Re-measured at 12:50: `?? venv` only; `HEAD` `278c58d`;
+  `main` `9df9e13`, `github/main` `84a2494`; `VERSION_LABEL` 2026.14.0, format 8; the lock and the four ports free;
+  96 runs, all finished; the eleven stores as note §0 lists them; the index 36 open, §1.26 the board's four; the
+  verification document 3016 lines, ending with §11.13 (note §0 said §11.12; the agent was told so). Dispatched at
+  12:51 at a load of 7.2, `278c58d` as the dispatch commit.
+1. *Scope.* `8f7a77e`'s parent is `278c58d`. Its 31 files are "What moves on purpose" exactly. The diff of code,
+   scripts, config, `science-runs/`, the README, the prompts and `orchestrator/` is empty; of `logs/` only `08-close.md`
+   is new; the user's notes folder is untouched. `?? venv` only; the main checkout clean at `9df9e13`; no remote branch
+   holds the commit; no PDF or PNG committed.
+2. *Additive.* `--numstat` on the four documents: +423/−0, +76/−0, +134/−0, +308/−0. The verification document's
+   first 3016 lines are byte-identical to `278c58d`'s; §12 at `:3018` and §13 at `:3308` follow §11.13; §6.13 at
+   `numerical-strategies.md:2020`, before `## 7.` at `:2098`; §4.22 at `review-remediation-verification.md:2957`, after
+   §4.21's point 8 and before the `---` and `## 5. Reproduce`; the architecture notes at the ends of §7.2 (`:1632`), §8.4a
+   (`:1998`), §9 (`:2237`) and §14 (`:2612`), with two more at §2 (`:333`) and §4.2 (`:537`) that correct undated text.
+3. *The suites,* re-run by me serially in the worktree: CosmologyModels 26 OK (68.8 s, load 18.3); ComputeTargets
+   `test_[a-f]` 226 OK (155.9 s, 20.4) and `test_[g-z]` 583 OK (569.0 s, 6.8); ObjectFactories 175 OK (165.3 s, 21.1);
+   tools 312 with `test_roots_and_distributions` failing (334.0 s, 47.8); RunDrivers 79 with
+   `test_the_script_is_main_py_with_its_hash_and_this_repositorys_head` failing (24.9 s, 20.2). The two worktree
+   failures, no other. (A first `test_[g-z]` run, 13:36–13:46, kept only the output's last 40 lines and lost its result
+   line; it was re-run.)
+4. *The code claims.* Read at `8f7a77e`: `ONE_LOOP_ELL_START`, `ONE_LOOP_ELL_RTOL` and `ONE_LOOP_MAX_ITERATIONS = 400`
+   (`AbstractModel.py:125`–`:127`); ln k_ex at `:877`–`:878`; ln m_ta at `:943`; `_pulse_rate` `:789`; the power wall's
+   `_pulse_rate_hook` (n + 2)/φ (`InversePowerModel.py:292`) and the exponential's rational form (`ExponentialModel.py:352`);
+   `DRAIN_ALPHA_CAP = 0.99` (`ScalarHistory.py:194`), `drain_alpha_effective` (`:1881`, `:1906`–`:1907`),
+   `NONADIABATICITY_SCALE` (`:128`), the classical test (`:4139`), `DEFAULT_TUNING_MAX_INTEGRATIONS = 30` (`:5498`), the step
+   budget 2 000 000 (`:296`); `SPECTRUM_MODELS` (`quanta_spectrum.py:155`) and `X_STAR` (`:188`); the type ids
+   (`model_ids.py:20`, `:24`) and option values (`model_options.py:42`–`:43`); `check_drain_law` (`drain_model.py:145`, the
+   one-loop branch `:161`). Each as §12 states it. Both laws' constants equal §12's tables digit for digit
+   (`InversePowerModel.py:97`–`:103`, `ExponentialModel.py:74`–`:79`), and v2's ten equal `minform.json`'s `with_new`,
+   `n12/S3/v-J` exactly.
+5. *The numbers.* Fifteen not among the agent's twenty, traced: S₂ 5.21615e-3 (`wall-02/stage1a_S_n.txt`, 5.2161510e-3);
+   n = 2's miss 0.0557 / 0.0215 / −0.0016 (§3.1); v2's held-out prediction 0.071 / 0.024 / +0.005 over 36 (§8.4); the
+   least margins 58.54, 74.92, 97.71 and the end 1.054769e-154 (§11.11, §10.5); 11.464 (§4.4); 3.345 and 47 (§11.11);
+   0.044624 → 0.041632 (§11.5); the power wall's worst-margin rise 1.1323 and ℓ's 1.2674 (§11.4); x_p, κ_hi and the tail
+   shares of the three tables (`kex-07b/spectrum_tables.txt`); G 4.3e-12 and Ω 2.2e-10 (§9.4); the tuning walls 3.5–17.7 s,
+   38.7–39.5 s and the n = 1 failures' 12.8–13.0 s (`07d-07d-costs.txt`); the eight block walls (the 2026.11.0 README on
+   `main`); every ratio of the projection and its sums, 713 and 704 min, recomputed. **One discrepancy:** §4.22 point 6
+   gave `power-law-wall-07-base` 121 520 KiB and `07-exp` 123 768 KiB; `du -sk` over each store's 18 files gives 119 104
+   and 119 412 (equal to the agent's scratch copies), and the other nine sizes agree to the KiB. Corrected here. The ten
+   `store_id`s equal the sidecars'.
+6. *The commands and the measurements.* `check_help.py`, run by me from a scratch copy writing its `out/` there: exit 0,
+   0 failures, and its fourteen output files byte-identical to the committed ones. By hand against `--help`: the
+   example block's sixteen options of `main.py` (and `--models`, `--inventory`, `--retry-failed-scalar`,
+   `--tuning-max-integrations`), `registered_run.py`'s four, `runregistrykit list --stale-after`, `quanta_measures
+   --assoc-scale`, `plot_quanta_grid`'s positional root; `inverse_power.yaml` exists. The three stores' 18 file hashes
+   each equal every hash `out/` records for them. On a fresh `cp -Rp` of 07d's power-law root (`diff -r` equal),
+   `split_by_n.py … 2` exits 0 with a report equal to `split-n2.txt` but for paths; `quanta_measures --assoc-scale 1`
+   exit 0, measured 11; `plot_quanta_grid` exit 0, "figures written 3, refused 0", 3 PDF and 3 PNG. As recorded.
+7. *The grep.* Every hit in `numerical-strategies.md` and `architecture-summary.md` for the nine terms is inside an
+   earlier campaign's dated note or section (a record), true of the present, or named by 08's §6.13.2 or a note of this
+   date, with one exception: `SPECTRUM_MODEL = "U4-U17-v1"` in `architecture-summary.md`'s 2026-11-07 note (item 7,
+   `:1624`) and `one-loop-drain` 05's §14 note (`:2528`), which the prompt's search list names and no note of 08 covered,
+   although its §7.2 note does reach back to correct the same 2026-11-07 note on the law. Residue: a bullet added here to
+   08's §7.2 note (`SPECTRUM_MODELS`, `_TABLES`, `X_STAR`, `spectrum_wall`; verification §12.4).
+8. *`CLAUDE.md`.* The diff changes the counts (783 → 809, 557 → 583), the times (with the loads, "in a worktree"), the
+   dating parenthesis (one sentence: 07c2, 4 tests, on 07c's 22) and the plot-scripts bullet (`--models`,
+   `<label>/<model>/`); nothing else. My modal grep over its `+` lines: no hit (exit 1).
+9. *The records.*
+   - The log has the campaign's form (§1 what shipped, §2 deviations, §3 verification, §4 the gate, §5 ruling 10's table,
+     §6 observations, §7 state handed on), rulings 1–14 classed, and D1–D7. D3 is the agent's read-only `git ls-remote`
+     against the remote, which the note's "Network: none" did not allow; it printed nothing and nothing rests on it.
+   - The index: 36 bullet rows and the header's 36; §1.26 the board's four, the campaign closed; `prompts/INDEX.md`'s
+     header 0 planned, 0 live, 19 closed, and its 19 rows all "complete".
+   - Verification §13 holds the Gate, the suites, the inventories' hashes, the commands, the per-n roots, the twenty
+     numbers, the agreement and what moved (§13.1–§13.8).
+   - §4.22 point 8 against mine at review time: merge base `a7e0978`; `--is-ancestor` exit 1; `main` 15 commits since the
+     base, none outside `science-runs/`; `merge-tree --write-tree` exit 0 (tree `0b7d59d…` now, `e58d124…` when the agent
+     ran it on `278c58d`: the branch tip moved, not the result); local `main` 16 ahead of `github/main`; no upstream. Equal.
+   - `black --check` passes on both scripts of `close-08/`.
+
+Corrected here: "this commit" replaced by `8f7a77e` at its eight places (the board's status line, row and change log,
+the log's header, `prompts/INDEX.md`'s row, verification §13.6 and §4.22's opening); §4.22 point 6's two sizes; the §7.2
+bullet above. Note 08 is marked used for 08. Nothing opened.
+
 ## 2. The gates
 
 As README §2.1: Model (01), Wall (02), Law (03), Sample (04), Store (05), Export (06), R (07), Remeasure (07b), Form (07b2), Consistent (07c), Range (07c2, added 2026-11-19), R2 (07d), Close (08). All hold.
@@ -1431,6 +1511,9 @@ ObjectFactories 163, tools 292, RunDrivers 76. 01 re-measures them at its base.
   the 2026.11.0 scripts read on `main`; three inventories; the per-n roots for `plot_quanta_grid` measured; the merge
   facts), from a survey of the documents, the stores and `main` (note 08 §0). No question waits on the user; not
   dispatched.
-- 2026-11-19: prompt 08 dispatched at `278c58d` and landed (this commit): the gate Close holds; the campaign is closed.
+- 2026-11-19: prompt 08 dispatched at `278c58d` and landed (`8f7a77e`): the gate Close holds; the campaign is closed.
   No issue opened or closed; `[06-plot-quanta-grid-refuses-two-n-at-one-cell]` gained the per-n measurement. The merge
   into `main` is the user's.
+- 2026-11-19: prompt 08 reviewed by the orchestrator (this board, "Orchestrator review of prompt 08"); all nine checks
+  of note 08 §3 pass. Corrected by the review: two store sizes in `review-remediation-verification.md` §4.22 point 6, and
+  a dated note added in `architecture-summary.md` §7.2 for the spectrum's name. No issue opened or closed.
