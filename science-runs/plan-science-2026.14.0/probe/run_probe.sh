@@ -18,8 +18,8 @@ set -euo pipefail
 
 RUN=science-2026.14.0
 HERE=science-runs/plan-science-2026.14.0/probe
-LOG=$HERE/logs
-OUT=$HERE/out
+LOG=var/$RUN/probe/logs        # in var/ (ignored), so the checkout stays clean; copied to the record after
+OUT=var/$RUN/probe/out
 DS=$PWD/var/datastores
 RAY_ADDR=127.0.0.1:6380
 NUM_CPUS=${NUM_CPUS:-8}                 # P5, amended 2026-11-20
