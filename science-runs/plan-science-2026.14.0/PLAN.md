@@ -81,6 +81,10 @@ alternative (the reflection store holds 84 histories), and §5's new choice is r
     sleeps when moved ([[machine-sleep-and-timing-tests]]). It also has 16 GB of memory and 64 GB of free disk.
   - **CPUs.** The cluster starts with `tools/ray_cluster.sh start "science-2026.14.0" --num-cpus 6`. SecondaryGWKit runs
     with 6 because the Mac Studio also serves a website's object store.
+  - **Amended 2026-11-20: 8 CPUs.** The user ruled: "It will be running over a weekend. I think it's safe to take 8
+    cores." The cluster starts with `--num-cpus 8`, which leaves 2 for the object store (the user, 2026-11-19: "2 cores
+    is adequate for `minio`+`nginx`"). `CategoriesService`'s loop has been stopped, and the Mac Studio was at load 3
+    before the suites ran on 2026-11-20.
   - **Orchestration.** A laptop session starts a session over the desktop app's saved SSH connection `MacStudio`. That
     session drives the Mac Studio, waits on the run itself and commits nothing; the laptop copies the records back.
   - **The Mac Studio's checkout** is used only to build. It stays clean and is never moved while a build runs.
@@ -209,7 +213,7 @@ On the Mac Studio, from its ChamPBH checkout's root, after P6:
    and fast-forwarded the same way.
 2. **Discovery** on both hosts (CLAUDE.md, rule 1), and P7's checks on the Mac Studio.
 3. **The cluster** is started on the Mac Studio from the checkout's root:
-   `tools/ray_cluster.sh start "science-2026.14.0" --num-cpus 6`. Workers read the w table and PRyMordial's rates by
+   `tools/ray_cluster.sh start "science-2026.14.0" --num-cpus 8` (P5, amended 2026-11-20). Workers read the w table and PRyMordial's rates by
    paths relative to the directory the cluster started in. Exit 3 is a stop for the user.
 4. **The launch**, detached, then one check that `A-exp` started, and nothing more until it ends (rule 4):
    ```bash
@@ -247,6 +251,15 @@ with the user's mask for `ScalarHistory.failure_reason` (`[07-failure-reason-car
 - **Otherwise:** the differences are reported by value, column by column, and the probe stops for the user before
   Part 2.
 - **Cost:** about 10 minutes.
+- **Amended 2026-11-20: the exponential's reference is rebuilt on the laptop.** `power-law-wall-07d-r2-exp` was
+  retired on 2026-11-19 at 16:10, so its sidecar and fingerprint remain but not its shards; `-r2-pl` is kept. The
+  user ruled (b): "(b) please." The laptop first rebuilds the exponential store from the same three commands, into
+  `science-2026.14.0-probe-ref-exp`, registered as `--prompt Q`. That rebuild's fingerprint is compared with the
+  retired sidecar's (the tree has changed only in records since `00fb718`). The Mac Studio's rebuild is then compared
+  by value against it, as against `-r2-pl`.
+  - **Done 2026-11-20** (`probe/ref_exp_laptop.sh`, 17:59–18:07, runs `science-2026.14.0-Q-probe-ref-exp-{a,b,c}`,
+    all `done`, tree `5482e13` with uncommitted records): the rebuild's fingerprint is `17b288e7…c14c`, equal to the
+    retired sidecar's, and equal class by class (`probe/logs/probe-ref-exp-compare.log`).
 
 **Part 2, coverage of the power wall.** At each mass of P2's grid it runs a sparse sample of β and rows, at both n:
 
@@ -328,6 +341,10 @@ further.
 
 The exports and measures took 58 min for 2026.11.0's one wall. Three walls have about three times its one-loop rows
 (11 190 against 3770), which suggests **about 3–5 h** more at 6 CPUs. The probe takes about 3 h.
+
+**At 8 CPUs (P5, amended 2026-11-20)** the same assumptions give about 37 h of building (×10/8 of the laptop's
+29 h 40 min), about 2.5–4 h of exports and measures, and about 2 h for the probe's Part 2. These are still
+projections; the probe replaces them.
 
 **The weakest assumptions:** the power law's B, whose ratio rests on one history per n at 10⁻³³ M_P, with none at all
 below it; and the CPU-speed ratio. The probe replaces both.

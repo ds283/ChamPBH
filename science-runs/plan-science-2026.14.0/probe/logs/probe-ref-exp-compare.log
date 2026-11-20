@@ -1,0 +1,21 @@
+>> 2026-11-20 18:06:57 fingerprint against the retired sidecar
+rebuild  17b288e76597ff76500889c06f113ef59ca85cc872b6df2418b8ff93c146c14c  format 8  taken {'git_dirty': True, 'git_head': '5482e13a9e1da0fe8755396d10cd4693cbcf53c7', 'run_id': 'science-2026.14.0-Q-probe-ref-exp-c-20261120T180559', 'when': '2026-11-20T18:06:33+00:00'}
+retired  17b288e76597ff76500889c06f113ef59ca85cc872b6df2418b8ff93c146c14c  format 8  taken {'git_dirty': True, 'git_head': '00fb7188e54d6175537e2158b17827a3eed81788', 'run_id': None, 'when': '2026-11-19T09:36:08+00:00'}
+  same     AdiabaticHistory     rebuild 20  retired 20
+  same     BBNData              rebuild 20  retired 20
+  same     ExponentialModel     rebuild 8  retired 8
+  same     IntegrationSolver    rebuild 7  retired 7
+  same     InversePowerModel    rebuild 0  retired 0
+  same     M_value              rebuild 4  retired 4
+  same     QCD_Cosmology        rebuild 1  retired 1
+  same     ScalarHistory        rebuild 20  retired 20
+  same     alpha_value          rebuild 6  retired 6
+  same     beta_value           rebuild 3  retired 3
+  same     phi_value            rebuild 1  retired 1
+  same     pi_value             rebuild 1  retired 1
+  same     redshift             rebuild 75001  retired 75001
+  same     store_tag            rebuild 1  retired 1
+  same     temperature          rebuild 1  retired 1
+  same     tolerance            rebuild 2  retired 2
+  same     version              rebuild 1  retired 1
+EQUAL
