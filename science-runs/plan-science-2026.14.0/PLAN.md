@@ -302,6 +302,23 @@ The script is 2026.11.0's, with these changes:
 The script is written after §0.2 is ruled. Its export section is tested on the probe's stores before the script is
 committed (P9).
 
+**Written 2026-11-20** (`run_science_2026.14.0.sh`, beside this file, uncommitted). A dry run with `run`, `inventory`
+and `export_wall` stubbed gives §1's counts block by block: 4818, 8904 and 84, 13 806 in all. `START_AT` resumes at each
+slot, `EXPORT_WALLS` at each wall, and a dirty tree, an unknown slot and an unknown wall are refused (exit 2).
+- **Beyond §4's list:**
+  - X can be resumed at a wall with `EXPORT_WALLS` (default `exp pl1 pl2`);
+  - each wall's main and reflection roots are `out/<wall>/` and `out/<wall>-reflections/`;
+  - `gzip` runs after that wall's `plot_quanta_grid` as well as its measures;
+  - the power law's rows read no α = 0, since none is built for it;
+  - the inventories read the reflection store once per potential.
+- **The export test (P9):** `DB_EXP`, `DB_PL`, `DB_R`, `LOG`, `OUT`, `A_ALL` and `A_PLOT_R` can be set from the
+  environment, and the run sets none of them. Once the probe ends, `START_AT=X` runs on the Mac Studio, one wall at a
+  time:
+  - `exp` with `DB_EXP` and `DB_R` both set to the probe's `-p1-exp` store, and `A_ALL` and `A_PLOT_R` set to
+    `0.05 1 10`;
+  - `pl1` and `pl2` the same way on `-p1-pl`;
+  - `OUT` and `LOG` under `var/science-2026.14.0/probe/`.
+
 ## 5. After the build: the analyses
 
 Each of 2026.11.0's five analysis folders is copied into the run's folder and ported. The changes, which §4.22 point 3
