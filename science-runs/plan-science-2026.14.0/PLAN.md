@@ -365,6 +365,8 @@ that's what it is."
     in (ln V)'' or a non-finite turning point. The six other masses succeed at n = 2.
   - **The costly failures are elsewhere.** At β = 0.5, 48 failures took 2.0 h, with a mean of 151 s and up to
     1016 s. At β = 1.1, 3 failures took 2.4 h, one of them 8094 s. At β = 1.0, 15 failures took 0.85 h.
+- **Ruled 2026-11-21: the grid is unchanged.** The user: "Keep beta = 20 on the power wall's grid." No other grid
+  change was asked for, so P2's grid stands as §1 gives it, and the run script needs no change.
 
 ## 4. The run script
 
