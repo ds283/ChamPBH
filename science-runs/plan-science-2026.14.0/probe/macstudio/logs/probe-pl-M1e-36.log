@@ -1,0 +1,194 @@
+>> 2026-11-20 20:07:49 probe-pl-M1e-36
+** registered_run: registered as science-2026.14.0-Q-probe-pl-M1e-36-20261120T200750
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/science-2026.14.0-Q-probe-pl-M1e-36-20261120T200750/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-20 20:07:51,014	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-20 20:07:51,084	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-pl.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model InversePowerModel, V = V0 [1 + (M/phi)^n], with n = [ 1, 2 ]
+   -- populated beta sample grid with 12 values = [ 0.5, 1, 1.1, 1.2, 1.5, 2, 2.9, 2.975, 3, 3.04, 5, 20 ]
+   -- populated M sample grid with 1 value = [ 2.4353e-09 eV ]
+   -- populated alpha grid with 1 value = [ 0.01 ]
+   -- populated A grid with 3 values = [ 0.05, 1, 10 ] (one-loop-inverse-power-v1)
+   -- total number of models to integrate = 24
+!! warning: beta=20, M=1e-36 M_P, n=1, phi*=5 M_P: Omega(phi*) T* = 2.2076e+29 M_P (super-Planckian start), with Omega at the seed's phi_ref = 3.3272e-19 M_P (tracking seed)
+!! warning: beta=20, M=1e-36 M_P, n=2, phi*=5 M_P: Omega(phi*) T* = 2.2076e+29 M_P (super-Planckian start), with Omega at the seed's phi_ref = 6.0497e-25 M_P (tracking seed)
+!! warning: 2 of 24 models start super-Planckian at the seed's phi_ref; they are computed like the others. The tuned phi_ref differs from the seed's, moving ln Omega(phi*) by -beta (phi_ref - phi_ref_seed)/M_P, in size up to 1.4e-3 at M = 1e-3 M_P with beta <= 5.5, 6.5e-3 at beta = 25, and up to 1.0 at M = 0.5 M_P from a static seed (jordan-normalization prompt 06's points)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=75067)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(compute_scalar_history pid=75121)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:08:03): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = 0.9625 < ln 10 at N = 42.46355183 (generation 21); the generations below ln 10 carry 0.2941 of K
+[36m(compute_scalar_history pid=75121)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:08:03): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = 1.1377 < ln 10 at N = 42.46355183 (generation 20); the generations below ln 10 carry 0.2971 of K
+[36m(compute_scalar_history pid=75121)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:08:03): the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+[36m(compute_scalar_history pid=75132)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=2,beta=0.5)-2026-11-20T20:08:06): the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+[36m(compute_scalar_history pid=75132)[0m -- integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:08:07): integration failure
+[36m(compute_scalar_history pid=75132)[0m    classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0)
+[36m(compute_scalar_history pid=75132)[0m !! integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:08:07): marked as total integration failure
+[36m(compute_scalar_history pid=75132)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:08:07): classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)
+[36m(compute_scalar_history pid=75123)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:08:04): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = 1.1985 < ln 10 at N = 43.34507009 (generation 229); the generations below ln 10 carry 0.1093 of K
+[36m(compute_scalar_history pid=75123)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:08:04): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = 0.6947 < ln 10 at N = 43.65068364 (generation 229); the generations below ln 10 carry 0.1661 of K
+   -- ALL WORK ITEMS COMPLETE in time 1m 49.1s
+      Queue summary: 24 lookup (avg 13.2/min), 24 compute (avg 13.2/min), 24 store (avg 13.2/min), 24 validation (avg 13.2/min)
+-- ScalarHistory: 3 histories failed in this run
+     -- 2 x the effective minimum was not found
+     -- 1 x classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 3.14s
+      Queue summary: 21 lookup (avg 401.6/min), 21 compute (avg 401.6/min), 21 store (avg 401.6/min), 21 validation (avg 401.6/min)
+-- AdiabaticHistory: 3 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 27.6s
+      Queue summary: 21 lookup (avg 45.57/min), 21 compute (avg 45.57/min), 21 store (avg 45.57/min), 21 validation (avg 45.57/min)
+-- BBNData: 3 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-inverse-power-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=75122)[0m -- integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:10:25): integration failure
+[36m(compute_scalar_history pid=75122)[0m    classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0)
+[36m(compute_scalar_history pid=75122)[0m !! integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:10:25): marked as total integration failure
+[36m(compute_scalar_history pid=75122)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:10:25): classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)
+[36m(compute_scalar_history pid=75132)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=2,beta=0.5)-2026-11-20T20:10:23): the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [3.13283e-06, 0.00125313] (values 1.63914e-121, 1.64016e-121) (tuning integration 0)
+[36m(compute_scalar_history pid=75123)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:10:24): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = 0.5681 < ln 10 at N = 42.53456026 (generation 24); the generations below ln 10 carry 0.3925 of K
+[36m(compute_scalar_history pid=75123)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:10:24): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = 0.6942 < ln 10 at N = 42.53456026 (generation 23); the generations below ln 10 carry 0.4326 of K
+[36m(compute_scalar_history pid=75133)[0m -- tune probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=2,beta=20)-2026-11-20T20:10:27 it=0 kind=seed H/H0-1=-9.915e-07 phi_ref/phi_min-1=-1.939e-06 norm=-276.630728594 phi_ref=6.0496862967e-25 wall=139.8
+[36m(compute_scalar_history pid=75123)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:10:24): the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)): V_eff' does not change sign on the bracket [2.76743e-05, 0.0110697] (values 1.64037e-121, 1.64945e-121) (tuning integration 0)
+[36m(compute_scalar_history pid=75121)[0m ** STATUS UPDATE #1 - Fri 20 Nov 2026 20:15:23 - probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:10:23
+[36m(compute_scalar_history pid=75121)[0m |    running for 5m 0.000207s (5m 0.000207s since last notification) | reflections = 4249 | current N = 43.419 | current step cap dN=6.3596e-06
+[36m(compute_scalar_history pid=75121)[0m |    --
+[36m(compute_scalar_history pid=75121)[0m |    current T_J = 0.0012308 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=75121)[0m |    current log(T_J/GeV) = -27.423 | target log(T_J/GeV) = -29.08 | 95.751% complete measured in T_J
+[36m(compute_scalar_history pid=75121)[0m |    --
+[36m(compute_scalar_history pid=75121)[0m |    4249 elastic reflection events, 4249 since last update: N = [35.826, 36.645, 37.14, 37.504, 37.794, 38.036, 38.246, 38.432, 38.598, 38.748, ..., 43.417, 43.418, 43.418, 43.418, 43.418, 43.418, 43.418, 43.419, 43.419, 43.419]
+[36m(compute_scalar_history pid=75121)[0m |    4175903 RHS evaluations, mean 1.4509e-05s per evaluation, min RHS time = 1.0792e-05s, max RHS time = 0.097266s
+[36m(compute_scalar_history pid=75121)[0m |    current state: phi_E = 9.5497e-09 Mp, pi_E = -0.00015546 Mp, f_m = 650.94, log(rho_rad/GeV^4) = -109.59, T_J = 0.0012308 eV
+[36m(compute_scalar_history pid=75121)[0m ** STATUS UPDATE #2 - Fri 20 Nov 2026 20:20:23 - probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:10:23
+[36m(compute_scalar_history pid=75121)[0m |    running for 10m 0.000835s (5m 0.000344s since last notification) | reflections = 8706 | current N = 44.145 | current step cap dN=1.6843e-10
+[36m(compute_scalar_history pid=75121)[0m |    --
+[36m(compute_scalar_history pid=75121)[0m |    current T_J = 0.00059565 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=75121)[0m |    current log(T_J/GeV) = -28.149 | target log(T_J/GeV) = -29.08 | 97.613% complete measured in T_J
+[36m(compute_scalar_history pid=75121)[0m |    log_T_GeV increment since last update: Delta[ log(T_J/GeV) ] = 0.72579 | expected completion = Fri 20 Nov 2026 20:26:48
+[36m(compute_scalar_history pid=75121)[0m |    --
+[36m(compute_scalar_history pid=75121)[0m |    8706 elastic reflection events, 4457 since last update: N = [43.419, 43.419, 43.42, 43.42, 43.42, 43.42, 43.42, 43.421, 43.421, 43.421, ..., 44.144, 44.144, 44.144, 44.144, 44.144, 44.144, 44.144, 44.145, 44.145, 44.145]
+[36m(compute_scalar_history pid=75121)[0m |    8375224 RHS evaluations, mean 1.4387e-05s per evaluation, min RHS time = 1.0792e-05s, max RHS time = 0.20263s
+[36m(compute_scalar_history pid=75121)[0m |    current state: phi_E = 7.54e+05 GeV, pi_E = -0.00018671 Mp, f_m = 1345.1, log(rho_rad/GeV^4) = -112.49, T_J = 0.00059565 eV
+[36m(compute_scalar_history pid=75121)[0m ** STATUS UPDATE #3 - Fri 20 Nov 2026 20:25:23 - probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:10:23
+[36m(compute_scalar_history pid=75121)[0m |    running for 15m 0.00121s (5m 0.000138s since last notification) | reflections = 13194 | current N = 44.745 | current step cap dN=1.5549e-11
+[36m(compute_scalar_history pid=75121)[0m |    --
+[36m(compute_scalar_history pid=75121)[0m |    current T_J = 0.00032706 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=75121)[0m |    current log(T_J/GeV) = -28.749 | target log(T_J/GeV) = -29.08 | 99.151% complete measured in T_J
+[36m(compute_scalar_history pid=75121)[0m |    log_T_GeV increment since last update: Delta[ log(T_J/GeV) ] = 0.59951 | expected completion = Fri 20 Nov 2026 20:28:09
+[36m(compute_scalar_history pid=75121)[0m |    --
+[36m(compute_scalar_history pid=75121)[0m |    13194 elastic reflection events, 4488 since last update: N = [44.145, 44.145, 44.145, 44.145, 44.146, 44.146, 44.146, 44.146, 44.146, 44.146, ..., 44.743, 44.743, 44.743, 44.744, 44.744, 44.744, 44.744, 44.744, 44.744, 44.744]
+[36m(compute_scalar_history pid=75121)[0m |    12553706 RHS evaluations, mean 1.4354e-05s per evaluation, min RHS time = 1.0792e-05s, max RHS time = 0.28642s
+[36m(compute_scalar_history pid=75121)[0m |    current state: phi_E = 40756 GeV, pi_E = -0.00010932 Mp, f_m = 2449.7, log(rho_rad/GeV^4) = -114.89, T_J = 0.00032706 eV
+[36m(compute_scalar_history pid=75121)[0m -- integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:10:23): integration failure
+[36m(compute_scalar_history pid=75121)[0m    step budget exhausted: integrate_scalar_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:10:23) took 2000001 accepted steps (budget 2000000) at N=44.97243302, T_J=2.604e-13 GeV, with 14862 reflection(s)
+[36m(compute_scalar_history pid=75121)[0m !! integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:10:23): marked as total integration failure
+[36m(compute_scalar_history pid=75121)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:10:23): step budget exhausted: integrate_scalar_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:10:23) took 2000001 accepted steps (budget 2000000) at N=44.97243302, T_J=2.604e-13 GeV, with 14862 reflection(s) (tuning integration 0)
+   -- 2026-11-20 20:27:17 (16m 55.1s running): 0/3 work items remaining = 100.00% complete (may be waiting for compute/store/validate tasks to finish)
+      inflight: 0 lookup, 0 compute, 1 store, 1 validation | completed: 24 lookup (avg 85.12/hr), 24 compute (avg 85.12/hr), 23 store (avg 81.57/hr), 22 validation (avg 78.02/hr)
+   -- ALL WORK ITEMS COMPLETE in time 16m 55.5s
+      Queue summary: 24 lookup (avg 85.08/hr), 24 compute (avg 85.08/hr), 24 store (avg 85.08/hr), 24 validation (avg 85.08/hr)
+-- ScalarHistory: 4 histories failed in this run
+     -- 2 x the effective minimum was not found
+     -- 1 x classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672)
+     -- 1 x step budget exhausted
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 3.42s
+      Queue summary: 20 lookup (avg 351.2/min), 20 compute (avg 351.2/min), 20 store (avg 351.2/min), 20 validation (avg 351.2/min)
+-- AdiabaticHistory: 4 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 27.5s
+      Queue summary: 20 lookup (avg 43.58/min), 20 compute (avg 43.58/min), 20 store (avg 43.58/min), 20 validation (avg 43.58/min)
+-- BBNData: 4 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-inverse-power-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=75132)[0m    classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0)
+[36m(compute_scalar_history pid=75132)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:27:52): classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)
+[36m(compute_scalar_history pid=75132)[0m -- integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:27:52): integration failure
+[36m(compute_scalar_history pid=75132)[0m !! integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:27:52): marked as total integration failure
+[36m(compute_scalar_history pid=75135)[0m ** STATUS UPDATE #1 - Fri 20 Nov 2026 20:33:08 - probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:27:54
+[36m(compute_scalar_history pid=75135)[0m |    running for 5m 4.29e-05s (5m 4.29e-05s since last notification) | reflections = 4409 | current N = 40.629 | current step cap dN=1.4701e-11
+[36m(compute_scalar_history pid=75135)[0m |    --
+[36m(compute_scalar_history pid=75135)[0m |    current T_J = 0.0016455 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=75135)[0m |    current log(T_J/GeV) = -27.133 | target log(T_J/GeV) = -29.08 | 95.006% complete measured in T_J
+[36m(compute_scalar_history pid=75135)[0m |    --
+[36m(compute_scalar_history pid=75135)[0m |    4409 elastic reflection events, 4409 since last update: N = [36.955, 37.935, 38.492, 38.856, 39.108, 39.286, 39.412, 39.501, 39.562, 39.604, ..., 40.627, 40.627, 40.627, 40.628, 40.628, 40.628, 40.628, 40.628, 40.628, 40.629]
+[36m(compute_scalar_history pid=75135)[0m |    4246436 RHS evaluations, mean 1.4282e-05s per evaluation, min RHS time = 1.0791e-05s, max RHS time = 0.12272s
+[36m(compute_scalar_history pid=75135)[0m |    current state: phi_E = 45114 GeV, pi_E = -0.00012799 Mp, f_m = 486.89, log(rho_rad/GeV^4) = -108.43, T_J = 0.0016455 eV
+[36m(compute_scalar_history pid=75135)[0m ** STATUS UPDATE #2 - Fri 20 Nov 2026 20:38:08 - probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:27:54
+[36m(compute_scalar_history pid=75135)[0m |    running for 10m 0.000591s (5m 0.000247s since last notification) | reflections = 8913 | current N = 41.29 | current step cap dN=4.3137e-10
+[36m(compute_scalar_history pid=75135)[0m |    --
+[36m(compute_scalar_history pid=75135)[0m |    current T_J = 0.00084951 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=75135)[0m |    current log(T_J/GeV) = -27.794 | target log(T_J/GeV) = -29.08 | 96.702% complete measured in T_J
+[36m(compute_scalar_history pid=75135)[0m |    log_T_GeV increment since last update: Delta[ log(T_J/GeV) ] = 0.66116 | expected completion = Fri 20 Nov 2026 20:47:52
+[36m(compute_scalar_history pid=75135)[0m |    --
+[36m(compute_scalar_history pid=75135)[0m |    8913 elastic reflection events, 4504 since last update: N = [40.629, 40.629, 40.629, 40.629, 40.63, 40.63, 40.63, 40.63, 40.63, 40.63, ..., 41.289, 41.289, 41.289, 41.289, 41.289, 41.289, 41.289, 41.29, 41.29, 41.29]
+[36m(compute_scalar_history pid=75135)[0m |    8458508 RHS evaluations, mean 1.4276e-05s per evaluation, min RHS time = 1.0791e-05s, max RHS time = 0.24728s
+[36m(compute_scalar_history pid=75135)[0m |    current state: phi_E = 9.3404e+05 GeV, pi_E = -9.0313e-05 Mp, f_m = 943.13, log(rho_rad/GeV^4) = -111.07, T_J = 0.00084951 eV
+[36m(compute_scalar_history pid=75135)[0m ** STATUS UPDATE #3 - Fri 20 Nov 2026 20:43:08 - probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:27:54
+[36m(compute_scalar_history pid=75135)[0m |    running for 15m 0.00114s (5m 7.89e-05s since last notification) | reflections = 13514 | current N = 41.815 | current step cap dN=1.8938e-10
+[36m(compute_scalar_history pid=75135)[0m |    --
+[36m(compute_scalar_history pid=75135)[0m |    current T_J = 0.00050248 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=75135)[0m |    current log(T_J/GeV) = -28.319 | target log(T_J/GeV) = -29.08 | 98.049% complete measured in T_J
+[36m(compute_scalar_history pid=75135)[0m |    log_T_GeV increment since last update: Delta[ log(T_J/GeV) ] = 0.5251 | expected completion = Fri 20 Nov 2026 20:50:23
+[36m(compute_scalar_history pid=75135)[0m |    --
+[36m(compute_scalar_history pid=75135)[0m |    13514 elastic reflection events, 4601 since last update: N = [41.29, 41.29, 41.29, 41.29, 41.291, 41.291, 41.291, 41.291, 41.291, 41.291, ..., 41.814, 41.814, 41.814, 41.814, 41.814, 41.815, 41.815, 41.815, 41.815, 41.815]
+[36m(compute_scalar_history pid=75135)[0m |    12685626 RHS evaluations, mean 1.4247e-05s per evaluation, min RHS time = 1.0791e-05s, max RHS time = 0.27522s
+[36m(compute_scalar_history pid=75135)[0m |    current state: phi_E = 2.9165e+05 GeV, pi_E = -6.4231e-05 Mp, f_m = 1594.5, log(rho_rad/GeV^4) = -113.17, T_J = 0.00050248 eV
+[36m(compute_scalar_history pid=75135)[0m -- integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:27:54): integration failure
+[36m(compute_scalar_history pid=75135)[0m    step budget exhausted: integrate_scalar_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:27:54) took 2000001 accepted steps (budget 2000000) at N=41.97683708, T_J=4.2744e-13 GeV, with 15075 reflection(s)
+[36m(compute_scalar_history pid=75135)[0m !! integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:27:54): marked as total integration failure
+[36m(compute_scalar_history pid=75135)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:27:54): step budget exhausted: integrate_scalar_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:27:54) took 2000001 accepted steps (budget 2000000) at N=41.97683708, T_J=4.2744e-13 GeV, with 15075 reflection(s) (tuning integration 0)
+   -- 2026-11-20 20:44:51 (17m 2.68s running): 0/3 work items remaining = 100.00% complete (may be waiting for compute/store/validate tasks to finish)
+      inflight: 0 lookup, 0 compute, 1 store, 1 validation | completed: 24 lookup (avg 84.48/hr), 24 compute (avg 84.48/hr), 23 store (avg 80.96/hr), 22 validation (avg 77.44/hr)
+   -- ALL WORK ITEMS COMPLETE in time 17m 3.13s
+      Queue summary: 24 lookup (avg 84.45/hr), 24 compute (avg 84.45/hr), 24 store (avg 84.45/hr), 24 validation (avg 84.45/hr)
+-- ScalarHistory: 2 histories failed in this run
+     -- 1 x classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672)
+     -- 1 x step budget exhausted
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 3.7s
+      Queue summary: 22 lookup (avg 356.9/min), 22 compute (avg 356.9/min), 22 store (avg 356.9/min), 22 validation (avg 356.9/min)
+-- AdiabaticHistory: 2 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 25.7s
+      Queue summary: 22 lookup (avg 51.43/min), 22 compute (avg 51.43/min), 22 store (avg 51.43/min), 22 validation (avg 51.43/min)
+-- BBNData: 2 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-inverse-power-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=75133)[0m    classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0)
+[36m(compute_scalar_history pid=75133)[0m !! tune_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:45:25): classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)
+[36m(compute_scalar_history pid=75133)[0m -- integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:45:25): integration failure
+[36m(compute_scalar_history pid=75133)[0m !! integrate_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=20)-2026-11-20T20:45:25): marked as total integration failure
+   -- ALL WORK ITEMS COMPLETE in time 27.3s
+      Queue summary: 24 lookup (avg 52.8/min), 24 compute (avg 52.8/min), 24 store (avg 52.8/min), 24 validation (avg 52.8/min)
+-- ScalarHistory: 1 histories failed in this run
+     -- 1 x classical_turning_point (InversePowerModel(M=2.4353e-09eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 3.1s
+      Queue summary: 23 lookup (avg 445.2/min), 23 compute (avg 445.2/min), 23 store (avg 445.2/min), 23 validation (avg 445.2/min)
+-- AdiabaticHistory: 1 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 25.3s
+      Queue summary: 23 lookup (avg 54.57/min), 23 compute (avg 54.57/min), 23 store (avg 54.57/min), 23 validation (avg 54.57/min)
+-- BBNData: 1 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0

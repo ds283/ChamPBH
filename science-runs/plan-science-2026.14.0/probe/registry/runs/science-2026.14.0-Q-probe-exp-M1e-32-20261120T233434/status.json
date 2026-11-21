@@ -1,0 +1,215 @@
+{
+  "exit_code": 0,
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 22,
+        "digest": "91320fbd52eceaa8ad23a8cea31fae9c81afa6574bdc28560f3e280ebb04ddf9",
+        "tag_sets": [
+          {
+            "count": 22,
+            "digest": "91320fbd52eceaa8ad23a8cea31fae9c81afa6574bdc28560f3e280ebb04ddf9",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "BBNData": {
+        "count": 22,
+        "digest": "6c51db5b720cb4d413bdd031dde79829e0ae129e9f6eda2c7e20e47d44e8e5c9",
+        "tag_sets": [
+          {
+            "count": 22,
+            "digest": "6c51db5b720cb4d413bdd031dde79829e0ae129e9f6eda2c7e20e47d44e8e5c9",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "ExponentialModel": {
+        "count": 24,
+        "digest": "110a6686796298c6d5b493ae1a70d7d743b5131ea2dabb83ea13f431dac72514",
+        "tag_sets": [
+          {
+            "count": 24,
+            "digest": "110a6686796298c6d5b493ae1a70d7d743b5131ea2dabb83ea13f431dac72514",
+            "tags": []
+          }
+        ]
+      },
+      "IntegrationSolver": {
+        "count": 7,
+        "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+        "tag_sets": [
+          {
+            "count": 7,
+            "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+            "tags": []
+          }
+        ]
+      },
+      "InversePowerModel": {
+        "count": 0,
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tag_sets": []
+      },
+      "M_value": {
+        "count": 2,
+        "digest": "4010b37fc7cd918263a420fb4c07ce07dc44c38cc03560dfcec20f9a7e5f9344",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "4010b37fc7cd918263a420fb4c07ce07dc44c38cc03560dfcec20f9a7e5f9344",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ScalarHistory": {
+        "count": 24,
+        "digest": "180f6b1c8fe8719874b9e6711ec076df18f00b8fabdbc2e3761b11c0de041bbf",
+        "tag_sets": [
+          {
+            "count": 24,
+            "digest": "180f6b1c8fe8719874b9e6711ec076df18f00b8fabdbc2e3761b11c0de041bbf",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "alpha_value": {
+        "count": 1,
+        "digest": "bd273721d4e589bfa0142e5742dff3cb2efd0fb4fb1781dfcd3fd147af179cb4",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "bd273721d4e589bfa0142e5742dff3cb2efd0fb4fb1781dfcd3fd147af179cb4",
+            "tags": []
+          }
+        ]
+      },
+      "beta_value": {
+        "count": 12,
+        "digest": "fdc5a0f3d9e2585a977c0bcc2d7c0e628822d85420eac0231f1a257a5cf4d27a",
+        "tag_sets": [
+          {
+            "count": 12,
+            "digest": "fdc5a0f3d9e2585a977c0bcc2d7c0e628822d85420eac0231f1a257a5cf4d27a",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 1,
+        "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 75001,
+        "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+        "tag_sets": [
+          {
+            "count": 75001,
+            "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 1,
+        "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 2,
+        "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "8f50f27e6fc9bce34ccc9f1c75408165c7a87fba0c4a52a4d8b59716be0a078e",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "8f50f27e6fc9bce34ccc9f1c75408165c7a87fba0c4a52a4d8b59716be0a078e",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "0f32f13a0d54565f6228bc93b8fcb6d9d29b9d894254267551aae6c236ef56bb",
+    "encoding_format": 1,
+    "fingerprint_format": 8,
+    "problems": {},
+    "taken": {
+      "git_dirty": false,
+      "git_head": "075bbd1410d2854fb23fdac347b2c3a9df599ab9",
+      "run_id": "science-2026.14.0-Q-probe-exp-M1e-32-20261120T233434",
+      "when": "2026-11-20T23:36:17+00:00"
+    }
+  },
+  "fingerprint_sidecar": "written",
+  "heartbeat": "2026-11-20T23:36:41+00:00",
+  "host": {
+    "boot": "C58A0F92-923F-471F-B32E-B1B9F5D0A848",
+    "id": "d120d1cf03551e6f"
+  },
+  "pid": 92288,
+  "stage": "CALCULATE BBN DATA, all work items complete",
+  "state": "done",
+  "units_done": 0,
+  "units_total": null
+}

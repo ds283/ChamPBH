@@ -1,0 +1,215 @@
+== var/science-2026.14.0/probe/out/p2-histories-pl.txt: 768 histories
+  potential         M/M_P  n row        hist fail  cap med it max it
+  inverse-power     1e-42  1 A 0.05       12    2    0    1.0      1
+  inverse-power     1e-42  1 A 1          12    1    0      1      3
+  inverse-power     1e-42  1 A 10         12    1    0      1      3
+  inverse-power     1e-42  1 alpha 0.01   12    2    0    1.0      1
+  inverse-power     1e-42  2 A 0.05       12    2    0    1.0      1
+  inverse-power     1e-42  2 A 1          12    1    0      1      3
+  inverse-power     1e-42  2 A 10         12    1    0      1      3
+  inverse-power     1e-42  2 alpha 0.01   12    2    0    1.0      1
+  inverse-power     1e-40  1 A 0.05       12    2    0    1.0      1
+  inverse-power     1e-40  1 A 1          12    1    0      1      3
+  inverse-power     1e-40  1 A 10         12    1    0      1      3
+  inverse-power     1e-40  1 alpha 0.01   12    2    0    1.0      1
+  inverse-power     1e-40  2 A 0.05       12    2    0    1.0      1
+  inverse-power     1e-40  2 A 1          12    1    0      1      3
+  inverse-power     1e-40  2 A 10         12    1    0      1      3
+  inverse-power     1e-40  2 alpha 0.01   12    2    0    1.0      1
+  inverse-power     1e-36  1 A 0.05       12    3    0      1      1
+  inverse-power     1e-36  1 A 1          12    2    0    1.0      1
+  inverse-power     1e-36  1 A 10         12    1    0      1      3
+  inverse-power     1e-36  1 alpha 0.01   12    2    0    1.0      1
+  inverse-power     1e-36  2 A 0.05       12    1    0      1      1
+  inverse-power     1e-36  2 A 1          12    0    0    1.0      3
+  inverse-power     1e-36  2 A 10         12    0    0    1.0      3
+  inverse-power     1e-36  2 alpha 0.01   12    1    0      1      1
+  inverse-power     1e-33  1 A 0.05       12    3    0      1      1
+  inverse-power     1e-33  1 A 1          12    2    0    1.0      1
+  inverse-power     1e-33  1 A 10         12    1    0      1      3
+  inverse-power     1e-33  1 alpha 0.01   12    2    0    1.0      1
+  inverse-power     1e-33  2 A 0.05       12    2    0    1.0      1
+  inverse-power     1e-33  2 A 1          12    1    0      1      1
+  inverse-power     1e-33  2 A 10         12    0    0    1.0      3
+  inverse-power     1e-33  2 alpha 0.01   12    1    0      1      1
+  inverse-power     1e-32  1 A 0.05       12    3    0      1      1
+  inverse-power     1e-32  1 A 1          12    2    0    1.0      1
+  inverse-power     1e-32  1 A 10         12    1    0      1      3
+  inverse-power     1e-32  1 alpha 0.01   12    2    0    1.0      1
+  inverse-power     1e-32  2 A 0.05       12    2    0    1.0      1
+  inverse-power     1e-32  2 A 1          12    1    0      1      1
+  inverse-power     1e-32  2 A 10         12    0    0    1.0      3
+  inverse-power     1e-32  2 alpha 0.01   12    1    0      1      1
+  inverse-power     4e-31  1 A 0.05       12    3    0      1      1
+  inverse-power     4e-31  1 A 1          12    2    0    1.0      1
+  inverse-power     4e-31  1 A 10         12    2    0    1.0      1
+  inverse-power     4e-31  1 alpha 0.01   12    2    0    1.0      1
+  inverse-power     4e-31  2 A 0.05       12    2    0    1.0      1
+  inverse-power     4e-31  2 A 1          12    1    0      1      1
+  inverse-power     4e-31  2 A 10         12    0    0    1.0      3
+  inverse-power     4e-31  2 alpha 0.01   12    1    0      1      1
+  inverse-power     1e-30  1 A 0.05       12    3    0      1      1
+  inverse-power     1e-30  1 A 1          12    2    0    1.0      1
+  inverse-power     1e-30  1 A 10         12    2    0    1.0      1
+  inverse-power     1e-30  1 alpha 0.01   12    2    0    1.0      1
+  inverse-power     1e-30  2 A 0.05       12    2    0    1.0      1
+  inverse-power     1e-30  2 A 1          12    1    0      1      1
+  inverse-power     1e-30  2 A 10         12    1    0      1      2
+  inverse-power     1e-30  2 alpha 0.01   12    1    0      1      1
+  inverse-power     1e-16  1 A 0.05       12    4    1    1.0      1
+  inverse-power     1e-16  1 A 1          12    3    0      1      1
+  inverse-power     1e-16  1 A 10         12    3    0      1      2
+  inverse-power     1e-16  1 alpha 0.01   12    2    0    1.0      1
+  inverse-power     1e-16  2 A 0.05       12    4    0    1.0      1
+  inverse-power     1e-16  2 A 1          12    3    0      1      1
+  inverse-power     1e-16  2 A 10         12    2    0    1.0      1
+  inverse-power     1e-16  2 alpha 0.01   12    1    0      1      1
+  failures: 107
+    M 1e-42 beta 0.5 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [3.12541e-05, 0.0125016] (values 1.64055e-121, 1.65081e-121) (tuning integration 0)"
+    M 1e-42 beta 20 n 1 A 0.05: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-42 beta 20 n 1 A 1: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-42 beta 20 n 1 A 10: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-42 beta 0.5 n 1 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-42 beta 20 n 1 alpha 0.01: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-42 beta 0.5 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [4.19835e-05, 0.0167934] (values 1.64108e-121, 1.65489e-121) (tuning integration 0)"
+    M 1e-42 beta 20 n 2 A 0.05: "!! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)"
+    M 1e-42 beta 20 n 2 A 1: "!! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)"
+    M 1e-42 beta 20 n 2 A 10: "!! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)"
+    M 1e-42 beta 0.5 n 2 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-42 beta 20 n 2 alpha 0.01: "!! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)"
+    M 1e-40 beta 0.5 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [3.81259e-05, 0.0152503] (values 1.64089e-121, 1.65342e-121) (tuning integration 0)"
+    M 1e-40 beta 20 n 1 A 0.05: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-40 beta 20 n 1 A 1: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-40 beta 20 n 1 A 10: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-40 beta 0.5 n 1 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-40 beta 20 n 1 alpha 0.01: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-40 beta 0.5 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [1.14761e-05, 0.00459046] (values 1.63956e-121, 1.64331e-121) (tuning integration 0)"
+    M 1e-40 beta 20 n 2 A 0.05: 'classical_turning_point (<label>): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar'
+    M 1e-40 beta 20 n 2 A 1: 'classical_turning_point (<label>): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar'
+    M 1e-40 beta 20 n 2 A 10: 'classical_turning_point (<label>): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar'
+    M 1e-40 beta 0.5 n 2 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-40 beta 20 n 2 alpha 0.01: 'classical_turning_point (<label>): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar'
+    M 1e-36 beta 0.5 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.76743e-05, 0.0110697] (values 1.64037e-121, 1.64945e-121) (tuning integration 0)"
+    M 1e-36 beta 1 n 1 A 0.05: 'step budget exhausted: integrate_scalar_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=1)-2026-11-20T20:10:23) took 2000001 accepted steps (budget 2000000) at N=44.97243302, T_J=2.604e-13 GeV, with 14862 reflection(s) (tun'
+    M 1e-36 beta 20 n 1 A 0.05: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-36 beta 0.5 n 1 A 1: 'step budget exhausted: integrate_scalar_history (probe-pl-M1e-36-ScalarHistory-InversePowerModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T20:27:54) took 2000001 accepted steps (budget 2000000) at N=41.97683708, T_J=4.2744e-13 GeV, with 15075 reflection(s) ('
+    M 1e-36 beta 20 n 1 A 1: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-36 beta 20 n 1 A 10: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-36 beta 0.5 n 1 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-36 beta 20 n 1 alpha 0.01: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-36 beta 0.5 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [3.13283e-06, 0.00125313] (values 1.63914e-121, 1.64016e-121) (tuning integration 0)"
+    M 1e-36 beta 0.5 n 2 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-33 beta 0.5 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [1.00526e-05, 0.00402103] (values 1.63949e-121, 1.64278e-121) (tuning integration 0)"
+    M 1e-33 beta 1 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [1.52659e-09, 6.10636e-07] (values 3.27795e-121, 3.27795e-121) (tuning integration 0)"
+    M 1e-33 beta 20 n 1 A 0.05: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-33 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [1.85615e-09, 7.42458e-07] (values 1.63898e-121, 1.63898e-121) (tuning integration 0)"
+    M 1e-33 beta 20 n 1 A 1: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-33 beta 20 n 1 A 10: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-33 beta 0.5 n 1 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-33 beta 20 n 1 alpha 0.01: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-33 beta 0.5 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.03175e-07, 8.12699e-05] (values 1.63899e-121, 1.63906e-121) (tuning integration 0)"
+    M 1e-33 beta 1 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.1048e-10, 8.41921e-08] (values 3.27795e-121, 3.27795e-121) (tuning integration 0)"
+    M 1e-33 beta 0.5 n 2 A 1: 'step budget exhausted: integrate_scalar_history (probe-pl-M1e-33-ScalarHistory-InversePowerModel(M=2.4353e-06eV,n=2,beta=0.5)-2026-11-20T19:49:20) took 2000001 accepted steps (budget 2000000) at N=41.93063357, T_J=4.4765e-13 GeV, with 14945 reflection(s) ('
+    M 1e-33 beta 0.5 n 2 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-32 beta 0.5 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [4.41421e-05, 0.0176569] (values 1.64119e-121, 1.65571e-121) (tuning integration 0)"
+    M 1e-32 beta 1 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [1.76509e-08, 7.06038e-06] (values 3.27796e-121, 3.27798e-121) (tuning integration 0)"
+    M 1e-32 beta 20 n 1 A 0.05: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-32 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.71271e-09, 2.28508e-06] (values 1.63898e-121, 1.63899e-121) (tuning integration 0)"
+    M 1e-32 beta 20 n 1 A 1: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-32 beta 20 n 1 A 10: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-32 beta 0.5 n 1 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-32 beta 20 n 1 alpha 0.01: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-32 beta 0.5 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [3.6606e-05, 0.0146424] (values 1.64081e-121, 1.65284e-121) (tuning integration 0)"
+    M 1e-32 beta 1 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.2766e-09, 9.10641e-07] (values 3.27795e-121, 3.27796e-121) (tuning integration 0)"
+    M 1e-32 beta 0.5 n 2 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [1.40583e-10, 5.62333e-08] (values 1.63898e-121, 1.63898e-121) (tuning integration 0)"
+    M 1e-32 beta 0.5 n 2 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 4e-31 beta 0.5 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [3.64878e-05, 0.0145951] (values 1.64081e-121, 1.6528e-121) (tuning integration 0)"
+    M 4e-31 beta 1 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [6.10504e-08, 2.44202e-05] (values 3.27796e-121, 3.27804e-121) (tuning integration 0)"
+    M 4e-31 beta 20 n 1 A 0.05: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 4e-31 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.49067e-08, 9.96268e-06] (values 1.63898e-121, 1.63899e-121) (tuning integration 0)"
+    M 4e-31 beta 20 n 1 A 1: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 4e-31 beta 0.5 n 1 A 10: 'step budget exhausted: integrate_scalar_history (probe-pl-M4e-31-ScalarHistory-InversePowerModel(M=0.00097413eV,n=1,beta=0.5)-2026-11-20T18:31:31) took 2000001 accepted steps (budget 2000000) at N=41.26495673, T_J=8.7105e-13 GeV, with 14547 reflection(s) ('
+    M 4e-31 beta 20 n 1 A 10: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 4e-31 beta 0.5 n 1 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 4e-31 beta 20 n 1 alpha 0.01: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 4e-31 beta 0.5 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [1.33319e-05, 0.00533276] (values 1.63965e-121, 1.64402e-121) (tuning integration 0)"
+    M 4e-31 beta 1 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [4.76113e-08, 1.90445e-05] (values 3.27796e-121, 3.27802e-121) (tuning integration 0)"
+    M 4e-31 beta 0.5 n 2 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [1.57511e-08, 6.30044e-06] (values 1.63898e-121, 1.63899e-121) (tuning integration 0)"
+    M 4e-31 beta 0.5 n 2 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-30 beta 0.5 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [4.90961e-05, 0.0196384] (values 1.64144e-121, 1.6576e-121) (tuning integration 0)"
+    M 1e-30 beta 1 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [4.50503e-08, 1.80201e-05] (values 3.27796e-121, 3.27802e-121) (tuning integration 0)"
+    M 1e-30 beta 20 n 1 A 0.05: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-30 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [6.09286e-08, 2.43714e-05] (values 1.63899e-121, 1.63901e-121) (tuning integration 0)"
+    M 1e-30 beta 20 n 1 A 1: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-30 beta 0.5 n 1 A 10: 'step budget exhausted: integrate_scalar_history (probe-pl-M1e-30-ScalarHistory-InversePowerModel(M=0.0024353eV,n=1,beta=0.5)-2026-11-20T18:56:14) took 2000001 accepted steps (budget 2000000) at N=41.72851645, T_J=5.4792e-13 GeV, with 14458 reflection(s) (t'
+    M 1e-30 beta 20 n 1 A 10: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-30 beta 0.5 n 1 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-30 beta 20 n 1 alpha 0.01: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-30 beta 0.5 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [4.83816e-05, 0.0193527] (values 1.6414e-121, 1.65732e-121) (tuning integration 0)"
+    M 1e-30 beta 1 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [7.68281e-08, 3.07312e-05] (values 3.27797e-121, 3.27807e-121) (tuning integration 0)"
+    M 1e-30 beta 0.5 n 2 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [1.832e-08, 7.32802e-06] (values 1.63898e-121, 1.63899e-121) (tuning integration 0)"
+    M 1e-30 beta 0.5 n 2 A 10: 'step budget exhausted: integrate_scalar_history (probe-pl-M1e-30-ScalarHistory-InversePowerModel(M=0.0024353eV,n=2,beta=0.5)-2026-11-20T18:56:15) took 2000001 accepted steps (budget 2000000) at N=41.41217643, T_J=7.5181e-13 GeV, with 14519 reflection(s) (t'
+    M 1e-30 beta 0.5 n 2 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)"
+    M 1e-16 beta 0.5 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.55543e-05, 0.0222217] (values 1.64176e-121, 1.66006e-121) (tuning integration 0)"
+    M 1e-16 beta 1 n 1 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.57635e-07, 0.000223054] (values 3.27573e-121, 3.27879e-121) (tuning integration 0)"
+    M 1e-16 beta 1.1 n 1 A 0.05: 'the normalization did not converge: after 30 integrations, H/H0-1=-1.220e-04, phi_ref/phi_min-1=+8.635e-07'
+    M 1e-16 beta 20 n 1 A 0.05: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-16 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.55543e-05, 0.0222217] (values 1.64176e-121, 1.66006e-121) (tuning integration 0)"
+    M 1e-16 beta 1 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.55548e-07, 0.000222219] (values 3.27571e-121, 3.27879e-121) (tuning integration 0)"
+    M 1e-16 beta 20 n 1 A 1: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-16 beta 0.5 n 1 A 10: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.55543e-05, 0.0222217] (values 1.64176e-121, 1.66006e-121) (tuning integration 0)"
+    M 1e-16 beta 1 n 1 A 10: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.29591e-07, 0.000211837] (values 3.27547e-121, 3.27875e-121) (tuning integration 0)"
+    M 1e-16 beta 20 n 1 A 10: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-16 beta 0.5 n 1 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.18297e-05, 0.00873188] (values 1.64007e-121, 1.64723e-121) (tuning integration 0)"
+    M 1e-16 beta 20 n 1 alpha 0.01: 'classical_turning_point (<label>): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)'
+    M 1e-16 beta 0.5 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.55526e-05, 0.022221] (values 1.64176e-121, 1.66005e-121) (tuning integration 0)"
+    M 1e-16 beta 1 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [4.848e-07, 0.00019392] (values 3.27805e-121, 3.27868e-121) (tuning integration 0)"
+    M 1e-16 beta 1.1 n 2 A 0.05: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [3.37527e-09, 1.35011e-06] (values 3.60577e-121, 3.60578e-121) (tuning integration 0)"
+    M 1e-16 beta 1.2 n 2 A 0.05: 'step budget exhausted: integrate_scalar_history (probe-pl-M1e-16-ScalarHistory-InversePowerModel(M=243.53GeV,n=2,beta=1.2)-2026-11-20T21:03:24) took 2000001 accepted steps (budget 2000000) at N=43.40302274, T_J=3.4003e-12 GeV, with 13745 reflection(s) (tun'
+    M 1e-16 beta 0.5 n 2 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.55526e-05, 0.022221] (values 1.64176e-121, 1.66005e-121) (tuning integration 0)"
+    M 1e-16 beta 1 n 2 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [4.848e-07, 0.00019392] (values 3.27805e-121, 3.27868e-121) (tuning integration 0)"
+    M 1e-16 beta 1.1 n 2 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [3.29818e-09, 1.31927e-06] (values 3.60575e-121, 3.60575e-121) (tuning integration 0)"
+    M 1e-16 beta 0.5 n 2 A 10: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.55526e-05, 0.022221] (values 1.64176e-121, 1.66005e-121) (tuning integration 0)"
+    M 1e-16 beta 1 n 2 A 10: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [4.848e-07, 0.00019392] (values 3.27805e-121, 3.27868e-121) (tuning integration 0)"
+    M 1e-16 beta 0.5 n 2 alpha 0.01: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.15109e-05, 0.00860435] (values 1.64005e-121, 1.64711e-121) (tuning integration 0)"
+
+== var/science-2026.14.0/probe/out/p2-histories-exp.txt: 72 histories
+  potential         M/M_P  n row        hist fail  cap med it max it
+  exponential       1e-42  1 A 1          12    1    0      1      1
+  exponential       1e-40  1 A 1          12    1    0      1      1
+  exponential       1e-36  1 A 1          12    1    0      1      1
+  exponential       1e-33  1 A 1          12    1    0      1      3
+  exponential       1e-32  1 A 1          12    1    0      1      1
+  exponential       1e-30  1 A 1          12    1    0      1      2
+  failures: 6
+    M 1e-42 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [1.34815e-06, 0.000539262] (values 1.63905e-121, 1.63949e-121) (tuning integration 0)"
+    M 1e-40 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [2.29495e-06, 0.000917978] (values 1.6391e-121, 1.63985e-121) (tuning integration 0)"
+    M 1e-36 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [3.29925e-07, 0.00013197] (values 1.639e-121, 1.63911e-121) (tuning integration 0)"
+    M 1e-33 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [5.11397e-08, 2.04559e-05] (values 1.63899e-121, 1.639e-121) (tuning integration 0)"
+    M 1e-32 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [3.1833e-08, 1.27332e-05] (values 1.63898e-121, 1.63899e-121) (tuning integration 0)"
+    M 1e-30 beta 0.5 n 1 A 1: "the effective minimum was not found: effective_minimum (<label>): V_eff' does not change sign on the bracket [4.64312e-08, 1.85725e-05] (values 1.63899e-121, 1.639e-121) (tuning integration 0)"
+
+== block wall times (run_probe.sh's log)
+  probe-p1-exp-a                    2.7 min
+  probe-p1-exp-b                    1.5 min
+  probe-p1-exp-c                    0.9 min
+  probe-p1-pl-a                     3.0 min
+  probe-p1-pl-b                     2.3 min
+  probe-p1-pl-c                     1.2 min
+  probe-pl-M4e-31                  25.4 min
+  probe-pl-M1e-30                  24.9 min
+  probe-pl-M1e-32                  18.9 min
+  probe-pl-M1e-33                  35.0 min
+  probe-pl-M1e-36                  38.9 min
+  probe-pl-M1e-40                   6.8 min
+  probe-pl-M1e-42                   7.1 min
+  probe-pl-M1e-16                 151.6 min
+  probe-exp-M1e-30                  2.3 min
+  probe-exp-M1e-32                  2.1 min
+  probe-exp-M1e-33                  2.1 min
+  probe-exp-M1e-36                  1.5 min
+  probe-exp-M1e-40                  1.5 min
+  probe-exp-M1e-42                  1.4 min
+
+== store /Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-pl: 17 files, 1.462 GB, 1.90 MB per history (768)
+== store /Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-exp: 17 files, 0.234 GB, 3.25 MB per history (72)

@@ -1,0 +1,36 @@
+>> 2026-11-20 18:16:01 probe-p1-exp-c
+** registered_run: registered as science-2026.14.0-Q-probe-p1-exp-c-20261120T181602
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/science-2026.14.0-Q-probe-p1-exp-c-20261120T181602/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-20 18:16:02,503	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-20 18:16:02,552	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-p1-exp.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 1 value = [ 2 ]
+   -- populated M sample grid with 2 values = [ 2.4353e-06 eV, 2435.3 GeV ]
+   -- no alpha grid (--no-alpha-values): no fixed-law row is built
+   -- populated A grid with 1 value = [ 1 ] (one-loop-exponential-v2)
+   -- total number of models to integrate = 2
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-exponential-v2)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=65745)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(compute_scalar_history pid=65792)[0m !! tune_history (probe-p1-exp-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-20T18:16:14): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6645 < ln 10 at N = 21.40767202 (generation 1); the generations below ln 10 carry 0.007975 of K
+[36m(compute_scalar_history pid=65792)[0m !! tune_history (probe-p1-exp-c-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-20T18:16:14): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.1052 < ln 10 at N = 21.93611759 (generation 1); the generations below ln 10 carry 0.007975 of K
+   -- ALL WORK ITEMS COMPLETE in time 10.4s
+      Queue summary: 2 lookup (avg 11.54/min), 2 compute (avg 11.54/min), 2 store (avg 11.54/min), 2 validation (avg 11.54/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.791s
+      Queue summary: 2 lookup (avg 151.7/min), 2 compute (avg 151.7/min), 2 store (avg 151.7/min), 2 validation (avg 151.7/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.33s
+      Queue summary: 2 lookup (avg 12.87/min), 2 compute (avg 12.87/min), 2 store (avg 12.87/min), 2 validation (avg 12.87/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0

@@ -288,6 +288,50 @@ That ratio replaces §6's assumed one.
 - **Its stores** are kept until the ports are done. They are retired at the run's record (CLAUDE.md, "Fingerprints and
   retirement").
 
+### 3.1 What the probe found (2026-11-20/21)
+
+It ran on the Mac Studio at `075bbd1`, 8 CPUs, from 18:11 to 23:43 on 2026-11-20 (`run_probe.sh`). Its 20 registered
+blocks are all `done`. The records are in `probe/`:
+- `probe/macstudio/logs/` and `out/`: the block logs, the Part 1 comparisons, the per-history listings and
+  `p2-summary.txt`;
+- `probe/registry/`: the runs' manifests and statuses, and the stores' sidecars.
+
+Measurements only; nothing is judged against a threshold.
+
+- **Part 1: equal.** `compare_histories.py` finds the Mac Studio's rebuilds equal by value to the laptop's references,
+  exponential and power law (exit 0 for each). The block walls at 8 CPUs total 11.6 min, against 12.5 min for 07d's on
+  the laptop at 10 CPUs. That is about 1.3 times the laptop's speed per CPU, measured on blocks of 6–40 histories, so
+  it may not hold for long blocks.
+- **Part 2, the power wall: 768 histories, 107 failed.**
+  - β = 0.5: 48 failed, every row at every M, "the effective minimum was not found". The exponential's 6 at β = 0.5 fail
+    the same way, and 2026.11.0's Figure 6 marks β < 1 as having no BBN result.
+  - β = 20: 40 failed. 32 are "the classical turning point search left float range" and 4 are an overflow in
+    `InversePowerModel`'s (ln V)''. The exponential has no failure at β = 20.
+  - β = 1.0: 15 failed; β = 1.1: 3; β = 1.2: 1. Of the 107, 7 ran out of step budget and 1 reached the tuning cap (at
+    10⁻¹⁶ M_P).
+  - No other β failed, including 2.9–3.04 and 5.
+- **Part 2, the exponential at B's masses (law v2 extrapolated): 72 histories, 6 failed**, all at β = 0.5 and in the
+  same way. P4's count of one-loop candidates outside ln(V₀/M⁴) ≤ 10 is not yet taken: `summarise.py` does not read
+  the bounce rows.
+- **Cost.**
+  - Most power-wall histories took about 17 s from submission to storage (the median at each M).
+  - Each block had a tail of single histories at 500–1000 s. At 10⁻¹⁶ M_P one history took 8094 s, and that block
+    took 2.5 h of the probe's 5.3 h.
+  - Block walls times 8 CPUs, divided by histories, bound the cost at about 127 CPU-s per history at laboratory M and
+    34–195 CPU-s per history at B's masses. The bound is high, because in blocks of 96 histories the tail sets the wall.
+  - At that bound, A-pl is about 20 h and B-pl about 17 h at 8 CPUs. The exponential's blocks, at 2026.11.0's cost
+    and Part 1's ratio, come to about 14.5 h. The build's upper bound is therefore about 51 h, against §6's 37 h.
+- **Disk.** The power law's store is 1.90 MB per history (1.462 GB for 768), against §7's assumed 1.95, so §7's
+  launch condition of about 120 GB free stands. The Mac Studio had 152 GB free afterwards.
+- **The export test (P9)** was the run script at `c147a2d`, `START_AT=X`, on the Part 1 stores, one wall at a time
+  (`probe/macstudio/export-test/`). It ran clean on all three walls:
+  - every step exited 0, and no measure exited non-zero;
+  - each wall's main and reflection roots were written and its `fields.csv` gzipped;
+  - each power-law root held only its own n.
+
+  The same test on the laptop's references passed earlier the same evening. Its walls `pl1` and `pl2` were rerun with
+  `ALLOW_DIRTY_TREE=1`, because the untracked analysis ports dirtied the laptop's tree.
+
 ## 4. The run script
 
 The script is 2026.11.0's, with these changes:

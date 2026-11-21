@@ -1,0 +1,99 @@
+>> 2026-11-20 18:11:52 probe-p1-exp-a
+** registered_run: registered as science-2026.14.0-Q-probe-p1-exp-a-20261120T181153
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/science-2026.14.0-Q-probe-p1-exp-a-20261120T181153/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-20 18:11:54,317	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-20 18:11:54,367	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Created sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-p1-exp.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+   -- populated M sample grid with 1 value = [ 0.00097413 eV ]
+   -- populated alpha grid with 2 values = [ 0.01, 0.1 ]
+   -- populated A grid with 3 values = [ 0.05, 1, 10 ] (one-loop-exponential-v2)
+   -- total number of models to integrate = 3
+[36m(Datastore pid=65227)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 15.8s
+      Queue summary: 3 lookup (avg 11.39/min), 3 compute (avg 11.39/min), 3 store (avg 11.39/min), 3 validation (avg 11.39/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.699s
+      Queue summary: 3 lookup (avg 257.7/min), 3 compute (avg 257.7/min), 3 store (avg 257.7/min), 3 validation (avg 257.7/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 10.1s
+      Queue summary: 3 lookup (avg 17.86/min), 3 compute (avg 17.86/min), 3 store (avg 17.86/min), 3 validation (avg 17.86/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 10.3s
+      Queue summary: 3 lookup (avg 17.45/min), 3 compute (avg 17.45/min), 3 store (avg 17.45/min), 3 validation (avg 17.45/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.649s
+      Queue summary: 3 lookup (avg 277.3/min), 3 compute (avg 277.3/min), 3 store (avg 277.3/min), 3 validation (avg 277.3/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 8.98s
+      Queue summary: 3 lookup (avg 20.04/min), 3 compute (avg 20.04/min), 3 store (avg 20.04/min), 3 validation (avg 20.04/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-exponential-v2)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 18s
+      Queue summary: 3 lookup (avg 599.9/hr), 3 compute (avg 599.9/hr), 3 store (avg 599.9/hr), 3 validation (avg 599.9/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.684s
+      Queue summary: 3 lookup (avg 263.2/min), 3 compute (avg 263.2/min), 3 store (avg 263.2/min), 3 validation (avg 263.2/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.24s
+      Queue summary: 3 lookup (avg 19.47/min), 3 compute (avg 19.47/min), 3 store (avg 19.47/min), 3 validation (avg 19.47/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-exponential-v2)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 9.98s
+      Queue summary: 3 lookup (avg 18.03/min), 3 compute (avg 18.03/min), 3 store (avg 18.03/min), 3 validation (avg 18.03/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.688s
+      Queue summary: 3 lookup (avg 261.6/min), 3 compute (avg 261.6/min), 3 store (avg 261.6/min), 3 validation (avg 261.6/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 8.52s
+      Queue summary: 3 lookup (avg 21.12/min), 3 compute (avg 21.12/min), 3 store (avg 21.12/min), 3 validation (avg 21.12/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-exponential-v2)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+   -- ALL WORK ITEMS COMPLETE in time 5.98s
+      Queue summary: 3 lookup (avg 30.11/min), 3 compute (avg 30.11/min), 3 store (avg 30.11/min), 3 validation (avg 30.11/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.661s
+      Queue summary: 3 lookup (avg 272.4/min), 3 compute (avg 272.4/min), 3 store (avg 272.4/min), 3 validation (avg 272.4/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 8.23s
+      Queue summary: 3 lookup (avg 21.88/min), 3 compute (avg 21.88/min), 3 store (avg 21.88/min), 3 validation (avg 21.88/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+[36m(Datastore pid=65272)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"[32m [repeated 15x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+** driver exit status 0

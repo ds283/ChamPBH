@@ -1,0 +1,62 @@
+acquired the rehearsal lock (/Users/ds283/.raypoolkit/rehearsal-lock) for ChamPBH: science-2026.14.0 export test on the probe stores (P9)
+2026-11-20 23:55:08,604	INFO usage_lib.py:448 -- Usage stats collection is disabled.
+2026-11-20 23:55:08,605	INFO scripts.py:1043 -- [37mLocal node IP[39m: [1m127.0.0.1[22m
+2026-11-20 23:55:14,177	SUCC scripts.py:1084 -- [32m--------------------[39m
+2026-11-20 23:55:14,177	SUCC scripts.py:1085 -- [32mRay runtime started.[39m
+2026-11-20 23:55:14,177	SUCC scripts.py:1086 -- [32m--------------------[39m
+2026-11-20 23:55:14,177	INFO scripts.py:1088 -- [36mNext steps[39m
+2026-11-20 23:55:14,177	INFO cli_output_helpers.py:16 -- [2mNote: The following commands are intended for use on[22m
+2026-11-20 23:55:14,178	INFO cli_output_helpers.py:17 -- [2mthe head node or within the cluster network.[22m
+2026-11-20 23:55:14,178	INFO scripts.py:1106 -- To connect to this Ray cluster:
+2026-11-20 23:55:14,178	INFO scripts.py:1108 -- [35mimport[39m[26m ray
+2026-11-20 23:55:14,178	INFO scripts.py:1109 -- ray[35m.[39m[26minit()
+2026-11-20 23:55:14,178	INFO scripts.py:1123 -- To submit a Ray job using the Ray Jobs CLI:
+2026-11-20 23:55:14,178	INFO scripts.py:1124 -- [1m  RAY_API_SERVER_ADDRESS='http://127.0.0.1:8267' ray job submit --working-dir . -- python my_script.py[22m
+2026-11-20 23:55:14,178	INFO scripts.py:1133 -- See https://docs.ray.io/en/latest/cluster/running-applications/job-submission/index.html 
+2026-11-20 23:55:14,178	INFO scripts.py:1137 -- for more information on submitting Ray jobs to the Ray cluster.
+2026-11-20 23:55:14,178	INFO scripts.py:1142 -- To terminate the Ray runtime, run
+2026-11-20 23:55:14,178	INFO scripts.py:1143 -- [1m  ray stop[22m
+2026-11-20 23:55:14,178	INFO scripts.py:1146 -- To view the status of the cluster, use
+2026-11-20 23:55:14,178	INFO scripts.py:1147 --   [1mray status[22m[26m
+2026-11-20 23:55:14,178	INFO scripts.py:1151 -- To monitor and debug Ray, view the dashboard at 
+2026-11-20 23:55:14,178	INFO scripts.py:1152 --   [1m127.0.0.1:8267[22m[26m
+2026-11-20 23:55:14,178	INFO scripts.py:1159 -- [4mIf connection to the dashboard fails, check your firewall settings and network configuration.[24m
+recorded pid 94592 in /Users/ds283/.raypoolkit/rehearsal-lock/owner
+>> ray_cluster: address 127.0.0.1:6380
+>> ray_cluster: dashboard http://127.0.0.1:8267
+>> ray_cluster: actors: RAY_AUTH_MODE=token ./venv/bin/ray list actors --address 127.0.0.1:6380
+>> ray_cluster: started in 8s; gcs_server pid 94592
+=== wall exp 23:55:15
+    exit 0 23:59:29
+>> 2026-11-20 23:59:29 wall exp done:  44M main, 128M reflections
+=== wall pl1 23:59:29
+    exit 0 00:03:37
+>> 2026-11-21 00:03:37 wall pl1 done:  43M main, 114M reflections
+=== wall pl2 00:03:37
+    exit 0 00:07:42
+>> 2026-11-21 00:07:42 wall pl2 done:  43M main, 113M reflections
+=== all done 00:07:42
+>> ray_cluster: SIGTERM to 19 process(es) naming /tmp/ray-cpbh, and their descendants: 94592 94593 94594 94595 94604 94605 94612 94613 94614 94615 94616 94617 94618 94619 94620 94627 94628 94635 94636
+    94592     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray-cpbh/session_2026
+    94593     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    94594     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m ray.util.client.server --addres
+    94595     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/ds283/Documents/Code/ChamPB
+    94604 94595 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c from multiprocessing.resource_t
+    94605 94595 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c import sys; from multiprocessin
+    94612 94605 ray-dashboard-MetricsHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c "i
+    94613 94605 ray-dashboard-DataHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c "impo
+    94614 94605 ray-dashboard-EventHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c "imp
+    94615 94605 ray-dashboard-JobHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c "impor
+    94616 94605 ray-dashboard-NodeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c "impo
+    94617 94605 ray-dashboard-ReportHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c "im
+    94618 94605 ray-dashboard-ServeHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c "imp
+    94619 94605 ray-dashboard-StateHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c "imp
+    94620 94605 ray-dashboard-TrainHead-0 (/opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -c "imp
+    94627     1 /opt/local/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -u /Users/ds283/Documents/Code/Cha
+    94628     1 /Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/tmp/ray-cpbh/se
+    94635 94628 ray::DashboardAgent                      
+    94636 94628 ray::RuntimeEnvAgent                
+>> ray_cluster: grace period of 15s over; SIGKILL to: 94592
+>> ray_cluster: no process names /tmp/ray-cpbh; ports 6380 6381 8267 52367 are free
+released the rehearsal lock (/Users/ds283/.raypoolkit/rehearsal-lock)
+>> ray_cluster: stopped in 19s

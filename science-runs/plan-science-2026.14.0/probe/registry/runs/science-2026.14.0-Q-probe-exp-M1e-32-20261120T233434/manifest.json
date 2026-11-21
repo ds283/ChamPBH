@@ -1,0 +1,122 @@
+{
+  "argv": [
+    "/Users/ds283/Documents/Code/ChamPBH/RunDrivers/registered_run.py",
+    "--campaign",
+    "science-2026.14.0",
+    "--prompt",
+    "Q",
+    "--register",
+    "probe-exp-M1e-32",
+    "--purpose",
+    "science-2026.14.0 probe Part 2: exponential at M 1e-32 Mp, 12 beta, A 1, no fixed alpha (law v2 extrapolated)",
+    "--",
+    "--config",
+    "exponential.yaml",
+    "--database",
+    "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-exp.db",
+    "--shards",
+    "16",
+    "--phi-init-Mp",
+    "5",
+    "--ray-address",
+    "127.0.0.1:6380",
+    "--job-name",
+    "probe-exp-M1e-32",
+    "--bbn-wall-clock-limit",
+    "600",
+    "--M-values-Mp",
+    "1e-32",
+    "--beta-values",
+    "0.5",
+    "1.0",
+    "1.1",
+    "1.2",
+    "1.5",
+    "2.0",
+    "2.9",
+    "2.975",
+    "3.0",
+    "3.04",
+    "5",
+    "20",
+    "--A-values",
+    "1",
+    "--no-alpha-values"
+  ],
+  "campaign": "science-2026.14.0",
+  "checkpoint": null,
+  "created": "2026-11-20T23:34:34+00:00",
+  "cwd": "/Users/ds283/Documents/Code/ChamPBH",
+  "expected_units": null,
+  "git_dirty": false,
+  "git_head": "075bbd1410d2854fb23fdac347b2c3a9df599ab9",
+  "heartbeat_means": "Refreshed when the run writes a line to stdout, at most once per 30 s, or at once when the line changes the stage, and the line it came from is the `stage` in status.json. RayWorkPool prints a progress line only after ray.wait has returned completed work, and in this repository no more often than every 300 s (main.py's MIN_NOTIFY_INTERVAL), so a fresh heartbeat from it means work completed within about five minutes. Ray also forwards the workers' own output to the driver's stdout, so a worker's line beats too, without moving the stage. It does NOT mean any Ray actor is progressing, and the converse does not hold: a stage that prints nothing for longer than the staleness window (900 s, `list --stale-after`), such as a queue whose items each take longer than that, is reported stale while it works. Stale means go and look.",
+  "host": {
+    "id": "d120d1cf03551e6f",
+    "machine": "arm64",
+    "name": "mps026298.phys.susx.ac.uk",
+    "python": "3.13.16",
+    "release": "27.0.0",
+    "system": "Darwin"
+  },
+  "packages": {
+    "SQLAlchemy": {
+      "commit": null,
+      "editable": false,
+      "requested_revision": null,
+      "url": null,
+      "version": "2.0.55"
+    },
+    "datastorekit": {
+      "commit": "c8570e849334d09085bbd84876095fc9e22bd005",
+      "editable": false,
+      "requested_revision": "v0.4.0",
+      "url": "https://github.com/ds283/DatastoreKit",
+      "version": "0.4.0"
+    },
+    "numpy": {
+      "commit": null,
+      "editable": false,
+      "requested_revision": null,
+      "url": null,
+      "version": "2.3.5"
+    },
+    "ray": {
+      "commit": null,
+      "editable": false,
+      "requested_revision": null,
+      "url": null,
+      "version": "2.59.0"
+    },
+    "raypoolkit": {
+      "commit": "67a75b97a656accb98195a4bda93f64e6a5f3fb2",
+      "editable": false,
+      "requested_revision": "v0.3.0",
+      "url": "https://github.com/ds283/RayPoolKit",
+      "version": "0.3.0"
+    },
+    "runregistrykit": {
+      "commit": "0bae3a3c501a8264ee4be5bc24f06422af38720f",
+      "editable": false,
+      "requested_revision": "v0.2.0",
+      "url": "https://github.com/ds283/RunRegistryKit",
+      "version": "0.2.0"
+    },
+    "scipy": {
+      "commit": null,
+      "editable": false,
+      "requested_revision": null,
+      "url": null,
+      "version": "1.17.0"
+    }
+  },
+  "prompt": "Q",
+  "purpose": "science-2026.14.0 probe Part 2: exponential at M 1e-32 Mp, 12 beta, A 1, no fixed alpha (law v2 extrapolated)",
+  "results": "var/datastores/science-2026.14.0-probe-exp.db",
+  "results_store_id": "73d183187ea146d1b8f02cb3717f4246",
+  "run_id": "science-2026.14.0-Q-probe-exp-M1e-32-20261120T233434",
+  "scope": "config exponential.yaml; models exponential; \u03b2 12 values, 0.5\u201320; M 1e-32 Mp; n 1; \u03c6* 5 Mp; tuning tolerance 1e-05; \u03b1 none; A 1; 16 shards; job probe-exp-M1e-32",
+  "script": "main.py",
+  "script_sha256": "2705636433a750115d1c2628e040dcee25c576ed94fec006c273b648a8d6fb87",
+  "unit": null
+}

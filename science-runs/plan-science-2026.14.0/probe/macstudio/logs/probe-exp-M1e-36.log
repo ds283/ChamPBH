@@ -1,0 +1,39 @@
+>> 2026-11-20 23:38:49 probe-exp-M1e-36
+** registered_run: registered as science-2026.14.0-Q-probe-exp-M1e-36-20261120T233850
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/science-2026.14.0-Q-probe-exp-M1e-36-20261120T233850/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-20 23:38:51,239	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-20 23:38:51,316	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-exp.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 12 values = [ 0.5, 1, 1.1, 1.2, 1.5, 2, 2.9, 2.975, 3, 3.04, 5, 20 ]
+   -- populated M sample grid with 1 value = [ 2.4353e-09 eV ]
+   -- no alpha grid (--no-alpha-values): no fixed-law row is built
+   -- populated A grid with 1 value = [ 1 ] (one-loop-exponential-v2)
+   -- total number of models to integrate = 12
+!! warning: beta=20, M=1e-36 M_P, n=1, phi*=5 M_P: Omega(phi*) T* = 2.2076e+29 M_P (super-Planckian start), with Omega at the seed's phi_ref = 3.3272e-19 M_P (tracking seed)
+!! warning: 1 of 12 models start super-Planckian at the seed's phi_ref; they are computed like the others. The tuned phi_ref differs from the seed's, moving ln Omega(phi*) by -beta (phi_ref - phi_ref_seed)/M_P, in size up to 1.4e-3 at M = 1e-3 M_P with beta <= 5.5, 6.5e-3 at beta = 25, and up to 1.0 at M = 0.5 M_P from a static seed (jordan-normalization prompt 06's points)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-exponential-v2)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=93008)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(compute_scalar_history pid=93063)[0m !! tune_history (probe-exp-M1e-36-ScalarHistory-ExponentialModel(M=2.4353e-09eV,n=1,beta=0.5)-2026-11-20T23:39:06): the effective minimum was not found: effective_minimum (ExponentialModel(M=2.4353e-09eV,n=1,beta=0.5)): V_eff' does not change sign on the bracket [3.29925e-07, 0.00013197] (values 1.639e-121, 1.63911e-121) (tuning integration 0)
+   -- ALL WORK ITEMS COMPLETE in time 33s
+      Queue summary: 12 lookup (avg 21.84/min), 12 compute (avg 21.84/min), 12 store (avg 21.84/min), 12 validation (avg 21.84/min)
+-- ScalarHistory: 1 histories failed in this run
+     -- 1 x the effective minimum was not found
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 2.07s
+      Queue summary: 11 lookup (avg 318.2/min), 11 compute (avg 318.2/min), 11 store (avg 318.2/min), 11 validation (avg 318.2/min)
+-- AdiabaticHistory: 1 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 18.3s
+      Queue summary: 11 lookup (avg 35.97/min), 11 compute (avg 35.97/min), 11 store (avg 35.97/min), 11 validation (avg 35.97/min)
+-- BBNData: 1 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0

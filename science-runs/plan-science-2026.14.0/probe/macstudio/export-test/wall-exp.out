@@ -1,0 +1,972 @@
+>> 2026-11-20 23:55:15 science-2026.14.0 on c147a2d2c280b3adf520071f566f16926aa48ea0, starting at slot X, β grids: dense 191, sparse 30, coarse 62
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+@@ DATASTORE INVENTORY: /Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-p1-exp.db
+   read-only; 16 shards (#0, #1, #2, #3, #4, #5, #6, #7, #8, #9, #10, #11, #12, #13, #14, #15); 75,097 records in 17 classes
+   problems: none
+
+   -- Datastore metadata
+      @@ version (replicated): 1 record
+         label = [ 2026.14.0 ]
+      @@ store_tag (replicated): 1 record | committed at Fri 20 Nov 2026 18:12:21
+         label = [ SamplesPerLog10Z_250 ]
+
+   -- Redshifts, tolerances and parameter values
+      @@ redshift (replicated): 75,001 records | committed at Fri 20 Nov 2026 18:11:59
+         log_one_plus_z = [ 0, 0.0092103, 0.018421, 0.027631, 0.036841, 0.046052, 0.055262, 0.064472, 0.073683, 0.082893, ... 74,981 values not shown (--show-all shows every one) ..., 690.69, 690.7, 690.71, 690.72, 690.73, 690.74, 690.75, 690.76, 690.77, 690.78 ]
+      @@ tolerance (replicated): 2 records | committed between Fri 20 Nov 2026 18:11:59 and Fri 20 Nov 2026 18:11:59
+         log10_tol = [ -8, -5 ]
+      @@ beta_value (replicated): 3 records | committed at Fri 20 Nov 2026 18:12:21
+         values = [ 1.2, 2, 2.9 ]
+      @@ alpha_value (replicated): 6 records | committed between Fri 20 Nov 2026 18:11:59 and Fri 20 Nov 2026 18:14:41
+         values = [ 0, 0.01, 0.1, A=0.05 (one-loop-exponential-v2), A=1 (one-loop-exponential-v2), A=10 (one-loop-exponential-v2) ]
+      @@ temperature (replicated): 1 record | committed at Fri 20 Nov 2026 18:11:59
+         values = [ 20000 GeV ]
+      @@ M_value (replicated): 4 records | committed between Fri 20 Nov 2026 18:12:21 and Fri 20 Nov 2026 18:16:13
+         values = [ 2.4353e-06 eV, 0.00097413 eV, 2.4353e+12 eV, 2.4353e+24 eV ]
+      @@ phi_value (replicated): 1 record | committed at Fri 20 Nov 2026 18:11:59
+         values = [ 5 PlanckMass ]
+      @@ pi_value (replicated): 1 record | committed at Fri 20 Nov 2026 18:11:59
+         values = [ 0 PlanckMass ]
+
+   -- Cosmologies and solvers
+      @@ QCD_Cosmology (replicated): 1 record | committed at Fri 20 Nov 2026 18:12:21
+            - omega_m=0.3111, omega_cc=0.6889, h=0.6766, f_baryon=0.15817, T_CMB_Kelvin=2.7255, Neff=3.046
+      @@ IntegrationSolver (replicated): 7 records | committed between Fri 20 Nov 2026 18:11:59 and Fri 20 Nov 2026 18:11:59
+            - label=Radau+kinematic-cap, stepping=0
+            - label=Radau+kinematic-cap, stepping=1
+            - label=solve_ivp+BDF, stepping=0
+            - label=solve_ivp+DOP853, stepping=0
+            - label=solve_ivp+LSODA, stepping=0
+            - label=solve_ivp+RK45, stepping=0
+            - label=solve_ivp+Radau, stepping=0
+
+   -- Models
+      @@ ExponentialModel (sharded): 8 records | committed between Fri 20 Nov 2026 18:12:21 and Fri 20 Nov 2026 18:16:13
+            - M=2.4353e-06 eV, beta=2, n_value=1
+            - M=0.00097413 eV, beta=1.2, n_value=1
+            - M=0.00097413 eV, beta=2, n_value=1
+            - M=0.00097413 eV, beta=2.9, n_value=1
+            - M=2.4353e+12 eV, beta=2, n_value=1
+            - M=2.4353e+24 eV, beta=1.2, n_value=1
+            - M=2.4353e+24 eV, beta=2, n_value=1
+            - M=2.4353e+24 eV, beta=2.9, n_value=1
+      @@ InversePowerModel (sharded): 0 records
+
+   -- Compute targets
+      @@ ScalarHistory (sharded): 20 records: 20 validated, 0 unvalidated; 109,052 ScalarHistoryValue rows | committed between Fri 20 Nov 2026 18:12:34 and Fri 20 Nov 2026 18:16:22
+         common to every history: cosmology=QCD_Cosmology(omega_m=0.3111, omega_cc=0.6889, h=0.6766, f_baryon=0.15817, T_CMB_Kelvin=2.7255, Neff=3.046), log10_atol=-8, log10_rtol=-8, log10_tuning_tol=-5
+         validated: 20 records; version = 2026.14.0
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=10 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            ... 0 records not shown (--show-all shows every one) ...
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=10 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 4,998
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 5,431
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 5,919
+         unvalidated: none
+      @@ AdiabaticHistory (sharded): 20 records: 20 validated, 0 unvalidated; 109,052 AdiabaticHistoryValue rows | committed between Fri 20 Nov 2026 18:12:37 and Fri 20 Nov 2026 18:16:24
+         validated: 20 records; version = 2026.14.0
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            ... 0 records not shown (--show-all shows every one) ...
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 4,998
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,431
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,919
+         unvalidated: none
+      @@ BBNData (sharded): 20 records: 20 validated, 0 unvalidated; 29,768 BBNDataValue rows | committed between Fri 20 Nov 2026 18:12:47 and Fri 20 Nov 2026 18:16:34
+         validated: 20 records; version = 2026.14.0
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,483
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,510
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,505
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,506
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,510
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,478
+            ... 0 records not shown (--show-all shows every one) ...
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,478
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,509
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+         unvalidated: none
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+@@ DATASTORE INVENTORY: /Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-p1-pl.db
+   read-only; 16 shards (#0, #1, #2, #3, #4, #5, #6, #7, #8, #9, #10, #11, #12, #13, #14, #15); 75,159 records in 17 classes
+   problems: none
+
+   -- Datastore metadata
+      @@ version (replicated): 1 record
+         label = [ 2026.14.0 ]
+      @@ store_tag (replicated): 1 record | committed at Fri 20 Nov 2026 18:17:26
+         label = [ SamplesPerLog10Z_250 ]
+
+   -- Redshifts, tolerances and parameter values
+      @@ redshift (replicated): 75,001 records | committed at Fri 20 Nov 2026 18:17:04
+         log_one_plus_z = [ 0, 0.0092103, 0.018421, 0.027631, 0.036841, 0.046052, 0.055262, 0.064472, 0.073683, 0.082893, ... 74,981 values not shown (--show-all shows every one) ..., 690.69, 690.7, 690.71, 690.72, 690.73, 690.74, 690.75, 690.76, 690.77, 690.78 ]
+      @@ tolerance (replicated): 2 records | committed between Fri 20 Nov 2026 18:17:04 and Fri 20 Nov 2026 18:17:04
+         log10_tol = [ -8, -5 ]
+      @@ beta_value (replicated): 3 records | committed at Fri 20 Nov 2026 18:17:26
+         values = [ 1.2, 2, 2.9 ]
+      @@ alpha_value (replicated): 6 records | committed between Fri 20 Nov 2026 18:17:04 and Fri 20 Nov 2026 18:20:03
+         values = [ 0, 0.01, 0.1, A=0.05 (one-loop-inverse-power-v1), A=1 (one-loop-inverse-power-v1), A=10 (one-loop-inverse-power-v1) ]
+      @@ temperature (replicated): 1 record | committed at Fri 20 Nov 2026 18:17:04
+         values = [ 20000 GeV ]
+      @@ M_value (replicated): 4 records | committed between Fri 20 Nov 2026 18:17:26 and Fri 20 Nov 2026 18:22:26
+         values = [ 2.4353e-06 eV, 0.00097413 eV, 2.4353e+12 eV, 2.4353e+24 eV ]
+      @@ phi_value (replicated): 1 record | committed at Fri 20 Nov 2026 18:17:04
+         values = [ 5 PlanckMass ]
+      @@ pi_value (replicated): 1 record | committed at Fri 20 Nov 2026 18:17:04
+         values = [ 0 PlanckMass ]
+
+   -- Cosmologies and solvers
+      @@ QCD_Cosmology (replicated): 1 record | committed at Fri 20 Nov 2026 18:17:26
+            - omega_m=0.3111, omega_cc=0.6889, h=0.6766, f_baryon=0.15817, T_CMB_Kelvin=2.7255, Neff=3.046
+      @@ IntegrationSolver (replicated): 7 records | committed between Fri 20 Nov 2026 18:17:04 and Fri 20 Nov 2026 18:17:04
+            - label=Radau+kinematic-cap, stepping=0
+            - label=Radau+kinematic-cap, stepping=1
+            - label=solve_ivp+BDF, stepping=0
+            - label=solve_ivp+DOP853, stepping=0
+            - label=solve_ivp+LSODA, stepping=0
+            - label=solve_ivp+RK45, stepping=0
+            - label=solve_ivp+Radau, stepping=0
+
+   -- Models
+      @@ ExponentialModel (sharded): 0 records
+      @@ InversePowerModel (sharded): 16 records | committed between Fri 20 Nov 2026 18:17:26 and Fri 20 Nov 2026 18:22:26
+            - M=2.4353e-06 eV, beta=2, n_value=1
+            - M=2.4353e-06 eV, beta=2, n_value=2
+            - M=0.00097413 eV, beta=1.2, n_value=1
+            - M=0.00097413 eV, beta=1.2, n_value=2
+            - M=0.00097413 eV, beta=2, n_value=1
+            - M=0.00097413 eV, beta=2, n_value=2
+            - M=0.00097413 eV, beta=2.9, n_value=1
+            - M=0.00097413 eV, beta=2.9, n_value=2
+            - M=2.4353e+12 eV, beta=2, n_value=1
+            - M=2.4353e+12 eV, beta=2, n_value=2
+            - M=2.4353e+24 eV, beta=1.2, n_value=1
+            - M=2.4353e+24 eV, beta=1.2, n_value=2
+            - M=2.4353e+24 eV, beta=2, n_value=1
+            - M=2.4353e+24 eV, beta=2, n_value=2
+            - M=2.4353e+24 eV, beta=2.9, n_value=1
+            - M=2.4353e+24 eV, beta=2.9, n_value=2
+
+   -- Compute targets
+      @@ ScalarHistory (sharded): 40 records: 40 validated, 0 unvalidated; 201,766 ScalarHistoryValue rows | committed between Fri 20 Nov 2026 18:17:38 and Fri 20 Nov 2026 18:22:39
+         common to every history: cosmology=QCD_Cosmology(omega_m=0.3111, omega_cc=0.6889, h=0.6766, f_baryon=0.15817, T_CMB_Kelvin=2.7255, Neff=3.046), log10_atol=-8, log10_rtol=-8, log10_tuning_tol=-5
+         validated: 40 records; version = 2026.14.0
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-inverse-power-v1)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e-06 eV, beta=2, n_value=2), failure=False, A=1 (one-loop-inverse-power-v1)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-inverse-power-v1)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-inverse-power-v1)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-inverse-power-v1)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=2), failure=False, A=0.05 (one-loop-inverse-power-v1)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=2), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=2), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,003
+            ... 20 records not shown (--show-all shows every one) ...
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, A=10 (one-loop-inverse-power-v1)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, A=1 (one-loop-inverse-power-v1)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-inverse-power-v1)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+12 eV, beta=2, n_value=2), failure=False, A=1 (one-loop-inverse-power-v1)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=True, alpha=0  tags: SamplesPerLog10Z_250  | values: 0
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=1.2, n_value=2), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 5,001
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=True, alpha=0  tags: SamplesPerLog10Z_250  | values: 0
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=2, n_value=2), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 5,435
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=True, alpha=0  tags: SamplesPerLog10Z_250  | values: 0
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=2.9, n_value=2), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 5,922
+         unvalidated: none
+      @@ AdiabaticHistory (sharded): 37 records: 37 validated, 0 unvalidated; 201,766 AdiabaticHistoryValue rows | committed between Fri 20 Nov 2026 18:17:44 and Fri 20 Nov 2026 18:22:41
+         validated: 37 records; version = 2026.14.0
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e-06 eV, beta=2, n_value=2), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=2), failure=False, A=0.05 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=2), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=2), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            ... 17 records not shown (--show-all shows every one) ...
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, A=0.05 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, A=10 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+12 eV, beta=2, n_value=2), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=1.2, n_value=2), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,001
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=2, n_value=2), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,435
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=2.9, n_value=2), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,922
+         unvalidated: none
+      @@ BBNData (sharded): 37 records: 37 validated, 0 unvalidated; 55,059 BBNDataValue rows | committed between Fri 20 Nov 2026 18:17:54 and Fri 20 Nov 2026 18:22:59
+         validated: 37 records; version = 2026.14.0
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,484
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e-06 eV, beta=2, n_value=2), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,484
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,509
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,510
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,506
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,506
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=2), failure=False, A=0.05 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,510
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=2), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,510
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=1.2, n_value=2), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,506
+            ... 17 records not shown (--show-all shows every one) ...
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, A=0.05 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, A=10 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,478
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=0.00097413 eV, beta=2.9, n_value=2), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,482
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+12 eV, beta=2, n_value=2), failure=False, A=1 (one-loop-inverse-power-v1), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=1.2, n_value=2), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,509
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=2, n_value=2), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,488
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=InversePowerModel(M=2.4353e+24 eV, beta=2.9, n_value=2), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+         unvalidated: none
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+@@ DATASTORE INVENTORY: /Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-p1-exp.db
+   read-only; 16 shards (#0, #1, #2, #3, #4, #5, #6, #7, #8, #9, #10, #11, #12, #13, #14, #15); 75,097 records in 17 classes
+   problems: none
+
+   -- Datastore metadata
+      @@ version (replicated): 1 record
+         label = [ 2026.14.0 ]
+      @@ store_tag (replicated): 1 record | committed at Fri 20 Nov 2026 18:12:21
+         label = [ SamplesPerLog10Z_250 ]
+
+   -- Redshifts, tolerances and parameter values
+      @@ redshift (replicated): 75,001 records | committed at Fri 20 Nov 2026 18:11:59
+         log_one_plus_z = [ 0, 0.0092103, 0.018421, 0.027631, 0.036841, 0.046052, 0.055262, 0.064472, 0.073683, 0.082893, ... 74,981 values not shown (--show-all shows every one) ..., 690.69, 690.7, 690.71, 690.72, 690.73, 690.74, 690.75, 690.76, 690.77, 690.78 ]
+      @@ tolerance (replicated): 2 records | committed between Fri 20 Nov 2026 18:11:59 and Fri 20 Nov 2026 18:11:59
+         log10_tol = [ -8, -5 ]
+      @@ beta_value (replicated): 3 records | committed at Fri 20 Nov 2026 18:12:21
+         values = [ 1.2, 2, 2.9 ]
+      @@ alpha_value (replicated): 6 records | committed between Fri 20 Nov 2026 18:11:59 and Fri 20 Nov 2026 18:14:41
+         values = [ 0, 0.01, 0.1, A=0.05 (one-loop-exponential-v2), A=1 (one-loop-exponential-v2), A=10 (one-loop-exponential-v2) ]
+      @@ temperature (replicated): 1 record | committed at Fri 20 Nov 2026 18:11:59
+         values = [ 20000 GeV ]
+      @@ M_value (replicated): 4 records | committed between Fri 20 Nov 2026 18:12:21 and Fri 20 Nov 2026 18:16:13
+         values = [ 2.4353e-06 eV, 0.00097413 eV, 2.4353e+12 eV, 2.4353e+24 eV ]
+      @@ phi_value (replicated): 1 record | committed at Fri 20 Nov 2026 18:11:59
+         values = [ 5 PlanckMass ]
+      @@ pi_value (replicated): 1 record | committed at Fri 20 Nov 2026 18:11:59
+         values = [ 0 PlanckMass ]
+
+   -- Cosmologies and solvers
+      @@ QCD_Cosmology (replicated): 1 record | committed at Fri 20 Nov 2026 18:12:21
+            - omega_m=0.3111, omega_cc=0.6889, h=0.6766, f_baryon=0.15817, T_CMB_Kelvin=2.7255, Neff=3.046
+      @@ IntegrationSolver (replicated): 7 records | committed between Fri 20 Nov 2026 18:11:59 and Fri 20 Nov 2026 18:11:59
+            - label=Radau+kinematic-cap, stepping=0
+            - label=Radau+kinematic-cap, stepping=1
+            - label=solve_ivp+BDF, stepping=0
+            - label=solve_ivp+DOP853, stepping=0
+            - label=solve_ivp+LSODA, stepping=0
+            - label=solve_ivp+RK45, stepping=0
+            - label=solve_ivp+Radau, stepping=0
+
+   -- Models
+      @@ ExponentialModel (sharded): 8 records | committed between Fri 20 Nov 2026 18:12:21 and Fri 20 Nov 2026 18:16:13
+            - M=2.4353e-06 eV, beta=2, n_value=1
+            - M=0.00097413 eV, beta=1.2, n_value=1
+            - M=0.00097413 eV, beta=2, n_value=1
+            - M=0.00097413 eV, beta=2.9, n_value=1
+            - M=2.4353e+12 eV, beta=2, n_value=1
+            - M=2.4353e+24 eV, beta=1.2, n_value=1
+            - M=2.4353e+24 eV, beta=2, n_value=1
+            - M=2.4353e+24 eV, beta=2.9, n_value=1
+      @@ InversePowerModel (sharded): 0 records
+
+   -- Compute targets
+      @@ ScalarHistory (sharded): 20 records: 20 validated, 0 unvalidated; 109,052 ScalarHistoryValue rows | committed between Fri 20 Nov 2026 18:12:34 and Fri 20 Nov 2026 18:16:22
+         common to every history: cosmology=QCD_Cosmology(omega_m=0.3111, omega_cc=0.6889, h=0.6766, f_baryon=0.15817, T_CMB_Kelvin=2.7255, Neff=3.046), log10_atol=-8, log10_rtol=-8, log10_tuning_tol=-5
+         validated: 20 records; version = 2026.14.0
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=10 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            ... 0 records not shown (--show-all shows every one) ...
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=10 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 4,998
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 5,431
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 5,919
+         unvalidated: none
+      @@ AdiabaticHistory (sharded): 20 records: 20 validated, 0 unvalidated; 109,052 AdiabaticHistoryValue rows | committed between Fri 20 Nov 2026 18:12:37 and Fri 20 Nov 2026 18:16:24
+         validated: 20 records; version = 2026.14.0
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            ... 0 records not shown (--show-all shows every one) ...
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 4,998
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,431
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,919
+         unvalidated: none
+      @@ BBNData (sharded): 20 records: 20 validated, 0 unvalidated; 29,768 BBNDataValue rows | committed between Fri 20 Nov 2026 18:12:47 and Fri 20 Nov 2026 18:16:34
+         validated: 20 records; version = 2026.14.0
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,483
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,510
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,505
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,506
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,510
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,478
+            ... 0 records not shown (--show-all shows every one) ...
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,478
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,509
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+         unvalidated: none
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+@@ DATASTORE INVENTORY: /Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-p1-exp.db
+   read-only; 16 shards (#0, #1, #2, #3, #4, #5, #6, #7, #8, #9, #10, #11, #12, #13, #14, #15); 75,097 records in 17 classes
+   problems: none
+
+   -- Datastore metadata
+      @@ version (replicated): 1 record
+         label = [ 2026.14.0 ]
+      @@ store_tag (replicated): 1 record | committed at Fri 20 Nov 2026 18:12:21
+         label = [ SamplesPerLog10Z_250 ]
+
+   -- Redshifts, tolerances and parameter values
+      @@ redshift (replicated): 75,001 records | committed at Fri 20 Nov 2026 18:11:59
+         log_one_plus_z = [ 0, 0.0092103, 0.018421, 0.027631, 0.036841, 0.046052, 0.055262, 0.064472, 0.073683, 0.082893, ... 74,981 values not shown (--show-all shows every one) ..., 690.69, 690.7, 690.71, 690.72, 690.73, 690.74, 690.75, 690.76, 690.77, 690.78 ]
+      @@ tolerance (replicated): 2 records | committed between Fri 20 Nov 2026 18:11:59 and Fri 20 Nov 2026 18:11:59
+         log10_tol = [ -8, -5 ]
+      @@ beta_value (replicated): 3 records | committed at Fri 20 Nov 2026 18:12:21
+         values = [ 1.2, 2, 2.9 ]
+      @@ alpha_value (replicated): 6 records | committed between Fri 20 Nov 2026 18:11:59 and Fri 20 Nov 2026 18:14:41
+         values = [ 0, 0.01, 0.1, A=0.05 (one-loop-exponential-v2), A=1 (one-loop-exponential-v2), A=10 (one-loop-exponential-v2) ]
+      @@ temperature (replicated): 1 record | committed at Fri 20 Nov 2026 18:11:59
+         values = [ 20000 GeV ]
+      @@ M_value (replicated): 4 records | committed between Fri 20 Nov 2026 18:12:21 and Fri 20 Nov 2026 18:16:13
+         values = [ 2.4353e-06 eV, 0.00097413 eV, 2.4353e+12 eV, 2.4353e+24 eV ]
+      @@ phi_value (replicated): 1 record | committed at Fri 20 Nov 2026 18:11:59
+         values = [ 5 PlanckMass ]
+      @@ pi_value (replicated): 1 record | committed at Fri 20 Nov 2026 18:11:59
+         values = [ 0 PlanckMass ]
+
+   -- Cosmologies and solvers
+      @@ QCD_Cosmology (replicated): 1 record | committed at Fri 20 Nov 2026 18:12:21
+            - omega_m=0.3111, omega_cc=0.6889, h=0.6766, f_baryon=0.15817, T_CMB_Kelvin=2.7255, Neff=3.046
+      @@ IntegrationSolver (replicated): 7 records | committed between Fri 20 Nov 2026 18:11:59 and Fri 20 Nov 2026 18:11:59
+            - label=Radau+kinematic-cap, stepping=0
+            - label=Radau+kinematic-cap, stepping=1
+            - label=solve_ivp+BDF, stepping=0
+            - label=solve_ivp+DOP853, stepping=0
+            - label=solve_ivp+LSODA, stepping=0
+            - label=solve_ivp+RK45, stepping=0
+            - label=solve_ivp+Radau, stepping=0
+
+   -- Models
+      @@ ExponentialModel (sharded): 8 records | committed between Fri 20 Nov 2026 18:12:21 and Fri 20 Nov 2026 18:16:13
+            - M=2.4353e-06 eV, beta=2, n_value=1
+            - M=0.00097413 eV, beta=1.2, n_value=1
+            - M=0.00097413 eV, beta=2, n_value=1
+            - M=0.00097413 eV, beta=2.9, n_value=1
+            - M=2.4353e+12 eV, beta=2, n_value=1
+            - M=2.4353e+24 eV, beta=1.2, n_value=1
+            - M=2.4353e+24 eV, beta=2, n_value=1
+            - M=2.4353e+24 eV, beta=2.9, n_value=1
+      @@ InversePowerModel (sharded): 0 records
+
+   -- Compute targets
+      @@ ScalarHistory (sharded): 20 records: 20 validated, 0 unvalidated; 109,052 ScalarHistoryValue rows | committed between Fri 20 Nov 2026 18:12:34 and Fri 20 Nov 2026 18:16:22
+         common to every history: cosmology=QCD_Cosmology(omega_m=0.3111, omega_cc=0.6889, h=0.6766, f_baryon=0.15817, T_CMB_Kelvin=2.7255, Neff=3.046), log10_atol=-8, log10_rtol=-8, log10_tuning_tol=-5
+         validated: 20 records; version = 2026.14.0
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,003
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=10 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            ... 0 records not shown (--show-all shows every one) ...
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.01  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.1  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=10 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,926
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2)  tags: SamplesPerLog10Z_250  | values: 5,437
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 4,998
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 5,431
+            - T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, alpha=0  tags: SamplesPerLog10Z_250  | values: 5,919
+         unvalidated: none
+      @@ AdiabaticHistory (sharded): 20 records: 20 validated, 0 unvalidated; 109,052 AdiabaticHistoryValue rows | committed between Fri 20 Nov 2026 18:12:37 and Fri 20 Nov 2026 18:16:24
+         validated: 20 records; version = 2026.14.0
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,003
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            ... 0 records not shown (--show-all shows every one) ...
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,926
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,437
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 4,998
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,431
+            - history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 5,919
+         unvalidated: none
+      @@ BBNData (sharded): 20 records: 20 validated, 0 unvalidated; 29,768 BBNDataValue rows | committed between Fri 20 Nov 2026 18:12:47 and Fri 20 Nov 2026 18:16:34
+         validated: 20 records; version = 2026.14.0
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e-06 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,483
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,510
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,505
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,506
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=1.2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,510
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,478
+            ... 0 records not shown (--show-all shows every one) ...
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.01, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, alpha=0.1, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,479
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=10 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,478
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=0.00097413 eV, beta=2.9, n_value=1), failure=False, A=0.05 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,481
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+12 eV, beta=2, n_value=1), failure=False, A=1 (one-loop-exponential-v2), tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=1.2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,509
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,487
+            - failure=False, PRyM_version=bf24c3d+ri02+sr01+bt02, history: {T_init=20000 GeV, phiE_init=5 PlanckMass, piE_init=0 PlanckMass, model=ExponentialModel(M=2.4353e+24 eV, beta=2.9, n_value=1), failure=False, alpha=0, tags=[SamplesPerLog10Z_250]}  tags: SamplesPerLog10Z_250  | values: 1,480
+         unvalidated: none
+>> 2026-11-20 23:56:56 disk: 152 GB free before the exports of wall exp (needs 20)
+>> 2026-11-20 23:56:56 plot_by_beta (exp)
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-20 23:56:58,855	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-20 23:56:58,905	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-p1-exp.db" read-only with 16 shards (version label "2026.14.0", serial 1)
+!! plot: no ExponentialModel stored for M=2.435323596e-06 eV, n=1, β=1.2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e-06 eV, n=1, β=2.9; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+12 eV, n=1, β=1.2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+12 eV, n=1, β=2.9; no history can use it; skipped
+!! plot: 4 of 12 ExponentialModel combinations of the stored M and β are not stored, and were skipped
+[36m(Datastore pid=95067)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ plot_by_beta: SM baseline (rho_NP = 0, PRyM_version=bf24c3d+ri02+sr01+bt02, small_network=True): Yp=0.24688, D/H x1e5=2.45829, 3He/H x1e5=1.04193, 7Li/H x1e10=5.48637
+@@ plot_by_beta: alpha values 0, 0.01, 0.1
+@@ plot_by_beta: A values 0.05, 1, 10 (one-loop-exponential-v2)
+@@ plot_by_beta: exponential (ExponentialModel): 8 model(s), exported under /Users/ds283/Documents/Code/ChamPBH/var/science-2026.14.0/probe/export-test/out/exp/QCD_Cosmology/exponential
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e-06 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+12 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e+12 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95122)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1, alpha=0: no valid BBN data to plot
+[36m(build_beta_plot pid=95121)[0m @@ build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1: no models used elastic reflections (3 model(s) checked)
+   -- ALL WORK ITEMS COMPLETE in time 3.87s
+      Queue summary: 4 lookup (avg 62.06/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e-06 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+12 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e+12 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95121)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 3 of 3 model(s) used elastic reflections
+[36m(build_beta_plot pid=95121)[0m      -- beta=1.2, M=0.00097413 eV, n=1: 5 reflection(s)
+[36m(build_beta_plot pid=95121)[0m      -- beta=2, M=0.00097413 eV, n=1: 85 reflection(s)
+[36m(build_beta_plot pid=95121)[0m      -- beta=2.9, M=0.00097413 eV, n=1: 55 reflection(s)
+   -- ALL WORK ITEMS COMPLETE in time 1.14s
+      Queue summary: 4 lookup (avg 210.7/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e-06 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+12 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e+12 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95121)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 3 of 3 model(s) used elastic reflections
+[36m(build_beta_plot pid=95121)[0m      -- beta=1.2, M=0.00097413 eV, n=1: 9 reflection(s)
+[36m(build_beta_plot pid=95121)[0m      -- beta=2, M=0.00097413 eV, n=1: 49 reflection(s)
+[36m(build_beta_plot pid=95121)[0m      -- beta=2.9, M=0.00097413 eV, n=1: 42 reflection(s)
+   -- ALL WORK ITEMS COMPLETE in time 1.21s
+      Queue summary: 4 lookup (avg 198.2/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-exponential-v2)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e-06 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+12 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e+12 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95121)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 3 of 3 model(s) used elastic reflections
+[36m(build_beta_plot pid=95121)[0m      -- beta=1.2, M=0.00097413 eV, n=1: 144 reflection(s)
+[36m(build_beta_plot pid=95121)[0m      -- beta=2, M=0.00097413 eV, n=1: 39 reflection(s)
+[36m(build_beta_plot pid=95121)[0m      -- beta=2.9, M=0.00097413 eV, n=1: 116 reflection(s)
+   -- ALL WORK ITEMS COMPLETE in time 1.17s
+      Queue summary: 4 lookup (avg 205.9/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-exponential-v2)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95122)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1, A=1 (one-loop-exponential-v2): no valid BBN data to plot[32m [repeated 12x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[36m(build_beta_plot pid=95121)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 of 1 model(s) used elastic reflections
+[36m(build_beta_plot pid=95121)[0m      -- beta=2, M=2.4353e-06 eV, n=1: 47 reflection(s)
+   -- ALL WORK ITEMS COMPLETE in time 1.69s
+      Queue summary: 4 lookup (avg 142.4/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-exponential-v2)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e-06 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+12 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e+12 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95123)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 3 of 3 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=95123)[0m      -- beta=2.9, M=0.00097413 eV, n=1: 8 reflection(s)[32m [repeated 7x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 1.12s
+      Queue summary: 4 lookup (avg 215/min)
+      (no compute items were evaluated - all assets read from datastore)
+@@ plot_Delta_N_eff: left out (NULL or not positive): 4 from the T_CMB panel, 4 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 0 from the T_CMB panel, 0 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 4 from the T_CMB panel, 4 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 15 from the T_CMB panel, 15 from the 1 MeV panel
+[36m(build_beta_plot pid=95124)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1, A=10 (one-loop-exponential-v2): no valid BBN data to plot[32m [repeated 3x across cluster][0m
+>> 2026-11-20 23:57:26 plot_ScalarHistory --no-plots (exp, one-loop rows)
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-20 23:57:28,187	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-20 23:57:28,234	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-p1-exp.db" read-only with 16 shards (version label "2026.14.0", serial 1)
+!! plot: no ExponentialModel stored for M=2.435323596e-06 eV, n=1, β=1.2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e-06 eV, n=1, β=2.9; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+12 eV, n=1, β=1.2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+12 eV, n=1, β=2.9; no history can use it; skipped
+!! plot: 4 of 12 ExponentialModel combinations of the stored M and β are not stored, and were skipped
+@@ plot_ScalarHistory: no alpha values (--no-alpha-values): no fixed-law row is read
+@@ plot_ScalarHistory: A values 0.05, 1, 10 (one-loop-exponential-v2)
+@@ plot_ScalarHistory: exponential (ExponentialModel): 8 model(s), exported under /Users/ds283/Documents/Code/ChamPBH/var/science-2026.14.0/probe/export-test/out/exp/QCD_Cosmology/exponential
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-exponential-v2)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(Datastore pid=95182)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(plot_ScalarHistory pid=95207)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=2.4353e-06eV,n=1,beta=2) is not available; skipping this item
+   -- ALL WORK ITEMS COMPLETE in time 3.11s
+      Queue summary: 8 lookup (avg 154.2/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-exponential-v2)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+   -- ALL WORK ITEMS COMPLETE in time 1.01s
+      Queue summary: 8 lookup (avg 474.2/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-exponential-v2)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+   -- ALL WORK ITEMS COMPLETE in time 0.698s
+      Queue summary: 8 lookup (avg 11.46/sec)
+      (no compute items were evaluated - all assets read from datastore)
+[36m(plot_ScalarHistory pid=95220)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.001Mp,n=1,beta=2.9) is not available; skipping this item[32m [repeated 12x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+>> 2026-11-20 23:57:39 plot_ScalarHistory (exp-reflections)
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-20 23:57:41,764	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-20 23:57:41,811	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-p1-exp.db" read-only with 16 shards (version label "2026.14.0", serial 1)
+!! plot: no ExponentialModel stored for M=2.435323596e-06 eV, n=1, β=1.2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e-06 eV, n=1, β=2.9; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+12 eV, n=1, β=1.2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+12 eV, n=1, β=2.9; no history can use it; skipped
+!! plot: 4 of 12 ExponentialModel combinations of the stored M and β are not stored, and were skipped
+@@ plot_ScalarHistory: alpha values 0, 0.01, 0.1
+@@ plot_ScalarHistory: A values 0.05, 1, 10 (one-loop-exponential-v2)
+@@ plot_ScalarHistory: exponential (ExponentialModel): 8 model(s), exported under /Users/ds283/Documents/Code/ChamPBH/var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(Datastore pid=95276)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(plot_ScalarHistory pid=95291)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=2.4353e-06eV,n=1,beta=2) is not available; skipping this item
+[36m(plot_ScalarHistory pid=95292)[0m @@ plot_dark_radiation: alpha = 0, no dark radiation to plot; figure skipped
+   -- ALL WORK ITEMS COMPLETE in time 5.78s
+      Queue summary: 8 lookup (avg 83.06/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** GENERATING ScalarHistory DATA PRODUCTS
+   -- ALL WORK ITEMS COMPLETE in time 3.44s
+      Queue summary: 8 lookup (avg 139.6/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(plot_ScalarHistory pid=95292)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=2.4353e-06eV,n=1,beta=2) is not available; skipping this item[32m [repeated 10x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+   -- ALL WORK ITEMS COMPLETE in time 3.44s
+      Queue summary: 8 lookup (avg 139.5/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-exponential-v2)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(plot_ScalarHistory pid=95310)[0m @@ plot_dark_radiation: alpha = 0, no dark radiation to plot; figure skipped[32m [repeated 2x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 3.52s
+      Queue summary: 8 lookup (avg 136.3/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-exponential-v2)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+[36m(plot_ScalarHistory pid=95296)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.001Mp,n=1,beta=1.2) is not available; skipping this item[32m [repeated 10x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 4.18s
+      Queue summary: 8 lookup (avg 114.9/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-exponential-v2)
+
+** GENERATING ScalarHistory DATA PRODUCTS
+   -- ALL WORK ITEMS COMPLETE in time 3.62s
+      Queue summary: 8 lookup (avg 132.5/min)
+      (no compute items were evaluated - all assets read from datastore)
+[36m(plot_ScalarHistory pid=95297)[0m @@ plot_ScalarHistory: scalar field history for Model=ExponentialModel(M=0.001Mp,n=1,beta=2.9) is not available; skipping this item[32m [repeated 7x across cluster][0m
+>> 2026-11-20 23:58:12 plot_by_beta (exp-reflections)
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-20 23:58:14,743	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-20 23:58:14,791	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-p1-exp.db" read-only with 16 shards (version label "2026.14.0", serial 1)
+!! plot: no ExponentialModel stored for M=2.435323596e-06 eV, n=1, β=1.2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e-06 eV, n=1, β=2.9; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+12 eV, n=1, β=1.2; no history can use it; skipped
+!! plot: no ExponentialModel stored for M=2.435323596e+12 eV, n=1, β=2.9; no history can use it; skipped
+!! plot: 4 of 12 ExponentialModel combinations of the stored M and β are not stored, and were skipped
+[36m(Datastore pid=95341)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ plot_by_beta: SM baseline (rho_NP = 0, PRyM_version=bf24c3d+ri02+sr01+bt02, small_network=True): Yp=0.24688, D/H x1e5=2.45829, 3He/H x1e5=1.04193, 7Li/H x1e10=5.48637
+@@ plot_by_beta: alpha values 0, 0.01, 0.1
+@@ plot_by_beta: A values 0.05, 1, 10 (one-loop-exponential-v2)
+@@ plot_by_beta: exponential (ExponentialModel): 8 model(s), exported under /Users/ds283/Documents/Code/ChamPBH/var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e-06 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=0.00097413 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+12 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e+12 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95393)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-06 eV, n=1, alpha=0: no valid BBN data to plot
+[36m(build_beta_plot pid=95390)[0m @@ build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1: no models used elastic reflections (3 model(s) checked)
+   -- ALL WORK ITEMS COMPLETE in time 3.47s
+      Queue summary: 4 lookup (avg 69.07/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e-06 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+12 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e+12 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95390)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 3 of 3 model(s) used elastic reflections
+[36m(build_beta_plot pid=95390)[0m      -- beta=1.2, M=0.00097413 eV, n=1: 5 reflection(s)
+[36m(build_beta_plot pid=95390)[0m      -- beta=2, M=0.00097413 eV, n=1: 85 reflection(s)
+[36m(build_beta_plot pid=95390)[0m      -- beta=2.9, M=0.00097413 eV, n=1: 55 reflection(s)
+   -- ALL WORK ITEMS COMPLETE in time 1.13s
+      Queue summary: 4 lookup (avg 212.8/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e-06 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+12 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e+12 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95390)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 3 of 3 model(s) used elastic reflections
+[36m(build_beta_plot pid=95390)[0m      -- beta=1.2, M=0.00097413 eV, n=1: 9 reflection(s)
+[36m(build_beta_plot pid=95390)[0m      -- beta=2, M=0.00097413 eV, n=1: 49 reflection(s)
+[36m(build_beta_plot pid=95390)[0m      -- beta=2.9, M=0.00097413 eV, n=1: 42 reflection(s)
+   -- ALL WORK ITEMS COMPLETE in time 1.21s
+      Queue summary: 4 lookup (avg 197.8/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-exponential-v2)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e-06 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+12 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e+12 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95390)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 3 of 3 model(s) used elastic reflections
+[36m(build_beta_plot pid=95390)[0m      -- beta=1.2, M=0.00097413 eV, n=1: 144 reflection(s)
+[36m(build_beta_plot pid=95390)[0m      -- beta=2, M=0.00097413 eV, n=1: 39 reflection(s)
+[36m(build_beta_plot pid=95390)[0m      -- beta=2.9, M=0.00097413 eV, n=1: 116 reflection(s)
+   -- ALL WORK ITEMS COMPLETE in time 1.18s
+      Queue summary: 4 lookup (avg 203/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-exponential-v2)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95391)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1, A=1 (one-loop-exponential-v2): no valid BBN data to plot[32m [repeated 12x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[36m(build_beta_plot pid=95390)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 of 1 model(s) used elastic reflections
+[36m(build_beta_plot pid=95390)[0m      -- beta=2, M=2.4353e-06 eV, n=1: 47 reflection(s)
+   -- ALL WORK ITEMS COMPLETE in time 1.61s
+      Queue summary: 4 lookup (avg 149.3/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-exponential-v2)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e-06 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+12 eV, n=1: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=2, M=2.4353e+12 eV, n=1: no ScalarHistory row in the store
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e+24 eV, n=1: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=1.2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+     -- beta=2.9, M=2.4353e+24 eV, n=1: no ScalarHistory row in the store
+[36m(build_beta_plot pid=95392)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=1: 3 of 3 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=95392)[0m      -- beta=2.9, M=0.00097413 eV, n=1: 8 reflection(s)[32m [repeated 7x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 1.1s
+      Queue summary: 4 lookup (avg 218.8/min)
+      (no compute items were evaluated - all assets read from datastore)
+@@ plot_Delta_N_eff: left out (NULL or not positive): 4 from the T_CMB panel, 4 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 0 from the T_CMB panel, 0 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 4 from the T_CMB panel, 4 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 15 from the T_CMB panel, 15 from the 1 MeV panel
+[36m(build_beta_plot pid=95393)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e+24 eV, n=1, A=10 (one-loop-exponential-v2): no valid BBN data to plot[32m [repeated 3x across cluster][0m
+>> 2026-11-20 23:58:40 quanta_measures exp --assoc-scale 1
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=1.2: generations 144; drains without spectrum 0; leftover after the last candidate; K bitwise 143/143; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 1.442 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.0: generations 39; drains without spectrum 0; leftover after the last candidate; K bitwise 38/38; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.135 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.9: generations 116; drains without spectrum 0; leftover after the last candidate; K bitwise 115/115; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.146 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-33 n=1 beta=2.0: generations 47; drains without spectrum 0; leftover after the last candidate; K bitwise 46/46; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.136 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=1.2: generations 21; drains without spectrum 0; leftover after the last candidate; K bitwise 20/20; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.127 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.0: generations 46; drains without spectrum 0; leftover after the last candidate; K bitwise 45/45; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.137 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.9: generations 41; drains without spectrum 0; leftover after the last candidate; K bitwise 40/40; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.145 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-15 n=1 beta=2.0: generations 27; drains without spectrum 0; leftover after the last candidate; K bitwise 27/27; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.131 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=1.2: generations 7; drains without spectrum 0; leftover after the last candidate; K bitwise 6/6; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.127 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.0: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.133 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.9: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.144 s
+quanta_measures (R8-exponential-v2, assoc scale 1): measured 11, skipped as fixed-law 24, failed histories 13, missing files 0, refused 0, failed the K check 0; wall 3.2 s
+>> 2026-11-20 23:58:45 quanta_measures exp --assoc-scale 0
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=1.2: generations 144; drains without spectrum 0; leftover after the last candidate; K bitwise 143/143; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 1.440 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.0: generations 39; drains without spectrum 0; leftover after the last candidate; K bitwise 38/38; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.134 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.9: generations 116; drains without spectrum 0; leftover after the last candidate; K bitwise 115/115; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.149 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-33 n=1 beta=2.0: generations 47; drains without spectrum 0; leftover after the last candidate; K bitwise 46/46; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.140 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=1.2: generations 21; drains without spectrum 0; leftover after the last candidate; K bitwise 20/20; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.126 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.0: generations 46; drains without spectrum 0; leftover after the last candidate; K bitwise 45/45; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.138 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.9: generations 41; drains without spectrum 0; leftover after the last candidate; K bitwise 40/40; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.142 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-15 n=1 beta=2.0: generations 27; drains without spectrum 0; leftover after the last candidate; K bitwise 27/27; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.132 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=1.2: generations 7; drains without spectrum 0; leftover after the last candidate; K bitwise 6/6; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.127 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.0: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.133 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.9: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.139 s
+quanta_measures (R8-exponential-v2, assoc scale 0): measured 11, skipped as fixed-law 24, failed histories 13, missing files 0, refused 0, failed the K check 0; wall 3.2 s
+>> 2026-11-20 23:58:50 quanta_measures exp --assoc-scale 10
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=1.2: generations 144; drains without spectrum 0; leftover after the last candidate; K bitwise 143/143; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 1.453 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.0: generations 39; drains without spectrum 0; leftover after the last candidate; K bitwise 38/38; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.137 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.9: generations 116; drains without spectrum 0; leftover after the last candidate; K bitwise 115/115; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.147 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-33 n=1 beta=2.0: generations 47; drains without spectrum 0; leftover after the last candidate; K bitwise 46/46; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.139 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=1.2: generations 21; drains without spectrum 0; leftover after the last candidate; K bitwise 20/20; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.126 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.0: generations 46; drains without spectrum 0; leftover after the last candidate; K bitwise 45/45; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.137 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.9: generations 41; drains without spectrum 0; leftover after the last candidate; K bitwise 40/40; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.144 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-15 n=1 beta=2.0: generations 27; drains without spectrum 0; leftover after the last candidate; K bitwise 27/27; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.131 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=1.2: generations 7; drains without spectrum 0; leftover after the last candidate; K bitwise 6/6; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.126 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.0: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.137 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.9: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.140 s
+quanta_measures (R8-exponential-v2, assoc scale 10): measured 11, skipped as fixed-law 24, failed histories 13, missing files 0, refused 0, failed the K check 0; wall 3.3 s
+>> 2026-11-20 23:58:55 quanta_measures exp-reflections --assoc-scale 1
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=1.2: generations 144; drains without spectrum 0; leftover after the last candidate; K bitwise 143/143; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 1.504 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.0: generations 39; drains without spectrum 0; leftover after the last candidate; K bitwise 38/38; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.140 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.9: generations 116; drains without spectrum 0; leftover after the last candidate; K bitwise 115/115; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.153 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-33 n=1 beta=2.0: generations 47; drains without spectrum 0; leftover after the last candidate; K bitwise 46/46; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.139 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=1.2: generations 21; drains without spectrum 0; leftover after the last candidate; K bitwise 20/20; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.131 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.0: generations 46; drains without spectrum 0; leftover after the last candidate; K bitwise 45/45; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.138 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.9: generations 41; drains without spectrum 0; leftover after the last candidate; K bitwise 40/40; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.148 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-15 n=1 beta=2.0: generations 27; drains without spectrum 0; leftover after the last candidate; K bitwise 27/27; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.137 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=1.2: generations 7; drains without spectrum 0; leftover after the last candidate; K bitwise 6/6; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.129 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.0: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.131 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.9: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.139 s
+quanta_measures (R8-exponential-v2, assoc scale 1): measured 11, skipped as fixed-law 24, failed histories 13, missing files 0, refused 0, failed the K check 0; wall 3.3 s
+>> 2026-11-20 23:59:00 quanta_measures exp-reflections --assoc-scale 0
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=1.2: generations 144; drains without spectrum 0; leftover after the last candidate; K bitwise 143/143; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 1.512 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.0: generations 39; drains without spectrum 0; leftover after the last candidate; K bitwise 38/38; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.141 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.9: generations 116; drains without spectrum 0; leftover after the last candidate; K bitwise 115/115; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.154 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-33 n=1 beta=2.0: generations 47; drains without spectrum 0; leftover after the last candidate; K bitwise 46/46; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.139 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=1.2: generations 21; drains without spectrum 0; leftover after the last candidate; K bitwise 20/20; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.130 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.0: generations 46; drains without spectrum 0; leftover after the last candidate; K bitwise 45/45; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.140 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.9: generations 41; drains without spectrum 0; leftover after the last candidate; K bitwise 40/40; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.141 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-15 n=1 beta=2.0: generations 27; drains without spectrum 0; leftover after the last candidate; K bitwise 27/27; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.131 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=1.2: generations 7; drains without spectrum 0; leftover after the last candidate; K bitwise 6/6; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.127 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.0: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.136 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.9: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.143 s
+quanta_measures (R8-exponential-v2, assoc scale 0): measured 11, skipped as fixed-law 24, failed histories 13, missing files 0, refused 0, failed the K check 0; wall 3.3 s
+>> 2026-11-20 23:59:05 quanta_measures exp-reflections --assoc-scale 10
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=1.2: generations 144; drains without spectrum 0; leftover after the last candidate; K bitwise 143/143; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 1.460 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.0: generations 39; drains without spectrum 0; leftover after the last candidate; K bitwise 38/38; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.135 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.9: generations 116; drains without spectrum 0; leftover after the last candidate; K bitwise 115/115; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.147 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-33 n=1 beta=2.0: generations 47; drains without spectrum 0; leftover after the last candidate; K bitwise 46/46; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.136 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=1.2: generations 21; drains without spectrum 0; leftover after the last candidate; K bitwise 20/20; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.128 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.0: generations 46; drains without spectrum 0; leftover after the last candidate; K bitwise 45/45; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.139 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.9: generations 41; drains without spectrum 0; leftover after the last candidate; K bitwise 40/40; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.146 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-15 n=1 beta=2.0: generations 27; drains without spectrum 0; leftover after the last candidate; K bitwise 27/27; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.133 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=1.2: generations 7; drains without spectrum 0; leftover after the last candidate; K bitwise 6/6; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.131 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.0: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 2.84e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.136 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.9: generations 8; drains without spectrum 0; leftover after the last candidate; K bitwise 7/7; K check 1.42e-14; K(N) = 0 with a generation born 0; between N_turn and N 0; wall 0.142 s
+quanta_measures (R8-exponential-v2, assoc scale 10): measured 11, skipped as fixed-law 24, failed histories 13, missing files 0, refused 0, failed the K check 0; wall 3.3 s
+>> 2026-11-20 23:59:10 plot_quanta_grid (exp)
+plot_quanta_grid: histories.csv rows: fixed 24, marker 13, failed 0, drawn 11
+one-loop-exponential-v2 A=0.05: drawn 3, failed 0, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 3, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote var/science-2026.14.0/probe/export-test/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.05/plots/quanta_grid.pdf var/science-2026.14.0/probe/export-test/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.05/plots/quanta_grid.png; wall 1.36 s
+one-loop-exponential-v2 A=1: drawn 5, failed 0, no quanta row 0; blank cells [a 0, b 0, c 0, d 1, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 4, c 0, h 0, i 0, j 0]; degenerate colour range [(b) one]; wrote var/science-2026.14.0/probe/export-test/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/quanta_grid.pdf var/science-2026.14.0/probe/export-test/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/quanta_grid.png; wall 1.23 s
+one-loop-exponential-v2 A=10: drawn 3, failed 0, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 3, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote var/science-2026.14.0/probe/export-test/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=10/plots/quanta_grid.pdf var/science-2026.14.0/probe/export-test/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=10/plots/quanta_grid.png; wall 1.06 s
+plot_quanta_grid (R8-exponential-v2, assoc scale 1): figures written 3, refused 0, A with no drawn or failed row 0; skipped as fixed-law 24, marker rows 13; wall 3.7 s
+>> 2026-11-20 23:59:16 plot_quanta_history (exp-reflections)
+plot_quanta_history: histories.csv rows: fixed 24, marker 13, failed 0, drawn 11; selected 11
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=1.2: generations 144; bounce rows 287; alpha_eff drawn 144, undrawn 0; fraction drawn 144, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 1918; parking_fraction 2120; r_chi 1918; n_bar 1; backreaction_ratio 1]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.05/plots/beta=1.2/M=0.00097413eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.05/plots/beta=1.2/M=0.00097413eV_n=1/quanta_history.png; wall 0.96 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.0: generations 39; bounce rows 77; alpha_eff drawn 39, undrawn 0; fraction drawn 39, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 2209; parking_fraction 1481; r_chi 2209; n_bar 1; backreaction_ratio 1]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.05/plots/beta=2/M=0.00097413eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.05/plots/beta=2/M=0.00097413eV_n=1/quanta_history.png; wall 0.90 s
+one-loop-exponential-v2 A=0.05 M_Mp=4e-31 n=1 beta=2.9: generations 116; bounce rows 231; alpha_eff drawn 116, undrawn 0; fraction drawn 116, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 2594; parking_fraction 1228; r_chi 2594; n_bar 1; backreaction_ratio 1]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.05/plots/beta=2.9/M=0.00097413eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.05/plots/beta=2.9/M=0.00097413eV_n=1/quanta_history.png; wall 0.92 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-33 n=1 beta=2.0: generations 47; bounce rows 93; alpha_eff drawn 47, undrawn 0; fraction drawn 47, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 2209; parking_fraction 981; r_chi 2209; n_bar 1; backreaction_ratio 1]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/beta=2/M=2.4353e-06eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/beta=2/M=2.4353e-06eV_n=1/quanta_history.png; wall 0.87 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=1.2: generations 21; bounce rows 41; alpha_eff drawn 21, undrawn 0; fraction drawn 21, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 1918; parking_fraction 1926; r_chi 1918; n_bar 1; backreaction_ratio 1]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/beta=1.2/M=0.00097413eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/beta=1.2/M=0.00097413eV_n=1/quanta_history.png; wall 0.95 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.0: generations 46; bounce rows 91; alpha_eff drawn 46, undrawn 0; fraction drawn 46, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 2209; parking_fraction 1023; r_chi 2209; n_bar 1; backreaction_ratio 1]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/beta=2/M=0.00097413eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/beta=2/M=0.00097413eV_n=1/quanta_history.png; wall 0.96 s
+one-loop-exponential-v2 A=1.0 M_Mp=4e-31 n=1 beta=2.9: generations 41; bounce rows 81; alpha_eff drawn 41, undrawn 0; fraction drawn 41, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 2594; parking_fraction 901; r_chi 2594; n_bar 1; backreaction_ratio 1]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/beta=2.9/M=0.00097413eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/beta=2.9/M=0.00097413eV_n=1/quanta_history.png; wall 0.89 s
+one-loop-exponential-v2 A=1.0 M_Mp=1e-15 n=1 beta=2.0: generations 27; bounce rows 55; alpha_eff drawn 27, undrawn 1; fraction drawn 27, undrawn dK=0 1, K_before blank 0; zeros not drawn [K/K_final 2324; parking_fraction 1071; r_chi 2324; n_bar 1; backreaction_ratio 2]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/beta=2/M=2.4353e+12eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/beta=2/M=2.4353e+12eV_n=1/quanta_history.png; wall 0.86 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=1.2: generations 7; bounce rows 13; alpha_eff drawn 7, undrawn 0; fraction drawn 7, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 1918; parking_fraction 173; r_chi 1918; n_bar 1; backreaction_ratio 1]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=10/plots/beta=1.2/M=0.00097413eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=10/plots/beta=1.2/M=0.00097413eV_n=1/quanta_history.png; wall 0.84 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.0: generations 8; bounce rows 15; alpha_eff drawn 8, undrawn 0; fraction drawn 8, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 2209; parking_fraction 118; r_chi 2209; n_bar 1; backreaction_ratio 1]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=10/plots/beta=2/M=0.00097413eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=10/plots/beta=2/M=0.00097413eV_n=1/quanta_history.png; wall 0.86 s
+one-loop-exponential-v2 A=10.0 M_Mp=4e-31 n=1 beta=2.9: generations 8; bounce rows 15; alpha_eff drawn 8, undrawn 0; fraction drawn 8, undrawn dK=0 0, K_before blank 0; zeros not drawn [K/K_final 2594; parking_fraction 120; r_chi 2594; n_bar 1; backreaction_ratio 1]; wrote var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=10/plots/beta=2.9/M=0.00097413eV_n=1/quanta_history.pdf var/science-2026.14.0/probe/export-test/out/exp-reflections/QCD_Cosmology/exponential/one-loop-exponential-v2/A=10/plots/beta=2.9/M=0.00097413eV_n=1/quanta_history.png; wall 0.97 s
+plot_quanta_history (R8-exponential-v2, assoc scale 1): figures written 11, refused 0, no quanta files 0; skipped as fixed-law 24, marker rows 13, failed histories 0; wall 10.0 s
+>> 2026-11-20 23:59:28 gzip fields.csv (exp)
+>> 2026-11-20 23:59:29 wall exp done:  44M main, 128M reflections
+>> 2026-11-20 23:59:29 science-2026.14.0 done

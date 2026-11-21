@@ -1,0 +1,138 @@
+>> 2026-11-20 20:53:30 probe-pl-M1e-42
+** registered_run: registered as science-2026.14.0-Q-probe-pl-M1e-42-20261120T205331
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/science-2026.14.0-Q-probe-pl-M1e-42-20261120T205331/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-20 20:53:32,022	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-20 20:53:32,067	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-probe-pl.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model InversePowerModel, V = V0 [1 + (M/phi)^n], with n = [ 1, 2 ]
+   -- populated beta sample grid with 12 values = [ 0.5, 1, 1.1, 1.2, 1.5, 2, 2.9, 2.975, 3, 3.04, 5, 20 ]
+   -- populated M sample grid with 1 value = [ 2.4353e-15 eV ]
+   -- populated alpha grid with 1 value = [ 0.01 ]
+   -- populated A grid with 3 values = [ 0.05, 1, 10 ] (one-loop-inverse-power-v1)
+   -- total number of models to integrate = 24
+!! warning: beta=20, M=1e-42 M_P, n=1, phi*=5 M_P: Omega(phi*) T* = 2.2076e+29 M_P (super-Planckian start), with Omega at the seed's phi_ref = 3.3272e-22 M_P (tracking seed)
+!! warning: beta=20, M=1e-42 M_P, n=2, phi*=5 M_P: Omega(phi*) T* = 2.2076e+29 M_P (super-Planckian start), with Omega at the seed's phi_ref = 6.0497e-29 M_P (tracking seed)
+!! warning: 2 of 24 models start super-Planckian at the seed's phi_ref; they are computed like the others. The tuned phi_ref differs from the seed's, moving ln Omega(phi*) by -beta (phi_ref - phi_ref_seed)/M_P, in size up to 1.4e-3 at M = 1e-3 M_P with beta <= 5.5, 6.5e-3 at beta = 25, and up to 1.0 at M = 0.5 M_P from a static seed (jordan-normalization prompt 06's points)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=78739)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(compute_scalar_history pid=78786)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=0.5)-2026-11-20T20:53:45): the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=1,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+[36m(compute_scalar_history pid=78803)[0m !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20))
+[36m(compute_scalar_history pid=78803)[0m -- integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:53:48): integration failure
+[36m(compute_scalar_history pid=78803)[0m    !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20))
+[36m(compute_scalar_history pid=78803)[0m !! integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:53:48): marked as total integration failure
+[36m(compute_scalar_history pid=78803)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:53:48): !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+[36m(compute_scalar_history pid=78787)[0m    classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0)
+[36m(compute_scalar_history pid=78787)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:53:49): classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)
+[36m(compute_scalar_history pid=78787)[0m -- integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:53:49): integration failure
+[36m(compute_scalar_history pid=78787)[0m !! integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:53:49): marked as total integration failure
+[36m(compute_scalar_history pid=78787)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=0.5)-2026-11-20T20:53:49): the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+   -- ALL WORK ITEMS COMPLETE in time 1m 46.4s
+      Queue summary: 24 lookup (avg 13.53/min), 24 compute (avg 13.53/min), 24 store (avg 13.53/min), 24 validation (avg 13.53/min)
+-- ScalarHistory: 4 histories failed in this run
+     -- 2 x the effective minimum was not found
+     -- 1 x !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+     -- 1 x classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 2.57s
+      Queue summary: 20 lookup (avg 467.5/min), 20 compute (avg 467.5/min), 20 store (avg 467.5/min), 20 validation (avg 467.5/min)
+-- AdiabaticHistory: 4 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 27.4s
+      Queue summary: 20 lookup (avg 43.84/min), 20 compute (avg 43.84/min), 20 store (avg 43.84/min), 20 validation (avg 43.84/min)
+-- BBNData: 4 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-inverse-power-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=78800)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=0.5)-2026-11-20T20:56:01): the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [4.19835e-05, 0.0167934] (values 1.64108e-121, 1.65489e-121) (tuning integration 0)
+[36m(compute_scalar_history pid=78800)[0m !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20))
+[36m(compute_scalar_history pid=78800)[0m -- integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:56:03): integration failure
+[36m(compute_scalar_history pid=78800)[0m    !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20))
+[36m(compute_scalar_history pid=78800)[0m !! integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:56:03): marked as total integration failure
+[36m(compute_scalar_history pid=78800)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:56:03): !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+[36m(compute_scalar_history pid=78803)[0m    classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0)
+[36m(compute_scalar_history pid=78803)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:56:04): classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)
+[36m(compute_scalar_history pid=78803)[0m -- integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:56:04): integration failure
+[36m(compute_scalar_history pid=78803)[0m !! integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:56:04): marked as total integration failure
+[36m(compute_scalar_history pid=78791)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=0.5)-2026-11-20T20:56:04): the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=1,beta=0.5)): V_eff' does not change sign on the bracket [3.12541e-05, 0.0125016] (values 1.64055e-121, 1.65081e-121) (tuning integration 0)
+   -- ALL WORK ITEMS COMPLETE in time 1m 43.5s
+      Queue summary: 24 lookup (avg 13.91/min), 24 compute (avg 13.91/min), 24 store (avg 13.91/min), 24 validation (avg 13.91/min)
+-- ScalarHistory: 4 histories failed in this run
+     -- 2 x the effective minimum was not found
+     -- 1 x !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+     -- 1 x classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 2.54s
+      Queue summary: 20 lookup (avg 471.9/min), 20 compute (avg 471.9/min), 20 store (avg 471.9/min), 20 validation (avg 471.9/min)
+-- AdiabaticHistory: 4 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 26.3s
+      Queue summary: 20 lookup (avg 45.68/min), 20 compute (avg 45.68/min), 20 store (avg 45.68/min), 20 validation (avg 45.68/min)
+-- BBNData: 4 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-inverse-power-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=78802)[0m -- integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:58:14): integration failure
+[36m(compute_scalar_history pid=78802)[0m !! integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:58:14): marked as total integration failure
+[36m(compute_scalar_history pid=78802)[0m    classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0)
+[36m(compute_scalar_history pid=78802)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:58:14): classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)
+[36m(compute_scalar_history pid=78790)[0m !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20))
+[36m(compute_scalar_history pid=78790)[0m    !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20))
+[36m(compute_scalar_history pid=78790)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:58:18): !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+[36m(compute_scalar_history pid=78790)[0m -- integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:58:18): integration failure
+[36m(compute_scalar_history pid=78790)[0m !! integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:58:18): marked as total integration failure
+   -- ALL WORK ITEMS COMPLETE in time 37.5s
+      Queue summary: 24 lookup (avg 38.43/min), 24 compute (avg 38.43/min), 24 store (avg 38.43/min), 24 validation (avg 38.43/min)
+-- ScalarHistory: 2 histories failed in this run
+     -- 1 x !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+     -- 1 x classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 2.8s
+      Queue summary: 22 lookup (avg 472.1/min), 22 compute (avg 472.1/min), 22 store (avg 472.1/min), 22 validation (avg 472.1/min)
+-- AdiabaticHistory: 2 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 25.9s
+      Queue summary: 22 lookup (avg 51.04/min), 22 compute (avg 51.04/min), 22 store (avg 51.04/min), 22 validation (avg 51.04/min)
+-- BBNData: 2 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-inverse-power-v1)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=78800)[0m -- integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:59:21): integration failure
+[36m(compute_scalar_history pid=78800)[0m !! integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:59:21): marked as total integration failure
+[36m(compute_scalar_history pid=78800)[0m    !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20))[32m [repeated 2x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[36m(compute_scalar_history pid=78800)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=2,beta=20)-2026-11-20T20:59:21): !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+[36m(compute_scalar_history pid=78790)[0m    classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0)
+[36m(compute_scalar_history pid=78790)[0m !! tune_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:59:23): classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672): the search left float range at ln phi = -1021.390562087566 (phi = 0.0) (tuning integration 0)
+   -- ALL WORK ITEMS COMPLETE in time 26.1s
+      Queue summary: 24 lookup (avg 55.2/min), 24 compute (avg 55.2/min), 24 store (avg 55.2/min), 24 validation (avg 55.2/min)
+-- ScalarHistory: 2 histories failed in this run
+     -- 1 x !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+     -- 1 x classical_turning_point (InversePowerModel(M=2.4353e-15eV,n=1,beta=20), normalization = -276.63072859401797, phi = 5.0, log_E = 208.59726295709672)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 2.71s
+      Queue summary: 22 lookup (avg 487.5/min), 22 compute (avg 487.5/min), 22 store (avg 487.5/min), 22 validation (avg 487.5/min)
+-- AdiabaticHistory: 2 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 25.5s
+      Queue summary: 22 lookup (avg 51.74/min), 22 compute (avg 51.74/min), 22 store (avg 51.74/min), 22 validation (avg 51.74/min)
+-- BBNData: 2 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+[36m(compute_scalar_history pid=78790)[0m -- integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:59:23): integration failure
+[36m(compute_scalar_history pid=78790)[0m !! integrate_history (probe-pl-M1e-42-ScalarHistory-InversePowerModel(M=2.4353e-15eV,n=1,beta=20)-2026-11-20T20:59:23): marked as total integration failure
+** driver exit status 0
