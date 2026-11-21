@@ -1,0 +1,62 @@
+  beta state    n  median s   mean s    max s  sum h
+   0.5    ok   16      12.0     12.4     28.8   0.06
+   0.5  FAIL   48      19.7    150.8   1016.4   2.01
+     1    ok   49      17.5     42.5    113.9   0.58
+     1  FAIL   15      84.6    203.3   1013.4   0.85
+   1.1    ok   61      20.2     40.9    600.1   0.69
+   1.1  FAIL    3     353.1   2922.5   8093.9   2.44
+   1.2    ok   63      12.4     36.4    677.5   0.64
+   1.2  FAIL    1     988.9    988.9    988.9   0.27
+   1.5    ok   64      11.7     15.5     56.2   0.28
+     2    ok   64      15.2     17.2     45.5   0.31
+   2.9    ok   64      17.0     21.3     60.1   0.38
+ 2.975    ok   64      16.2     18.6     57.8   0.33
+     3    ok   64      22.2     25.2     87.2   0.45
+  3.04    ok   64      18.4     26.1     75.2   0.46
+     5    ok   64      30.0     34.2    101.9   0.61
+    20    ok   24      64.7     85.1    511.7   0.57
+    20  FAIL   40       7.9     12.7     54.1   0.14
+
+beta = 20 failures, one line each:
+  M    1e-42 n 1 fixed      0.01     38.0 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-42 n 1 one-loop-  0.05     22.5 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-42 n 1 one-loop-     1      1.7 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-42 n 1 one-loop-    10      3.4 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-42 n 2 fixed      0.01     16.8 s  !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi
+  M    1e-42 n 2 one-loop-  0.05      2.5 s  !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi
+  M    1e-42 n 2 one-loop-     1     21.1 s  !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi
+  M    1e-42 n 2 one-loop-    10      2.1 s  !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi
+  M    1e-40 n 1 fixed      0.01     16.5 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-40 n 1 one-loop-  0.05      9.9 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-40 n 1 one-loop-     1      1.4 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-40 n 1 one-loop-    10      5.2 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-40 n 2 fixed      0.01      5.0 s  classical_turning_point a non-finite value in ClassicalTurningPoint(ph
+  M    1e-40 n 2 one-loop-  0.05     23.6 s  classical_turning_point a non-finite value in ClassicalTurningPoint(ph
+  M    1e-40 n 2 one-loop-     1     13.3 s  classical_turning_point a non-finite value in ClassicalTurningPoint(ph
+  M    1e-40 n 2 one-loop-    10      5.4 s  classical_turning_point a non-finite value in ClassicalTurningPoint(ph
+  M    1e-36 n 1 fixed      0.01     21.1 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-36 n 1 one-loop-  0.05      0.9 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-36 n 1 one-loop-     1      6.6 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-36 n 1 one-loop-    10      4.3 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-33 n 1 fixed      0.01      9.5 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-33 n 1 one-loop-  0.05      2.2 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-33 n 1 one-loop-     1     20.6 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-33 n 1 one-loop-    10      2.4 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-32 n 1 fixed      0.01     13.6 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-32 n 1 one-loop-  0.05     33.8 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-32 n 1 one-loop-     1      5.7 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-32 n 1 one-loop-    10      1.1 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    4e-31 n 1 fixed      0.01     16.4 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    4e-31 n 1 one-loop-  0.05      7.5 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    4e-31 n 1 one-loop-     1      4.1 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    4e-31 n 1 one-loop-    10      8.4 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-30 n 1 fixed      0.01     54.1 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-30 n 1 one-loop-  0.05      1.4 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-30 n 1 one-loop-     1      8.5 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-30 n 1 one-loop-    10      2.7 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-16 n 1 fixed      0.01     33.8 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-16 n 1 one-loop-  0.05     49.5 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-16 n 1 one-loop-     1     10.4 s  classical_turning_point the search left float range at ln phi = -1021.
+  M    1e-16 n 1 one-loop-    10      1.4 s  classical_turning_point the search left float range at ln phi = -1021.
+
+beta = 20 successes: 24: M 1e-36 n 2 fixed 0.01, M 1e-33 n 2 fixed 0.01, M 1e-32 n 2 fixed 0.01, M 4e-31 n 2 fixed 0.01, M 1e-30 n 2 fixed 0.01, M 1e-16 n 2 fixed 0.01, M 1e-36 n 2 one-loop- 0.05, M 1e-33 n 2 one-loop- 0.05, M 1e-32 n 2 one-loop- 0.05, M 4e-31 n 2 one-loop- 0.05, M 1e-30 n 2 one-loop- 0.05, M 1e-16 n 2 one-loop- 0.05, M 1e-36 n 2 one-loop- 1, M 1e-33 n 2 one-loop- 1, M 1e-32 n 2 one-loop- 1, M 4e-31 n 2 one-loop- 1, M 1e-30 n 2 one-loop- 1, M 1e-16 n 2 one-loop- 1, M 1e-36 n 2 one-loop- 10, M 1e-33 n 2 one-loop- 10, M 1e-32 n 2 one-loop- 10, M 4e-31 n 2 one-loop- 10, M 1e-30 n 2 one-loop- 10, M 1e-16 n 2 one-loop- 10

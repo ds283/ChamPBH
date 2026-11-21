@@ -332,6 +332,40 @@ Measurements only; nothing is judged against a threshold.
   The same test on the laptop's references passed earlier the same evening. Its walls `pl1` and `pl2` were rerun with
   `ALLOW_DIRTY_TREE=1`, because the untracked analysis ports dirtied the laptop's tree.
 
+**Added 2026-11-21**, at the user's request ("Take the P4 counts from the probe's bounce rows. Did the `beta = 20`
+histories take a long time to fail?"). The user also said of the cost bound: "the cost is just the cost. If it's 51h,
+that's what it is."
+
+- **P4's counts** (`probe/p4_counts.py`, output `probe/macstudio/out/p4-counts.txt`).
+  - **Method.** ln(V₀/M⁴) was taken for every one-loop candidate row of the probe's exponential stores, directly as
+    ln E − ln(e^L − 1) − 4 ln M. It agrees with 07b's formula from (L, ln R) to 7 × 10⁻¹², over 3575 candidates.
+  - **It depends on M alone.** It is one value per history, the same at every β and every row, and the same for every
+    candidate of a history.
+  - **Its values**, against the law's fitted domain ln(V₀/M⁴) ≤ 10:
+
+    | M (M_P) | ln(V₀/M⁴) |
+    |---|---|
+    | 10⁻³⁰ | −0.32 |
+    | 4 × 10⁻³¹ | 3.34 |
+    | 10⁻³² | 18.10 |
+    | 10⁻³³ | 27.31 |
+    | 10⁻³⁶ | 54.94 |
+    | 10⁻⁴⁰ | 91.78 |
+    | 10⁻⁴² | 110.20 |
+
+    10⁻¹⁵ M_P gives −138.5.
+  - **So, of block B's six masses,** 10⁻³⁰ M_P lies inside the fitted domain. At the other five, every candidate lies
+    outside it: 3080 of the probe's 3575 at B's masses. The furthest is at 10⁻⁴² M_P, eleven times the domain's edge.
+    The figures' P4 marking (§5) shades all of M < 4 × 10⁻³¹ M_P, which includes 10⁻³⁰ M_P, inside.
+- **The time to fail at β = 20** (`probe/fail_times.py`, output `probe/macstudio/out/p2-times-by-beta-pl.txt`).
+  - **They fail quickly:** median 7.9 s and at most 54 s from submission to storage. The 40 together took 0.14 h.
+    The 24 successes at β = 20 took a median of 65 s.
+  - **Which fail.** Every n = 1 history at β = 20 fails, at all eight masses and all four rows (32): "the classical
+    turning point search left float range at ln φ = −1021". At n = 2 only 10⁻⁴⁰ and 10⁻⁴² M_P fail (8): an overflow
+    in (ln V)'' or a non-finite turning point. The six other masses succeed at n = 2.
+  - **The costly failures are elsewhere.** At β = 0.5, 48 failures took 2.0 h, with a mean of 151 s and up to
+    1016 s. At β = 1.1, 3 failures took 2.4 h, one of them 8094 s. At β = 1.0, 15 failures took 0.85 h.
+
 ## 4. The run script
 
 The script is 2026.11.0's, with these changes:
