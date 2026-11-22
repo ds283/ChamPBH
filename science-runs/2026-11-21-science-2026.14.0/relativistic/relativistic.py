@@ -89,7 +89,8 @@ WALLS = {
         "drain_model": "one-loop-exponential-v2",
         "store": f"{RUN}-exponential",
         "title": r"exponential, $n = 1$",
-        "EW_BRACKET": None,  # 2026.11.0's was (2.980, 2.985); set from this run's export
+        # this run's export, 2026-11-22 (2026.11.0's was the same)
+        "EW_BRACKET": (2.980, 2.985),
         "HISTORY_PICKS": [
             (0.05, 1.0775, "the largest share of K failing at a wall"),
             (1.0, 2.0, "a typical surfing history"),
@@ -103,7 +104,8 @@ WALLS = {
         "drain_model": "one-loop-inverse-power-v1",
         "store": f"{RUN}-inverse-power",
         "title": r"inverse power law, $n = 1$",
-        "EW_BRACKET": None,  # no EW edge at 1e-3 M_P in 07d's surfing scan (R11)
+        # this run's export, 2026-11-22; as exp at lab M (07d's scan at 1e-3 M_P had none)
+        "EW_BRACKET": (2.980, 2.985),
         "HISTORY_PICKS": None,
         "carried_over": True,
     },
@@ -113,7 +115,8 @@ WALLS = {
         "drain_model": "one-loop-inverse-power-v1",
         "store": f"{RUN}-inverse-power",
         "title": r"inverse power law, $n = 2$",
-        "EW_BRACKET": None,  # matched the exponential's at 1e-3 M_P in 07d's scan
+        # this run's export, 2026-11-22; as exp at lab M
+        "EW_BRACKET": (2.980, 2.985),
         "HISTORY_PICKS": None,
         "carried_over": True,
     },

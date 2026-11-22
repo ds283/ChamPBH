@@ -1,3 +1,18 @@
+# m-trend — the trend in M across the laboratory region, 2026.14.0, one figure per wall
+
+**Ported 2026-11-20, before the run; changed 2026-11-22, after it.** This note is rewritten once the run's figures have
+been seen. Below the line is 2026.11.0's note, unchanged. `m_trend.py`'s docstring lists what the port changed.
+
+**pl1 has no β = 10 in panel (b).** All 84 of pl1's histories at β = 10 failed (7 M × 12 rows): `(ln V)''` overflowed in
+`InversePowerModel.d2_logV_dphi2` at φ ≈ 6.6 × 10⁻¹⁵⁶ to 10⁻¹⁶⁶ M_P. So the export has no bounce files for them, and
+the first run of the port stopped at the first missing file. On 2026-11-22, at the user's request ("fix m_trend"), the
+script was changed to skip any (β, M) that has no bounce file. It lists each one under `first_impact_missing` in the
+provenance. A β with none at any M keeps its legend entry, which says "failed at every M, none drawn". Panels (a) and
+(c) read only stored, successful histories, so they were unchanged by this; the β = 10 failures are absent from them as
+from any figure. On `exp` and `pl2` nothing is missing and the output is unchanged.
+
+---
+
 # m-trend — the trend in M across the laboratory region, 2026.11.0
 
 **Of 2026-11-14**, made by a Claude Code session (the run's orchestrator) at the user's request ("write the record and

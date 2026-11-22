@@ -43,6 +43,11 @@ the n in the bounce path is the wall's; on the exponential wall the region below
 in panels (a) and (b), and noted in (c), as law v2 used beyond its fitted domain ln(V0/M^4) <= 10
 (PLAN.md P4, the user's ruling to extrapolate it); panel (b) on the power wall as above; panel (a)'s
 y range widens only if a wall's ratios leave 2026.11.0's; the title names the potential and n.
+
+Changed on 2026-11-22, after the build: a (beta, M) whose bounces file the export does not hold (its
+history failed, so the store has no samples) is skipped in panel (b) and listed in the provenance's
+first_impact_missing; a beta with none at any M keeps its legend entry, saying so. On pl1 every
+history at beta = 10 failed at every M (an overflow in (ln V)'' at phi ~ 1e-156 M_P to 1e-166 M_P).
 """
 
 import argparse
@@ -200,9 +205,28 @@ def ell_law(log_E: float, ln_V0: float, M: float) -> float:
     raise RuntimeError("ell_law did not converge")
 
 
-def first_impact(bounces: Path, beta: float, M: float, n: int) -> pd.Series:
-    b = pd.read_csv(bounces / f"beta={beta:g}" / f"M={M_EV[M]}eV_n={n}" / "bounces.csv")
+def first_impact(bounces: Path, beta: float, M: float, n: int) -> pd.Series | None:
+    """The first impact of the A = 1 history at (beta, M), or None where the export holds no bounces
+    file for it (the history failed, so the store has no samples: pl1 at beta = 10, every M).
+    """
+    path = bounces / f"beta={beta:g}" / f"M={M_EV[M]}eV_n={n}" / "bounces.csv"
+    if not path.exists():
+        return None
+    b = pd.read_csv(path)
     return b[b.delta_K_Mp4 > 0].iloc[0]
+
+
+def first_impacts(bounces: Path, beta: float, Ms: list, n: int, missing: list):
+    """The (M, first impact) pairs at beta that have a bounces file; each M without one is added to
+    missing, and drawn as nothing."""
+    pairs = []
+    for M in Ms:
+        r = first_impact(bounces, beta, M, n)
+        if r is None:
+            missing.append({"beta": beta, "M_Mp": M})
+        else:
+            pairs.append((M, r))
+    return pairs
 
 
 def main():
@@ -327,12 +351,26 @@ def main():
     # ln R at the first impact, points only
     ell_table = {}
     log_R_table = {}
+    missing = []  # (beta, M) with no bounces file: the history failed
     if wall["law"] == "log_R":
         for beta, c in BETA_ELL.items():
-            rows = [first_impact(BOUNCES, beta, M, n) for M in Ms]
-            logR = [float(r.log_R) for r in rows]
+            pairs = first_impacts(BOUNCES, beta, Ms, n, missing)
+            if not pairs:
+                ax_b.plot(
+                    [],
+                    [],
+                    color=c,
+                    marker="o",
+                    ms=4,
+                    lw=0,
+                    label=rf"$\beta = {beta:g}$: failed at every $M$, none drawn",
+                )
+                log_R_table[f"{beta:g}"] = {"log_R": {}, "no_history_at_any_M": True}
+                continue
+            Mb = [M for M, _ in pairs]
+            logR = [float(r.log_R) for _, r in pairs]
             stored = []
-            for M in Ms:  # histories.csv's log_R_first_impact, the same impact
+            for M in Mb:  # histories.csv's log_R_first_impact, the same impact
                 s = L[
                     np.isclose(L.beta, beta) & is_M(L.Mk, M) & np.isclose(L.alpha, 1.0)
                 ]
@@ -340,13 +378,13 @@ def main():
                     float(s.log_R_first_impact.iloc[0]) if len(s) else float("nan")
                 )
             log_R_table[f"{beta:g}"] = {
-                "log_R": dict(zip([f"{M:.0e}" for M in Ms], logR)),
+                "log_R": dict(zip([f"{M:.0e}" for M in Mb], logR)),
                 "histories_log_R_first_impact_max_abs_difference": float(
                     np.nanmax(np.abs(np.array(stored) - np.array(logR)))
                 ),
             }
             ax_b.plot(
-                Ms, logR, color=c, marker="o", ms=4, lw=0, label=rf"$\beta = {beta:g}$"
+                Mb, logR, color=c, marker="o", ms=4, lw=0, label=rf"$\beta = {beta:g}$"
             )
         lo, hi = ax_b.get_ylim()
         ax_b.set_ylim(lo, hi + 0.2 * (hi - lo))  # headroom for the caption
@@ -361,7 +399,21 @@ def main():
             fontsize=8,
         )
     for beta, c in BETA_ELL.items() if wall["law"] == "ell" else ():
-        rows = [first_impact(BOUNCES, beta, M, n) for M in Ms]
+        pairs = first_impacts(BOUNCES, beta, Ms, n, missing)
+        if not pairs:
+            ax_b.plot(
+                [],
+                [],
+                color=c,
+                marker="o",
+                ms=4,
+                lw=0,
+                label=rf"$\beta = {beta:g}$: failed at every $M$, none drawn",
+            )
+            ell_table[f"{beta:g}"] = {"ell": {}, "no_history_at_any_M": True}
+            continue
+        Mb = [M for M, _ in pairs]
+        rows = [r for _, r in pairs]
         ells = [r.ell for r in rows]
         lnV0 = float(
             H[
@@ -375,9 +427,9 @@ def main():
         ell_max = 0.5 * (log_E - lnV0) + ELL_MAX_OFFSET
         M_curve = np.logspace(-42.5, -29.5, 140)
         ell_curve = [ell_law(log_E, lnV0, M) for M in M_curve]
-        ell_check = [ell_law(r.log_E_Mp4, lnV0, M) for r, M in zip(rows, Ms)]
+        ell_check = [ell_law(r.log_E_Mp4, lnV0, M) for r, M in zip(rows, Mb)]
         ell_table[f"{beta:g}"] = {
-            "ell": dict(zip([f"{M:.0e}" for M in Ms], ells)),
+            "ell": dict(zip([f"{M:.0e}" for M in Mb], ells)),
             "ell_law_max_abs_difference": float(
                 np.max(np.abs(np.array(ell_check) - np.array(ells)))
             ),
@@ -390,7 +442,7 @@ def main():
         }
         ax_b.plot(M_curve, ell_curve, color=c, lw=0.8, alpha=0.8)
         ax_b.plot(
-            Ms, ells, color=c, marker="o", ms=4, lw=0, label=rf"$\beta = {beta:g}$"
+            Mb, ells, color=c, marker="o", ms=4, lw=0, label=rf"$\beta = {beta:g}$"
         )
         ax_b.axhline(ell_max, color=c, ls="--", lw=0.9)
     if wall["law"] == "ell":
@@ -537,6 +589,9 @@ def main():
         "fixed_law_max_relative_deviation": fixed_dev,
         "ell_first_impact_A1": ell_table,
         "log_R_first_impact_A1": log_R_table,
+        "first_impact_missing": [
+            {"beta": m["beta"], "M_Mp": f"{m['M_Mp']:.0e}"} for m in missing
+        ],
         "largest_excluded_beta": {
             f"{A:g}": {
                 f"{M:.0e}": (None if np.isnan(grid[i, j]) else float(grid[i, j]))
@@ -561,6 +616,7 @@ def main():
                     "git_dirty",
                     "ell_first_impact_A1",
                     "log_R_first_impact_A1",
+                    "first_impact_missing",
                 )
             },
             indent=2,

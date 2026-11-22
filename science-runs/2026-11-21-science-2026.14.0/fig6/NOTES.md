@@ -24,6 +24,13 @@ figures are made. Below the line is 2026.11.0's note, unchanged, for the design 
 the β without BBN, the parking count, the A count per β, every exclusion count by A and by α), and its `ew_candidate`
 is β = 2.980–2.985 (×10.6 in T_deliver), the bracket 2026.11.0 set by hand.
 
+**`EW_BRACKET` set, 2026-11-22**, after the build, at the user's request ("fix m_trend and set the brackets"). On this
+run's exports `ew_candidate` is the same on all three walls: β = 2.980 → 2.985, median T_deliver 1.953 → 20.65 GeV
+(×10.58). At laboratory M the delivery temperature at each of these β is the same in every row of every wall, whatever
+the A or α (min = max), so the jump does not depend on the wall. The bracket is (2.980, 2.985) for `exp`, `pl1` and
+`pl2`, in `fig6.py`'s `WALLS` and `relativistic.py`'s, and `fig6b.py` reads the `exp` value. On `pl1` this is not what
+`power-law-wall` 07d's surfing scan found at 10⁻³ M_P, where n = 1 had no electroweak edge; that scan is at another M.
+
 ---
 
 # fig6 — Figure 6 at the laboratory mass, 2026.11.0
