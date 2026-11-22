@@ -1,7 +1,7 @@
 # lnR-test — the power walls' one-loop law beyond its measured ln R
 
 **Of 2026-11-22**, run by a Claude Code session at the user's request ("run the ln R test"), after the user had accepted
-the extrapolation for now ("For now we'll accept the `ln R` extrapolation"). **Not yet seen by the user.** Measurements,
+the extrapolation for now ("For now we'll accept the `ln R` extrapolation"). **Reviewed by the user on 2026-11-22** ("I've reviewed those notes"). Measurements,
 not bounds.
 
 ```bash
