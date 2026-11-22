@@ -40,8 +40,8 @@ on 2026-11-22:
 - **The power walls' ln R extrapolation.** The user, 2026-11-22: "For now we'll accept the `ln R` extrapolation".
   The power-wall law's falling branch was measured to ln R = 554.5 (n = 1) and 344.7 (n = 2). This run's first
   impacts reach ln R = 635 and 383 at laboratory M, and 740 and 490 at 10⁻⁴² M_P. The notes first stated the measured
-  range as 100 and 60; `fig6/NOTES.md` and `m-trend/NOTES.md` carry the correction. Below, "What stays open", says
-  what a test would take.
+  range as 100 and 60; `fig6/NOTES.md` and `m-trend/NOTES.md` carry the correction. The test that followed
+  ([`lnR-test/`](lnR-test/NOTES.md)) found the law's offset unchanged out to ln R = 700 (n = 1) and 500 (n = 2).
 
 ## Standard analyses
 
@@ -214,6 +214,15 @@ Only what the analyses read was copied here, byte for byte, with SHA-256 checked
   At the top of the measured range the law is already 4–5% below the measured f at n = 1 (0.0513 against 0.0538 at
   ln R = 545.6) and 2% at n = 2. Only if a test moved the law would the power-law store need rebuilding: A-pl and B-pl,
   11 h on the Mac Studio at 8 CPUs, with about 2 h of exports.
+
+  **Run later on 2026-11-22** ([`lnR-test/`](lnR-test/NOTES.md)), at the user's request ("run the ln R test"):
+  - it reaches ln R = 700 at n = 1 and 500 at n = 2. That covers every first impact of the run at n = 2, and all but
+    50 at n = 1 (β = 3.0–5.0 at 10⁻⁴⁰ and 10⁻⁴² M_P, up to 740, beyond the stage-2 code's float range);
+  - the law stays below stage 2 by the offset it had at the top of the measured range: 4.6–4.8% at n = 1 and 2.4–2.7%
+    at n = 2;
+  - the extrapolation adds nothing new, and nothing was rebuilt.
+
+  Whether to refit the law to remove the offset is the user's to decide.
 - **As 2026.11.0 left them:**
   - `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]`;
   - the one-loop tuning cap at M_crit;
