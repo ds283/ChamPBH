@@ -22,8 +22,7 @@ Three panels against M (drafted at the user's request of 2026-11-09):
 (a) Delta N_eff today relative to its value at 4e-31 M_P, the median over the surfing beta (>= 1.06) for
     each A, with the range over beta shaded for A = 1; the fixed law is at 1 to 2e-8 at every M.
 (b) ell = ln(k_ex/m_ta) at the first impact, A = 1, beta = 1.2, 2 and 10 (points), the law's ell(M) at
-    that impact's E solved on V = V0 exp(M/phi) (thin line), and its maximum (dashed),
-    (1/2) ln(E/V0) - ln 2 - 1.024, where the turnaround sits at M/phi = sqrt(3) - 1; above
+    that impact's E solved on V = V0 exp(M/phi) (thin line), which has no maximum (ell_law); above
     ell = 45 the law is used beyond the range one-loop-drain 02d measured it on.
 (c) The largest beta excluded at each (A, M), by the tests of Figure 6: |dY_p| and |d(D/H)| within twice
     the measurement's relative 1-sigma about PRyMordial + LambdaCDM, and Delta N_eff today < 0.30.
@@ -48,6 +47,11 @@ Changed on 2026-11-22, after the build: a (beta, M) whose bounces file the expor
 history failed, so the store has no samples) is skipped in panel (b) and listed in the provenance's
 first_impact_missing; a beta with none at any M keeps its legend entry, saying so. On pl1 every
 history at beta = 10 failed at every M (an overflow in (ln V)'' at phi ~ 1e-156 M_P to 1e-166 M_P).
+
+Changed again on 2026-11-22, at the user's request ("fix the ell_law curve for the new k_ex"): ell_law used
+the k_ex from before power-law-wall 07b (lambda = x^2/M) and was 0.1 low at 4e-31 and 2.6 low at 1e-42. It now
+uses k_ex = E^{1/2}|V'''/V''|/2, as the code does, and reproduces every stored ell to 1.4e-14. Under that k_ex ell
+has no maximum over M, so the dashed maximum line, its constant and the provenance's ell_max are gone.
 """
 
 import argparse
@@ -172,21 +176,20 @@ def load(path: Path, wall: dict) -> pd.DataFrame:
     return H
 
 
-# the maximum of ell over M: -x/2 + ln(x/(x+2))/2 at x = sqrt(3) - 1
-ELL_MAX_OFFSET = (
-    -(np.sqrt(3.0) - 1.0) / 2.0 + 0.5 * np.log(2.0 - np.sqrt(3.0)) - np.log(2.0)
-)
-
-
 def ell_law(log_E: float, ln_V0: float, M: float) -> float:
     """
     ell of AbstractModel.one_loop_turnaround on V = V0 exp(M/phi), solved here in closed form for the
-    turnaround: with x = M/phi, V'' = V0 e^x x^3 (x + 2)/M^2 and lambda = x^2/M; m_ta^4 = 32 pi^2 E/ell,
-    V''(phi_ta) = m_ta^2 and ell = ln(lambda E^{1/2}/2 m_ta), iterated to a fixed point. It reproduces the
-    stored ell of every first impact this figure draws (checked 2026-11-09).
+    turnaround: with x = M/phi, V'' = V0 e^x x^3 (x + 2)/M^2 and the pulse rate |V'''/V''| =
+    x (x^2 + 6x + 6)/((x + 2) M) (ExponentialModel._pulse_rate_hook at n = 1); m_ta^4 = 32 pi^2 E/ell,
+    V''(phi_ta) = m_ta^2 and ell = ln(k_ex/m_ta), k_ex = E^{1/2} |V'''/V''|/2 (the k_ex ruling of 2026-11-16,
+    power-law-wall 07b-07d), iterated to a fixed point. It reproduces the stored ell of every first impact this
+    figure draws, to 1.4e-14 (checked 2026-11-22). Substituting the turnaround's ln M,
+    ell = (1/2) ln(E/V0) - ln 2 + h(x), h = -ln(x)/2 + ln(x^2 + 6x + 6) - (3/2) ln(x + 2) - x/2, with
+    dh/dx < -1/2 for every x > 0: as M falls x falls and ell rises without bound, so it has no maximum (the
+    k_ex before 07b, lambda = x^2/M, gave one at x = sqrt(3) - 1).
     """
     ell = 32.0
-    for _ in range(200):
+    for _ in range(400):
         log_m = 0.25 * (np.log(32.0 * np.pi**2) + log_E - np.log(ell))
         x = brentq(
             lambda x: ln_V0
@@ -198,7 +201,15 @@ def ell_law(log_E: float, ln_V0: float, M: float) -> float:
             1e-300,
             1e4,
         )
-        new = 2 * np.log(x) - np.log(M) + 0.5 * log_E - np.log(2.0) - log_m
+        new = (
+            np.log(x)
+            + np.log(x * x + 6.0 * x + 6.0)
+            - np.log(x + 2.0)
+            - np.log(M)
+            + 0.5 * log_E
+            - np.log(2.0)
+            - log_m
+        )
         if abs(new - ell) <= 1e-12 * new:
             return new
         ell = new
@@ -347,7 +358,7 @@ def main():
         fontsize=8,
     )
 
-    # (b) ell at the first impact, the law's ell(M) at that E, and its maximum; on the power wall,
+    # (b) ell at the first impact and the law's ell(M) at that E; on the power wall,
     # ln R at the first impact, points only
     ell_table = {}
     log_R_table = {}
@@ -424,7 +435,6 @@ def main():
             ].normalization.iloc[0]
         )
         log_E = float(np.median([r.log_E_Mp4 for r in rows]))
-        ell_max = 0.5 * (log_E - lnV0) + ELL_MAX_OFFSET
         M_curve = np.logspace(-42.5, -29.5, 140)
         ell_curve = [ell_law(log_E, lnV0, M) for M in M_curve]
         ell_check = [ell_law(r.log_E_Mp4, lnV0, M) for r, M in zip(rows, Mb)]
@@ -433,7 +443,6 @@ def main():
             "ell_law_max_abs_difference": float(
                 np.max(np.abs(np.array(ell_check) - np.array(ells)))
             ),
-            "ell_max": ell_max,
             "ln_E_over_V0": log_E - lnV0,
             "ell_law_below_sample": {
                 f"{M:.0e}": ell_law(log_E, lnV0, M)
@@ -444,7 +453,6 @@ def main():
         ax_b.plot(
             Mb, ells, color=c, marker="o", ms=4, lw=0, label=rf"$\beta = {beta:g}$"
         )
-        ax_b.axhline(ell_max, color=c, ls="--", lw=0.9)
     if wall["law"] == "ell":
         ax_b.axhspan(ELL_MEASURED, 80, color="0.93", lw=0, zorder=0)
         ax_b.set_ylabel(
@@ -455,9 +463,9 @@ def main():
         ax_b.text(
             0.01,
             0.97,
-            r"(b) points: stored; line: the law's $\ell(M)$ at that impact's $E$; dashed: its maximum"
+            r"(b) points: stored; line: the law's $\ell(M)$ at that impact's $E$, with"
             + "\n"
-            + r"    $\frac{1}{2}\ln(E/V_0) - \ln 2 - 1.024$, at $M/\phi_{\rm ta} = \sqrt{3} - 1$; below it $\ell$ falls again"
+            + r"    $k_{\rm ex} = \frac{1}{2}E^{1/2}|V'''/V''|$; it rises without bound as $M$ falls (no maximum)"
             + "\n"
             + rf"    grey: $\ell > {ELL_MEASURED:g}$, beyond the range the law was measured on",
             transform=ax_b.transAxes,
