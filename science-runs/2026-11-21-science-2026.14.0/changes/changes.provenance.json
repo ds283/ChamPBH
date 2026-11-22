@@ -1,0 +1,53 @@
+{
+  "script": "changes.py",
+  "script_sha256": "99313172e621620e7f803656d14ada3d0652b16c97963e5bdf69b6c83ec1555b",
+  "git_head": "4ec8e68e2aed8432d2cf991c252359f5786ef34b",
+  "git_dirty": false,
+  "inputs": {
+    "new": {
+      "path": "../fig6/inputs/exp/histories.csv",
+      "sha256": "c7dee32749a67b1f3de36e94f789a4c4dedb7f6bf8f799c33a15014f381752a0"
+    },
+    "old": {
+      "path": "../../2026-11-13-science-2026.11.0/fig6/inputs/histories.csv",
+      "sha256": "fb6a8dbb41fa7bbd7a0dd6b6076e25c3f9623dec9328b3e07b41b5e4fdb04253"
+    }
+  },
+  "store": {
+    "name": "science-2026.14.0-exponential",
+    "store_id": "4ef1aadbd04c4101bff768be7e10f177",
+    "digest": "485bcdea3b5346d439576bc0bee92558447713d04bcab286aca1ff35390f1c5b"
+  },
+  "key": [
+    "M_Mp",
+    "beta",
+    "law",
+    "alpha"
+  ],
+  "model": "exponential",
+  "n": 1,
+  "joined": 4818,
+  "in_old_only": 0,
+  "in_new_only": 0,
+  "histories_ok_in_both": 4509,
+  "status_changed": 42,
+  "delivery_class_changed": 36,
+  "figure6_tests_flips": {
+    "A": {
+      "become_excluded": 26,
+      "cease_to_be": 20
+    },
+    "B": {
+      "become_excluded": 21,
+      "cease_to_be": 16
+    },
+    "C": {
+      "become_excluded": 0,
+      "cease_to_be": 0
+    },
+    "D": {
+      "become_excluded": 0,
+      "cease_to_be": 0
+    }
+  }
+}
