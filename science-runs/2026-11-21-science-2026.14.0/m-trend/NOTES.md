@@ -109,6 +109,12 @@ clean tree: `exp`'s records `c79446a`, where it was regenerated after the ℓ cu
 - **The power walls' panel (b) has no "beyond the measured range" marking.** Their law was checked to ln R = 100
   (n = 1) and 60 (n = 2), and every point drawn is at ln R ≥ 305 (`../fig6/NOTES.md`, observations).
 
+  **Corrected later on 2026-11-22.** The law was measured to ln R = 554.5 (n = 1) and 344.7 (n = 2), not 100 and 60
+  (`../fig6/NOTES.md` has the correction). Panel (b)'s points run to 638 at n = 1 and 490 at n = 2, so the points
+  beyond the measured range are β = 1.2 and 2 at 10⁻³⁶ M_P and below on both walls, and every point of n = 2's β = 10
+  (379.5 to 490.0). At 10⁻³³ M_P, β = 2 sits at the edge on both walls (554.5 and 344.7). The user ruled on 2026-11-22: "For
+  now we'll accept the `ln R` extrapolation".
+
 ---
 
 # m-trend — the trend in M across the laboratory region, 2026.11.0

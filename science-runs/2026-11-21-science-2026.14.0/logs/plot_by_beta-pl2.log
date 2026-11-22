@@ -1,0 +1,1553 @@
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-22 02:04:47,742	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-22 02:04:47,828	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+!! WARNING: number of shards read from database (=16) does not match specified number of shards (=10)
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-inverse-power.db" read-only with 16 shards (version label "2026.14.0", serial 1)
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.0625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.065; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.0675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.07; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.0725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.0775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.0825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.085; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.0875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.09; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.0925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.095; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.0975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.105; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.11; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.115; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1225; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1275; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.13; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1325; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.135; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1375; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1425; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.145; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1475; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1525; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.155; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1575; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.165; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.17; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.185; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.19; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.195; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.1975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.21; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.23; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.27; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.29; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.31; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.33; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.35; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.37; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.39; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.41; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.43; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.45; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.47; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.49; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=1.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.95; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.955; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.965; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.97; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.985; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.99; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=2.995; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=3.005; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=3.01; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=3.015; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=3.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=3.025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=3.03; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=3.035; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=3.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=3.25; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=4; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=6; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=8; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-15 eV, n=2, β=15; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.0625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.065; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.0675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.07; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.0725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.0775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.0825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.085; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.0875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.09; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.0925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.095; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.0975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.105; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.11; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.115; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1225; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1275; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.13; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1325; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.135; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1375; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1425; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.145; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1475; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1525; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.155; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1575; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.165; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.17; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.185; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.19; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.195; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.1975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.21; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.23; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.27; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.29; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.31; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.33; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.35; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.37; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.39; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.41; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.43; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.45; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.47; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.49; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=1.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.95; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.955; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.965; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.97; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.985; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.99; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=2.995; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=3.005; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=3.01; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=3.015; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=3.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=3.025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=3.03; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=3.035; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=3.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=3.25; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=4; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=6; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=8; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-13 eV, n=2, β=15; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.0625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.065; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.0675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.07; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.0725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.0775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.0825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.085; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.0875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.09; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.0925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.095; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.0975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.105; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.11; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.115; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1225; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1275; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.13; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1325; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.135; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1375; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1425; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.145; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1475; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1525; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.155; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1575; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.165; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.17; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.185; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.19; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.195; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.1975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.21; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.23; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.27; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.29; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.31; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.33; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.35; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.37; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.39; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.41; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.43; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.45; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.47; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.49; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=1.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.95; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.955; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.965; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.97; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.985; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.99; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=2.995; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=3.005; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=3.01; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=3.015; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=3.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=3.025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=3.03; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=3.035; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=3.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=3.25; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=4; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=6; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=8; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-09 eV, n=2, β=15; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.0625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.065; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.0675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.07; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.0725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.0775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.0825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.085; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.0875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.09; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.0925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.095; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.0975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.105; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.11; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.115; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1225; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1275; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.13; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1325; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.135; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1375; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1425; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.145; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1475; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1525; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.155; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1575; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.165; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.17; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.185; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.19; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.195; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.1975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.21; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.23; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.27; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.29; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.31; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.33; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.35; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.37; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.39; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.41; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.43; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.45; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.47; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.49; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=1.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.95; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.955; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.965; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.97; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.985; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.99; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=2.995; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=3.005; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=3.01; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=3.015; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=3.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=3.025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=3.03; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=3.035; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=3.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=3.25; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=4; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=6; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=8; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-06 eV, n=2, β=15; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.0625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.065; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.0675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.07; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.0725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.0775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.0825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.085; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.0875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.09; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.0925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.095; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.0975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.105; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.11; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.115; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1225; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1275; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.13; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1325; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.135; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1375; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1425; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.145; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1475; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1525; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.155; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1575; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.165; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.17; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.185; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.19; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.195; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.1975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.21; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.23; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.27; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.29; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.31; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.33; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.35; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.37; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.39; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.41; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.43; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.45; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.47; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.49; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=1.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.95; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.955; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.965; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.97; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.985; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.99; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=2.995; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=3.005; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=3.01; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=3.015; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=3.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=3.025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=3.03; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=3.035; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=3.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=3.25; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=4; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=6; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=8; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=2.435323596e-05 eV, n=2, β=15; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.0625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.065; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.0675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.07; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.0725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.0775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.0825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.085; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.0875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.09; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.0925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.095; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.0975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.105; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1075; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.11; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.115; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1225; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.125; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1275; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.13; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1325; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.135; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1375; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1425; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.145; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1475; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1525; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.155; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1575; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1625; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.165; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1675; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.17; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1725; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.175; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1775; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1825; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.185; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1875; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.19; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1925; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.195; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.1975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.21; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.23; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.27; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.29; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.31; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.33; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.35; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.37; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.39; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.41; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.43; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.45; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.47; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.49; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=1.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.06; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.08; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.12; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.14; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.16; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.18; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.22; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.24; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.26; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.28; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.32; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.34; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.36; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.38; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.42; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.44; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.46; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.48; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.52; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.54; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.56; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.58; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.62; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.64; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.66; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.68; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.72; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.74; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.76; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.78; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.82; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.84; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.86; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.88; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.92; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.94; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.95; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.955; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.96; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.965; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.97; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.975; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.98; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.985; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.99; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=2.995; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=3.005; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=3.01; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=3.015; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=3.02; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=3.025; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=3.03; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=3.035; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=3.04; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=3.25; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=4; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=6; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=8; no history can use it; skipped
+!! plot: no InversePowerModel stored for M=0.002435323596 eV, n=2, β=15; no history can use it; skipped
+!! plot: 966 of 1337 InversePowerModel combinations of the stored M and β are not stored, and were skipped
+[36m(Datastore pid=17852)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+@@ plot_by_beta: SM baseline (rho_NP = 0, PRyM_version=bf24c3d+ri02+sr01+bt02, small_network=True): Yp=0.24688, D/H x1e5=2.45829, 3He/H x1e5=1.04193, 7Li/H x1e10=5.48637
+@@ plot_by_beta: alpha values 0.01, 0.1
+@@ plot_by_beta: A values 0.05, 0.1, 0.2, 0.5, 1, 1.5, 2, 3, 5, 10 (one-loop-inverse-power-v1)
+@@ plot_by_beta: inverse-power (InversePowerModel): 371 model(s), exported under /Users/ds283/Documents/Code/ChamPBH/var/science-2026.14.0/out/pl2/QCD_Cosmology/inverse-power
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-15 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-15 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.55114e-06, 0.00102045] (values 2.45874e-121, 2.46062e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-15 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [3.93075e-07, 0.00015723] (values 2.95023e-121, 2.95065e-121) (tuning integration 0)
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-13 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-13eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-13 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-13eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.55114e-06, 0.00102045] (values 2.45874e-121, 2.46062e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-13 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-13eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [3.93075e-07, 0.00015723] (values 2.95023e-121, 2.95065e-121) (tuning integration 0)
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-09 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-09 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.55114e-06, 0.00102045] (values 2.45874e-121, 2.46062e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-09 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [3.93075e-07, 0.00015723] (values 2.95023e-121, 2.95065e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.55114e-06, 0.00102045] (values 2.45874e-121, 2.46062e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [3.93075e-07, 0.00015723] (values 2.95023e-121, 2.95065e-121) (tuning integration 0)
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 26 of 26 model(s) used elastic reflections
+[36m(build_beta_plot pid=17899)[0m      -- beta=1, M=2.4353e-15 eV, n=2: 1067 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.1, M=2.4353e-15 eV, n=2: 543 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.15, M=2.4353e-15 eV, n=2: 272 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.2, M=2.4353e-15 eV, n=2: 5 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.25, M=2.4353e-15 eV, n=2: 436 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.3, M=2.4353e-15 eV, n=2: 452 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.4, M=2.4353e-15 eV, n=2: 600 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.5, M=2.4353e-15 eV, n=2: 42 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.6, M=2.4353e-15 eV, n=2: 44 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.7, M=2.4353e-15 eV, n=2: 415 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.8, M=2.4353e-15 eV, n=2: 355 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=1.9, M=2.4353e-15 eV, n=2: 92 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=2, M=2.4353e-15 eV, n=2: 85 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=2.1, M=2.4353e-15 eV, n=2: 38 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=2.2, M=2.4353e-15 eV, n=2: 62 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=2.3, M=2.4353e-15 eV, n=2: 107 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=2.4, M=2.4353e-15 eV, n=2: 47 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=2.5, M=2.4353e-15 eV, n=2: 42 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=2.6, M=2.4353e-15 eV, n=2: 113 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=2.7, M=2.4353e-15 eV, n=2: 49 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=2.8, M=2.4353e-15 eV, n=2: 145 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=2.9, M=2.4353e-15 eV, n=2: 55 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=3, M=2.4353e-15 eV, n=2: 185 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=3.5, M=2.4353e-15 eV, n=2: 104 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=5, M=2.4353e-15 eV, n=2: 316 reflection(s)
+[36m(build_beta_plot pid=17899)[0m      -- beta=10, M=2.4353e-15 eV, n=2: 485 reflection(s)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.55114e-06, 0.00102045] (values 2.45874e-121, 2.46062e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [3.93075e-07, 0.00015723] (values 2.95023e-121, 2.95065e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+     -- beta=0.75, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.55114e-06, 0.00102045] (values 2.45874e-121, 2.46062e-121) (tuning integration 0)
+     -- beta=0.9, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [3.93075e-07, 0.00015723] (values 2.95023e-121, 2.95065e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.15124e-05, 0.00860495] (values 1.64006e-121, 1.64711e-121) (tuning integration 0)
+     -- beta=0.75, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.55114e-06, 0.00102045] (values 2.45874e-121, 2.46062e-121) (tuning integration 0)
+     -- beta=0.9, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [3.93075e-07, 0.00015723] (values 2.95023e-121, 2.95065e-121) (tuning integration 0)
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 27 of 27 model(s) used elastic reflections[32m [repeated 5x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[36m(build_beta_plot pid=17909)[0m      -- beta=20, M=0.0024353 eV, n=2: 429 reflection(s)[32m [repeated 134x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 20.6s
+      Queue summary: 7 lookup (avg 20.39/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 30 of 30 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=17909)[0m      -- beta=20, M=2.4353e-09 eV, n=2: 65 reflection(s)[32m [repeated 247x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 30 of 30 model(s) used elastic reflections[32m [repeated 4x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m      -- beta=20, M=0.0024353 eV, n=2: 65 reflection(s)[32m [repeated 119x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 18.4s
+      Queue summary: 7 lookup (avg 22.88/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.05 (one-loop-inverse-power-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-15 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [4.19835e-05, 0.0167934] (values 1.64108e-121, 1.65489e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-15 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [3.13651e-06, 0.00125461] (values 2.45881e-121, 2.46112e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-15 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [3.43895e-07, 0.000137558] (values 2.95022e-121, 2.95059e-121) (tuning integration 0)
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-13 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-13eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.14761e-05, 0.00459046] (values 1.63956e-121, 1.64331e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-13 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-13eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.63017e-06, 0.00105207] (values 2.45875e-121, 2.46069e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-13 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-13eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [7.30702e-08, 2.92281e-05] (values 2.95018e-121, 2.95025e-121) (tuning integration 0)
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-09 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [3.13283e-06, 0.00125313] (values 1.63914e-121, 1.64016e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-09 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [7.94247e-08, 3.17699e-05] (values 2.45846e-121, 2.45852e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-09 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [4.86718e-11, 1.94687e-08] (values 2.95017e-121, 2.95017e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.03175e-07, 8.12699e-05] (values 1.63899e-121, 1.63906e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [9.84221e-07, 0.000393689] (values 2.45857e-121, 2.45929e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [1.55688e-08, 6.22752e-06] (values 2.95017e-121, 2.95018e-121) (tuning integration 0)
+     -- beta=1, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=1)): V_eff' does not change sign on the bracket [2.1048e-10, 8.41921e-08] (values 3.27795e-121, 3.27795e-121) (tuning integration 0)
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 26 of 26 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m      -- beta=10, M=2.4353e-13 eV, n=2: 795 reflection(s)[32m [repeated 243x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [3.6606e-05, 0.0146424] (values 1.64081e-121, 1.65284e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.23497e-06, 0.000893987] (values 2.45871e-121, 2.46035e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [2.21901e-07, 8.87605e-05] (values 2.9502e-121, 2.95044e-121) (tuning integration 0)
+     -- beta=1, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=1)): V_eff' does not change sign on the bracket [2.2766e-09, 9.10641e-07] (values 3.27795e-121, 3.27796e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.33319e-05, 0.00533276] (values 1.63965e-121, 1.64402e-121) (tuning integration 0)
+     -- beta=0.75, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [4.4168e-06, 0.00176672] (values 2.45895e-121, 2.4622e-121) (tuning integration 0)
+     -- beta=0.9, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [8.29678e-07, 0.000331871] (values 2.9503e-121, 2.95118e-121) (tuning integration 0)
+     -- beta=1, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=1)): V_eff' does not change sign on the bracket [4.76113e-08, 1.90445e-05] (values 3.27796e-121, 3.27802e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [4.83816e-05, 0.0193527] (values 1.6414e-121, 1.65732e-121) (tuning integration 0)
+     -- beta=0.75, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [4.29553e-06, 0.00171821] (values 2.45894e-121, 2.4621e-121) (tuning integration 0)
+     -- beta=0.9, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [2.34494e-07, 9.37975e-05] (values 2.9502e-121, 2.95045e-121) (tuning integration 0)
+     -- beta=1, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=1)): V_eff' does not change sign on the bracket [7.68281e-08, 3.07312e-05] (values 3.27797e-121, 3.27807e-121) (tuning integration 0)
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 26 of 26 model(s) used elastic reflections[32m [repeated 4x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m      -- beta=20, M=0.0024353 eV, n=2: 1177 reflection(s)[32m [repeated 105x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 19s
+      Queue summary: 7 lookup (avg 22.07/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.1 (one-loop-inverse-power-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-15 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.11176e-05, 0.00444704] (values 1.63954e-121, 1.64318e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-15 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [6.24705e-07, 0.000249882] (values 2.45852e-121, 2.45898e-121) (tuning integration 0)
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 1 model(s) dropped from the BBN plots
+     -- beta=0.9, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-13 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-13eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [3.50963e-05, 0.0140385] (values 1.64074e-121, 1.65227e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-13 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-13eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [4.37702e-08, 1.75081e-05] (values 2.45846e-121, 2.45849e-121) (tuning integration 0)
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 1 model(s) dropped from the BBN plots
+     -- beta=0.9, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 2 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-09 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.7411e-05, 0.00696439] (values 1.63985e-121, 1.64556e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-09 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [3.68414e-11, 1.47365e-08] (values 2.45845e-121, 2.45845e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 1 model(s) dropped from the BBN plots
+     -- beta=0.9, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.23814e-05, 0.00495256] (values 1.6396e-121, 1.64366e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [7.10117e-10, 2.84047e-07] (values 2.45845e-121, 2.45846e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [2.92008e-10, 1.16803e-07] (values 2.95017e-121, 2.95017e-121) (tuning integration 0)
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 27 of 27 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m      -- beta=10, M=2.4353e-13 eV, n=2: 657 reflection(s)[32m [repeated 241x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.21291e-05, 0.00485162] (values 1.63959e-121, 1.64356e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.34204e-07, 9.36816e-05] (values 2.45848e-121, 2.45865e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [5.93906e-09, 2.37562e-06] (values 2.95017e-121, 2.95017e-121) (tuning integration 0)
+     -- beta=1, M=2.4353e-05 eV, n=2: step budget exhausted: integrate_scalar_history (B-pl-lab-M-trend-ScalarHistory-InversePowerModel(M=2.4353e-05eV,n=2,beta=1)-2026-11-21T15:07:00) took 2000001 accepted steps (budget 2000000) at N=43.64982799, T_J=9.7733e-13 GeV, with 14905 reflection(s) (t
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [3.08041e-05, 0.0123217] (values 1.64052e-121, 1.65064e-121) (tuning integration 0)
+     -- beta=0.75, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [1.91467e-06, 0.00076587] (values 2.45867e-121, 2.46008e-121) (tuning integration 0)
+     -- beta=0.9, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [2.08663e-07, 8.34654e-05] (values 2.9502e-121, 2.95042e-121) (tuning integration 0)
+     -- beta=1, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=1)): V_eff' does not change sign on the bracket [2.362e-09, 9.44798e-07] (values 3.27795e-121, 3.27796e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [7.18133e-06, 0.00287253] (values 1.63934e-121, 1.64169e-121) (tuning integration 0)
+     -- beta=0.75, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [1.81773e-06, 0.000727091] (values 2.45866e-121, 2.46e-121) (tuning integration 0)
+     -- beta=0.9, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [3.17025e-07, 0.00012681] (values 2.95022e-121, 2.95055e-121) (tuning integration 0)
+     -- beta=1, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=1)): V_eff' does not change sign on the bracket [4.81913e-09, 1.92765e-06] (values 3.27795e-121, 3.27796e-121) (tuning integration 0)
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 26 of 26 model(s) used elastic reflections[32m [repeated 4x across cluster][0m
+[36m(build_beta_plot pid=17909)[0m      -- beta=20, M=0.0024353 eV, n=2: 623 reflection(s)[32m [repeated 107x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 18.2s
+      Queue summary: 7 lookup (avg 23.09/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.2 (one-loop-inverse-power-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 2 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-15 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-15eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.15498e-05, 0.00461993] (values 1.63956e-121, 1.64334e-121) (tuning integration 0)
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 2 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-13 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-13eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [8.46786e-07, 0.000338714] (values 1.63903e-121, 1.6393e-121) (tuning integration 0)
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-09 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-09eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [3.51924e-09, 1.40769e-06] (values 1.63898e-121, 1.63898e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 2 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.41333e-06, 0.00056533] (values 1.63905e-121, 1.63952e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [5.77949e-10, 2.3118e-07] (values 2.45845e-121, 2.45846e-121) (tuning integration 0)
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 28 of 28 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=17909)[0m      -- beta=10, M=2.4353e-13 eV, n=2: 464 reflection(s)[32m [repeated 243x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 1 model(s) dropped from the BBN plots
+     -- beta=0.9, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [5.94455e-06, 0.00237782] (values 1.63928e-121, 1.64123e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [7.57448e-09, 3.02979e-06] (values 2.45846e-121, 2.45846e-121) (tuning integration 0)
+     -- beta=0.9, M=2.4353e-05 eV, n=2: step budget exhausted: integrate_scalar_history (B-pl-lab-M-trend-ScalarHistory-InversePowerModel(M=2.4353e-05eV,n=2,beta=0.9)-2026-11-21T15:42:18) took 2000001 accepted steps (budget 2000000) at N=44.35128333, T_J=2.9394e-13 GeV, with 14613 reflection(s) 
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.91074e-05, 0.00764296] (values 1.63994e-121, 1.6462e-121) (tuning integration 0)
+     -- beta=0.75, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.13619e-07, 8.54475e-05] (values 2.45848e-121, 2.45864e-121) (tuning integration 0)
+     -- beta=0.9, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [6.23154e-09, 2.49262e-06] (values 2.95017e-121, 2.95017e-121) (tuning integration 0)
+     -- beta=1, M=0.00097413 eV, n=2: step budget exhausted: integrate_scalar_history (A-pl-lab-ScalarHistory-InversePowerModel(M=0.00097413eV,n=2,beta=1)-2026-11-21T06:06:55) took 2000001 accepted steps (budget 2000000) at N=43.25385083, T_J=1.4522e-12 GeV, with 14663 reflection(s) (tuning in
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 4 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [2.02988e-05, 0.00811951] (values 1.64e-121, 1.64665e-121) (tuning integration 0)
+     -- beta=0.75, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [5.03469e-07, 0.000201388] (values 2.45851e-121, 2.45888e-121) (tuning integration 0)
+     -- beta=0.9, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.9)): V_eff' does not change sign on the bracket [1.77415e-08, 7.0966e-06] (values 2.95017e-121, 2.95019e-121) (tuning integration 0)
+     -- beta=1, M=0.0024353 eV, n=2: step budget exhausted: integrate_scalar_history (B-pl-lab-M-trend-ScalarHistory-InversePowerModel(M=0.0024353eV,n=2,beta=1)-2026-11-21T15:46:41) took 2000001 accepted steps (budget 2000000) at N=44.11663416, T_J=6.1279e-13 GeV, with 14458 reflection(s) (tu
+[36m(build_beta_plot pid=17900)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 26 of 26 model(s) used elastic reflections[32m [repeated 4x across cluster][0m
+[36m(build_beta_plot pid=17900)[0m      -- beta=20, M=0.0024353 eV, n=2: 336 reflection(s)[32m [repeated 110x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 18.7s
+      Queue summary: 7 lookup (avg 22.49/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.5 (one-loop-inverse-power-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17900)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 29 of 29 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=17900)[0m      -- beta=10, M=2.4353e-13 eV, n=2: 198 reflection(s)[32m [repeated 245x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-06 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-06eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [3.06953e-09, 1.22781e-06] (values 1.63898e-121, 1.63898e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 2 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [5.57491e-08, 2.22996e-05] (values 1.63899e-121, 1.639e-121) (tuning integration 0)
+     -- beta=0.75, M=2.4353e-05 eV, n=2: step budget exhausted: integrate_scalar_history (B-pl-lab-M-trend-ScalarHistory-InversePowerModel(M=2.4353e-05eV,n=2,beta=0.75)-2026-11-21T16:18:36) took 2000001 accepted steps (budget 2000000) at N=42.15105205, T_J=1.2534e-12 GeV, with 15009 reflection(s)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 1 model(s) dropped from the BBN plots
+     -- beta=0.9, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.48661e-06, 0.000594644] (values 1.63906e-121, 1.63954e-121) (tuning integration 0)
+     -- beta=0.75, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [1.20188e-09, 4.8075e-07] (values 2.45845e-121, 2.45846e-121) (tuning integration 0)
+     -- beta=0.9, M=0.00097413 eV, n=2: step budget exhausted: integrate_scalar_history (A-pl-lab-ScalarHistory-InversePowerModel(M=0.00097413eV,n=2,beta=0.9)-2026-11-21T06:37:04) took 2000001 accepted steps (budget 2000000) at N=42.57998596, T_J=1.7279e-12 GeV, with 14717 reflection(s) (tuning 
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 3 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [3.0189e-06, 0.00120756] (values 1.63913e-121, 1.64012e-121) (tuning integration 0)
+     -- beta=0.75, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.75)): V_eff' does not change sign on the bracket [2.59708e-09, 1.03883e-06] (values 2.45845e-121, 2.45846e-121) (tuning integration 0)
+     -- beta=0.9, M=0.0024353 eV, n=2: step budget exhausted: integrate_scalar_history (B-pl-lab-M-trend-ScalarHistory-InversePowerModel(M=0.0024353eV,n=2,beta=0.9)-2026-11-21T16:20:50) took 2000001 accepted steps (budget 2000000) at N=43.38895583, T_J=7.6947e-13 GeV, with 14511 reflection(s) (
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 27 of 27 model(s) used elastic reflections[32m [repeated 4x across cluster][0m
+[36m(build_beta_plot pid=17909)[0m      -- beta=20, M=0.0024353 eV, n=2: 146 reflection(s)[32m [repeated 114x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 18.9s
+      Queue summary: 7 lookup (avg 22.17/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-inverse-power-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 29 of 29 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=17909)[0m      -- beta=10, M=2.4353e-13 eV, n=2: 105 reflection(s)[32m [repeated 246x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-06 eV, n=2: step budget exhausted: integrate_scalar_history (B-pl-lab-M-trend-ScalarHistory-InversePowerModel(M=2.4353e-06eV,n=2,beta=0.5)-2026-11-21T16:50:14) took 2000001 accepted steps (budget 2000000) at N=41.93063357, T_J=4.4765e-13 GeV, with 14945 reflection(s) 
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=2.4353e-05 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=2.4353e-05eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.40583e-10, 5.62333e-08] (values 1.63898e-121, 1.63898e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.57511e-08, 6.30044e-06] (values 1.63898e-121, 1.63899e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 2 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.832e-08, 7.32802e-06] (values 1.63898e-121, 1.63899e-121) (tuning integration 0)
+     -- beta=0.75, M=0.0024353 eV, n=2: step budget exhausted: integrate_scalar_history (B-pl-lab-M-trend-ScalarHistory-InversePowerModel(M=0.0024353eV,n=2,beta=0.75)-2026-11-21T16:54:19) took 2000001 accepted steps (budget 2000000) at N=42.12974305, T_J=1.2804e-12 GeV, with 14588 reflection(s) 
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 1 model(s) dropped from the BBN plots
+     -- beta=0.9, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 28 of 28 model(s) used elastic reflections[32m [repeated 4x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m      -- beta=20, M=0.0024353 eV, n=2: 93 reflection(s)[32m [repeated 116x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 19s
+      Queue summary: 7 lookup (avg 22.07/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1.5 (one-loop-inverse-power-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 29 of 29 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m      -- beta=10, M=2.4353e-13 eV, n=2: 72 reflection(s)[32m [repeated 248x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.00097413 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.00097413eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.7198e-11, 6.8792e-09] (values 1.63898e-121, 1.63898e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.74246e-09, 6.96984e-07] (values 1.63898e-121, 1.63898e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 29 of 29 model(s) used elastic reflections[32m [repeated 4x across cluster][0m
+[36m(build_beta_plot pid=17909)[0m      -- beta=20, M=0.0024353 eV, n=2: 74 reflection(s)[32m [repeated 119x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 19.1s
+      Queue summary: 7 lookup (avg 22.02/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 2 (one-loop-inverse-power-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 29 of 29 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=17909)[0m      -- beta=10, M=2.4353e-13 eV, n=2: 54 reflection(s)[32m [repeated 248x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.00097413 eV, n=2: step budget exhausted: integrate_scalar_history (A-pl-lab-ScalarHistory-InversePowerModel(M=0.00097413eV,n=2,beta=0.5)-2026-11-21T07:54:53) took 2000001 accepted steps (budget 2000000) at N=42.46693214, T_J=2.6184e-13 GeV, with 14369 reflection(s) (tuning 
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: the effective minimum was not found: effective_minimum (InversePowerModel(M=0.0024353eV,n=2,beta=0.5)): V_eff' does not change sign on the bracket [1.31101e-10, 5.24406e-08] (values 1.63898e-121, 1.63898e-121) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17900)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 29 of 29 model(s) used elastic reflections[32m [repeated 4x across cluster][0m
+[36m(build_beta_plot pid=17900)[0m      -- beta=20, M=0.0024353 eV, n=2: 58 reflection(s)[32m [repeated 119x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 19.1s
+      Queue summary: 7 lookup (avg 21.98/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 3 (one-loop-inverse-power-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17900)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 29 of 29 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+[36m(build_beta_plot pid=17900)[0m      -- beta=10, M=2.4353e-13 eV, n=2: 37 reflection(s)[32m [repeated 248x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: step budget exhausted: integrate_scalar_history (B-pl-lab-M-trend-ScalarHistory-InversePowerModel(M=0.0024353eV,n=2,beta=0.5)-2026-11-21T18:22:19) took 2000001 accepted steps (budget 2000000) at N=41.62603397, T_J=6.0706e-13 GeV, with 14477 reflection(s) (
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 29 of 29 model(s) used elastic reflections[32m [repeated 4x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m      -- beta=20, M=0.0024353 eV, n=2: 40 reflection(s)[32m [repeated 119x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 24.7s
+      Queue summary: 7 lookup (avg 16.97/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 5 (one-loop-inverse-power-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 29 of 29 model(s) used elastic reflections[32m [repeated 2x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m      -- beta=10, M=2.4353e-13 eV, n=2: 30 reflection(s)[32m [repeated 220x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 30 of 30 model(s) used elastic reflections[32m [repeated 4x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m      -- beta=20, M=2.4353e-05 eV, n=2: 25 reflection(s)[32m [repeated 119x across cluster][0m
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: step budget exhausted: integrate_scalar_history (B-pl-lab-M-trend-ScalarHistory-InversePowerModel(M=0.0024353eV,n=2,beta=0.5)-2026-11-21T18:52:22) took 2000001 accepted steps (budget 2000000) at N=41.55007906, T_J=6.5496e-13 GeV, with 14492 reflection(s) (
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 29 of 29 model(s) used elastic reflections
+[36m(build_beta_plot pid=17909)[0m      -- beta=20, M=0.0024353 eV, n=2: 24 reflection(s)[32m [repeated 29x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=2: 191 of 191 model(s) used elastic reflections
+   -- ALL WORK ITEMS COMPLETE in time 20.5s
+      Queue summary: 7 lookup (avg 20.52/min)
+      (no compute items were evaluated - all assets read from datastore)
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-inverse-power-v1)
+
+** GENERATING SUMMARY PLOTS BY BETA
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-15 eV, n=2: !! overflow ((ln V)'' = inf) in InversePowerModel d2_logV_dphi2 at phi=7.4606e-155 Mp, M=2.4353e-15 eV, n=2 (InversePowerModel(M=2.4353e-15eV,n=2,beta=20)) (tuning integration 0)
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-15 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=20, M=2.4353e-13 eV, n=2: classical_turning_point (InversePowerModel(M=2.4353e-13eV,n=2,beta=20), normalization = -276.63072859401797, phi = 4.9976137816489725, log_E = 247.23539056769104): a non-finite value in ClassicalTurningPoint(phi_t=1.7535477482246874e-154, log_omega_t_squar
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-13 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-15 eV, n=2: 29 of 29 model(s) used elastic reflections
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-09 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-09 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17909)[0m      -- beta=10, M=2.4353e-13 eV, n=2: 15 reflection(s)[32m [repeated 249x across cluster][0m
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-13 eV, n=2: 29 of 29 model(s) used elastic reflections
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-06 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=2.4353e-05 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=2.4353e-05 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17909)[0m !! build_beta_plot 'QCD_Cosmology', M=2.4353e-06 eV, n=2: 30 of 30 model(s) used elastic reflections
+!! plot_by_beta 'QCD_Cosmology', M=0.00097413 eV, n=2: 3 model(s) dropped from the BBN plots
+     -- beta=0.5, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019818 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.75, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.00097413 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 1 model(s) dropped because their ScalarHistory failed or is missing
+     -- beta=0.5, M=0.0024353 eV, n=2: step budget exhausted: integrate_scalar_history (B-pl-lab-M-trend-ScalarHistory-InversePowerModel(M=0.0024353eV,n=2,beta=0.5)-2026-11-21T19:22:03) took 2000001 accepted steps (budget 2000000) at N=41.41217643, T_J=7.5181e-13 GeV, with 14519 reflection(s) (
+!! plot_by_beta 'QCD_Cosmology', M=0.0024353 eV, n=2: 2 model(s) dropped from the BBN plots
+     -- beta=0.75, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019553 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+     -- beta=0.9, M=0.0024353 eV, n=2: PRyMordial: ComputationFailureError: T_in_MeV=0.00019854 MeV is smaller than T_BBN_spline_min=0.0002 MeV
+[36m(build_beta_plot pid=17899)[0m      -- beta=20, M=0.0024353 eV, n=2: 11 reflection(s)[32m [repeated 119x across cluster][0m
+[36m(build_beta_plot pid=17899)[0m !! build_beta_plot 'QCD_Cosmology', M=0.0024353 eV, n=2: 29 of 29 model(s) used elastic reflections[32m [repeated 3x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 18.4s
+      Queue summary: 7 lookup (avg 22.84/min)
+      (no compute items were evaluated - all assets read from datastore)
+@@ plot_Delta_N_eff: left out (NULL or not positive): 21 from the T_CMB panel, 60 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 21 from the T_CMB panel, 60 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 9 from the T_CMB panel, 48 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 14 from the T_CMB panel, 48 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 17 from the T_CMB panel, 48 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 21 from the T_CMB panel, 72 from the 1 MeV panel
+@@ plot_Delta_N_eff: left out (NULL or not positive): 25 from the T_CMB panel, 48 from the 1 MeV panel
+[36m(build_beta_plot pid=17900)[0m      -- beta=20, M=0.00097413 eV, n=2: 11 reflection(s)[32m [repeated 191x across cluster][0m
+[36m(build_beta_plot pid=17900)[0m !! build_beta_plot 'QCD_Cosmology', M=0.00097413 eV, n=2: 191 of 191 model(s) used elastic reflections

@@ -1,0 +1,130 @@
+>> 2026-11-21 20:15:18 R-exp-ladder
+** registered_run: registered as science-2026.14.0-R-R-exp-ladder-20261121T201519
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/science-2026.14.0-R-R-exp-ladder-20261121T201519/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-21 20:15:19,541	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-21 20:15:19,585	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-reflections.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 1 value = [ 2 ]
+   -- populated M sample grid with 1 value = [ 243.53 GeV ]
+   -- populated alpha grid with 2 values = [ 0.01, 0.1 ]
+   -- populated A grid with 3 values = [ 0.1, 1, 10 ] (one-loop-exponential-v2)
+   -- total number of models to integrate = 1
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=89699)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(compute_scalar_history pid=89719)[0m !! tune_history (R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:15:31): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6645 < ln 10 at N = 21.40513794 (generation 1); the generations below ln 10 carry 0.9899 of K
+[36m(compute_scalar_history pid=89719)[0m !! tune_history (R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:15:31): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.1045 < ln 10 at N = 21.9310281 (generation 1); the generations below ln 10 carry 0.9725 of K
+   -- ALL WORK ITEMS COMPLETE in time 13.5s
+      Queue summary: 1 lookup (avg 267.3/hr), 1 compute (avg 267.3/hr), 1 store (avg 267.3/hr), 1 validation (avg 267.3/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.558s
+      Queue summary: 1 lookup (avg 107.5/min), 1 compute (avg 107.5/min), 1 store (avg 107.5/min), 1 validation (avg 107.5/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.28s
+      Queue summary: 1 lookup (avg 387.8/hr), 1 compute (avg 387.8/hr), 1 store (avg 387.8/hr), 1 validation (avg 387.8/hr)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=89719)[0m !! tune_history (R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:15:54): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6645 < ln 10 at N = 21.38093778 (generation 1); the generations below ln 10 carry 0.9924 of K
+[36m(compute_scalar_history pid=89719)[0m !! tune_history (R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:15:54): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.4953 < ln 10 at N = 29.34248036 (generation 17); the generations below ln 10 carry 0.9891 of K
+   -- ALL WORK ITEMS COMPLETE in time 8.49s
+      Queue summary: 1 lookup (avg 424/hr), 1 compute (avg 424/hr), 1 store (avg 424/hr), 1 validation (avg 424/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.53s
+      Queue summary: 1 lookup (avg 113.2/min), 1 compute (avg 113.2/min), 1 store (avg 113.2/min), 1 validation (avg 113.2/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 8.49s
+      Queue summary: 1 lookup (avg 424.1/hr), 1 compute (avg 424.1/hr), 1 store (avg 424.1/hr), 1 validation (avg 424.1/hr)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 0.1 (one-loop-exponential-v2)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=89719)[0m ** STATUS UPDATE #1 - Sat 21 Nov 2026 20:21:12 - R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:16:12
+[36m(compute_scalar_history pid=89719)[0m |    running for 5m 0.000199s (5m 0.000199s since last notification) | reflections = 4137 | current N = 46.009 | current step cap dN=1.4747e-06
+[36m(compute_scalar_history pid=89719)[0m |    --
+[36m(compute_scalar_history pid=89719)[0m |    current T_J = 0.013708 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=89719)[0m |    current log(T_J/GeV) = -25.013 | target log(T_J/GeV) = -29.08 | 89.568% complete measured in T_J
+[36m(compute_scalar_history pid=89719)[0m |    --
+[36m(compute_scalar_history pid=89719)[0m |    4137 elastic reflection events, 4137 since last update: N = [20.352, 21.383, 21.895, 22.312, 22.97, 23.621, 24.139, 24.872, 28.118, 28.637, ..., 46.005, 46.005, 46.006, 46.006, 46.007, 46.007, 46.008, 46.008, 46.008, 46.009]
+[36m(compute_scalar_history pid=89719)[0m |    4752180 RHS evaluations, mean 1.3118e-05s per evaluation, min RHS time = 1.0791e-05s, max RHS time = 0.12116s
+[36m(compute_scalar_history pid=89719)[0m |    current state: phi_E = 1.3635e+08 GeV, pi_E = 0.001265 Mp, f_m = 58.447, log(rho_rad/GeV^4) = -99.947, T_J = 0.013708 eV
+[36m(compute_scalar_history pid=89719)[0m ** STATUS UPDATE #2 - Sat 21 Nov 2026 20:26:12 - R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:16:12
+[36m(compute_scalar_history pid=89719)[0m |    running for 10m 0.000668s (5m 0.000229s since last notification) | reflections = 8323 | current N = 47.286 | current step cap dN=3.04e-08
+[36m(compute_scalar_history pid=89719)[0m |    --
+[36m(compute_scalar_history pid=89719)[0m |    current T_J = 0.0038224 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=89719)[0m |    current log(T_J/GeV) = -26.29 | target log(T_J/GeV) = -29.08 | 92.844% complete measured in T_J
+[36m(compute_scalar_history pid=89719)[0m |    log_T_GeV increment since last update: Delta[ log(T_J/GeV) ] = 1.2771 | expected completion = Sat 21 Nov 2026 20:37:07
+[36m(compute_scalar_history pid=89719)[0m |    --
+[36m(compute_scalar_history pid=89719)[0m |    8323 elastic reflection events, 4186 since last update: N = [46.009, 46.01, 46.01, 46.011, 46.011, 46.011, 46.012, 46.012, 46.013, 46.013, ..., 47.284, 47.284, 47.284, 47.284, 47.285, 47.285, 47.285, 47.285, 47.286, 47.286]
+[36m(compute_scalar_history pid=89719)[0m |    9562008 RHS evaluations, mean 1.3118e-05s per evaluation, min RHS time = 1.0791e-05s, max RHS time = 0.12116s
+[36m(compute_scalar_history pid=89719)[0m |    current state: phi_E = 4.8668e+08 GeV, pi_E = -0.00066774 Mp, f_m = 209.61, log(rho_rad/GeV^4) = -105.06, T_J = 0.0038224 eV
+[36m(compute_scalar_history pid=89719)[0m !! tune_history (R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:16:12): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6645 < ln 10 at N = 21.38292852 (generation 1); the generations below ln 10 carry 1 of K
+[36m(compute_scalar_history pid=89719)[0m !! tune_history (R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:16:12): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.1076 < ln 10 at N = 21.89515441 (generation 1); the generations below ln 10 carry 1 of K
+[36m(compute_scalar_history pid=89719)[0m -- tune R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:16:12 it=0 kind=seed H/H0-1=+6.231e-08 phi_ref/phi_min-1=+6.013e-08 norm=-276.630728695 phi_ref=1.0521660029e-08 wall=705.2
+   -- 2026-11-21 20:27:58 (11m 46.6s running): 0/1 work items remaining = 100.00% complete (may be waiting for compute/store/validate tasks to finish)
+      inflight: 0 lookup, 0 compute, 1 store, 0 validation | completed: 1 lookup (avg 122.3/day), 1 compute (avg 122.3/day), 0 store (avg 0/day), 0 validation (avg 0/day)
+   -- ALL WORK ITEMS COMPLETE in time 11m 48.7s
+      Queue summary: 1 lookup (avg 121.9/day), 1 compute (avg 121.9/day), 1 store (avg 121.9/day), 1 validation (avg 121.9/day)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.04s
+      Queue summary: 1 lookup (avg 57.7/min), 1 compute (avg 57.7/min), 1 store (avg 57.7/min), 1 validation (avg 57.7/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.04s
+      Queue summary: 1 lookup (avg 398.3/hr), 1 compute (avg 398.3/hr), 1 store (avg 398.3/hr), 1 validation (avg 398.3/hr)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-exponential-v2)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=89719)[0m !! tune_history (R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:28:10): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6645 < ln 10 at N = 20.78743113 (generation 1); the generations below ln 10 carry 0.9999 of K
+[36m(compute_scalar_history pid=89719)[0m !! tune_history (R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:28:10): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.4817 < ln 10 at N = 21.34716757 (generation 3); the generations below ln 10 carry 0.9999 of K
+   -- ALL WORK ITEMS COMPLETE in time 17.3s
+      Queue summary: 1 lookup (avg 207.5/hr), 1 compute (avg 207.5/hr), 1 store (avg 207.5/hr), 1 validation (avg 207.5/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.562s
+      Queue summary: 1 lookup (avg 106.7/min), 1 compute (avg 106.7/min), 1 store (avg 106.7/min), 1 validation (avg 106.7/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 8.86s
+      Queue summary: 1 lookup (avg 406.5/hr), 1 compute (avg 406.5/hr), 1 store (avg 406.5/hr), 1 validation (avg 406.5/hr)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 10 (one-loop-exponential-v2)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=89719)[0m !! tune_history (R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:28:37): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6642 < ln 10 at N = 20.53701833 (generation 1); the generations below ln 10 carry 1 of K
+[36m(compute_scalar_history pid=89719)[0m !! tune_history (R-exp-ladder-ScalarHistory-ExponentialModel(M=243.53GeV,n=1,beta=2)-2026-11-21T20:28:37): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = 1.7511 < ln 10 at N = 20.55408161 (generation 1); the generations below ln 10 carry 1 of K
+   -- ALL WORK ITEMS COMPLETE in time 35.4s
+      Queue summary: 1 lookup (avg 101.8/hr), 1 compute (avg 101.8/hr), 1 store (avg 101.8/hr), 1 validation (avg 101.8/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 0.553s
+      Queue summary: 1 lookup (avg 108.5/min), 1 compute (avg 108.5/min), 1 store (avg 108.5/min), 1 validation (avg 108.5/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 8.11s
+      Queue summary: 1 lookup (avg 443.7/hr), 1 compute (avg 443.7/hr), 1 store (avg 443.7/hr), 1 validation (avg 443.7/hr)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0

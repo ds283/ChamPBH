@@ -125,6 +125,15 @@ at A = 1, 0.63 → 0.599 at A = 10).
   (or 60) is not measured here. Figure 6 does not mark this. The exponential's law reads ℓ, which is 32–39 at the first impact at A = 1 (M-trend
   panel (b)), inside the ℓ ≤ 45 one-loop-drain 02d measured. No campaign board records the power walls' extrapolation;
   it is the user's to rule on.
+
+  **Corrected later on 2026-11-22.** The range stated above is wrong. It came from `fit_fn.txt`'s grid check rows,
+  which stop at ln R = 100 and 60. The falling branch was fitted on stage 2's curve points
+  (`.documents/power-law-wall/wall-02/stage2_scan.txt`), which reach ln R = 554.5 at n = 1 (the 10⁻³³ M_P curve) and
+  344.7 at n = 2. So this run's first impacts at laboratory M go about 15% beyond the measured range at n = 1 (to 635)
+  and 11% at n = 2 (to 383), not 3–6 times. Over every M of the run they reach 740 and 490. At the top of the measured
+  range the law is 4–5% below the measured f at n = 1 (0.0513 against 0.0538 at ln R = 545.6) and 2% at n = 2 (0.0597
+  against 0.0611 at 329.7). The user ruled on 2026-11-22: "For now we'll accept the `ln R` extrapolation". The run's
+  README, "What stays open", says what a test would take.
 - `pl1` has no history at β = 10, 15 or 20 at any M: all 180 fail (`../m-trend/NOTES.md`). On the other walls those β surf the electroweak kick,
   where the shifts are small.
 

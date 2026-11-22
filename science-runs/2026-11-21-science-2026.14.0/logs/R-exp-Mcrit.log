@@ -1,0 +1,126 @@
+>> 2026-11-21 23:39:50 R-exp-Mcrit
+** registered_run: registered as science-2026.14.0-C-exp-R-exp-Mcrit-20261121T233952
+**   manifest /Users/ds283/Documents/Code/ChamPBH/var/runs/science-2026.14.0-C-exp-R-exp-Mcrit-20261121T233952/manifest.json
+**   list it with: ./venv/bin/python -m runregistrykit list
+>> packages: datastorekit 0.4.0 (https://github.com/ds283/DatastoreKit@c8570e849334d09085bbd84876095fc9e22bd005, requested v0.4.0); raypoolkit 0.3.0 (https://github.com/ds283/RayPoolKit@67a75b97a656accb98195a4bda93f64e6a5f3fb2, requested v0.3.0); ray 2.59.0 (no recorded origin); SQLAlchemy 2.0.55 (no recorded origin); numpy 2.3.5 (no recorded origin); scipy 1.17.0 (no recorded origin)
+2026-11-21 23:39:52,673	INFO worker.py:1836 -- Connecting to existing Ray cluster at address: 127.0.0.1:6380...
+2026-11-21 23:39:52,730	INFO worker.py:2024 -- Connected to Ray cluster. View the dashboard at [1m[32mhttp://127.0.0.1:8267 [39m[22m
+>> Opened existing sharded datastore "/Users/ds283/Documents/Code/ChamPBH/var/datastores/science-2026.14.0-reflections.db" with 16 shards
+
+** BUILDING GRID OF MODELS TO SAMPLE
+   -- using model ExponentialModel, V = V0 exp((M/phi)^n), with n = [ 1 ]
+   -- populated beta sample grid with 3 values = [ 1.2, 2, 2.9 ]
+   -- populated M sample grid with 2 values = [ 2435.3 GeV, 2.4353e+06 GeV ]
+   -- populated alpha grid with 2 values = [ 0.01, 0.1 ]
+   -- populated A grid with 1 value = [ 1 ] (one-loop-exponential-v2)
+   -- total number of models to integrate = 6
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.01
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(Datastore pid=5675)[0m @@ Parametrized equation-of-state LambdaCDM-like model "QCD equation of state based on Saikawa & Shirai parametrization (arXiv:1803.01038), with adjustments (splined) | Planck2018 68% central values TT+TE+EE+lowP+lensing+BAO"
+[36m(compute_scalar_history pid=5726)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:04): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-1.586 < 1 at the first impact (phi_t = 9.79e-18 M_P)
+[36m(compute_scalar_history pid=5726)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:04): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6646 < ln 10 at N = 17.66785152 (generation 0); the generations below ln 10 carry 0.9996 of K
+[36m(compute_scalar_history pid=5726)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:04): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = 0.5496 < ln 10 at N = 25.97252977 (generation 2); the generations below ln 10 carry 0.04374 of K
+[36m(compute_scalar_history pid=5727)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-21T23:40:05): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-13.586 < 1 at the first impact (phi_t = 9.79e-15 M_P)
+[36m(compute_scalar_history pid=5734)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2.9)-2026-11-21T23:40:05): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6664 < ln 10 at N = 23.88781995 (generation 0); the generations below ln 10 carry 0.9928 of K[32m [repeated 2x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[36m(compute_scalar_history pid=5734)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2.9)-2026-11-21T23:40:05): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.5598 < ln 10 at N = 34.14637243 (generation 35); the generations below ln 10 carry 0.9928 of K[32m [repeated 2x across cluster][0m
+[36m(compute_scalar_history pid=5737)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2.9)-2026-11-21T23:40:05): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-10.357 < 1 at the first impact (phi_t = 9.17e-15 M_P)
+   -- ALL WORK ITEMS COMPLETE in time 16.5s
+      Queue summary: 6 lookup (avg 21.87/min), 6 compute (avg 21.87/min), 6 store (avg 21.87/min), 6 validation (avg 21.87/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.18s
+      Queue summary: 6 lookup (avg 305.5/min), 6 compute (avg 305.5/min), 6 store (avg 305.5/min), 6 validation (avg 305.5/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 10.3s
+      Queue summary: 6 lookup (avg 34.83/min), 6 compute (avg 34.83/min), 6 store (avg 34.83/min), 6 validation (avg 34.83/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, alpha = 0.1
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=5737)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:32): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6646 < ln 10 at N = 17.66785152 (generation 0); the generations below ln 10 carry 0.9999 of K[32m [repeated 4x across cluster][0m
+[36m(compute_scalar_history pid=5737)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:32): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = 0.0598 < ln 10 at N = 25.84266411 (generation 3); the generations below ln 10 carry 0.04028 of K[32m [repeated 4x across cluster][0m
+[36m(compute_scalar_history pid=5737)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:32): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-1.586 < 1 at the first impact (phi_t = 9.79e-18 M_P)[32m [repeated 2x across cluster][0m
+[36m(compute_scalar_history pid=5728)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-21T23:40:33): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6656 < ln 10 at N = 20.35209825 (generation 0); the generations below ln 10 carry 0.9924 of K[32m [repeated 5x across cluster][0m
+[36m(compute_scalar_history pid=5728)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-21T23:40:33): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.4953 < ln 10 at N = 29.34248035 (generation 17); the generations below ln 10 carry 0.9891 of K[32m [repeated 5x across cluster][0m
+[36m(compute_scalar_history pid=5727)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2)-2026-11-21T23:40:33): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-11.763 < 1 at the first impact (phi_t = 9.43e-15 M_P)[32m [repeated 3x across cluster][0m
+   -- ALL WORK ITEMS COMPLETE in time 12.5s
+      Queue summary: 6 lookup (avg 28.72/min), 6 compute (avg 28.72/min), 6 store (avg 28.72/min), 6 validation (avg 28.72/min)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.07s
+      Queue summary: 6 lookup (avg 336.9/min), 6 compute (avg 336.9/min), 6 store (avg 336.9/min), 6 validation (avg 336.9/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 9.25s
+      Queue summary: 6 lookup (avg 38.9/min), 6 compute (avg 38.9/min), 6 store (avg 38.9/min), 6 validation (avg 38.9/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+
+>> RUNNING PIPELINE FOR MODEL QCD_Cosmology, A = 1 (one-loop-exponential-v2)
+
+** CALCULATE SCALAR FIELD HISTORIES FOR SAMPLE GRID
+[36m(compute_scalar_history pid=5734)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-21T23:40:55): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6645 < ln 10 at N = 21.40767202 (generation 1); the generations below ln 10 carry 0.007975 of K
+[36m(compute_scalar_history pid=5734)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2)-2026-11-21T23:40:55): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = -0.1052 < ln 10 at N = 21.93611759 (generation 1); the generations below ln 10 carry 0.007975 of K
+[36m(compute_scalar_history pid=5737)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=2)-2026-11-21T23:40:56): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-11.763 < 1 at the first impact (phi_t = 9.43e-15 M_P)
+[36m(compute_scalar_history pid=5727)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2.9)-2026-11-21T23:40:56): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6664 < ln 10 at N = 23.88781995 (generation 0); the generations below ln 10 carry 0.9998 of K
+[36m(compute_scalar_history pid=5727)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=2.9)-2026-11-21T23:40:56): dissipation mode: the spectrum's peak is not relativistic at a later bounce: the worst margin ln(p/m) = 0.5974 < ln 10 at N = 24.82585938 (generation 0); the generations below ln 10 carry 0.9998 of K
+[36m(compute_scalar_history pid=5726)[0m -- tune R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-21T23:40:55 it=0 kind=seed H/H0-1=+1.471e-05 phi_ref/phi_min-1=+1.919e-07 norm=-276.630736429 phi_ref=1.3583357095e-06 wall=240.7
+[36m(compute_scalar_history pid=5726)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-21T23:40:55): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-13.586 < 1 at the first impact (phi_t = 9.79e-15 M_P)[32m [repeated 2x across cluster][0m
+[36m(compute_scalar_history pid=5726)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-21T23:40:55): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6646 < ln 10 at N = 17.66785152 (generation 0); the generations below ln 10 carry 1 of K
+[36m(compute_scalar_history pid=5729)[0m ** STATUS UPDATE #1 - Sat 21 Nov 2026 23:45:56 - R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:56
+[36m(compute_scalar_history pid=5729)[0m |    running for 5m 3.89e-05s (5m 3.89e-05s since last notification) | reflections = 4173 | current N = 43.786 | current step cap dN=7.0444e-08
+[36m(compute_scalar_history pid=5729)[0m |    --
+[36m(compute_scalar_history pid=5729)[0m |    current T_J = 0.002319 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=5729)[0m |    current log(T_J/GeV) = -26.79 | target log(T_J/GeV) = -29.08 | 94.126% complete measured in T_J
+[36m(compute_scalar_history pid=5729)[0m |    --
+[36m(compute_scalar_history pid=5729)[0m |    4173 elastic reflection events, 4173 since last update: N = [17.668, 20.099, 25.179, 26.022, 33.178, 33.876, 34.284, 34.575, 34.8, 34.985, ..., 43.781, 43.782, 43.782, 43.783, 43.783, 43.783, 43.784, 43.784, 43.785, 43.785]
+[36m(compute_scalar_history pid=5729)[0m |    4756868 RHS evaluations, mean 1.3187e-05s per evaluation, min RHS time = 1.0709e-05s, max RHS time = 0.1025s
+[36m(compute_scalar_history pid=5729)[0m |    current state: phi_E = 1.2311e+09 GeV, pi_E = -0.0007958 Mp, f_m = 345.49, log(rho_rad/GeV^4) = -107.05, T_J = 0.002319 eV
+[36m(compute_scalar_history pid=5729)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:56): dissipation mode: the reflections are expected to be nearly elastic in this regime: the test-field ratio R = 10^-1.586 < 1 at the first impact (phi_t = 9.79e-18 M_P)
+[36m(compute_scalar_history pid=5729)[0m !! tune_history (R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:56): dissipation mode: the spectrum's peak is not relativistic at its birth: the worst margin ln(p/m) = -0.6646 < ln 10 at N = 17.66785152 (generation 0); the generations below ln 10 carry 1 of K
+[36m(compute_scalar_history pid=5729)[0m -- tune R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:56 it=0 kind=seed H/H0-1=-6.529e-05 phi_ref/phi_min-1=+2.345e-07 norm=-276.630728842 phi_ref=4.2954494342e-08 wall=454.4
+[36m(compute_scalar_history pid=5726)[0m -- tune R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-21T23:40:55 it=1 kind=plain H/H0-1=+1.419e-05 phi_ref/phi_min-1=+2.140e-05 norm=-276.630779147 phi_ref=1.3583354488e-06 wall=244.3
+[36m(compute_scalar_history pid=5726)[0m -- tune R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-21T23:40:55 it=2 kind=secant H/H0-1=-4.479e-04 phi_ref/phi_min-1=-2.995e-06 norm=-276.632021248 phi_ref=1.3574590609e-06 wall=241.8
+[36m(compute_scalar_history pid=5729)[0m ** STATUS UPDATE #1 - Sat 21 Nov 2026 23:53:30 - R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:56
+[36m(compute_scalar_history pid=5729)[0m |    running for 5m 0.000232s (5m 0.000232s since last notification) | reflections = 4133 | current N = 43.786 | current step cap dN=1.8255e-07
+[36m(compute_scalar_history pid=5729)[0m |    --
+[36m(compute_scalar_history pid=5729)[0m |    current T_J = 0.0023174 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=5729)[0m |    current log(T_J/GeV) = -26.791 | target log(T_J/GeV) = -29.08 | 94.128% complete measured in T_J
+[36m(compute_scalar_history pid=5729)[0m |    --
+[36m(compute_scalar_history pid=5729)[0m |    4133 elastic reflection events, 4133 since last update: N = [17.668, 20.099, 25.179, 26.022, 33.178, 33.876, 34.284, 34.575, 34.8, 34.985, ..., 43.782, 43.782, 43.783, 43.783, 43.784, 43.784, 43.785, 43.785, 43.786, 43.786]
+[36m(compute_scalar_history pid=5729)[0m |    4720114 RHS evaluations, mean 1.313e-05s per evaluation, min RHS time = 1.0666e-05s, max RHS time = 0.00057425s
+[36m(compute_scalar_history pid=5729)[0m |    current state: phi_E = 1.4577e-09 Mp, pi_E = -0.00081113 Mp, f_m = 345.72, log(rho_rad/GeV^4) = -107.06, T_J = 0.0023174 eV
+[36m(compute_scalar_history pid=5729)[0m -- tune R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:56 it=1 kind=plain H/H0-1=+5.100e-05 phi_ref/phi_min-1=-9.478e-05 norm=-276.630539253 phi_ref=4.2954484269e-08 wall=453.6
+[36m(compute_scalar_history pid=5726)[0m -- tune R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-21T23:40:55 it=3 kind=plain H/H0-1=-8.173e-06 phi_ref/phi_min-1=-6.502e-04 norm=-276.63072021 phi_ref=1.3574631267e-06 wall=240.1
+[36m(compute_scalar_history pid=5729)[0m ** STATUS UPDATE #1 - Sun 22 Nov 2026 00:01:04 - R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:56
+[36m(compute_scalar_history pid=5729)[0m |    running for 5m 9.2e-05s (5m 9.2e-05s since last notification) | reflections = 4089 | current N = 43.77 | current step cap dN=1.304e-08
+[36m(compute_scalar_history pid=5729)[0m |    --
+[36m(compute_scalar_history pid=5729)[0m |    current T_J = 0.0023567 eV | target T_J = 0.00023487 eV
+[36m(compute_scalar_history pid=5729)[0m |    current log(T_J/GeV) = -26.774 | target log(T_J/GeV) = -29.08 | 94.085% complete measured in T_J
+[36m(compute_scalar_history pid=5729)[0m |    --
+[36m(compute_scalar_history pid=5729)[0m |    4089 elastic reflection events, 4089 since last update: N = [17.668, 20.099, 25.179, 26.022, 33.178, 33.876, 34.284, 34.575, 34.8, 34.985, ..., 43.765, 43.765, 43.766, 43.766, 43.767, 43.767, 43.768, 43.768, 43.769, 43.769]
+[36m(compute_scalar_history pid=5729)[0m |    4684591 RHS evaluations, mean 1.3205e-05s per evaluation, min RHS time = 1.0666e-05s, max RHS time = 0.00061929s
+[36m(compute_scalar_history pid=5729)[0m |    current state: phi_E = 2.3334e+08 GeV, pi_E = -0.00074491 Mp, f_m = 339.97, log(rho_rad/GeV^4) = -106.99, T_J = 0.0023567 eV
+[36m(compute_scalar_history pid=5726)[0m -- tune R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-21T23:40:55 it=4 kind=secant H/H0-1=-1.270e-05 phi_ref/phi_min-1=+7.006e-07 norm=-276.630696009 phi_ref=1.3583638361e-06 wall=242.7
+[36m(compute_scalar_history pid=5729)[0m -- tune R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2435.3GeV,n=1,beta=1.2)-2026-11-21T23:40:56 it=2 kind=secant H/H0-1=+5.260e-06 phi_ref/phi_min-1=-2.882e-08 norm=-276.630622362 phi_ref=4.2956769627e-08 wall=455.4
+[36m(compute_scalar_history pid=5726)[0m -- tune R-exp-Mcrit-ScalarHistory-ExponentialModel(M=2.4353e+06GeV,n=1,beta=1.2)-2026-11-21T23:40:55 it=5 kind=secant H/H0-1=-3.370e-06 phi_ref/phi_min-1=+2.043e-08 norm=-276.63065732 phi_ref=1.3583891493e-06 wall=239.3
+   -- 2026-11-22 00:05:06 (24m 11.2s running): 0/1 work items remaining = 100.00% complete (may be waiting for compute/store/validate tasks to finish)
+      inflight: 0 lookup, 0 compute, 2 store, 0 validation | completed: 6 lookup (avg 14.88/hr), 6 compute (avg 14.88/hr), 4 store (avg 238.1/day), 4 validation (avg 238.1/day)
+   -- ALL WORK ITEMS COMPLETE in time 24m 14.8s
+      Queue summary: 6 lookup (avg 14.85/hr), 6 compute (avg 14.85/hr), 6 store (avg 14.85/hr), 6 validation (avg 14.85/hr)
+
+** CALCULATE ADIABATIC TRANSGRESSION PARAMETERS
+   -- ALL WORK ITEMS COMPLETE in time 1.92s
+      Queue summary: 6 lookup (avg 187.1/min), 6 compute (avg 187.1/min), 6 store (avg 187.1/min), 6 validation (avg 187.1/min)
+-- AdiabaticHistory: 0 models skipped because their ScalarHistory failed
+
+** CALCULATE BBN DATA
+   -- ALL WORK ITEMS COMPLETE in time 10.8s
+      Queue summary: 6 lookup (avg 33.43/min), 6 compute (avg 33.43/min), 6 store (avg 33.43/min), 6 validation (avg 33.43/min)
+-- BBNData: 0 models skipped because their ScalarHistory failed; 0 computations skipped because of a stored failure
+** driver exit status 0

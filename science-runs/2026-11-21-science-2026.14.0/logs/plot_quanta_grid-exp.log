@@ -1,0 +1,60 @@
+plot_quanta_grid: histories.csv rows: fixed 1851, marker 2400, failed 160, drawn 3610
+one-loop-exponential-v2 A=0.05: drawn 343, failed 28, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 343, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.05/plots/quanta_grid.pdf var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.05/plots/quanta_grid.png; wall 4.02 s
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+one-loop-exponential-v2 A=0.1: drawn 343, failed 28, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 343, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.1/plots/quanta_grid.pdf var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.1/plots/quanta_grid.png; wall 3.82 s
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+one-loop-exponential-v2 A=0.2: drawn 343, failed 28, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 343, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.2/plots/quanta_grid.pdf var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.2/plots/quanta_grid.png; wall 3.95 s
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+one-loop-exponential-v2 A=0.5: drawn 348, failed 23, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 348, c 0, h 0, i 0, j 0]; degenerate colour range [(b) none]; wrote var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.5/plots/quanta_grid.pdf var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=0.5/plots/quanta_grid.png; wall 3.99 s
+one-loop-exponential-v2 A=1: drawn 406, failed 25, no quanta row 17; blank cells [a 0, b 0, c 0, d 46, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 357, c 8, h 0, i 0, j 0]; degenerate colour range [none]; wrote var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/quanta_grid.pdf var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1/plots/quanta_grid.png; wall 4.21 s
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+one-loop-exponential-v2 A=1.5: drawn 361, failed 10, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 360, c 0, h 0, i 0, j 0]; degenerate colour range [(b) one]; wrote var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1.5/plots/quanta_grid.pdf var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=1.5/plots/quanta_grid.png; wall 4.04 s
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+one-loop-exponential-v2 A=2: drawn 362, failed 9, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 361, c 0, h 0, i 0, j 0]; degenerate colour range [(b) one]; wrote var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=2/plots/quanta_grid.pdf var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=2/plots/quanta_grid.png; wall 4.04 s
+one-loop-exponential-v2 A=3: drawn 367, failed 4, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 366, c 0, h 0, i 0, j 0]; degenerate colour range [(b) one]; wrote var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=3/plots/quanta_grid.pdf var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=3/plots/quanta_grid.png; wall 4.05 s
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+/Users/ds283/Documents/Code/ChamPBH/venv/lib/python3.13/site-packages/matplotlib/colors.py:778: RuntimeWarning: overflow encountered in multiply
+  xa *= self.N
+one-loop-exponential-v2 A=5: drawn 368, failed 3, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 367, c 0, h 0, i 0, j 0]; degenerate colour range [(b) one]; wrote var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=5/plots/quanta_grid.pdf var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=5/plots/quanta_grid.png; wall 3.88 s
+one-loop-exponential-v2 A=10: drawn 369, failed 2, no quanta row 0; blank cells [a 0, b 0, c 0, d 0, e 0, f 0, g 0, h 0, i 0, j 0]; zero cells [b 368, c 0, h 0, i 0, j 0]; degenerate colour range [(b) one]; wrote var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=10/plots/quanta_grid.pdf var/science-2026.14.0/out/exp/QCD_Cosmology/exponential/one-loop-exponential-v2/A=10/plots/quanta_grid.png; wall 4.16 s
+plot_quanta_grid (R8-exponential-v2, assoc scale 1): figures written 10, refused 0, A with no drawn or failed row 0; skipped as fixed-law 1851, marker rows 2400; wall 40.2 s
