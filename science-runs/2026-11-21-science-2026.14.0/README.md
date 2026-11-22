@@ -42,6 +42,11 @@ on 2026-11-22:
   impacts reach ln R = 635 and 383 at laboratory M, and 740 and 490 at 10⁻⁴² M_P. The notes first stated the measured
   range as 100 and 60; `fig6/NOTES.md` and `m-trend/NOTES.md` carry the correction. The test that followed
   ([`lnR-test/`](lnR-test/NOTES.md)) found the law's offset unchanged out to ln R = 700 (n = 1) and 500 (n = 2).
+- **No refit of the power-wall law.** The user, 2026-11-22, on the offset the test found: "I'm not going to worry too
+  much about the power law fit being < 5% low". The user's reasons: the offset is likely smaller than the accuracy of
+  the approximations, and the amplitude of the effect is uncertain anyway, which is what A is for. The power-law
+  calculation's main purpose is to test whether the details of the reflections are sensitive to the type of wall,
+  and the user reads the outcome as that largely they are not. `one-loop-inverse-power-v1` stays as it is.
 
 ## Standard analyses
 
@@ -223,6 +228,8 @@ Only what the analyses read was copied here, byte for byte, with SHA-256 checked
   - the extrapolation adds nothing new, and nothing was rebuilt.
 
   Whether to refit the law to remove the offset is the user's to decide.
+
+  **Ruled later on 2026-11-22: no refit** (see "Rulings after the build"). This item is closed.
 - **As 2026.11.0 left them:**
   - `[02-one-loop-tunings-fail-at-small-A-in-the-transition-window]`;
   - the one-loop tuning cap at M_crit;

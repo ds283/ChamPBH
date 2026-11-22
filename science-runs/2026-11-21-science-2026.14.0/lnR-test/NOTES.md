@@ -82,3 +82,11 @@ From `lnR_test.txt` and `lnR_test-cap1e30.txt`. "law − f" is relative to stage
   - the exponential's own extrapolation in ℓ below 4×10⁻³¹ M_P (P4).
 - Whether the law should be refitted to remove its offset is the user's to decide. A refit would change
   `one-loop-inverse-power-v1` and so the power-law store.
+
+## Ruled later on 2026-11-22: no refit
+
+The user, after reviewing these notes: "I'm not going to worry too much about the power law fit being < 5% low". The
+user's reasons: the offset is likely smaller than the accuracy of the approximations, and the amplitude of the effect is
+uncertain anyway, which is what A is for. The power-law calculation's main purpose is to test whether the details of the
+reflections are sensitive to the type of wall, and the user reads the outcome as that largely they are not.
+`one-loop-inverse-power-v1` stays as it is, and the power-law store is not rebuilt.
