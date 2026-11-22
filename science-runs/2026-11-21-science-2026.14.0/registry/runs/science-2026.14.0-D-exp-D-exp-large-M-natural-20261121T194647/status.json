@@ -1,0 +1,215 @@
+{
+  "exit_code": 0,
+  "fingerprint": {
+    "classes": {
+      "AdiabaticHistory": {
+        "count": 4462,
+        "digest": "b9fd64b600ea9e359c785fca88343a49b852889586662aa8185c0896b38ec174",
+        "tag_sets": [
+          {
+            "count": 4462,
+            "digest": "b9fd64b600ea9e359c785fca88343a49b852889586662aa8185c0896b38ec174",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "BBNData": {
+        "count": 4462,
+        "digest": "e27e982426c454d0b17160e37e9b6591793800dd2e8d8f50d950762ad9e38b65",
+        "tag_sets": [
+          {
+            "count": 4462,
+            "digest": "e27e982426c454d0b17160e37e9b6591793800dd2e8d8f50d950762ad9e38b65",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "ExponentialModel": {
+        "count": 557,
+        "digest": "9725419017589d5c5705315fc01506e1f8e6b41894fac4c9f449cc2eb3158f98",
+        "tag_sets": [
+          {
+            "count": 557,
+            "digest": "9725419017589d5c5705315fc01506e1f8e6b41894fac4c9f449cc2eb3158f98",
+            "tags": []
+          }
+        ]
+      },
+      "IntegrationSolver": {
+        "count": 7,
+        "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+        "tag_sets": [
+          {
+            "count": 7,
+            "digest": "5806cd3cbdd9430253813a33ebea6ff660ea4ace1fc8f0f8739e653941343783",
+            "tags": []
+          }
+        ]
+      },
+      "InversePowerModel": {
+        "count": 0,
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tag_sets": []
+      },
+      "M_value": {
+        "count": 10,
+        "digest": "759a923b37ed061f899183e234a219f858ca9c8c25819859b819c927d14dbecf",
+        "tag_sets": [
+          {
+            "count": 10,
+            "digest": "759a923b37ed061f899183e234a219f858ca9c8c25819859b819c927d14dbecf",
+            "tags": []
+          }
+        ]
+      },
+      "QCD_Cosmology": {
+        "count": 1,
+        "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "dcbaa9d413d45bf56b63a2a6ac1da865159e363f8b5ea2a479265113b82091b2",
+            "tags": []
+          }
+        ]
+      },
+      "ScalarHistory": {
+        "count": 4638,
+        "digest": "0fa2888abc0364ecc9099e338f1c4a800f0e30b8757c838d2b249529732c8655",
+        "tag_sets": [
+          {
+            "count": 4638,
+            "digest": "0fa2888abc0364ecc9099e338f1c4a800f0e30b8757c838d2b249529732c8655",
+            "tags": [
+              "SamplesPerLog10Z_250"
+            ]
+          }
+        ]
+      },
+      "alpha_value": {
+        "count": 13,
+        "digest": "ed978956bd86aad3beb6767af23b5cd72b363ae14286b1b567dceaaf9264a156",
+        "tag_sets": [
+          {
+            "count": 13,
+            "digest": "ed978956bd86aad3beb6767af23b5cd72b363ae14286b1b567dceaaf9264a156",
+            "tags": []
+          }
+        ]
+      },
+      "beta_value": {
+        "count": 205,
+        "digest": "69b465ef048d4c814539b504034438020375cde0985b19040ea1d34a7d855382",
+        "tag_sets": [
+          {
+            "count": 205,
+            "digest": "69b465ef048d4c814539b504034438020375cde0985b19040ea1d34a7d855382",
+            "tags": []
+          }
+        ]
+      },
+      "phi_value": {
+        "count": 1,
+        "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "29e7a88b01e35866c8f102278ae2ab0eaaecef332e2fe6badec047d47894e14a",
+            "tags": []
+          }
+        ]
+      },
+      "pi_value": {
+        "count": 1,
+        "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "237cd5e9616925eae2215daa8eb602f9db5e521a4415d78f11056c39f8c74cc8",
+            "tags": []
+          }
+        ]
+      },
+      "redshift": {
+        "count": 75001,
+        "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+        "tag_sets": [
+          {
+            "count": 75001,
+            "digest": "8dad579a1ae8f2a82a70c62838d7200adc490a4205dc7976074a17f3012b450d",
+            "tags": []
+          }
+        ]
+      },
+      "store_tag": {
+        "count": 1,
+        "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "34407c96658d27b3334475fbcac14bdf7862190810b233d798b75c11a6450531",
+            "tags": []
+          }
+        ]
+      },
+      "temperature": {
+        "count": 1,
+        "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "9bd0581c026ad77d80f5c76b87ad07d5299ba643855d44d4b3d27bdd06b061bf",
+            "tags": []
+          }
+        ]
+      },
+      "tolerance": {
+        "count": 2,
+        "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+        "tag_sets": [
+          {
+            "count": 2,
+            "digest": "a6a6f286796401ec6660c96b91e9635bbf6cad6951285cbbf48b5d1ea823c5ef",
+            "tags": []
+          }
+        ]
+      },
+      "version": {
+        "count": 1,
+        "digest": "8f50f27e6fc9bce34ccc9f1c75408165c7a87fba0c4a52a4d8b59716be0a078e",
+        "tag_sets": [
+          {
+            "count": 1,
+            "digest": "8f50f27e6fc9bce34ccc9f1c75408165c7a87fba0c4a52a4d8b59716be0a078e",
+            "tags": []
+          }
+        ]
+      }
+    },
+    "digest": "30d1309f90f96971b614e7f9f11824b8adcdf30a34a9ebdde4332d0a2d48994e",
+    "encoding_format": 1,
+    "fingerprint_format": 8,
+    "problems": {},
+    "taken": {
+      "git_dirty": false,
+      "git_head": "a9161497ed965a07d2a1586154d1c4420389e217",
+      "run_id": "science-2026.14.0-D-exp-D-exp-large-M-natural-20261121T194647",
+      "when": "2026-11-21T20:09:17+00:00"
+    }
+  },
+  "fingerprint_sidecar": "written",
+  "heartbeat": "2026-11-21T20:09:54+00:00",
+  "host": {
+    "boot": "C58A0F92-923F-471F-B32E-B1B9F5D0A848",
+    "id": "d120d1cf03551e6f"
+  },
+  "pid": 87488,
+  "stage": "CALCULATE BBN DATA, all work items complete",
+  "state": "done",
+  "units_done": 0,
+  "units_total": null
+}
