@@ -1,3 +1,81 @@
+# changes — what moved between 2026.11.0 and 2026.14.0 (the exponential)
+
+**Of 2026-11-22**, PLAN.md P14, written by a Claude Code session at the user's request ("please write the notes"), from
+the outputs of `5c08a3f`. **Reviewed by the user on 2026-11-22** ("I've reviewed all those notes"). It repeats 2026.11.0's comparison for the exponential's main
+store. The power walls have no earlier run to compare with. Below the line is 2026.11.0's note, unchanged, for the
+comparison's design and its choices (the delivery classes, "the edge" β = 2.950–3.040, the figure's layout).
+
+```bash
+./venv/bin/python science-runs/2026-11-21-science-2026.14.0/changes/changes.py
+```
+
+It reads `../fig6/inputs/exp/histories.csv`, 2026.11.0's committed copy of its export, and this store's sidecar. It
+writes `changes.csv`, `changes.txt` (the summary below, in full), `changes.pdf`/`.png` and `changes.provenance.json`.
+The provenance records `4ec8e68` and a clean tree. That commit is the one after `6bc8eed`, because `changes.py` counts
+untracked files as dirtying the tree; its CSV and text are byte-identical to a run at `6bc8eed`. Measurements, not
+bounds.
+
+**The port** (2026-11-20):
+- the runs are 2026.11.0 (old) and 2026.14.0 (new);
+- the join key is (M, β, law class, strength), since the one-loop law's drain-model name changed between them;
+- the summary opens with what changed between the trees;
+- the store's sidecar is in the provenance.
+
+## What moved
+
+Of 4818 histories in each run, 4509 are ok in both. Between the trees:
+- the exponential's one-loop law changed from `one-loop-measured-v1` to `one-loop-exponential-v2`, fitted on
+  ln(V₀/M⁴) ≤ 10 and used beyond it below 4×10⁻³¹ M_P (P4, by the user's ruling);
+- k_ex became one k_ex = ½E^{1/2}|V'''/V''| for both potentials;
+- the spectrum became tabulated.
+
+- **The fixed law is unchanged**, to the bit, in every block: ΔN_eff today and at 1 MeV, the yields, the parking
+  temperature and the reflections.
+- **The one-loop law's ΔN_eff today falls**:
+
+  | M / M_P | median change |
+  |---|---|
+  | 4×10⁻³¹ (block A) | −4.9% (5–95%: −6.3% to −0.5%) |
+  | 10⁻³⁰ | −4.8% |
+  | 10⁻³² and 10⁻³³ | −4.9% |
+  | 10⁻³⁶ | −5.5% |
+  | 10⁻⁴⁰ | −7.1% |
+  | 10⁻⁴² | −10.0% |
+  | M_crit (block C) | 0 (5–95%: −3.3% to +0.8%) |
+
+  The fall grows below laboratory M, where law v2 is used beyond its fitted domain. Reflections rise by a median of 1
+  (A) and 2 (B). The yields move by a median of 0.02 percentage points in ΔY_p. ln R at the first impact is unchanged
+  to 1.3×10⁻⁵, and T_deliver exactly.
+- **Status.** All the status changes are in block B, at β ≤ 1.0, below the wall edge. Most are one kind of failure
+  becoming another: PRyMordial's floor (`T_in_MeV`) or the step budget became a failure to find the effective minimum,
+  or the step budget. Five histories
+  that were ok now fail: β = 1.0 at A = 0.2 at 10⁻⁴², 10⁻⁴⁰ and 10⁻³⁶, and at A = 0.5 at 10⁻⁴² and 10⁻⁴⁰. None is a
+  surfing β.
+- **Delivery class.** The only changes are those failures: 36 histories at β = 0.5–1.0 that delivered "not at the wall"
+  now have no delivery.
+- **At the edge** (β = 2.950–3.040), the largest moves are 0.11 percentage points in ΔY_p, 0.22 in Δ(D/H) and 0.0027 in
+  ΔN_eff today, all far inside the tests.
+
+## Figure 6's tests
+
+| block | excluded in 2026.11.0 | excluded in 2026.14.0 | become excluded | cease to be |
+|---|---|---|---|---|
+| A | 810 | 816 | 26 | 20 |
+| B | 431 | 436 | 21 | 16 |
+| C | 34 | 34 | 0 | 0 |
+| D | 170 | 170 | 0 | 0 |
+
+All 83 histories that change class are under the one-loop law, at β = 1.0675–1.80; `changes.txt` lists each one. Every
+one changes through Δ(D/H), and one through ΔY_p as well. Δ(D/H) is jagged in β there: for example, at A = 1 it goes
+from 1.47% to 4.18% at β = 1.41 and from 4.86% to 1.73% at β = 1.42.
+
+## What it does not cover
+
+As 2026.11.0's note says: no observable is tested, the per-history `fields.csv` and `bounces.csv` are not compared, and
+the changes are not attributed among the law, k_ex and the spectrum.
+
+---
+
 # changes — what moved between 2026.10.0 and 2026.11.0
 
 **Of 2026-11-14**, PLAN.md P5 (ruled as proposed by the user, 2026-11-13): "a short `changes/` analysis joins this

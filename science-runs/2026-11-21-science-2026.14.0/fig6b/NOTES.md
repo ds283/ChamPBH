@@ -1,3 +1,45 @@
+# fig6b — Figure 6 around M_crit, 2026.14.0 (the exponential)
+
+**Of 2026-11-22**, written by a Claude Code session at the user's request ("please write the notes"), from the figure
+of `4ec8e68`. **Reviewed by the user on 2026-11-22** ("I've reviewed all those notes"). It repeats 2026.11.0's Figure 6b on this run's exponential store, with that
+figure's rulings (the user's of 2026-11-09) and no new choice. Below the line is 2026.11.0's note, unchanged. That note
+and 2026.10.0's say what each element is. Block C (M_crit) was built for the exponential alone (PLAN.md), so there is no
+power-wall Figure 6b.
+
+```bash
+./venv/bin/python science-runs/2026-11-21-science-2026.14.0/fig6b/fig6b.py
+```
+
+It reads `../fig6/inputs/exp/histories.csv` and the exponential store's sidecar, and writes `fig6b.pdf`, `.png` and
+`.provenance.json`. The provenance records `6bc8eed` and a clean tree. The port (2026-11-20):
+- the one-loop rows are `one-loop-exponential-v2`;
+- rows are filtered by `model` and `n`;
+- `EW_BRACKET` is read from Figure 6's `WALLS["exp"]`, (2.980, 2.985) since 2026-11-22.
+
+## What it shows
+
+**Figure 6b is 2026.11.0's at M_crit to within a few percent in ΔN_eff and unchanged in every count.** The changes
+between the trees (one-loop law v2, k_ex, the spectrum tables) hardly reach M_crit:
+- the classical branch R S(L) is unchanged in v2;
+- ln R at the first impact is unchanged to 8×10⁻⁷;
+- block C's one-loop ΔN_eff moves by a median of 0 (5–95%: −3.3% to +0.8%, `../changes/`).
+
+Against 2026.11.0's note, finding by finding:
+- **The fixed law still does not depend on M here.** At 10⁻¹⁵ and 10⁻¹², ΔY_p and Δ(D/H) equal the laboratory mass's
+  to 0.005 and 0.019 percentage points, and ΔN_eff to 1.5×10⁻³ and 4.2×10⁻³ relative. These are 2026.11.0's numbers.
+- **The regimes, one-loop law, A = 1:**
+  - 10⁻¹²: classical in all 25 surfing histories;
+  - 10⁻¹⁵: 13 classical, 7 gap and 5 one-loop, as before;
+  - ΔN_eff today runs from 1.8×10⁻²⁰ to 7.4×10⁻⁶ at 10⁻¹² (unchanged), and from 1.8×10⁻⁸ to 0.0378 at 10⁻¹⁵ (0.0382).
+- **Exclusions at A = 1:**
+  - 4 of 25 surfing β at each of 10⁻¹⁵ and 10⁻¹², up to β = 1.3, as before;
+  - 59 of 183 at laboratory M, up to β = 1.5, as before; the laboratory mass's ΔN_eff tops out at 0.0675 (0.0710).
+- **Failures at surfing β**: β = 1.4 at both M, as before.
+
+The laboratory mass's lines are this run's Figure 6 for `exp`, whose changes are in `../fig6/NOTES.md`.
+
+---
+
 # fig6b — Figure 6 around M_crit, 2026.11.0
 
 **Of 2026-11-14**, made by a Claude Code session (the run's orchestrator) at the user's request ("write the record and

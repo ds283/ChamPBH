@@ -1,3 +1,134 @@
+# relativistic — do the quanta produced at reflections stay relativistic? (2026.14.0, one set per wall)
+
+**Of 2026-11-22**, written by a Claude Code session at the user's request ("please write the notes"), from the figures
+of `4ec8e68`. **Reviewed by the user on 2026-11-22** ("I've reviewed all those notes"). It repeats 2026.11.0's analysis for each wall, with 2026.10.0's plan and
+rulings (that run's `relativistic/PLAN.md` §6, the user's of 2026-11-09) and no new choice. Below the line is 2026.11.0's
+note, unchanged. That note and 2026.10.0's say what the measures are and what each figure shows.
+
+```bash
+./venv/bin/python science-runs/2026-11-21-science-2026.14.0/relativistic/relativistic.py --wall {exp,pl1,pl2}
+```
+
+It needs no Ray and no store. For each wall it reads:
+- `../fig6/inputs/<wall>/histories.csv`;
+- `inputs/<wall>/quanta_histories.csv`, `-assoc0.csv` and `-assoc10.csv`, unchanged copies of that wall's
+  `tools/quanta_measures.py` output at c_a = 1, 0 and 10;
+- the three picked histories' files in `inputs/<wall>/samples/`;
+- the wall's store's sidecar.
+
+It writes `rel-lab-<wall>`, `rel-M-<wall>`, `rel-history-<wall>` (`.pdf`, `.png`) and
+`relativistic-<wall>.provenance.json`. Each provenance file records `6bc8eed` and a clean tree.
+
+**The port** (2026-11-20, `relativistic.py`'s docstring):
+- the one-loop rows are the wall's own drain model;
+- the join key gains `model` and `n`;
+- `EW_BRACKET` is per wall, set to (2.980, 2.985) on every wall on 2026-11-22 (`../fig6/NOTES.md`);
+- `HISTORY_PICKS` follow 2026.10.0's rules within each wall. They give the same three picks on every wall: A = 0.05 at
+  β = 1.0775 (the largest share of K failing at a wall), A = 1 at β = 2.0 and A = 10 at β = 2.0;
+- the power wall's figures say that x_* and the associated piece are carried over from the exponential, unmeasured on
+  that wall (power-law-wall U5).
+
+## What it says
+
+From each `relativistic-<wall>.provenance.json`, one-loop law, all A, aggregated over A as in 2026.11.0's table. The
+margins are taken over the stored histories and E over the measured ones. "> 1%" counts the histories with more than 1%
+of K failing at a wall.
+
+| wall | M / M_P | stored | measured | max r_χ E_field | max E_field today | worst birth | worst reflection | worst tracker | > 1% | max parking share |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `exp` | 10⁻³⁰ | 278 | 278 | 1.0×10⁻³² | 1.8×10⁻⁴⁶ | −0.10 | 0.40 | 29.8 | 0 | 0.009 |
+| | 4×10⁻³¹ | 1888 | 1888 | 4.9×10⁻³³ | 6.8×10⁻⁴⁶ | 0.19 | 0.87 | 30.2 | 2 | 0.053 |
+| | 10⁻³² | 281 | 281 | 2.6×10⁻³⁴ | 1.6×10⁻⁴⁶ | 0.06 | 2.18 | 31.6 | 0 | 0.009 |
+| | 10⁻³³ | 281 | 281 | 4.4×10⁻³⁵ | 1.7×10⁻⁴⁶ | 1.97 | 2.66 | 32.5 | 0 | 0.010 |
+| | 10⁻³⁶ | 281 | 281 | 3.8×10⁻³⁷ | 2.0×10⁻⁴⁶ | 4.17 | 4.36 | 34.8 | 0 | 0.013 |
+| | 10⁻⁴⁰ | 276 | 276 | 2.7×10⁻³⁸ | 1.8×10⁻⁴⁶ | 7.38 | 7.81 | 36.0 | 0 | 0.012 |
+| | 10⁻⁴² | 274 | 274 | 4.2×10⁻³⁸ | 1.5×10⁻⁴⁶ | 9.00 | 9.13 | 35.8 | 0 | 0.014 |
+| | 10⁻¹⁵ (A = 1) | 25 | 25 | 1.0×10⁻¹⁹ | 5.3×10⁻⁵⁰ | −0.67 | −3.48 | −6.4 | 16 | 0.99 |
+| | 10⁻¹² (A = 1) | 26 | 9 | 1.2×10⁻³³ | 8.6×10⁻³⁰ | −0.67 | −0.99 | −2.4 | 2 | 1.0 |
+| `pl2` | 10⁻³⁰ | 278 | 278 | 2.3×10⁻³⁴ | 8.3×10⁻⁴¹ | −0.20 | −0.30 | 32.1 | 0 | 0.011 |
+| | 4×10⁻³¹ | 1892 | 1892 | 1.7×10⁻³⁴ | 3.3×10⁻⁴⁰ | −0.20 | −0.29 | 32.2 | 3 | 0.033 |
+| | 10⁻³² | 286 | 286 | 5.2×10⁻³⁵ | 1.8×10⁻⁴⁰ | −0.20 | −0.20 | 32.8 | 0 | 0.012 |
+| | 10⁻³³ | 289 | 289 | 2.4×10⁻³⁵ | 2.0×10⁻³⁹ | −0.20 | −0.55 | 33.2 | 0 | 0.011 |
+| | 10⁻³⁶ | 294 | 294 | 2.4×10⁻³⁶ | 3.7×10⁻³⁸ | −0.20 | −0.49 | 34.3 | 0 | 0.012 |
+| | 10⁻⁴⁰ | 284 | 284 | 5.5×10⁻³⁸ | 2.6×10⁻³⁸ | 3.47 | 3.70 | 36.3 | 0 | 0.014 |
+| | 10⁻⁴² | 284 | 284 | 1.2×10⁻³⁸ | 1.6×10⁻³⁸ | 5.34 | 5.49 | 37.1 | 0 | 0.013 |
+| `pl1` | 10⁻³⁰ | 258 | 258 | 1.2×10⁻³⁵ | 7.6×10⁻⁴⁶ | 0.06 | 0.06 | 33.9 | 0 | 0.011 |
+| | 4×10⁻³¹ | 1858 | 1858 | 7.1×10⁻³⁵ | 3.3×10⁻⁴⁵ | 0.06 | 1.08 | 33.0 | 2 | 0.040 |
+| | 10⁻³² | 264 | 264 | 5.4×10⁻³⁶ | 2.9×10⁻⁴⁵ | 0.06 | −0.07 | 34.1 | 0 | 0.013 |
+| | 10⁻³³ | 265 | 265 | 3.6×10⁻³⁶ | 3.6×10⁻⁴⁵ | 0.06 | 0.08 | 34.4 | 0 | 0.011 |
+| | 10⁻³⁶ | 269 | 269 | 1.1×10⁻³⁶ | 9.9×10⁻⁴⁴ | 0.06 | −0.06 | 35.1 | 0 | 0.014 |
+| | 10⁻⁴⁰ | 274 | 274 | 2.1×10⁻³⁷ | 3.8×10⁻⁴² | 0.06 | 0.00 | 35.9 | 0 | 0.012 |
+| | 10⁻⁴² | 276 | 276 | 1.0×10⁻³⁷ | 6.1×10⁻⁴¹ | 0.06 | −0.07 | 36.3 | 0 | 0.012 |
+
+No history fails the K check at any M of any wall, except 17 at 10⁻¹² on `exp`, as in 2026.11.0.
+
+- **Under the one-loop law the quanta stay relativistic in energy, on every wall.** The matter-like share of ρ_R never
+  exceeds:
+  - 1.0×10⁻³² at or below 10⁻³⁰ M_P on `exp`;
+  - 2.3×10⁻³⁴ on `pl2`;
+  - 7.1×10⁻³⁵ on `pl1`;
+  - 1.0×10⁻¹⁹ at M_crit (`exp` only).
+
+  The conclusion is the same on all three walls.
+- **Few generations fail their margins.** The worst margins sit near zero on the power walls at most M and on `exp` from
+  10⁻³⁰ to 10⁻³², and they are positive below that on `exp` (2.0 to 9.1). On every wall the histories with more
+  than 1% of K failing at a wall are 2 or 3, all at laboratory M, and none at any other low M. The tracker margin holds at
+  every laboratory and lower M on every wall (≥ 29.8), and fails at M_crit.
+- **E today is larger on the power walls but still negligible.** It is up to 3.7×10⁻³⁸ on `pl2` and 6.1×10⁻⁴¹ on `pl1`,
+  against 6.8×10⁻⁴⁶ on `exp`. Times r_χ it bounds nothing.
+- **The associated piece matters more on the power walls.** The largest relative change in E is:
+
+  | | `exp` | `pl2` | `pl1` |
+  |---|---|---|---|
+  | c_a = 1 → 0 | 5.6×10⁻⁵ | 1.8×10⁻³ | 1.8×10⁻² |
+  | c_a = 1 → 10 | 5.0×10⁻⁴ | 1.6×10⁻² | 0.14 |
+
+  On the power walls x_* and the associated piece are carried over from the exponential and not measured there (U5). A
+  14% change in a share of order 10⁻³⁵ changes no conclusion.
+- **rel-history's three histories**:
+
+  | | `exp` | `pl2` | `pl1` |
+  |---|---|---|---|
+  | A = 0.05, β = 1.0775: generations | 197 | 198 | 206 |
+  | A = 0.05, β = 1.0775: worst birth / reflection margin | 1.11 / 1.13 | 1.05 / 1.08 | 1.06 / 1.08 |
+  | A = 0.05, β = 1.0775: r_χ E_field max | 5.5×10⁻⁴² | 1.1×10⁻³⁷ | 2.1×10⁻⁴¹ |
+  | A = 1, β = 2: generations | 46 | 48 | 37 |
+  | A = 10, β = 2: generations | 8 | 11 | 13 |
+
+  At A = 1 and 10 every margin is above 19.
+
+## What moved since 2026.11.0 (the exponential)
+
+Between the trees k_ex was redefined (power-law-wall 07b–07d), the spectrum became tabulated (R8) and the one-loop law
+became v2 (`../changes/NOTES.md`). This analysis does not separate their effects.
+- **The margins hold far more widely.**
+  - The worst reflection margin at 10⁻⁴² is +9.1, against −35.6 in 2026.11.0. At 10⁻³⁶ it is +4.4 (−18.6) and at
+    laboratory M +0.87 (−2.7).
+  - Histories with more than 1% of K failing at a wall: 2 at laboratory M (41), and none at 10⁻³⁰–10⁻⁴² (5 to 38 at
+    each M).
+  - rel-history's A = 0.05 history, whose worst birth and reflection margins were −0.97 and −2.72, now has +1.11 and
+    +1.13.
+- **The matter-like share falls at low M.** Max r_χ E_field at 10⁻⁴² is 4.2×10⁻³⁸, against 1.4×10⁻³¹. At laboratory M it
+  is 4.9×10⁻³³ (8.9×10⁻³³). Max E today at 10⁻⁴² is 1.5×10⁻⁴⁶ (5.3×10⁻³⁹).
+- **M_crit**: max r_χ E_field 1.0×10⁻¹⁹ at 10⁻¹⁵ (1.6×10⁻¹⁹). The 17 histories at 10⁻¹² that fail the K check are as
+  before.
+- The largest parking share at laboratory M is 0.053 (0.049). The stored counts at B's M fall by up to 14 (288 → 274 at
+  10⁻⁴²). This goes with the B-block status changes at β ≤ 1.0 that `../changes/changes.txt` lists, where most
+  failures now come at the effective minimum rather than at PRyMordial's floor.
+
+## What it does not cover
+
+Everything 2026.11.0's note lists, on every wall:
+- the fixed law;
+- the parking leftover;
+- the histories that fail the K check, and the failed histories;
+- stimulated emission and rescattering.
+
+In addition, x_* and the associated piece are unmeasured on the power walls (U5), and `pl1` has no history at
+β = 10, 15 or 20.
+
+---
+
 # relativistic — do the quanta produced at reflections stay relativistic? (2026.11.0)
 
 **Of 2026-11-14**, made by a Claude Code session (the run's orchestrator) at the user's request ("write the record and
