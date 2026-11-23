@@ -33,6 +33,13 @@ on 2026-11-22:
 - [`changes/`](changes/NOTES.md): what moved since 2026.11.0 (PLAN.md P14). The fixed law is unchanged to the bit,
   and the one-loop ΔN_eff falls 4.9% at laboratory M and 10% at 10⁻⁴².
 
+**Added on 2026-11-23**, at the user's request, not yet seen by the user:
+- `relativistic/NOTES.md` gains a section on resonance (band overlap and phase slip, `relativistic/resonance.py`);
+- [`resources/`](resources/NOTES.md) records the run's cost:
+  - 181 CPU-h reserved for the build, at least 73 recorded;
+  - 49% of the scalar-history stage waited on the last 5% of each row;
+  - 24.5 GiB of datastores and 35.7 GiB of derived products.
+
 ## Rulings after the build
 
 - **The electroweak bracket** is (2.980, 2.985) on every wall, read from the exports (`fig6/NOTES.md`). The user

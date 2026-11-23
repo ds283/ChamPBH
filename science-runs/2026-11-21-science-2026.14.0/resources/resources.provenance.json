@@ -1,0 +1,26 @@
+{
+  "script": "resources.py",
+  "script_sha256": "9af4528866ff7aebc01f7dd2f62110769f521370bc1b595a9639da0bc224bb34",
+  "git_sha": "ac67e93eddd118a1766555d92e5c2092af05a38e",
+  "git_dirty": true,
+  "inputs": {
+    "logs/A-exp-lab.log": "609949329ffc9f77a07236d36f751972aa01285129eca26c7d1b1257709a786d",
+    "logs/A-pl-lab.log": "9193f979b5ff01ebdd0359ea2f8e926e4223ff494df8ef56f543e6f37f792d74",
+    "logs/B-exp-lab-M-trend.log": "8376400e172973742821230432bd78febeb3be307ba91c99681b4def3bb56eee",
+    "logs/B-pl-lab-M-trend.log": "8369031e214ac007a90d9a56531969e2b6dc43e4f5f4802412234f954fdc45be",
+    "logs/C-exp-Mcrit.log": "c9edf5e66605145ad803d227d085540a433811cacc310bc80b19a0813408459b",
+    "logs/D-exp-large-M-natural.log": "0734939465313145c1ee52a790f70a0603bd165f4078807627b9cb224f5388d8",
+    "logs/R-exp-Mcrit.log": "9cb20af933710e2fcb1d0ca5882092ba6a9364ee0244d3517a7e53ec1fe5e174",
+    "logs/R-exp-lab.log": "194191aeac48d2cba01794aae08e2e4d54c4eb07f23ccad6b2e9aec140125761",
+    "logs/R-exp-ladder.log": "33407c1099b651417c22e2304f006696fef16c7283b2d9a395c28ad352b9244a",
+    "logs/R-exp-natural.log": "1024d62107c06e297a24d491c60f414d371ba30d85ff9358a6f9e6a7b109dabd",
+    "logs/R-pl-lab.log": "011613588ce20823abbd47cf01a95bde36fd721ec9a9a770ccbf15ef13697b3a",
+    "logs/R-pl-ladder.log": "ddc321cd26139c5bd22c9e97e1dcc3de11dd0c86853ca853ae7edbd87cbbce20",
+    "resources/inputs/files.csv": "a8b5bf0bc9cecf3ce4a46655b389b30d73bd2d87e7ae77acd155a281d63b79f8",
+    "resources/inputs/histories.csv": "5d54f7682ba6c993b83cfd74fe379f70130e020d758b8616ccaba52edf0627b3",
+    "resources/inputs/outputs.csv": "3c23783710e79ea66eab45b00c06bda5ed203e5ef3c1ebdbbdf943db76dd764b",
+    "resources/inputs/steps.txt": "e65ee9df1e38f5c0ba9d7ac39749451c139d6c96a1a227dfed27fc5d0453a834",
+    "resources/inputs/tables.csv": "76f966ef8e203c5d985aeb74068ec6cb65b2576606f0fbf3f14ca8bf15b0302b"
+  },
+  "ray_cpus": 8
+}

@@ -1,0 +1,71 @@
+>> 2026-11-21 01:17:43 science-2026.14.0 on a9161497ed965a07d2a1586154d1c4420389e217, starting at slot A-exp, β grids: dense 191, sparse 30, coarse 62
+>> 2026-11-21 01:17:43 disk: 156 GB free before A-exp-lab (needs 55)
+>> 2026-11-21 01:17:43 A-exp-lab
+>> 2026-11-21 04:33:51 disk: 143 GB free before A-pl-lab (needs 55)
+>> 2026-11-21 04:33:51 A-pl-lab
+>> 2026-11-21 09:36:59 disk: 130 GB free before B-exp-lab-M-trend (needs 55)
+>> 2026-11-21 09:36:59 B-exp-lab-M-trend
+>> 2026-11-21 13:40:47 disk: 130 GB free before B-pl-lab-M-trend (needs 55)
+>> 2026-11-21 13:40:47 B-pl-lab-M-trend
+>> 2026-11-21 19:46:46 disk: 119 GB free before D-exp-large-M-natural (needs 55)
+>> 2026-11-21 19:46:46 D-exp-large-M-natural
+>> 2026-11-21 20:09:54 disk: 132 GB free before R-exp-lab (needs 55)
+>> 2026-11-21 20:09:54 R-exp-lab
+>> 2026-11-21 20:12:35 disk: 132 GB free before R-pl-lab (needs 55)
+>> 2026-11-21 20:12:35 R-pl-lab
+>> 2026-11-21 20:15:18 disk: 132 GB free before R-exp-ladder (needs 55)
+>> 2026-11-21 20:15:18 R-exp-ladder
+>> 2026-11-21 20:29:44 disk: 132 GB free before R-pl-ladder (needs 55)
+>> 2026-11-21 20:29:44 R-pl-ladder
+>> 2026-11-21 20:32:06 disk: 132 GB free before R-exp-natural (needs 55)
+>> 2026-11-21 20:32:06 R-exp-natural
+>> 2026-11-21 20:33:36 disk: 132 GB free before C-exp-Mcrit (needs 55)
+>> 2026-11-21 20:33:36 C-exp-Mcrit
+>> 2026-11-21 23:39:50 disk: 132 GB free before R-exp-Mcrit (needs 55)
+>> 2026-11-21 23:39:50 R-exp-Mcrit
+>> 2026-11-22 00:08:59 disk: 132 GB free before the exports of wall exp (needs 70)
+>> 2026-11-22 00:08:59 plot_by_beta (exp)
+>> 2026-11-22 00:13:30 plot_ScalarHistory --no-plots (exp, one-loop rows)
+>> 2026-11-22 00:26:29 plot_ScalarHistory (exp-reflections)
+>> 2026-11-22 00:27:19 plot_by_beta (exp-reflections)
+>> 2026-11-22 00:27:50 quanta_measures exp --assoc-scale 1
+>> 2026-11-22 00:39:16 quanta_measures exp --assoc-scale 0
+>> 2026-11-22 00:50:34 quanta_measures exp --assoc-scale 10
+>> 2026-11-22 01:01:46 quanta_measures exp-reflections --assoc-scale 1
+>> 2026-11-22 01:01:56 quanta_measures exp-reflections --assoc-scale 0
+>> 2026-11-22 01:02:05 quanta_measures exp-reflections --assoc-scale 10
+>> 2026-11-22 01:02:14 plot_quanta_grid (exp)
+>> 2026-11-22 01:02:56 plot_quanta_history (exp-reflections)
+>> 2026-11-22 01:03:14 gzip fields.csv (exp)
+>> 2026-11-22 01:10:20 wall exp done:  12G main, 296M reflections
+>> 2026-11-22 01:10:21 disk: 119 GB free before the exports of wall pl1 (needs 70)
+>> 2026-11-22 01:10:21 plot_by_beta (pl1)
+>> 2026-11-22 01:14:16 plot_ScalarHistory --no-plots (pl1, one-loop rows)
+>> 2026-11-22 01:25:16 plot_ScalarHistory (pl1-reflections)
+>> 2026-11-22 01:25:51 plot_by_beta (pl1-reflections)
+>> 2026-11-22 01:26:20 quanta_measures pl1 --assoc-scale 1
+>> 2026-11-22 01:36:40 quanta_measures pl1 --assoc-scale 0
+>> 2026-11-22 01:46:50 quanta_measures pl1 --assoc-scale 10
+>> 2026-11-22 01:57:02 quanta_measures pl1-reflections --assoc-scale 1
+>> 2026-11-22 01:57:08 quanta_measures pl1-reflections --assoc-scale 0
+>> 2026-11-22 01:57:13 quanta_measures pl1-reflections --assoc-scale 10
+>> 2026-11-22 01:57:18 plot_quanta_grid (pl1)
+>> 2026-11-22 01:58:00 plot_quanta_history (pl1-reflections)
+>> 2026-11-22 01:58:12 gzip fields.csv (pl1)
+>> 2026-11-22 02:04:44 wall pl1 done:  11G main, 132M reflections
+>> 2026-11-22 02:04:45 disk: 108 GB free before the exports of wall pl2 (needs 70)
+>> 2026-11-22 02:04:45 plot_by_beta (pl2)
+>> 2026-11-22 02:09:02 plot_ScalarHistory --no-plots (pl2, one-loop rows)
+>> 2026-11-22 02:21:15 plot_ScalarHistory (pl2-reflections)
+>> 2026-11-22 02:21:48 plot_by_beta (pl2-reflections)
+>> 2026-11-22 02:22:16 quanta_measures pl2 --assoc-scale 1
+>> 2026-11-22 02:33:12 quanta_measures pl2 --assoc-scale 0
+>> 2026-11-22 02:44:04 quanta_measures pl2 --assoc-scale 10
+>> 2026-11-22 02:55:01 quanta_measures pl2-reflections --assoc-scale 1
+>> 2026-11-22 02:55:07 quanta_measures pl2-reflections --assoc-scale 0
+>> 2026-11-22 02:55:12 quanta_measures pl2-reflections --assoc-scale 10
+>> 2026-11-22 02:55:17 plot_quanta_grid (pl2)
+>> 2026-11-22 02:55:59 plot_quanta_history (pl2-reflections)
+>> 2026-11-22 02:56:11 gzip fields.csv (pl2)
+>> 2026-11-22 03:03:12 wall pl2 done:  12G main, 132M reflections
+>> 2026-11-22 03:03:12 science-2026.14.0 done

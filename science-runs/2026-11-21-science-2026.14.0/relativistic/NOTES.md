@@ -97,6 +97,54 @@ No history fails the K check at any M of any wall, except 17 at 10⁻¹² on `ex
 
   At A = 1 and 10 every margin is above 19.
 
+## Resonance: band overlap and phase slip (added 2026-11-23)
+
+**Added on 2026-11-23** by a Claude Code session at the user's request ("Add those resonance numbers to the relativistic
+NOTES"). The note above did not report these measures, although `tools/quanta_measures.py` writes them into the same
+`quanta_histories*.csv` this analysis reads. **Not yet seen by the user.**
+
+```bash
+./venv/bin/python science-runs/2026-11-21-science-2026.14.0/relativistic/resonance.py > science-runs/2026-11-21-science-2026.14.0/relativistic/resonance.txt
+```
+
+`resonance.py` reads only `inputs/<wall>/quanta_histories*.csv`, one-loop rows, and prints `resonance.txt`, the source
+of every number below. The measures are `quanta_measures.py`'s (`one-loop-drain` 05):
+- **n̄_max**, the largest over a history's generations j of n̄_j = Σ_{g earlier} A_g Ω(ln Q_g − ln Q_j): the occupation
+  the earlier quanta leave in the band where generation j is born, Q = k_ex a being the comoving peak. It is small when
+  Q moves by more than a band's width between generations;
+- **δ_stim** = Σ_j 2 n̄_j ΔK_j / K_final, the fractional change of the final ρ_χ that stimulated emission would make at
+  first order with random phases;
+- **the phase slip** of the comoving peak's mode between consecutive bounces, taken massless (the mass only adds phase,
+  so this understates it). Parametric resonance needs slips below about 1 rad over many consecutive bounces.
+
+**From 10⁻³⁰ to 10⁻⁴² M_P, on every wall, the measures rule out resonance.**
+
+| wall | histories | δ_stim, median by M | δ_stim, max | n̄_max, max | n̄_max > 1 | slip < 1 rad | least slip |
+|---|---|---|---|---|---|---|---|
+| `exp` | 3559 | 6×10⁻³⁹ (10⁻³⁰) to 3×10⁻⁶³ (10⁻⁴²) | 1.4×10⁻⁶ | 1.9×10⁻³ | 0 | 0 | 3.7×10²¹ rad |
+| `pl2` | 3607 | 7×10⁻⁴² to 2×10⁻⁶⁵ | 1.2×10⁻⁵ | 3.2 | 2 | 0 | 2.7×10²⁰ rad |
+| `pl1` | 3464 | 5×10⁻⁴⁵ to 2×10⁻⁶⁰ | 2.9×10⁻⁵ | 1.1 | 1 | 0 | 1.2×10²⁰ rad |
+
+- **The bands do not overlap where the field is at the wall.** At β ≥ 1.06875 (Figure 6's wall edge) n̄_max is at most
+  4.2×10⁻⁴ (`exp`), 3.6×10⁻³ (`pl2`) and 9.5×10⁻³ (`pl1`). Every history with n̄_max > 0.1 (none on `exp`, 6 on `pl2`,
+  7 on `pl1`) is at β = 0.5–1.0, below the wall edge, and even there δ_stim is at most 2.6×10⁻⁵.
+- **The phases are never coherent.** No history at these M has a slip below 1 rad at any bounce; the least is 10²⁰ rad.
+- **On the exponential the overlap falls steeply with M**: the largest δ_stim goes from 1.4×10⁻⁶ at 4×10⁻³¹ M_P to
+  1.1×10⁻¹⁹ at 10⁻⁴². On the power walls it stays at 10⁻⁷–10⁻⁵ down to 10⁻³⁶ (n = 2) or 10⁻⁴² (n = 1). At the wall
+  (β ≥ 1.06875) it is at most 1.2×10⁻⁵ (`pl2`) and 2.9×10⁻⁵ (`pl1`), both at laboratory M.
+- **The associated piece hardly matters.** From c_a = 0 to 10 the largest δ_stim moves by less than 3% on `exp` and
+  `pl2` and from 2.8×10⁻⁵ to 3.6×10⁻⁵ on `pl1`; the counts of slips below 1 rad do not move. On the power walls the
+  spectrum shape, and so Ω, is carried over from the exponential and not measured there (U5).
+
+**At M_crit (`exp`, block C, A = 1) the conditions are not ruled out.** n̄_max > 1 in 19 of 25 histories at 10⁻¹⁵ M_P
+and 5 of 9 measured at 10⁻¹², up to 3×10¹⁷, and slips fall below 1 rad in 11 and 4 histories. δ_stim is still at most
+2.9×10⁻⁵ there: the large overlaps sit at bounces that drain almost nothing. This is the regime of
+`[00-later-bounces-act-on-quanta-already-present]` (`one-loop-drain`, open), where the random-phase reading of δ_stim
+fails, as it did there on the low-M ladder and at 10⁻¹² M_P.
+
+These are measurements, not bounds. δ_stim is a first-order, random-phase estimate; stimulated emission and rescattering
+themselves are still not modelled (below, "What it does not cover").
+
 ## What moved since 2026.11.0 (the exponential)
 
 Between the trees k_ex was redefined (power-law-wall 07b–07d), the spectrum became tabulated (R8) and the one-loop law

@@ -1,0 +1,91 @@
+2026.14.0 resources (resources.py)
+
+end to end: 25.76 h; build 22.80 h; inventories 3.2 min; exports 2.90 h
+  A-exp-lab                      3.27 h
+  A-pl-lab                       5.05 h
+  B-exp-lab-M-trend              4.06 h
+  B-pl-lab-M-trend               6.10 h
+  D-exp-large-M-natural          0.39 h
+  R-exp-lab                      0.04 h
+  R-pl-lab                       0.05 h
+  R-exp-ladder                   0.24 h
+  R-pl-ladder                    0.04 h
+  R-exp-natural                  0.03 h
+  C-exp-Mcrit                    3.10 h
+  R-exp-Mcrit                    0.43 h
+  inventories                    0.05 h
+  exports, exp                   1.02 h
+  exports, pl1                   0.91 h
+  exports, pl2                   0.97 h
+
+stage wall-clock (h), from the slot logs:
+  scalar histories      17.98 h  reserved  143.8 CPU-h
+  adiabatic              0.68 h  reserved    5.5 CPU-h
+  BBN (PRyMordial)       3.97 h  reserved   31.8 CPU-h
+  total                22.64 h  reserved  181.1 CPU-h
+
+recorded CPU (h), lower bounds:
+  scalar histories      41.93  (29% of reserved)
+  adiabatic              0.33  (6% of reserved)
+  BBN (PRyMordial)      30.67  (97% of reserved)
+  total                72.94  (40% of reserved)
+  by wall (integration, BBN, adiabatic):
+    exp: 20.54, 10.86, 0.11
+    pl2: 11.31, 10.06, 0.12
+    pl1: 10.09, 9.76, 0.11
+  PRyMordial's share of the BBN time: 0.9998
+  final integration alone: 34.80 h; tuning iterations > 1 in 617 histories
+
+scalar-history stage, blocks A-D: bulk 8.88 h, tail (last 5% of each row) 8.38 h, 48.5%; rows 52
+  rows whose tail is over half the row: 34
+  A-exp-lab                bulk  0.92 h  tail  1.54 h
+  A-pl-lab                 bulk  1.88 h  tail  1.57 h
+  B-exp-lab-M-trend        bulk  1.33 h  tail  1.99 h
+  B-pl-lab-M-trend         bulk  2.29 h  tail  2.40 h
+  C-exp-Mcrit              bulk  2.23 h  tail  0.80 h
+  D-exp-large-M-natural    bulk  0.23 h  tail  0.07 h
+
+histories (ok; failed: the history, or its BBN):
+  exp  A:  2253 ok,   25 history failed,   14 BBN failed
+  exp  B:  1924 ok,  147 history failed,   89 BBN failed
+  exp  C:   158 ok,   18 history failed,    4 BBN failed
+  exp  D:   174 ok,    4 history failed,    8 BBN failed
+  exp  R:    44 ok,    0 history failed,    0 BBN failed
+  pl2  A:  2253 ok,   21 history failed,   18 BBN failed
+  pl2  B:  1914 ok,  107 history failed,  139 BBN failed
+  pl2  R:    20 ok,    0 history failed,    0 BBN failed
+  pl1  A:  2217 ok,   61 history failed,   14 BBN failed
+  pl1  B:  1792 ok,  236 history failed,  132 BBN failed
+  pl1  R:    20 ok,    0 history failed,    0 BBN failed
+  exp: 4862 histories, 194 + 115 failed
+  pl2: 4472 histories, 128 + 157 failed
+  pl1: 4472 histories, 297 + 146 failed
+  all: 13806 histories, 619 + 418 = 1037 failed
+
+per history, blocks A and B, successes:
+  exp: integration median 5.5 s, mean 8.8 s, 99% 54 s, max 300 s; RHS evaluations median 57482, mean RHS time 24.4 us; bounce rows median 63; sample rows median 5361; BBN median 8.4 s
+  pl2: integration median 5.9 s, mean 9.4 s, 99% 56 s, max 158 s; RHS evaluations median 59528, mean RHS time 25.7 us; bounce rows median 67; sample rows median 5329; BBN median 8.5 s
+  pl1: integration median 5.9 s, mean 8.7 s, 99% 50 s, max 95 s; RHS evaluations median 59652, mean RHS time 25.6 us; bounce rows median 67; sample rows median 5318; BBN median 8.5 s
+  share of the integration time in the top 1% of histories: 8.6%
+  exp, block A one-loop: median over A by beta, max 13 s at beta = 6.0, min 1.2 s at beta = 1.0
+  pl2, block A one-loop: median over A by beta, max 15 s at beta = 8.0, min 1.4 s at beta = 1.0
+  pl1, block A one-loop: median over A by beta, max 14 s at beta = 3.5, min 1.5 s at beta = 1.0
+
+datastores (GiB, dbstat by content):
+kind           field samples  adiabatic samples  BBN samples  bounce rows  redshift grid  other
+store                                                                                          
+inverse-power         10.311              4.024        0.927        0.137          0.075  0.023
+exponential            5.799              2.252        0.503        0.129          0.075  0.013
+reflections            0.098              0.038        0.009        0.010          0.075  0.004
+  files on disk (GiB): {'exponential': 8.771, 'inverse-power': 15.498, 'reflections': 0.234}; total 24.50
+
+derived products (GiB, by wall, main and reflections roots):
+k     quanta_samples.csv  fields.csv(.gz)  bounces + quanta_bounces  figures (pdf + png)  other
+wall                                                                                           
+exp                7.795            4.157                     0.444                0.178  0.010
+pl2                7.525            4.017                     0.258                0.116  0.009
+pl1                7.041            3.774                     0.219                0.120  0.009
+  total 35.67 GiB in 91279 files
+
+per history (MB = 1e6 bytes): exp store 1.96, products 2.78, pl2 store 1.95, products 2.86, pl1 store 1.80, products 2.68
+throughput: 606 histories per hour of build, 75.7 per CPU-hour reserved

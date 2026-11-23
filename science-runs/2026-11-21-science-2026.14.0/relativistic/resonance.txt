@@ -1,0 +1,70 @@
+
+== exp, c_a = 1, one-loop law, by M
+   M/M_P  hist d_stim med d_stim max  nbar max #nbar>1 #nbar>0.1 #slip<1  min slip
+   1e-12     9   8.77e-10   2.90e-05  2.74e+14       5         6       4  1.58e-05
+   1e-15    25   9.08e-07   2.30e-05  3.13e+17      19        20      11  7.76e-07
+   1e-30   278   5.85e-39   1.41e-07   0.00194       0         0       0  5.00e+21
+   4e-31  1888   2.43e-39   1.38e-06   0.00112       0         0       0  2.01e+22
+   1e-32   281   2.73e-45   1.33e-09  2.54e-05       0         0       0  3.72e+21
+   1e-33   281   3.27e-48   1.89e-10  4.27e-06       0         0       0  3.95e+23
+   1e-36   281   6.11e-55   2.07e-13  3.38e-09       0         0       0  1.51e+24
+   1e-40   276   1.33e-60   1.58e-17  1.71e-14       0         0       0  1.17e+25
+   1e-42   274   3.24e-63   1.13e-19  3.28e-17       0         0       0  3.52e+25
+
+== exp, laboratory region (M < 1e-20 M_P), one-loop law, by c_a
+c_a =  0: 3559 histories; delta_stim max 1.38e-06; n_bar_max max 0.00194; n_bar > 1 in 0, > 0.1 in 0; slip < 1 rad in 0; least slip 3.72e+21 rad
+c_a =  1: 3559 histories; delta_stim max 1.38e-06; n_bar_max max 0.00194; n_bar > 1 in 0, > 0.1 in 0; slip < 1 rad in 0; least slip 3.72e+21 rad
+c_a = 10: 3559 histories; delta_stim max 1.38e-06; n_bar_max max 0.00194; n_bar > 1 in 0, > 0.1 in 0; slip < 1 rad in 0; least slip 3.72e+21 rad
+
+== exp, laboratory region, beta >= 1.06875 (at the wall), c_a = 1: 3390 histories; delta_stim median 3.08e-43, max 1.38e-06; n_bar_max max 0.000421
+
+== pl2, c_a = 1, one-loop law, by M
+   M/M_P  hist d_stim med d_stim max  nbar max #nbar>1 #nbar>0.1 #slip<1  min slip
+   1e-30   278   2.11e-42   1.78e-06    0.0213       0         0       0  1.02e+23
+   4e-31  1892   7.24e-42   1.22e-05      1.07       1         4       0  1.70e+21
+   1e-32   286   4.92e-46   1.26e-06      3.23       1         1       0  5.26e+20
+   1e-33   289   6.82e-48   9.70e-06     0.936       0         1       0  2.74e+20
+   1e-36   294   1.55e-53   3.70e-07    0.0503       0         0       0  6.63e+22
+   1e-40   284   1.39e-61   1.08e-12  5.75e-07       0         0       0  1.07e+24
+   1e-42   284   1.87e-65   1.04e-15  5.56e-10       0         0       0  4.52e+24
+
+== pl2, laboratory region (M < 1e-20 M_P), one-loop law, by c_a
+c_a =  0: 3607 histories; delta_stim max 1.22e-05; n_bar_max max 3.22; n_bar > 1 in 2, > 0.1 in 6; slip < 1 rad in 0; least slip 2.74e+20 rad
+c_a =  1: 3607 histories; delta_stim max 1.22e-05; n_bar_max max 3.23; n_bar > 1 in 2, > 0.1 in 6; slip < 1 rad in 0; least slip 2.74e+20 rad
+c_a = 10: 3607 histories; delta_stim max 1.25e-05; n_bar_max max 3.29; n_bar > 1 in 2, > 0.1 in 6; slip < 1 rad in 0; least slip 2.74e+20 rad
+n_bar_max > 0.1 at c_a = 1: 6 histories, beta 0.5-0.9, 0 at or above the wall edge beta = 1.06875; their delta_stim at most 9.7e-06
+        M_Mp  beta  alpha  n_bar_max   delta_stim  phase_slip_min_producing
+1.000000e-33  0.90    0.2   0.935608 9.696703e-06              2.735250e+20
+4.000000e-31  0.75    1.0   0.937958 1.714796e-06              1.701668e+21
+1.000000e-32  0.50    1.5   3.230914 5.923940e-07              5.263565e+20
+4.000000e-31  0.50    3.0   1.074307 2.368920e-07              5.871116e+21
+4.000000e-31  0.50    5.0   0.949548 1.991327e-07              1.168012e+22
+4.000000e-31  0.50   10.0   0.468494 4.404042e-08              2.696657e+22
+
+== pl2, laboratory region, beta >= 1.06875 (at the wall), c_a = 1: 3370 histories; delta_stim median 4e-45, max 1.22e-05; n_bar_max max 0.00357
+
+== pl1, c_a = 1, one-loop law, by M
+   M/M_P  hist d_stim med d_stim max  nbar max #nbar>1 #nbar>0.1 #slip<1  min slip
+   1e-30   258   2.70e-45   2.48e-06    0.0734       0         0       0  8.22e+22
+   4e-31  1858   4.94e-45   2.92e-05    0.0353       0         0       0  5.24e+22
+   1e-32   264   1.24e-47   2.63e-05     0.647       0         2       0  4.26e+20
+   1e-33   265   4.73e-49   4.48e-06      1.09       1         1       0  6.58e+21
+   1e-36   269   9.51e-53   4.23e-06     0.237       0         1       0  5.11e+21
+   1e-40   274   4.20e-58   8.13e-07       0.3       0         1       0  1.33e+22
+   1e-42   276   1.76e-60   7.40e-06     0.641       0         2       0  1.18e+20
+
+== pl1, laboratory region (M < 1e-20 M_P), one-loop law, by c_a
+c_a =  0: 3464 histories; delta_stim max 2.84e-05; n_bar_max max 1.07; n_bar > 1 in 1, > 0.1 in 7; slip < 1 rad in 0; least slip 1.18e+20 rad
+c_a =  1: 3464 histories; delta_stim max 2.92e-05; n_bar_max max 1.09; n_bar > 1 in 1, > 0.1 in 7; slip < 1 rad in 0; least slip 1.18e+20 rad
+c_a = 10: 3464 histories; delta_stim max 3.58e-05; n_bar_max max 1.31; n_bar > 1 in 1, > 0.1 in 11; slip < 1 rad in 0; least slip 1.18e+20 rad
+n_bar_max > 0.1 at c_a = 1: 7 histories, beta 0.5-1, 0 at or above the wall edge beta = 1.06875; their delta_stim at most 2.63e-05
+        M_Mp  beta  alpha  n_bar_max   delta_stim  phase_slip_min_producing
+1.000000e-42  0.90   0.05   0.641015 7.400911e-06              1.177641e+20
+1.000000e-42  0.75   0.10   0.231463 2.009519e-06              3.410830e+21
+1.000000e-36  0.90   0.20   0.237216 4.231226e-06              5.111354e+21
+1.000000e-32  1.00   0.20   0.647459 2.630450e-05              4.259425e+20
+1.000000e-40  0.50   0.50   0.300102 3.592184e-07              1.334293e+22
+1.000000e-32  0.90   0.50   0.454291 4.314035e-06              2.785780e+21
+1.000000e-33  0.50   2.00   1.090875 2.023362e-07              6.581102e+21
+
+== pl1, laboratory region, beta >= 1.06875 (at the wall), c_a = 1: 3240 histories; delta_stim median 4.15e-47, max 2.92e-05; n_bar_max max 0.00949
